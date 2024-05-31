@@ -1,6 +1,5 @@
 # AssentifySdk
 
-[![CI Status](https://img.shields.io/travis/TariQ/AssentifySdk.svg?style=flat)](https://travis-ci.org/TariQ/AssentifySdk)
 [![Version](https://img.shields.io/cocoapods/v/AssentifySdk.svg?style=flat)](https://cocoapods.org/pods/AssentifySdk)
 [![License](https://img.shields.io/cocoapods/l/AssentifySdk.svg?style=flat)](https://cocoapods.org/pods/AssentifySdk)
 [![Platform](https://img.shields.io/cocoapods/p/AssentifySdk.svg?style=flat)](https://cocoapods.org/pods/AssentifySdk)
@@ -22,7 +21,7 @@ pod 'AssentifySdk'
 
 ## Author
 
-TariQ, talsakran@assentify.com
+Assentify, info.assentify@gmail.com
 
 ## License
 

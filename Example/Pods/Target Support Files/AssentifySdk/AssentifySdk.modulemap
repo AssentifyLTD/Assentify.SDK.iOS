@@ -1,0 +1,6 @@
+framework module AssentifySdk {
+  umbrella header "AssentifySdk-umbrella.h"
+
+  export *
+  module * { export * }
+}

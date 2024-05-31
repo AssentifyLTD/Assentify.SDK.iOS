@@ -1,0 +1,22 @@
+{
+  "name": "AssentifySdk",
+  "version": "0.1.0",
+  "summary": "A short description of AssentifySdk.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/TariQ/AssentifySdk",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "TariQ": "talsakran@assentify.com"
+  },
+  "source": {
+    "git": "https://github.com/TariQ/AssentifySdk.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "AssentifySdk/Classes/**/*"
+}

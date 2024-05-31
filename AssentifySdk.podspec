@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AssentifySdk'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of AssentifySdk.'
+  s.version          = '0.0.1'
+  s.summary          = 'This iOS Pod provides integration with Assentify services.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -24,13 +24,15 @@ TODO: Add long description of the pod here.
   s.homepage         = 'https://github.com/TariQ/AssentifySdk'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'TariQ' => 'talsakran@assentify.com' }
+  s.author           = { 'Assentify' => 'info.assentify@gmail.com' }
   s.source           = { :git => 'https://github.com/TariQ/AssentifySdk.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
 
   s.source_files = 'AssentifySdk/Classes/**/*'
+  s.resources = ["Classes/best-fp16.tflite", "Classes/classes.txt"]
+  s.dependency "TensorFlowLiteSwift"
   
   # s.resource_bundles = {
   #   'AssentifySdk' => ['AssentifySdk/Assets/*.png']
