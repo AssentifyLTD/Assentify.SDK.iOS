@@ -33,12 +33,12 @@ This iOS Pod provides integration with Assentify services.
 
   s.source_files = 'AssentifySdk/Classes/**/*'
   s.resources = ["best-fp16.tflite", "classes.txt"]
+  s.frameworks = 'UIKit'
   s.dependency 'TensorFlowLiteSwift'
   # s.resource_bundles = {
   #   'AssentifySdk' => ['AssentifySdk/Assets/*.png']
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
