@@ -6,134 +6,303 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		AC559E53E13B6FBEF4F5CC310A73AFE6 /* TensorFlowLiteC */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 95B5C322D5E1135295611DF314093FB3 /* Build configuration list for PBXAggregateTarget "TensorFlowLiteC" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = TensorFlowLiteC;
+			productName = TensorFlowLiteC;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
+		0BAE607C9D38CA4CD02C158820B4F9F2 /* HubConnectionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249D5D932B67B5F4F67EFCA60ED97E7E /* HubConnectionFunctions.swift */; };
+		0C34EA761248E494B28AD23A8DE4DFA9 /* Tensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8BF1B92B88D74ED3D5F51CA62DC06 /* Tensor.swift */; };
+		0D8CC9AFBB626A5BE0F43B6569EE2B8C /* ScanOther.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A31409EDAE6FC2DAC85CA801CE3AEA /* ScanOther.swift */; };
 		105369BA6E261AE279E69C85F798C547 /* Pods-AssentifySdk_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FA96C8DB1C6EB453C5CA73300D53F4 /* Pods-AssentifySdk_Tests-dummy.m */; };
-		1F84FE646CD1D7BAFFB58C243277AFF8 /* FBSnapshotTestCase-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E5923010B02074CAA9AAF6EA02D66AA /* FBSnapshotTestCase-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		294D5A95B585489D42B83B95877D3E07 /* Pods-AssentifySdk_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A84201E3706C528F3125884DCB0919F4 /* Pods-AssentifySdk_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2975A09730FD83DC0897129A11EA6585 /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D66CF296ABBC57EC4D0452397E235 /* SwiftSupport.swift */; };
-		2B88C28DD20CBFA7B3AEB21A365197FE /* FBSnapshotTestController.h in Headers */ = {isa = PBXBuildFile; fileRef = AE9FF9459FBCDC4AF88FB6B5A4CC1439 /* FBSnapshotTestController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2C8C624380204A8F8E0531A4FE5CF659 /* AssentifySdk-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD980A502F323AB051D7E2291235902 /* AssentifySdk-dummy.m */; };
-		2CB61F6FA511CAACB43A50DC3A82E0DD /* UIImage+Snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = D872A3EE224412D4057C234FBC629F9C /* UIImage+Snapshot.m */; };
+		1F84FE646CD1D7BAFFB58C243277AFF8 /* FBSnapshotTestCase-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DEC3BBECE07F207A68DC5B35421D4233 /* FBSnapshotTestCase-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2975A09730FD83DC0897129A11EA6585 /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2DC76616499270777FAA785F071EC /* SwiftSupport.swift */; };
+		2AB4C567889F94EA6B0DCA66B4E8758C /* RemoteClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2016C8175A3307D4A01DE6806E77C61 /* RemoteClient.swift */; };
+		2B88C28DD20CBFA7B3AEB21A365197FE /* FBSnapshotTestController.h in Headers */ = {isa = PBXBuildFile; fileRef = 90E20EAC0BE08603F40831D9E810E981 /* FBSnapshotTestController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2BD743078EB6F52B2D935945D087FCC1 /* BaseResponseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C78EB19D65B2ACD1FDBC268FA6D5F2 /* BaseResponseDataModel.swift */; };
+		2CB61F6FA511CAACB43A50DC3A82E0DD /* UIImage+Snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 4001B9354E868ACA4A077271D9A5C579 /* UIImage+Snapshot.m */; };
+		2D6C43E0A1A1CFB317FB2AEB04567557 /* AssentifySdk-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5151550E6958EF8769E78942EC5D0F3D /* AssentifySdk-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E0968CDB2CC0CAB6B166487F1434B02 /* Pods-AssentifySdk_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A105ADDDCE42BFF264CCC412FCA6C18 /* Pods-AssentifySdk_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2ECCAC52EF4C74E1032E0BC646BBE5B9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
-		30D475DF57C0C682A723231E7BCA0D14 /* FBSnapshotTestCasePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ABB3EB3CCC5BCA82F40FE8DC87BB778 /* FBSnapshotTestCasePlatform.m */; };
-		373413256658309F9053CE22BF62077E /* UIImage+Snapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 284833D18C244D2B42966B6EE425AA59 /* UIImage+Snapshot.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		5558B876B579BC1E79BD3D2B19148329 /* UIApplication+StrictKeyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 99A67367E018411D614EC8536A8A1C5B /* UIApplication+StrictKeyWindow.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5BE525FF6FA14B999ED2CCC0AA4FA0CF /* FBSnapshotTestCase-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA6E655DC84D06359BD0ED5E36C783 /* FBSnapshotTestCase-dummy.m */; };
-		640CCE9C3A28AA3CA15510899F9140EE /* FBSnapshotTestCasePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 88B1DEEBF6316A84D7413645212492FF /* FBSnapshotTestCasePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		679BB1844B9339CDA09E92F93F7C2DEF /* AssentifySdk-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C2CBE06065E6756558AC6EA9AA4AFA8 /* AssentifySdk-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		67F1963AA7C9EDB78127AD5F566A4949 /* UIImage+Diff.h in Headers */ = {isa = PBXBuildFile; fileRef = 96187BF3038121CC146335E9FF0B0AFF /* UIImage+Diff.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		74339C58AC4E5631FB8C0E662668A796 /* UIApplication+StrictKeyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F538C426803AE34255FC6E35B408CCA /* UIApplication+StrictKeyWindow.m */; };
-		7C67CBD15D9B5D0B7769B2F469478332 /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 277B6BE10C665F515606A22FD60C6DCC /* FBSnapshotTestCase.m */; };
+		30D475DF57C0C682A723231E7BCA0D14 /* FBSnapshotTestCasePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 188C80111A45B83833D91BA3E5CCECD6 /* FBSnapshotTestCasePlatform.m */; };
+		329C7689823ACEE4BEC37704570A62B4 /* best-fp16.tflite in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C064C0BF54EAE50E5F1C0AAB3058B /* best-fp16.tflite */; };
+		33F9211978781D8660ECBBD251A8F9BB /* BaseUrls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BEB00532F4B31915D3FB7ED75DF241 /* BaseUrls.swift */; };
+		35BF615847FF7601E8E5F47A314BD7BF /* DetectMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BCC19A95DF58764E9CE3C16E3D0BA6 /* DetectMotion.swift */; };
+		370B09844D438D114D926CAF5D63CC55 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3E72825A1A2609DC14838A01B259A6 /* OverlayView.swift */; };
+		373413256658309F9053CE22BF62077E /* UIImage+Snapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 33E4C6CE9B7B8DE3F30D563946D6BB16 /* UIImage+Snapshot.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3FB81602606D2EAE34A33718341EE3C1 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9ACDB90AECFED31F502D79D1B7C2BE /* Model.swift */; };
+		40C1AE47684A65EF417E742CB30EF9AD /* TensorFlowLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE4B5B994746C70CA373936A4F77C44 /* TensorFlowLite.swift */; };
+		410828E81DC431EA5B31CB5733BDB583 /* RemoteProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2923BF7A285A417985BFA18B632C7DAC /* RemoteProcessing.swift */; };
+		41391F082AACCB803056956FAD5F9092 /* BlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82EC44A33C881005CA95910F4519A71 /* BlockType.swift */; };
+		438E7802005EA83A96B8EA3A1389B385 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B149038739FCDA21E340A9E59240FC /* CameraView.swift */; };
+		438F67A5821113F8B5609C5BD6113688 /* ContextAwareSigningModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF988E6C6CB94A15A61D8AC43C07D81 /* ContextAwareSigningModel.swift */; };
+		47C223E3888579D896EEB8E54367A08D /* SubmitRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142975523878CCD49C347075480C95A /* SubmitRequestModel.swift */; };
+		4864424670F1CB4443181023E4109B36 /* RemoteProcessingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D854EC809ED6E2AB3CE266DA2F7B5FB /* RemoteProcessingDelegate.swift */; };
+		49511D6FDE4DF9DC6611F56E5DE0F62A /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E40D3B5C786F534CC77474092AB9E /* StringExtension.swift */; };
+		4BD0B21D5DCE2E057E73B590132F9486 /* ScanPassportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3D3B60251318F98BFB978FAB81C4EA /* ScanPassportDelegate.swift */; };
+		4E29175DB1FD59BCA1E9B28D49DA4B0D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
+		5515D1636F6A8A306CA872BFC6F08EBF /* ModelDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162186315A3BE540BFF735A3604E9A2F /* ModelDataHandler.swift */; };
+		5558B876B579BC1E79BD3D2B19148329 /* UIApplication+StrictKeyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EBDE1FE1891525FB2CEA22764EA4957 /* UIApplication+StrictKeyWindow.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5BE525FF6FA14B999ED2CCC0AA4FA0CF /* FBSnapshotTestCase-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C9F7B6CF5428C1F326B424925AD31 /* FBSnapshotTestCase-dummy.m */; };
+		5F6958A108E43F2DADDD500004963DCF /* BlurChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB54695520CAE8FFD3B68C6890024176 /* BlurChecker.swift */; };
+		640CCE9C3A28AA3CA15510899F9140EE /* FBSnapshotTestCasePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD551D3BA2AE7AAFF507A4BB98ED413 /* FBSnapshotTestCasePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66524EA5CA7223CC6EA2B7342690A190 /* ScanIDCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF8114FD7A7FF1BEECD8D199F8A869 /* ScanIDCard.swift */; };
+		67F1963AA7C9EDB78127AD5F566A4949 /* UIImage+Diff.h in Headers */ = {isa = PBXBuildFile; fileRef = 9EBFA0F07886F2F0CFA658839C4AB139 /* UIImage+Diff.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6AD54FB0E313800F49E998E6BACE4B70 /* AssentifySdkDelegate .swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6B7A846961B242685FDE4083A4AB2A /* AssentifySdkDelegate .swift */; };
+		6EDA2D26246F70F71DD246F4B4C949B4 /* ScanOtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E4476E8DAEF805E8D493AD89CD96B /* ScanOtherDelegate.swift */; };
+		6F0B043A6FAF7E8FD8E1F31E98CD6077 /* classes.txt in Sources */ = {isa = PBXBuildFile; fileRef = 52380609F86C2BCA3FBC926F3F44A9C7 /* classes.txt */; };
+		6F71DFB7A2E88AEA14B37918CA56FC8C /* MotionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF554E9913E4AD69B1F571FEEA8E28 /* MotionType.swift */; };
+		74339C58AC4E5631FB8C0E662668A796 /* UIApplication+StrictKeyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D0B17B75FE3CAC104311E53BD0EC871 /* UIApplication+StrictKeyWindow.m */; };
+		75F864843901DDDFDBE784A5CCA8B786 /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA753BDE998895B66DBE995D2D63446 /* CVPixelBufferExtension.swift */; };
+		7875EDA0E87ED6FB1789EB7E5F4D70ED /* ScanIDCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE8945695C95A393A74B231600134E4 /* ScanIDCardDelegate.swift */; };
+		7976D4867196358CE1588282F727BA16 /* TensorFlowLiteSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DDF1786B1A903D18903E47B37EC32D4 /* TensorFlowLiteSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		79D7B96D79D03245FA3A4037D4303EA3 /* CreateUserDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6EF6A02D6A5CF406132F2977747068 /* CreateUserDocument.swift */; };
+		7C67CBD15D9B5D0B7769B2F469478332 /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FC28A4EF85F39E94E27605AD26B513 /* FBSnapshotTestCase.m */; };
+		7E74531515A2823DDE77FCE1718541B1 /* SubmitDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D296D6BACA9B03DDDEF235FFF6E4E91 /* SubmitDataDelegate.swift */; };
+		809FA9A4E59CFD5B07D65B3F55E585C9 /* TemplatesByCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB492FC9C462BE759AA4060D258D0B8C /* TemplatesByCountry.swift */; };
+		847499CD910ACDC012375DD8B41CF112 /* ContextAware.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19B2709564951400D9A43E03A603009 /* ContextAware.swift */; };
 		875A310EAF4D0C136C3FFFF5E0335BE4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA24A38BA9EE106B59E3D4C8DD1CE0E /* UIKit.framework */; };
-		8AE19756F0126FE92AF625E36F3D70FE /* UIImage+Compare.h in Headers */ = {isa = PBXBuildFile; fileRef = 656116C8FA5458F45D4707110C9530EC /* UIImage+Compare.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		92130C03A987D2F500C685EEF59A982B /* Pods-AssentifySdk_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D9677824FA7C0260BCF869EF11599EBC /* Pods-AssentifySdk_Example-dummy.m */; };
+		894517B50867ED98751CB17C2AC5AE87 /* ScanPassport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ED3A2DE896B518A7F3D2517EBA9B80 /* ScanPassport.swift */; };
+		89C23B5AAE068CE67005C84640FD47AC /* Pods-AssentifySdk_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 80286000F57F1BCEA04A880A96E08524 /* Pods-AssentifySdk_Example-dummy.m */; };
+		8A81410A46AA7441A29582D75BE05B41 /* EnvironmentalConditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32286CC59A64C951FAAA44151D2F6C78 /* EnvironmentalConditions.swift */; };
+		8AE19756F0126FE92AF625E36F3D70FE /* UIImage+Compare.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC5356DCF661CC0BCFBBA9AD86AD51F /* UIImage+Compare.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8B62B4F06337ED963CA44212AC613649 /* TensorFlowLiteSwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EF193D27312B088DCBC50527DA56A619 /* TensorFlowLiteSwift-dummy.m */; };
+		8DF37BCA0104DFBB206DC430D674621F /* Pods-AssentifySdk_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DD15B8F6D5E8D1B9DA345A4F33F21DA /* Pods-AssentifySdk_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8E284D60D983D13B99869C704AB8CEBD /* ToBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCC970145792786901EB4A1A3461E4 /* ToBase64.swift */; };
+		911E5313D3D0A8E40D888B074EC4E108 /* ConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F5CA257A61216319E13242B494128 /* ConfigModel.swift */; };
+		94D44EC06C23A9DF5D7844FE4C6D79FC /* AssentifySdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B0CF871EF6758C24D0D567D0DD07EF2 /* AssentifySdk.swift */; };
 		94ED66B1C4E8D5876D073DDDCF866930 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
+		99751BD09E891CA94C117B987CAAAE86 /* ContextAwareDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CCAFB133758B6ED814E7651A4713A1 /* ContextAwareDelegate.swift */; };
+		9CF32FD6645143DC8F8DD188E4DC32B7 /* DetectZoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCEFACFE4BC0525BB7C32F38AE7FEF /* DetectZoom.swift */; };
 		9D3C5E2F56838937146191468A893244 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E658F388F01C72599CA75537950B6095 /* XCTest.framework */; };
-		B52281F9F4340D4FC8ABB2FEB1FEC08E /* UIImage+Compare.m in Sources */ = {isa = PBXBuildFile; fileRef = 235A78CFFA6D8B8D86CACD733531CB13 /* UIImage+Compare.m */; };
-		C390C6005353FB986CB52F474CEF8588 /* FBSnapshotTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E1B7EA746BF6557FD565BAE12AF9198 /* FBSnapshotTestController.m */; };
-		C5A58ACDFA8BEC8BD12814B21646DA92 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
+		A431B1CDA32B4345460409C23941E9B9 /* InterpreterError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44649495207A7149A0F8953A68E48580 /* InterpreterError.swift */; };
+		B361E0E5A3EE6CD86A2D77A39F2C3C82 /* HubConnectionTargets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C80D181618CE0B7D9A210B109556CF6 /* HubConnectionTargets.swift */; };
+		B52281F9F4340D4FC8ABB2FEB1FEC08E /* UIImage+Compare.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B04B5BB55C766C064F26874009E7F8 /* UIImage+Compare.m */; };
+		B97BE8E59C29669A34358576F70AD0C6 /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2567E6930FD0E23A0107939BCA1722CE /* Interpreter.swift */; };
+		BA09C65E0B4B47B911157B6A5B54A9CF /* FaceMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09074B03566E1603C786DB6162FED8AD /* FaceMatch.swift */; };
+		BCD2BE10E56BED5AABCB1A74D258686F /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BBA55A0285C9303A112E8A1E79F077 /* Delegate.swift */; };
+		BD714C5AA93322AE77CB89BCAF9F2415 /* AssentifySdk-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EE931ADDD1F224B3F216F8BF279A1BDB /* AssentifySdk-dummy.m */; };
+		BDCC7938FBCA70895E9E82D2EFE6D4FE /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7049E12D0B5ECF74B2B2B48B169F20 /* UIColorExtension.swift */; };
+		C1C663F1200E369D791A2B069E0BF746 /* SignatureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53A7AF0F08B07EA0D2398F1DDE1A303 /* SignatureModel.swift */; };
+		C390C6005353FB986CB52F474CEF8588 /* FBSnapshotTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB9F523D12DEFC65628D09940CACEF0A /* FBSnapshotTestController.m */; };
+		C96136E6AA27A4C030C6C7A828B6D57B /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474A4F98C131D3DAAEA9103319007EC /* PreviewView.swift */; };
 		C9F76407497DF0205D7460B36D22259F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3280BB5E7B57C31D41117A74F76E9DF3 /* QuartzCore.framework */; };
-		CA54C09A12400567AFFCB407EEB7E154 /* UIImage+Diff.m in Sources */ = {isa = PBXBuildFile; fileRef = 4568279DE47DC3AB91598E1317503995 /* UIImage+Diff.m */; };
-		E30FC228085A3C516A9FE9CC07CAB5EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
-		FF8307B7346F4D3BA13C11AECFE6EDD0 /* FBSnapshotTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = FEE661E58CA6655B39AA49AA4C021C33 /* FBSnapshotTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CA54C09A12400567AFFCB407EEB7E154 /* UIImage+Diff.m in Sources */ = {isa = PBXBuildFile; fileRef = 71428962F50D13011359B0D92DF8DB81 /* UIImage+Diff.m */; };
+		CEA1F3DFB1B5ADCBE9C1EEADE0F7F23D /* DocumentTokensModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE5C3A0E773596172C09BC52BB2B41E /* DocumentTokensModel.swift */; };
+		D32490E7268EF88D84BE4DB42BC71383 /* CameraFeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D5CA29F9C7E7863FF3B6512A2145 /* CameraFeedManager.swift */; };
+		D67EB55C3D5B47EC7BEC573830768D1B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
+		D95E1ADA74B75591463406145BCDA8E1 /* FaceMatchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60631D588B6A095F87A95C6ABDBE7C95 /* FaceMatchDelegate.swift */; };
+		DE91883D00F23EE958B6ED932B5D5175 /* PrePostProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074883ADD408E8E8E513A264D8B4256E /* PrePostProcessor.swift */; };
+		E181F1FB1EAAA0B9D623F75C944D1550 /* CameraSetupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A2B2D3DA763FC71AA7B40E7BA30D7C /* CameraSetupDelegate.swift */; };
+		E23F9D0961554630E48508E6F14F5D33 /* BrightnessChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439017D0EDB538FD2724204E1CA13B1F /* BrightnessChecker.swift */; };
+		E248D23F70CB0D2881F970C50ED59780 /* SignalRRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93B17E8E46652488F794071C172C5BF /* SignalRRequest.swift */; };
+		E5314FC7230EABF45E4E69443BF3A2D1 /* ZoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F124306A4335FDBB44B28A2CF69B69B2 /* ZoomType.swift */; };
+		E5E83C86E52FC4E8DE2778B79C7EC7C5 /* SubmitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E6BA6620A99785512FEBDF0A52146 /* SubmitData.swift */; };
+		E603CAF5670A9970821D757BDB1BF0BA /* ValidateKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1BCD1DAE20583AA3EE7EFC3D831AE /* ValidateKeyModel.swift */; };
+		F3B9AC3490F8E5C23F2876301C7276EC /* ConstantsDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E53C35386152E175B0EEB9E336CAD5 /* ConstantsDefault.swift */; };
+		F432654834E40E1835E448DACF82AE34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
+		F7F84162131CC34C771807E681A077A0 /* QuantizationParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B4AF837F23856D866E9F2D94916C5 /* QuantizationParameters.swift */; };
+		FF64EA9106F75AC0348EB3FFFE484784 /* EndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AC24661E16E02B16BB0117FA4521E /* EndPoints.swift */; };
+		FF8307B7346F4D3BA13C11AECFE6EDD0 /* FBSnapshotTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = DDB6FD3300068B10D518AE08C08BA555 /* FBSnapshotTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		00B50798E8AAE2BCDC6201E97E85A133 /* PBXContainerItemProxy */ = {
+		2B91393089761A7BE343C7BDCF5AC83F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8FE4C90B995A7A85507E3AC190AFAE07;
 			remoteInfo = "Pods-AssentifySdk_Example";
 		};
-		CB29F341A6DB201F86953C4720CF48C5 /* PBXContainerItemProxy */ = {
+		3AAC02D52796285A73238CE20D4FC8B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2E61F2FA7E18D3AA12DE6001D9B4EE97;
-			remoteInfo = AssentifySdk;
+			remoteGlobalIDString = 10418167F619D6DA72BADAD10F9EC02B;
+			remoteInfo = TensorFlowLiteSwift;
 		};
-		ED3352F3F2ED4553E99FCC99AC26E8AE /* PBXContainerItemProxy */ = {
+		9994EC517E9DE389177505F1B8E36852 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC559E53E13B6FBEF4F5CC310A73AFE6;
+			remoteInfo = TensorFlowLiteC;
+		};
+		BF478F377E2967E2878FB897DF59EA3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 98A98149697C80CEF8D5772791E92E66;
 			remoteInfo = FBSnapshotTestCase;
 		};
+		D602F843E8373D4D8A54FB610C048555 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 10418167F619D6DA72BADAD10F9EC02B;
+			remoteInfo = TensorFlowLiteSwift;
+		};
+		E7DD77C33CD52F8A3B2986172401A51B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2E61F2FA7E18D3AA12DE6001D9B4EE97;
+			remoteInfo = AssentifySdk;
+		};
+		FE21560961A13FA472CD3A3AFBF55FD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC559E53E13B6FBEF4F5CC310A73AFE6;
+			remoteInfo = TensorFlowLiteC;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00EF554E9913E4AD69B1F571FEEA8E28 /* MotionType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MotionType.swift; sourceTree = "<group>"; };
 		028F96F5F0D89681B56B6F3FDD54BD33 /* Pods-AssentifySdk_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AssentifySdk_Tests-Info.plist"; sourceTree = "<group>"; };
-		0F538C426803AE34255FC6E35B408CCA /* UIApplication+StrictKeyWindow.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+StrictKeyWindow.m"; path = "FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.m"; sourceTree = "<group>"; };
-		1ADA6E655DC84D06359BD0ED5E36C783 /* FBSnapshotTestCase-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FBSnapshotTestCase-dummy.m"; sourceTree = "<group>"; };
-		1BA56CFAB4AC0C1945CAA8A9F7F16FB2 /* AssentifySdk.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = AssentifySdk.podspec; sourceTree = "<group>"; tabWidth = 2; };
+		0474A4F98C131D3DAAEA9103319007EC /* PreviewView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		05A31409EDAE6FC2DAC85CA801CE3AEA /* ScanOther.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanOther.swift; sourceTree = "<group>"; };
+		074883ADD408E8E8E513A264D8B4256E /* PrePostProcessor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrePostProcessor.swift; sourceTree = "<group>"; };
+		09074B03566E1603C786DB6162FED8AD /* FaceMatch.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FaceMatch.swift; sourceTree = "<group>"; };
+		0C9E44E209D3D1B8902A66689225428F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0D9D71AE271C383170F42094A28BA4F0 /* Pods-AssentifySdk_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AssentifySdk_Example-resources.sh"; sourceTree = "<group>"; };
+		0DD15B8F6D5E8D1B9DA345A4F33F21DA /* Pods-AssentifySdk_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AssentifySdk_Example-umbrella.h"; sourceTree = "<group>"; };
+		0F7C064C0BF54EAE50E5F1C0AAB3058B /* best-fp16.tflite */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = "best-fp16.tflite"; sourceTree = "<group>"; };
+		0FB8BF1B92B88D74ED3D5F51CA62DC06 /* Tensor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Tensor.swift; path = tensorflow/lite/swift/Sources/Tensor.swift; sourceTree = "<group>"; };
+		15FDAB5405BADBF63E8B34EDD9116522 /* AssentifySdk.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = AssentifySdk.modulemap; sourceTree = "<group>"; };
+		162186315A3BE540BFF735A3604E9A2F /* ModelDataHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModelDataHandler.swift; sourceTree = "<group>"; };
+		17CF8C3452FA1D2F7046A9A12A761949 /* FBSnapshotTestCase.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FBSnapshotTestCase.modulemap; sourceTree = "<group>"; };
+		18450E52A5936ED91F63D7F83D02033F /* TensorFlowLiteSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TensorFlowLiteSwift-prefix.pch"; sourceTree = "<group>"; };
+		188C80111A45B83833D91BA3E5CCECD6 /* FBSnapshotTestCasePlatform.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCasePlatform.m; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.m; sourceTree = "<group>"; };
+		1B54F0FF17D65B7FAF29FDD28C972E45 /* AssentifySdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AssentifySdk.release.xcconfig; sourceTree = "<group>"; };
+		1BDCEFACFE4BC0525BB7C32F38AE7FEF /* DetectZoom.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DetectZoom.swift; sourceTree = "<group>"; };
+		1C80D181618CE0B7D9A210B109556CF6 /* HubConnectionTargets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HubConnectionTargets.swift; sourceTree = "<group>"; };
 		1DA24A38BA9EE106B59E3D4C8DD1CE0E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		1EECA7B688B8A61D24F65A999E730884 /* TensorFlowLiteC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TensorFlowLiteC.debug.xcconfig; sourceTree = "<group>"; };
 		2162A27DCB1AE81C0B750B4D6FCC7530 /* Pods-AssentifySdk_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AssentifySdk_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		235A78CFFA6D8B8D86CACD733531CB13 /* UIImage+Compare.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Compare.m"; path = "FBSnapshotTestCase/Categories/UIImage+Compare.m"; sourceTree = "<group>"; };
-		277B6BE10C665F515606A22FD60C6DCC /* FBSnapshotTestCase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCase.m; path = FBSnapshotTestCase/FBSnapshotTestCase.m; sourceTree = "<group>"; };
-		284833D18C244D2B42966B6EE425AA59 /* UIImage+Snapshot.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Snapshot.h"; path = "FBSnapshotTestCase/Categories/UIImage+Snapshot.h"; sourceTree = "<group>"; };
+		227991288E9B4C7E4DEEED194D3E0BE3 /* FBSnapshotTestCase-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-prefix.pch"; sourceTree = "<group>"; };
+		248705EADF52C9B6A96F80FC7003AABE /* best-fp16.tflite */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = "best-fp16.tflite"; sourceTree = "<group>"; };
+		249D5D932B67B5F4F67EFCA60ED97E7E /* HubConnectionFunctions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HubConnectionFunctions.swift; sourceTree = "<group>"; };
+		24A2B2D3DA763FC71AA7B40E7BA30D7C /* CameraSetupDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraSetupDelegate.swift; sourceTree = "<group>"; };
+		2567E6930FD0E23A0107939BCA1722CE /* Interpreter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Interpreter.swift; path = tensorflow/lite/swift/Sources/Interpreter.swift; sourceTree = "<group>"; };
+		2923BF7A285A417985BFA18B632C7DAC /* RemoteProcessing.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemoteProcessing.swift; sourceTree = "<group>"; };
 		2A105ADDDCE42BFF264CCC412FCA6C18 /* Pods-AssentifySdk_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AssentifySdk_Tests-umbrella.h"; sourceTree = "<group>"; };
-		2C2CBE06065E6756558AC6EA9AA4AFA8 /* AssentifySdk-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AssentifySdk-umbrella.h"; sourceTree = "<group>"; };
-		2FD980A502F323AB051D7E2291235902 /* AssentifySdk-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AssentifySdk-dummy.m"; sourceTree = "<group>"; };
+		2D0C9F7B6CF5428C1F326B424925AD31 /* FBSnapshotTestCase-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FBSnapshotTestCase-dummy.m"; sourceTree = "<group>"; };
+		2E4A5FDF8BC4EAA1893550E1356B91AD /* AssentifySdk.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = AssentifySdk.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		2EBDE1FE1891525FB2CEA22764EA4957 /* UIApplication+StrictKeyWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIApplication+StrictKeyWindow.h"; path = "FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.h"; sourceTree = "<group>"; };
+		32286CC59A64C951FAAA44151D2F6C78 /* EnvironmentalConditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EnvironmentalConditions.swift; sourceTree = "<group>"; };
 		3280BB5E7B57C31D41117A74F76E9DF3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		3F0D66CF296ABBC57EC4D0452397E235 /* SwiftSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftSupport.swift; path = FBSnapshotTestCase/SwiftSupport.swift; sourceTree = "<group>"; };
-		44AA39790A6BEFD4F931BDDAD04315B6 /* AssentifySdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AssentifySdk.debug.xcconfig; sourceTree = "<group>"; };
-		4568279DE47DC3AB91598E1317503995 /* UIImage+Diff.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Diff.m"; path = "FBSnapshotTestCase/Categories/UIImage+Diff.m"; sourceTree = "<group>"; };
-		4C6513B09838318BD763CFD5390D1DE0 /* FBSnapshotTestCase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FBSnapshotTestCase.release.xcconfig; sourceTree = "<group>"; };
-		4EC125F7384A523611CFEFA505C8921A /* Pods-AssentifySdk_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-AssentifySdk_Example"; path = Pods_AssentifySdk_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		54D805A20EEF2A120F628FB6BC89A205 /* Pods-AssentifySdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Example.release.xcconfig"; sourceTree = "<group>"; };
+		33E4C6CE9B7B8DE3F30D563946D6BB16 /* UIImage+Snapshot.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Snapshot.h"; path = "FBSnapshotTestCase/Categories/UIImage+Snapshot.h"; sourceTree = "<group>"; };
+		38BBA55A0285C9303A112E8A1E79F077 /* Delegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Delegate.swift; path = tensorflow/lite/swift/Sources/Delegate.swift; sourceTree = "<group>"; };
+		3D854EC809ED6E2AB3CE266DA2F7B5FB /* RemoteProcessingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemoteProcessingDelegate.swift; sourceTree = "<group>"; };
+		3F6B7A846961B242685FDE4083A4AB2A /* AssentifySdkDelegate .swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "AssentifySdkDelegate .swift"; path = "AssentifySdk/Classes/AssentifySdkDelegate .swift"; sourceTree = "<group>"; };
+		4001B9354E868ACA4A077271D9A5C579 /* UIImage+Snapshot.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Snapshot.m"; path = "FBSnapshotTestCase/Categories/UIImage+Snapshot.m"; sourceTree = "<group>"; };
+		40CA9D7B17F310279560EEA8FCEF04E8 /* TensorFlowLiteC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TensorFlowLiteC.release.xcconfig; sourceTree = "<group>"; };
+		42ED3A2DE896B518A7F3D2517EBA9B80 /* ScanPassport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanPassport.swift; sourceTree = "<group>"; };
+		439017D0EDB538FD2724204E1CA13B1F /* BrightnessChecker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BrightnessChecker.swift; sourceTree = "<group>"; };
+		44649495207A7149A0F8953A68E48580 /* InterpreterError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InterpreterError.swift; path = tensorflow/lite/swift/Sources/InterpreterError.swift; sourceTree = "<group>"; };
+		44FEBB666915B0017002F00C91A5D1A5 /* TensorFlowLiteC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TensorFlowLiteC.framework; path = Frameworks/TensorFlowLiteC.framework; sourceTree = "<group>"; };
+		4EC125F7384A523611CFEFA505C8921A /* Pods_AssentifySdk_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AssentifySdk_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5142975523878CCD49C347075480C95A /* SubmitRequestModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubmitRequestModel.swift; sourceTree = "<group>"; };
+		5151550E6958EF8769E78942EC5D0F3D /* AssentifySdk-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AssentifySdk-umbrella.h"; sourceTree = "<group>"; };
+		51CCAFB133758B6ED814E7651A4713A1 /* ContextAwareDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContextAwareDelegate.swift; sourceTree = "<group>"; };
+		52380609F86C2BCA3FBC926F3F44A9C7 /* classes.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = classes.txt; sourceTree = "<group>"; };
+		52BEB00532F4B31915D3FB7ED75DF241 /* BaseUrls.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BaseUrls.swift; sourceTree = "<group>"; };
+		54BD2314AB20C60597F00720AB632C06 /* AssentifySdk-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AssentifySdk-prefix.pch"; sourceTree = "<group>"; };
 		57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		584200284E6647F8EB51EB0F21F49826 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FBSnapshotTestCase; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		656116C8FA5458F45D4707110C9530EC /* UIImage+Compare.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Compare.h"; path = "FBSnapshotTestCase/Categories/UIImage+Compare.h"; sourceTree = "<group>"; };
-		6ABB3EB3CCC5BCA82F40FE8DC87BB778 /* FBSnapshotTestCasePlatform.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCasePlatform.m; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.m; sourceTree = "<group>"; };
+		5A0176885D19E941A7253CE961F5F1AF /* AssentifySdk-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "AssentifySdk-Info.plist"; sourceTree = "<group>"; };
+		5B7AC24661E16E02B16BB0117FA4521E /* EndPoints.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EndPoints.swift; sourceTree = "<group>"; };
+		5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D0B17B75FE3CAC104311E53BD0EC871 /* UIApplication+StrictKeyWindow.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+StrictKeyWindow.m"; path = "FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.m"; sourceTree = "<group>"; };
+		5DF988E6C6CB94A15A61D8AC43C07D81 /* ContextAwareSigningModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContextAwareSigningModel.swift; sourceTree = "<group>"; };
+		5E7049E12D0B5ECF74B2B2B48B169F20 /* UIColorExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		60631D588B6A095F87A95C6ABDBE7C95 /* FaceMatchDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FaceMatchDelegate.swift; sourceTree = "<group>"; };
+		616B4AF837F23856D866E9F2D94916C5 /* QuantizationParameters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuantizationParameters.swift; path = tensorflow/lite/swift/Sources/QuantizationParameters.swift; sourceTree = "<group>"; };
+		61BCC19A95DF58764E9CE3C16E3D0BA6 /* DetectMotion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DetectMotion.swift; sourceTree = "<group>"; };
+		67FC28A4EF85F39E94E27605AD26B513 /* FBSnapshotTestCase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCase.m; path = FBSnapshotTestCase/FBSnapshotTestCase.m; sourceTree = "<group>"; };
+		6AE4B5B994746C70CA373936A4F77C44 /* TensorFlowLite.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TensorFlowLite.swift; path = tensorflow/lite/swift/Sources/TensorFlowLite.swift; sourceTree = "<group>"; };
+		6BE8945695C95A393A74B231600134E4 /* ScanIDCardDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanIDCardDelegate.swift; sourceTree = "<group>"; };
 		6C9B131322233FB6FAB0C817685EAEDC /* Pods-AssentifySdk_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AssentifySdk_Tests-frameworks.sh"; sourceTree = "<group>"; };
-		6CA7996E7534FCE96106951F1B468647 /* Pods-AssentifySdk_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AssentifySdk_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		7E1B7EA746BF6557FD565BAE12AF9198 /* FBSnapshotTestController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestController.m; path = FBSnapshotTestCase/FBSnapshotTestController.m; sourceTree = "<group>"; };
-		837520364B61B3E68F05D63624446B59 /* Pods-AssentifySdk_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AssentifySdk_Example-frameworks.sh"; sourceTree = "<group>"; };
-		8700F25214CC3A2469B1C220D5A32A32 /* Pods-AssentifySdk_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AssentifySdk_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		88B1DEEBF6316A84D7413645212492FF /* FBSnapshotTestCasePlatform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCasePlatform.h; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.h; sourceTree = "<group>"; };
-		8C9B64A3616A5667599E436589BD533E /* AssentifySdk */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AssentifySdk; path = AssentifySdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D48AB31231BE66D5E467354220728F5 /* Pods-AssentifySdk_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AssentifySdk_Example.modulemap"; sourceTree = "<group>"; };
-		8E5923010B02074CAA9AAF6EA02D66AA /* FBSnapshotTestCase-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-umbrella.h"; sourceTree = "<group>"; };
-		8E8CB1FFDF4C98510F1BECCE65C99FAF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		9468E867498BBAF36F9AFFE4845F8B09 /* FBSnapshotTestCase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FBSnapshotTestCase.debug.xcconfig; sourceTree = "<group>"; };
-		96187BF3038121CC146335E9FF0B0AFF /* UIImage+Diff.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Diff.h"; path = "FBSnapshotTestCase/Categories/UIImage+Diff.h"; sourceTree = "<group>"; };
-		98D3E18965842B63EF516CBAE87482A9 /* AssentifySdk-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AssentifySdk-prefix.pch"; sourceTree = "<group>"; };
-		99A67367E018411D614EC8536A8A1C5B /* UIApplication+StrictKeyWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIApplication+StrictKeyWindow.h"; path = "FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.h"; sourceTree = "<group>"; };
+		71428962F50D13011359B0D92DF8DB81 /* UIImage+Diff.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Diff.m"; path = "FBSnapshotTestCase/Categories/UIImage+Diff.m"; sourceTree = "<group>"; };
+		74C78EB19D65B2ACD1FDBC268FA6D5F2 /* BaseResponseDataModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BaseResponseDataModel.swift; sourceTree = "<group>"; };
+		7AF2DC76616499270777FAA785F071EC /* SwiftSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftSupport.swift; path = FBSnapshotTestCase/SwiftSupport.swift; sourceTree = "<group>"; };
+		7B0CF871EF6758C24D0D567D0DD07EF2 /* AssentifySdk.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AssentifySdk.swift; path = AssentifySdk/Classes/AssentifySdk.swift; sourceTree = "<group>"; };
+		7C4CC865D338B408B195443ADDD778C9 /* FBSnapshotTestCase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FBSnapshotTestCase.debug.xcconfig; sourceTree = "<group>"; };
+		7CF7D5CA29F9C7E7863FF3B6512A2145 /* CameraFeedManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraFeedManager.swift; sourceTree = "<group>"; };
+		7DA753BDE998895B66DBE995D2D63446 /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CVPixelBufferExtension.swift; sourceTree = "<group>"; };
+		7F9C0F89CDB8B1D6BBB90692D0926242 /* Pods-AssentifySdk_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AssentifySdk_Example.modulemap"; sourceTree = "<group>"; };
+		80286000F57F1BCEA04A880A96E08524 /* Pods-AssentifySdk_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AssentifySdk_Example-dummy.m"; sourceTree = "<group>"; };
+		86B225B19AE5E204C11DA3895EF35A00 /* Pods-AssentifySdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Example.release.xcconfig"; sourceTree = "<group>"; };
+		8A6E40D3B5C786F534CC77474092AB9E /* StringExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		8C9B64A3616A5667599E436589BD533E /* AssentifySdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AssentifySdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D296D6BACA9B03DDDEF235FFF6E4E91 /* SubmitDataDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubmitDataDelegate.swift; sourceTree = "<group>"; };
+		90E20EAC0BE08603F40831D9E810E981 /* FBSnapshotTestController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestController.h; path = FBSnapshotTestCase/FBSnapshotTestController.h; sourceTree = "<group>"; };
+		9378D6F72B4166BDBEB36DA7D436C80A /* classes.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = classes.txt; sourceTree = "<group>"; };
+		9AFFB99B20098F90A9850D25E9CC3278 /* AssentifySdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AssentifySdk.debug.xcconfig; sourceTree = "<group>"; };
+		9B6EF6A02D6A5CF406132F2977747068 /* CreateUserDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreateUserDocument.swift; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9DDF1786B1A903D18903E47B37EC32D4 /* TensorFlowLiteSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TensorFlowLiteSwift-umbrella.h"; sourceTree = "<group>"; };
+		9EBFA0F07886F2F0CFA658839C4AB139 /* UIImage+Diff.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Diff.h"; path = "FBSnapshotTestCase/Categories/UIImage+Diff.h"; sourceTree = "<group>"; };
 		A1FA96C8DB1C6EB453C5CA73300D53F4 /* Pods-AssentifySdk_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AssentifySdk_Tests-dummy.m"; sourceTree = "<group>"; };
+		A4BA3461C1A306C51604CCCB638C6B68 /* FBSnapshotTestCase-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FBSnapshotTestCase-Info.plist"; sourceTree = "<group>"; };
 		A556DE663288A7E6FFC8D8190BE3F1CC /* Pods-AssentifySdk_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		A84201E3706C528F3125884DCB0919F4 /* Pods-AssentifySdk_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AssentifySdk_Example-umbrella.h"; sourceTree = "<group>"; };
-		A975E5729EA2330AE06022C2A96CE9E4 /* Pods-AssentifySdk_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AssentifySdk_Example-Info.plist"; sourceTree = "<group>"; };
-		AE9FF9459FBCDC4AF88FB6B5A4CC1439 /* FBSnapshotTestController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestController.h; path = FBSnapshotTestCase/FBSnapshotTestController.h; sourceTree = "<group>"; };
-		B7103CA00AED20722C5B69CA5B4F6938 /* FBSnapshotTestCase-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FBSnapshotTestCase-Info.plist"; sourceTree = "<group>"; };
+		A7B149038739FCDA21E340A9E59240FC /* CameraView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		A82EC44A33C881005CA95910F4519A71 /* BlockType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlockType.swift; sourceTree = "<group>"; };
+		AB492FC9C462BE759AA4060D258D0B8C /* TemplatesByCountry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TemplatesByCountry.swift; sourceTree = "<group>"; };
+		AB54695520CAE8FFD3B68C6890024176 /* BlurChecker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlurChecker.swift; sourceTree = "<group>"; };
+		AB6E6BA6620A99785512FEBDF0A52146 /* SubmitData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubmitData.swift; sourceTree = "<group>"; };
+		AE3CDF4F7143813031C8F99A553097D7 /* TensorFlowLiteSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TensorFlowLiteSwift.release.xcconfig; sourceTree = "<group>"; };
+		B0E53C35386152E175B0EEB9E336CAD5 /* ConstantsDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConstantsDefault.swift; sourceTree = "<group>"; };
+		B354B372E1677360D23825ECCEFB048E /* Pods-AssentifySdk_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		B3F1BCD1DAE20583AA3EE7EFC3D831AE /* ValidateKeyModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ValidateKeyModel.swift; sourceTree = "<group>"; };
+		B53A7AF0F08B07EA0D2398F1DDE1A303 /* SignatureModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SignatureModel.swift; sourceTree = "<group>"; };
 		BE69CEDF8594E38D3A6612D3FB503388 /* Pods-AssentifySdk_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AssentifySdk_Tests.modulemap"; sourceTree = "<group>"; };
-		CBFF6C5FD9C3A84274A9314D3E940B6E /* FBSnapshotTestCase.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FBSnapshotTestCase.modulemap; sourceTree = "<group>"; };
-		CC3869CB8A53BCD209E73DD31F57969D /* Pods-AssentifySdk_Tests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-AssentifySdk_Tests"; path = Pods_AssentifySdk_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEC5356DCF661CC0BCFBBA9AD86AD51F /* UIImage+Compare.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Compare.h"; path = "FBSnapshotTestCase/Categories/UIImage+Compare.h"; sourceTree = "<group>"; };
+		C91AADB51338FDFCE8629802A50A614B /* Pods-AssentifySdk_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AssentifySdk_Example-Info.plist"; sourceTree = "<group>"; };
+		CC3869CB8A53BCD209E73DD31F57969D /* Pods_AssentifySdk_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AssentifySdk_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE9ACDB90AECFED31F502D79D1B7C2BE /* Model.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Model.swift; path = tensorflow/lite/swift/Sources/Model.swift; sourceTree = "<group>"; };
 		CE9ACE079B82D2D79F6158D820996A1D /* Pods-AssentifySdk_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		D08CEBB9BDD9EF7A662ECFC0305C169E /* FBSnapshotTestCase-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-prefix.pch"; sourceTree = "<group>"; };
-		D18204B24A9798754F04819ABCDC33BB /* AssentifySdk-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "AssentifySdk-Info.plist"; sourceTree = "<group>"; };
-		D38BC7B0FE2B682B5679636E1FC08601 /* Pods-AssentifySdk_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		D872A3EE224412D4057C234FBC629F9C /* UIImage+Snapshot.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Snapshot.m"; path = "FBSnapshotTestCase/Categories/UIImage+Snapshot.m"; sourceTree = "<group>"; };
-		D9677824FA7C0260BCF869EF11599EBC /* Pods-AssentifySdk_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AssentifySdk_Example-dummy.m"; sourceTree = "<group>"; };
+		CF93505E7ADBA972488352023F402B89 /* TensorFlowLiteSwift-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "TensorFlowLiteSwift-Info.plist"; sourceTree = "<group>"; };
+		D0DAC3FE3BAD9AFD9ADEB2A77AFA1DA8 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		D89F5CA257A61216319E13242B494128 /* ConfigModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigModel.swift; sourceTree = "<group>"; };
+		DA6E4476E8DAEF805E8D493AD89CD96B /* ScanOtherDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanOtherDelegate.swift; sourceTree = "<group>"; };
+		DAD551D3BA2AE7AAFF507A4BB98ED413 /* FBSnapshotTestCasePlatform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCasePlatform.h; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.h; sourceTree = "<group>"; };
 		DCBA440B8EBB7F955F7F9CB43FD202ED /* Pods-AssentifySdk_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AssentifySdk_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		E4CB18B942065B3F64D00CC0C7E0635C /* AssentifySdk.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = AssentifySdk.modulemap; sourceTree = "<group>"; };
+		DDB6FD3300068B10D518AE08C08BA555 /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCase.h; path = FBSnapshotTestCase/FBSnapshotTestCase.h; sourceTree = "<group>"; };
+		DEC3BBECE07F207A68DC5B35421D4233 /* FBSnapshotTestCase-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-umbrella.h"; sourceTree = "<group>"; };
+		DF32815B4FA7537D521293C87786DAE9 /* TensorFlowLiteSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = TensorFlowLiteSwift.modulemap; sourceTree = "<group>"; };
+		E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TensorFlowLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E279CEBB12BE0336937CD4F037E2D3E8 /* TensorFlowLiteSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TensorFlowLiteSwift.debug.xcconfig; sourceTree = "<group>"; };
+		E3FF8114FD7A7FF1BEECD8D199F8A869 /* ScanIDCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanIDCard.swift; sourceTree = "<group>"; };
 		E658F388F01C72599CA75537950B6095 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		F4E21A8E67ED79C96635E24FF648B592 /* AssentifySdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AssentifySdk.release.xcconfig; sourceTree = "<group>"; };
-		FEE661E58CA6655B39AA49AA4C021C33 /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCase.h; path = FBSnapshotTestCase/FBSnapshotTestCase.h; sourceTree = "<group>"; };
+		E6B04B5BB55C766C064F26874009E7F8 /* UIImage+Compare.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Compare.m"; path = "FBSnapshotTestCase/Categories/UIImage+Compare.m"; sourceTree = "<group>"; };
+		EE931ADDD1F224B3F216F8BF279A1BDB /* AssentifySdk-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AssentifySdk-dummy.m"; sourceTree = "<group>"; };
+		EF193D27312B088DCBC50527DA56A619 /* TensorFlowLiteSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "TensorFlowLiteSwift-dummy.m"; sourceTree = "<group>"; };
+		F124306A4335FDBB44B28A2CF69B69B2 /* ZoomType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZoomType.swift; sourceTree = "<group>"; };
+		F19B2709564951400D9A43E03A603009 /* ContextAware.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContextAware.swift; sourceTree = "<group>"; };
+		F2016C8175A3307D4A01DE6806E77C61 /* RemoteClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemoteClient.swift; sourceTree = "<group>"; };
+		F46BA11DAF3D7CB0B951AED43A70210D /* FBSnapshotTestCase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FBSnapshotTestCase.release.xcconfig; sourceTree = "<group>"; };
+		F619D90F7EC64157D043463BD50E169E /* Pods-AssentifySdk_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AssentifySdk_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		F93B17E8E46652488F794071C172C5BF /* SignalRRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SignalRRequest.swift; sourceTree = "<group>"; };
+		FA3E72825A1A2609DC14838A01B259A6 /* OverlayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		FA9B171C9AA8172BD112F2C853AE0FC6 /* Pods-AssentifySdk_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AssentifySdk_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		FB9F523D12DEFC65628D09940CACEF0A /* FBSnapshotTestController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestController.m; path = FBSnapshotTestCase/FBSnapshotTestController.m; sourceTree = "<group>"; };
+		FC3D3B60251318F98BFB978FAB81C4EA /* ScanPassportDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanPassportDelegate.swift; sourceTree = "<group>"; };
+		FCE5C3A0E773596172C09BC52BB2B41E /* DocumentTokensModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DocumentTokensModel.swift; sourceTree = "<group>"; };
+		FEFCC970145792786901EB4A1A3461E4 /* ToBase64.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ToBase64.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1015AD3119BA5242CABD2C89AE07447A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E30FC228085A3C516A9FE9CC07CAB5EF /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		22794EC917B1DF220C1590BFD6DF1D6B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -142,11 +311,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DDC0C4426460C99EDCF44DA1D8188BB7 /* Frameworks */ = {
+		5C1DD3967A27BAD75D5B7D25312F1E5D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5A58ACDFA8BEC8BD12814B21646DA92 /* Foundation.framework in Frameworks */,
+				4E29175DB1FD59BCA1E9B28D49DA4B0D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6802B061E50CB269DF56791D18EDB9A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D67EB55C3D5B47EC7BEC573830768D1B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D35C22F0301234729FE349AAD8C2B8FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F432654834E40E1835E448DACF82AE34 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,35 +349,176 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01039FDB4A6F7C7BF825729F03F1BBE8 /* Pod */ = {
+		074CA03EC5805F68BB5E3722CC9BA7B0 /* ImageUtils */ = {
 			isa = PBXGroup;
 			children = (
-				1BA56CFAB4AC0C1945CAA8A9F7F16FB2 /* AssentifySdk.podspec */,
-				584200284E6647F8EB51EB0F21F49826 /* LICENSE */,
-				8E8CB1FFDF4C98510F1BECCE65C99FAF /* README.md */,
+				FEFCC970145792786901EB4A1A3461E4 /* ToBase64.swift */,
 			);
-			name = Pod;
+			path = ImageUtils;
 			sourceTree = "<group>";
 		};
-		4BA2479549DD918290454B1CDCD0B92B /* Core */ = {
+		0D7635657926F49AB990878C65B463B3 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				FEE661E58CA6655B39AA49AA4C021C33 /* FBSnapshotTestCase.h */,
-				277B6BE10C665F515606A22FD60C6DCC /* FBSnapshotTestCase.m */,
-				88B1DEEBF6316A84D7413645212492FF /* FBSnapshotTestCasePlatform.h */,
-				6ABB3EB3CCC5BCA82F40FE8DC87BB778 /* FBSnapshotTestCasePlatform.m */,
-				AE9FF9459FBCDC4AF88FB6B5A4CC1439 /* FBSnapshotTestController.h */,
-				7E1B7EA746BF6557FD565BAE12AF9198 /* FBSnapshotTestController.m */,
-				99A67367E018411D614EC8536A8A1C5B /* UIApplication+StrictKeyWindow.h */,
-				0F538C426803AE34255FC6E35B408CCA /* UIApplication+StrictKeyWindow.m */,
-				656116C8FA5458F45D4707110C9530EC /* UIImage+Compare.h */,
-				235A78CFFA6D8B8D86CACD733531CB13 /* UIImage+Compare.m */,
-				96187BF3038121CC146335E9FF0B0AFF /* UIImage+Diff.h */,
-				4568279DE47DC3AB91598E1317503995 /* UIImage+Diff.m */,
-				284833D18C244D2B42966B6EE425AA59 /* UIImage+Snapshot.h */,
-				D872A3EE224412D4057C234FBC629F9C /* UIImage+Snapshot.m */,
+				FDF9E439BBDDDB3A902BE2D3EA3A5C1A /* Frameworks */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		0F6E5B1D7B41F4B4D871EA065593DF91 /* TensorFlowLiteC */ = {
+			isa = PBXGroup;
+			children = (
+				0D7635657926F49AB990878C65B463B3 /* Core */,
+				799AC63C368A5CBE22D001ECAC653968 /* Support Files */,
+			);
+			path = TensorFlowLiteC;
+			sourceTree = "<group>";
+		};
+		1ACC8E72DF2CC80194391A928F26A87A /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				A82EC44A33C881005CA95910F4519A71 /* BlockType.swift */,
+				32286CC59A64C951FAAA44151D2F6C78 /* EnvironmentalConditions.swift */,
+				00EF554E9913E4AD69B1F571FEEA8E28 /* MotionType.swift */,
+				F124306A4335FDBB44B28A2CF69B69B2 /* ZoomType.swift */,
+				BC70FB5B4BDB113C82C5D75EE15A8BAF /* HubConnectionValues */,
+				4260D9791356EEFC63D0FA3BEF460E6E /* Routes */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		1FB4782065713524E8CEEF55C11BAB3C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7CF7D5CA29F9C7E7863FF3B6512A2145 /* CameraFeedManager.swift */,
+				24A2B2D3DA763FC71AA7B40E7BA30D7C /* CameraSetupDelegate.swift */,
+				A7B149038739FCDA21E340A9E59240FC /* CameraView.swift */,
+				FA3E72825A1A2609DC14838A01B259A6 /* OverlayView.swift */,
+				0474A4F98C131D3DAAEA9103319007EC /* PreviewView.swift */,
+			);
+			name = View;
+			path = AssentifySdk/Classes/View;
+			sourceTree = "<group>";
+		};
+		21CE132C2F1EB8B9CC08759A52A3C10C /* RemoteClient */ = {
+			isa = PBXGroup;
+			children = (
+				74C78EB19D65B2ACD1FDBC268FA6D5F2 /* BaseResponseDataModel.swift */,
+				D89F5CA257A61216319E13242B494128 /* ConfigModel.swift */,
+				5DF988E6C6CB94A15A61D8AC43C07D81 /* ContextAwareSigningModel.swift */,
+				9B6EF6A02D6A5CF406132F2977747068 /* CreateUserDocument.swift */,
+				FCE5C3A0E773596172C09BC52BB2B41E /* DocumentTokensModel.swift */,
+				F2016C8175A3307D4A01DE6806E77C61 /* RemoteClient.swift */,
+				F93B17E8E46652488F794071C172C5BF /* SignalRRequest.swift */,
+				B53A7AF0F08B07EA0D2398F1DDE1A303 /* SignatureModel.swift */,
+				5142975523878CCD49C347075480C95A /* SubmitRequestModel.swift */,
+				AB492FC9C462BE759AA4060D258D0B8C /* TemplatesByCountry.swift */,
+				B3F1BCD1DAE20583AA3EE7EFC3D831AE /* ValidateKeyModel.swift */,
+			);
+			name = RemoteClient;
+			path = AssentifySdk/Classes/RemoteClient;
+			sourceTree = "<group>";
+		};
+		2E31E37F2063780DB793CC866B3E83E7 /* Tflite */ = {
+			isa = PBXGroup;
+			children = (
+				0F7C064C0BF54EAE50E5F1C0AAB3058B /* best-fp16.tflite */,
+				52380609F86C2BCA3FBC926F3F44A9C7 /* classes.txt */,
+				B0E53C35386152E175B0EEB9E336CAD5 /* ConstantsDefault.swift */,
+				7DA753BDE998895B66DBE995D2D63446 /* CVPixelBufferExtension.swift */,
+				162186315A3BE540BFF735A3604E9A2F /* ModelDataHandler.swift */,
+				074883ADD408E8E8E513A264D8B4256E /* PrePostProcessor.swift */,
+				8A6E40D3B5C786F534CC77474092AB9E /* StringExtension.swift */,
+				5E7049E12D0B5ECF74B2B2B48B169F20 /* UIColorExtension.swift */,
+			);
+			name = Tflite;
+			path = AssentifySdk/Classes/Tflite;
+			sourceTree = "<group>";
+		};
+		4029F48332F8034B5ADBCC3D3E2C73EF /* AssentifySdk */ = {
+			isa = PBXGroup;
+			children = (
+				7B0CF871EF6758C24D0D567D0DD07EF2 /* AssentifySdk.swift */,
+				3F6B7A846961B242685FDE4083A4AB2A /* AssentifySdkDelegate .swift */,
+				248705EADF52C9B6A96F80FC7003AABE /* best-fp16.tflite */,
+				9378D6F72B4166BDBEB36DA7D436C80A /* classes.txt */,
+				D38F4F08316052C0739FCB08326C74BF /* CheckConditions */,
+				B8FCCB9AD7A9E2EC916432D577FD6247 /* ContextAware */,
+				F470F31CADDFFDCE72659B008C39541E /* Core */,
+				5C3CCF3804BB4EB77E8814F1F7C44534 /* FaceMatch */,
+				507B9EC3E590C3D5CDE21C626BEA2429 /* Pod */,
+				21CE132C2F1EB8B9CC08759A52A3C10C /* RemoteClient */,
+				8F462CA88CBB30D62EDC0D59A71024B4 /* RemoteProcessing */,
+				4567A14A536EFD2C598998EA62E944C0 /* ScanIDCard */,
+				489002D1B8E9A72C6C782AD0930ECD87 /* ScanOther */,
+				E4F81B58B0528B3B6ADEE6C7414214BE /* ScanPassport */,
+				4200E495B750B10E729E9D1164218E1C /* SubmitData */,
+				70490F6F43D1769CDDB835C28335CBC8 /* Support Files */,
+				2E31E37F2063780DB793CC866B3E83E7 /* Tflite */,
+				1FB4782065713524E8CEEF55C11BAB3C /* View */,
+			);
+			name = AssentifySdk;
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		4200E495B750B10E729E9D1164218E1C /* SubmitData */ = {
+			isa = PBXGroup;
+			children = (
+				AB6E6BA6620A99785512FEBDF0A52146 /* SubmitData.swift */,
+				8D296D6BACA9B03DDDEF235FFF6E4E91 /* SubmitDataDelegate.swift */,
+			);
+			name = SubmitData;
+			path = AssentifySdk/Classes/SubmitData;
+			sourceTree = "<group>";
+		};
+		4260D9791356EEFC63D0FA3BEF460E6E /* Routes */ = {
+			isa = PBXGroup;
+			children = (
+				52BEB00532F4B31915D3FB7ED75DF241 /* BaseUrls.swift */,
+				5B7AC24661E16E02B16BB0117FA4521E /* EndPoints.swift */,
+			);
+			path = Routes;
+			sourceTree = "<group>";
+		};
+		4567A14A536EFD2C598998EA62E944C0 /* ScanIDCard */ = {
+			isa = PBXGroup;
+			children = (
+				E3FF8114FD7A7FF1BEECD8D199F8A869 /* ScanIDCard.swift */,
+				6BE8945695C95A393A74B231600134E4 /* ScanIDCardDelegate.swift */,
+			);
+			name = ScanIDCard;
+			path = AssentifySdk/Classes/ScanIDCard;
+			sourceTree = "<group>";
+		};
+		471189DFC57FCB0585EB9E0E8F7B5D43 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				DDB6FD3300068B10D518AE08C08BA555 /* FBSnapshotTestCase.h */,
+				67FC28A4EF85F39E94E27605AD26B513 /* FBSnapshotTestCase.m */,
+				DAD551D3BA2AE7AAFF507A4BB98ED413 /* FBSnapshotTestCasePlatform.h */,
+				188C80111A45B83833D91BA3E5CCECD6 /* FBSnapshotTestCasePlatform.m */,
+				90E20EAC0BE08603F40831D9E810E981 /* FBSnapshotTestController.h */,
+				FB9F523D12DEFC65628D09940CACEF0A /* FBSnapshotTestController.m */,
+				2EBDE1FE1891525FB2CEA22764EA4957 /* UIApplication+StrictKeyWindow.h */,
+				5D0B17B75FE3CAC104311E53BD0EC871 /* UIApplication+StrictKeyWindow.m */,
+				BEC5356DCF661CC0BCFBBA9AD86AD51F /* UIImage+Compare.h */,
+				E6B04B5BB55C766C064F26874009E7F8 /* UIImage+Compare.m */,
+				9EBFA0F07886F2F0CFA658839C4AB139 /* UIImage+Diff.h */,
+				71428962F50D13011359B0D92DF8DB81 /* UIImage+Diff.m */,
+				33E4C6CE9B7B8DE3F30D563946D6BB16 /* UIImage+Snapshot.h */,
+				4001B9354E868ACA4A077271D9A5C579 /* UIImage+Snapshot.m */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		489002D1B8E9A72C6C782AD0930ECD87 /* ScanOther */ = {
+			isa = PBXGroup;
+			children = (
+				05A31409EDAE6FC2DAC85CA801CE3AEA /* ScanOther.swift */,
+				DA6E4476E8DAEF805E8D493AD89CD96B /* ScanOtherDelegate.swift */,
+			);
+			name = ScanOther;
+			path = AssentifySdk/Classes/ScanOther;
 			sourceTree = "<group>";
 		};
 		4C13DDD27E7A723F380CF7456118F2E5 /* Pods-AssentifySdk_Tests */ = {
@@ -212,69 +538,142 @@
 			path = "Target Support Files/Pods-AssentifySdk_Tests";
 			sourceTree = "<group>";
 		};
-		7371EA25CF86C3271ADB543CCF5FEB43 /* Targets Support Files */ = {
+		4D15B032EAF7442A61A28B5884129127 /* TensorFlowLiteSwift */ = {
 			isa = PBXGroup;
 			children = (
-				DCC41E7A1D82B11CF752A1D3ECA0250D /* Pods-AssentifySdk_Example */,
-				4C13DDD27E7A723F380CF7456118F2E5 /* Pods-AssentifySdk_Tests */,
+				CF67631F7CE3B35484A16F94AEBE6662 /* Core */,
+				A71DE7FB57305BDDB2D2D28AD028477A /* Support Files */,
 			);
-			name = "Targets Support Files";
+			path = TensorFlowLiteSwift;
 			sourceTree = "<group>";
 		};
-		77467C1061DB697D062D8848B039DD20 /* AssentifySdk */ = {
+		507B9EC3E590C3D5CDE21C626BEA2429 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				01039FDB4A6F7C7BF825729F03F1BBE8 /* Pod */,
-				8D2C9633F9079192FDD24CDA15FC340F /* Support Files */,
+				2E4A5FDF8BC4EAA1893550E1356B91AD /* AssentifySdk.podspec */,
+				D0DAC3FE3BAD9AFD9ADEB2A77AFA1DA8 /* LICENSE */,
+				0C9E44E209D3D1B8902A66689225428F /* README.md */,
 			);
-			name = AssentifySdk;
-			path = ../..;
+			name = Pod;
 			sourceTree = "<group>";
 		};
-		8D2C9633F9079192FDD24CDA15FC340F /* Support Files */ = {
+		5C3CCF3804BB4EB77E8814F1F7C44534 /* FaceMatch */ = {
 			isa = PBXGroup;
 			children = (
-				E4CB18B942065B3F64D00CC0C7E0635C /* AssentifySdk.modulemap */,
-				2FD980A502F323AB051D7E2291235902 /* AssentifySdk-dummy.m */,
-				D18204B24A9798754F04819ABCDC33BB /* AssentifySdk-Info.plist */,
-				98D3E18965842B63EF516CBAE87482A9 /* AssentifySdk-prefix.pch */,
-				2C2CBE06065E6756558AC6EA9AA4AFA8 /* AssentifySdk-umbrella.h */,
-				44AA39790A6BEFD4F931BDDAD04315B6 /* AssentifySdk.debug.xcconfig */,
-				F4E21A8E67ED79C96635E24FF648B592 /* AssentifySdk.release.xcconfig */,
+				09074B03566E1603C786DB6162FED8AD /* FaceMatch.swift */,
+				60631D588B6A095F87A95C6ABDBE7C95 /* FaceMatchDelegate.swift */,
+			);
+			name = FaceMatch;
+			path = AssentifySdk/Classes/FaceMatch;
+			sourceTree = "<group>";
+		};
+		5CC28F529CB9CFF12D8FF5144F637F24 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4029F48332F8034B5ADBCC3D3E2C73EF /* AssentifySdk */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		70490F6F43D1769CDDB835C28335CBC8 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				15FDAB5405BADBF63E8B34EDD9116522 /* AssentifySdk.modulemap */,
+				EE931ADDD1F224B3F216F8BF279A1BDB /* AssentifySdk-dummy.m */,
+				5A0176885D19E941A7253CE961F5F1AF /* AssentifySdk-Info.plist */,
+				54BD2314AB20C60597F00720AB632C06 /* AssentifySdk-prefix.pch */,
+				5151550E6958EF8769E78942EC5D0F3D /* AssentifySdk-umbrella.h */,
+				9AFFB99B20098F90A9850D25E9CC3278 /* AssentifySdk.debug.xcconfig */,
+				1B54F0FF17D65B7FAF29FDD28C972E45 /* AssentifySdk.release.xcconfig */,
 			);
 			name = "Support Files";
 			path = "Example/Pods/Target Support Files/AssentifySdk";
 			sourceTree = "<group>";
 		};
-		906402ECC4C6C5EB58DD365FD2C64E92 /* SwiftSupport */ = {
+		7371EA25CF86C3271ADB543CCF5FEB43 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				3F0D66CF296ABBC57EC4D0452397E235 /* SwiftSupport.swift */,
+				D1080AC42AD2193C110A1B5932A6906A /* Pods-AssentifySdk_Example */,
+				4C13DDD27E7A723F380CF7456118F2E5 /* Pods-AssentifySdk_Tests */,
 			);
-			name = SwiftSupport;
+			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		91B24F1B85DCA25951BB75BAAED87A00 /* Development Pods */ = {
+		799AC63C368A5CBE22D001ECAC653968 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				77467C1061DB697D062D8848B039DD20 /* AssentifySdk */,
-			);
-			name = "Development Pods";
-			sourceTree = "<group>";
-		};
-		B69B2ECE2D2C9A3924A9231138CE0BBC /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				CBFF6C5FD9C3A84274A9314D3E940B6E /* FBSnapshotTestCase.modulemap */,
-				1ADA6E655DC84D06359BD0ED5E36C783 /* FBSnapshotTestCase-dummy.m */,
-				B7103CA00AED20722C5B69CA5B4F6938 /* FBSnapshotTestCase-Info.plist */,
-				D08CEBB9BDD9EF7A662ECFC0305C169E /* FBSnapshotTestCase-prefix.pch */,
-				8E5923010B02074CAA9AAF6EA02D66AA /* FBSnapshotTestCase-umbrella.h */,
-				9468E867498BBAF36F9AFFE4845F8B09 /* FBSnapshotTestCase.debug.xcconfig */,
-				4C6513B09838318BD763CFD5390D1DE0 /* FBSnapshotTestCase.release.xcconfig */,
+				1EECA7B688B8A61D24F65A999E730884 /* TensorFlowLiteC.debug.xcconfig */,
+				40CA9D7B17F310279560EEA8FCEF04E8 /* TensorFlowLiteC.release.xcconfig */,
 			);
 			name = "Support Files";
-			path = "../Target Support Files/FBSnapshotTestCase";
+			path = "../Target Support Files/TensorFlowLiteC";
+			sourceTree = "<group>";
+		};
+		8F462CA88CBB30D62EDC0D59A71024B4 /* RemoteProcessing */ = {
+			isa = PBXGroup;
+			children = (
+				2923BF7A285A417985BFA18B632C7DAC /* RemoteProcessing.swift */,
+				3D854EC809ED6E2AB3CE266DA2F7B5FB /* RemoteProcessingDelegate.swift */,
+			);
+			name = RemoteProcessing;
+			path = AssentifySdk/Classes/RemoteProcessing;
+			sourceTree = "<group>";
+		};
+		A09DB994B4B5243A9565F1FC9DA52F25 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8C9B64A3616A5667599E436589BD533E /* AssentifySdk.framework */,
+				5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */,
+				4EC125F7384A523611CFEFA505C8921A /* Pods_AssentifySdk_Example.framework */,
+				CC3869CB8A53BCD209E73DD31F57969D /* Pods_AssentifySdk_Tests.framework */,
+				E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLite.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A2DFAFE8946A8AF1ADB80CD0DBA77DD9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A56A8B3400E135856B32B0B8E168F0C9 /* FBSnapshotTestCase */,
+				0F6E5B1D7B41F4B4D871EA065593DF91 /* TensorFlowLiteC */,
+				4D15B032EAF7442A61A28B5884129127 /* TensorFlowLiteSwift */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A56A8B3400E135856B32B0B8E168F0C9 /* FBSnapshotTestCase */ = {
+			isa = PBXGroup;
+			children = (
+				471189DFC57FCB0585EB9E0E8F7B5D43 /* Core */,
+				E7AF5A03AA5BD7E5B0746DA9A63AC17A /* Support Files */,
+				E3FF57E5DD2827CFA6CE1E3C5C5275E2 /* SwiftSupport */,
+			);
+			path = FBSnapshotTestCase;
+			sourceTree = "<group>";
+		};
+		A71DE7FB57305BDDB2D2D28AD028477A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DF32815B4FA7537D521293C87786DAE9 /* TensorFlowLiteSwift.modulemap */,
+				EF193D27312B088DCBC50527DA56A619 /* TensorFlowLiteSwift-dummy.m */,
+				CF93505E7ADBA972488352023F402B89 /* TensorFlowLiteSwift-Info.plist */,
+				18450E52A5936ED91F63D7F83D02033F /* TensorFlowLiteSwift-prefix.pch */,
+				9DDF1786B1A903D18903E47B37EC32D4 /* TensorFlowLiteSwift-umbrella.h */,
+				E279CEBB12BE0336937CD4F037E2D3E8 /* TensorFlowLiteSwift.debug.xcconfig */,
+				AE3CDF4F7143813031C8F99A553097D7 /* TensorFlowLiteSwift.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/TensorFlowLiteSwift";
+			sourceTree = "<group>";
+		};
+		B8FCCB9AD7A9E2EC916432D577FD6247 /* ContextAware */ = {
+			isa = PBXGroup;
+			children = (
+				F19B2709564951400D9A43E03A603009 /* ContextAware.swift */,
+				51CCAFB133758B6ED814E7651A4713A1 /* ContextAwareDelegate.swift */,
+			);
+			name = ContextAware;
+			path = AssentifySdk/Classes/ContextAware;
 			sourceTree = "<group>";
 		};
 		BA4F31F07263C99FC76E66D632A59F09 /* Frameworks */ = {
@@ -285,62 +684,111 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BD2D60DE56CBB8C87BA07E0C1CCD0592 /* FBSnapshotTestCase */ = {
+		BC70FB5B4BDB113C82C5D75EE15A8BAF /* HubConnectionValues */ = {
 			isa = PBXGroup;
 			children = (
-				4BA2479549DD918290454B1CDCD0B92B /* Core */,
-				B69B2ECE2D2C9A3924A9231138CE0BBC /* Support Files */,
-				906402ECC4C6C5EB58DD365FD2C64E92 /* SwiftSupport */,
+				249D5D932B67B5F4F67EFCA60ED97E7E /* HubConnectionFunctions.swift */,
+				1C80D181618CE0B7D9A210B109556CF6 /* HubConnectionTargets.swift */,
 			);
-			path = FBSnapshotTestCase;
+			path = HubConnectionValues;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				91B24F1B85DCA25951BB75BAAED87A00 /* Development Pods */,
+				5CC28F529CB9CFF12D8FF5144F637F24 /* Development Pods */,
 				BA4F31F07263C99FC76E66D632A59F09 /* Frameworks */,
-				E81A37DBDE41E671312C56736544E2FA /* Pods */,
-				F06008542C9ADB86FA49950D23F3A421 /* Products */,
+				A2DFAFE8946A8AF1ADB80CD0DBA77DD9 /* Pods */,
+				A09DB994B4B5243A9565F1FC9DA52F25 /* Products */,
 				7371EA25CF86C3271ADB543CCF5FEB43 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		DCC41E7A1D82B11CF752A1D3ECA0250D /* Pods-AssentifySdk_Example */ = {
+		CF67631F7CE3B35484A16F94AEBE6662 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				8D48AB31231BE66D5E467354220728F5 /* Pods-AssentifySdk_Example.modulemap */,
-				6CA7996E7534FCE96106951F1B468647 /* Pods-AssentifySdk_Example-acknowledgements.markdown */,
-				8700F25214CC3A2469B1C220D5A32A32 /* Pods-AssentifySdk_Example-acknowledgements.plist */,
-				D9677824FA7C0260BCF869EF11599EBC /* Pods-AssentifySdk_Example-dummy.m */,
-				837520364B61B3E68F05D63624446B59 /* Pods-AssentifySdk_Example-frameworks.sh */,
-				A975E5729EA2330AE06022C2A96CE9E4 /* Pods-AssentifySdk_Example-Info.plist */,
-				A84201E3706C528F3125884DCB0919F4 /* Pods-AssentifySdk_Example-umbrella.h */,
-				D38BC7B0FE2B682B5679636E1FC08601 /* Pods-AssentifySdk_Example.debug.xcconfig */,
-				54D805A20EEF2A120F628FB6BC89A205 /* Pods-AssentifySdk_Example.release.xcconfig */,
+				38BBA55A0285C9303A112E8A1E79F077 /* Delegate.swift */,
+				2567E6930FD0E23A0107939BCA1722CE /* Interpreter.swift */,
+				44649495207A7149A0F8953A68E48580 /* InterpreterError.swift */,
+				CE9ACDB90AECFED31F502D79D1B7C2BE /* Model.swift */,
+				616B4AF837F23856D866E9F2D94916C5 /* QuantizationParameters.swift */,
+				0FB8BF1B92B88D74ED3D5F51CA62DC06 /* Tensor.swift */,
+				6AE4B5B994746C70CA373936A4F77C44 /* TensorFlowLite.swift */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		D1080AC42AD2193C110A1B5932A6906A /* Pods-AssentifySdk_Example */ = {
+			isa = PBXGroup;
+			children = (
+				7F9C0F89CDB8B1D6BBB90692D0926242 /* Pods-AssentifySdk_Example.modulemap */,
+				F619D90F7EC64157D043463BD50E169E /* Pods-AssentifySdk_Example-acknowledgements.markdown */,
+				FA9B171C9AA8172BD112F2C853AE0FC6 /* Pods-AssentifySdk_Example-acknowledgements.plist */,
+				80286000F57F1BCEA04A880A96E08524 /* Pods-AssentifySdk_Example-dummy.m */,
+				C91AADB51338FDFCE8629802A50A614B /* Pods-AssentifySdk_Example-Info.plist */,
+				0D9D71AE271C383170F42094A28BA4F0 /* Pods-AssentifySdk_Example-resources.sh */,
+				0DD15B8F6D5E8D1B9DA345A4F33F21DA /* Pods-AssentifySdk_Example-umbrella.h */,
+				B354B372E1677360D23825ECCEFB048E /* Pods-AssentifySdk_Example.debug.xcconfig */,
+				86B225B19AE5E204C11DA3895EF35A00 /* Pods-AssentifySdk_Example.release.xcconfig */,
 			);
 			name = "Pods-AssentifySdk_Example";
 			path = "Target Support Files/Pods-AssentifySdk_Example";
 			sourceTree = "<group>";
 		};
-		E81A37DBDE41E671312C56736544E2FA /* Pods */ = {
+		D38F4F08316052C0739FCB08326C74BF /* CheckConditions */ = {
 			isa = PBXGroup;
 			children = (
-				BD2D60DE56CBB8C87BA07E0C1CCD0592 /* FBSnapshotTestCase */,
+				AB54695520CAE8FFD3B68C6890024176 /* BlurChecker.swift */,
+				439017D0EDB538FD2724204E1CA13B1F /* BrightnessChecker.swift */,
+				61BCC19A95DF58764E9CE3C16E3D0BA6 /* DetectMotion.swift */,
+				1BDCEFACFE4BC0525BB7C32F38AE7FEF /* DetectZoom.swift */,
 			);
-			name = Pods;
+			name = CheckConditions;
+			path = AssentifySdk/Classes/CheckConditions;
 			sourceTree = "<group>";
 		};
-		F06008542C9ADB86FA49950D23F3A421 /* Products */ = {
+		E3FF57E5DD2827CFA6CE1E3C5C5275E2 /* SwiftSupport */ = {
 			isa = PBXGroup;
 			children = (
-				8C9B64A3616A5667599E436589BD533E /* AssentifySdk */,
-				5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase */,
-				4EC125F7384A523611CFEFA505C8921A /* Pods-AssentifySdk_Example */,
-				CC3869CB8A53BCD209E73DD31F57969D /* Pods-AssentifySdk_Tests */,
+				7AF2DC76616499270777FAA785F071EC /* SwiftSupport.swift */,
 			);
-			name = Products;
+			name = SwiftSupport;
+			sourceTree = "<group>";
+		};
+		E4F81B58B0528B3B6ADEE6C7414214BE /* ScanPassport */ = {
+			isa = PBXGroup;
+			children = (
+				42ED3A2DE896B518A7F3D2517EBA9B80 /* ScanPassport.swift */,
+				FC3D3B60251318F98BFB978FAB81C4EA /* ScanPassportDelegate.swift */,
+			);
+			name = ScanPassport;
+			path = AssentifySdk/Classes/ScanPassport;
+			sourceTree = "<group>";
+		};
+		E7AF5A03AA5BD7E5B0746DA9A63AC17A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				17CF8C3452FA1D2F7046A9A12A761949 /* FBSnapshotTestCase.modulemap */,
+				2D0C9F7B6CF5428C1F326B424925AD31 /* FBSnapshotTestCase-dummy.m */,
+				A4BA3461C1A306C51604CCCB638C6B68 /* FBSnapshotTestCase-Info.plist */,
+				227991288E9B4C7E4DEEED194D3E0BE3 /* FBSnapshotTestCase-prefix.pch */,
+				DEC3BBECE07F207A68DC5B35421D4233 /* FBSnapshotTestCase-umbrella.h */,
+				7C4CC865D338B408B195443ADDD778C9 /* FBSnapshotTestCase.debug.xcconfig */,
+				F46BA11DAF3D7CB0B951AED43A70210D /* FBSnapshotTestCase.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/FBSnapshotTestCase";
+			sourceTree = "<group>";
+		};
+		F470F31CADDFFDCE72659B008C39541E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				1ACC8E72DF2CC80194391A928F26A87A /* Constants */,
+				074CA03EC5805F68BB5E3722CC9BA7B0 /* ImageUtils */,
+			);
+			name = Core;
+			path = AssentifySdk/Classes/Core;
 			sourceTree = "<group>";
 		};
 		FB2668559AE577E6E8078C0C291AD417 /* iOS */ = {
@@ -354,22 +802,38 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		FDF9E439BBDDDB3A902BE2D3EA3A5C1A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				44FEBB666915B0017002F00C91A5D1A5 /* TensorFlowLiteC.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		06DD71B0D352AA3FD5D5112A0F5F0FD7 /* Headers */ = {
+		6B981020779F509BDD0653C06BE168F4 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				294D5A95B585489D42B83B95877D3E07 /* Pods-AssentifySdk_Example-umbrella.h in Headers */,
+				8DF37BCA0104DFBB206DC430D674621F /* Pods-AssentifySdk_Example-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		99648B1F1946837E941B111A74AF4F2E /* Headers */ = {
+		86CC6B949F4F4B77700F10DFC96CD1CB /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				679BB1844B9339CDA09E92F93F7C2DEF /* AssentifySdk-umbrella.h in Headers */,
+				2D6C43E0A1A1CFB317FB2AEB04567557 /* AssentifySdk-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2A9AE3B985DE4E1946E2487E1B0B91E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7976D4867196358CE1588282F727BA16 /* TensorFlowLiteSwift-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +863,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		10418167F619D6DA72BADAD10F9EC02B /* TensorFlowLiteSwift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8CEB496BD07E2A372A87F6E3ED3BA2C5 /* Build configuration list for PBXNativeTarget "TensorFlowLiteSwift" */;
+			buildPhases = (
+				B2A9AE3B985DE4E1946E2487E1B0B91E /* Headers */,
+				830FCC9623E3840339F9FFCF6DA7CF5E /* Sources */,
+				D35C22F0301234729FE349AAD8C2B8FD /* Frameworks */,
+				1E6FEA9911DAC6EE6C3AAC7A13CA3B27 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				979ADAD2EC79725A6E0C7A50CC393368 /* PBXTargetDependency */,
+			);
+			name = TensorFlowLiteSwift;
+			productName = TensorFlowLite;
+			productReference = E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLite.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		13165000CD87A0EB9235C570E291368B /* Pods-AssentifySdk_Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A6A8971543BD0FA69564B4824A7D66A /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Tests" */;
@@ -411,49 +894,52 @@
 			buildRules = (
 			);
 			dependencies = (
-				A88462541DEF7371F1EF8549594D6CF7 /* PBXTargetDependency */,
-				DBB74EAEFC185B0FA8019FD154081732 /* PBXTargetDependency */,
+				4119AFB4E240F1ED2430C88155213E2D /* PBXTargetDependency */,
+				695B363864FA53CA445AF7CE9CCA0028 /* PBXTargetDependency */,
 			);
 			name = "Pods-AssentifySdk_Tests";
 			productName = Pods_AssentifySdk_Tests;
-			productReference = CC3869CB8A53BCD209E73DD31F57969D /* Pods-AssentifySdk_Tests */;
+			productReference = CC3869CB8A53BCD209E73DD31F57969D /* Pods_AssentifySdk_Tests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		2E61F2FA7E18D3AA12DE6001D9B4EE97 /* AssentifySdk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0B5C2E632B4333B35CC3F71ED551715B /* Build configuration list for PBXNativeTarget "AssentifySdk" */;
+			buildConfigurationList = 74415F9F62343E77BEB59CF40A3BD7C5 /* Build configuration list for PBXNativeTarget "AssentifySdk" */;
 			buildPhases = (
-				99648B1F1946837E941B111A74AF4F2E /* Headers */,
-				9CADAB536FBEEB1DB525407A78F8B46F /* Sources */,
-				DDC0C4426460C99EDCF44DA1D8188BB7 /* Frameworks */,
-				79AE0C2B048FA1ADB8F22DD1DF103C85 /* Resources */,
+				86CC6B949F4F4B77700F10DFC96CD1CB /* Headers */,
+				B697E00C2BDA35C4469BC2E983943552 /* Sources */,
+				5C1DD3967A27BAD75D5B7D25312F1E5D /* Frameworks */,
+				D2887BEBFECFA77A838615524AF28951 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				727963954AD1B7C050B8A9D583BCE1C1 /* PBXTargetDependency */,
 			);
 			name = AssentifySdk;
 			productName = AssentifySdk;
-			productReference = 8C9B64A3616A5667599E436589BD533E /* AssentifySdk */;
+			productReference = 8C9B64A3616A5667599E436589BD533E /* AssentifySdk.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8FE4C90B995A7A85507E3AC190AFAE07 /* Pods-AssentifySdk_Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B4C6ADC39178B6A896B1C94152118B1D /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Example" */;
+			buildConfigurationList = 91BFF486D5C9D82EB99AF82C85CF041E /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Example" */;
 			buildPhases = (
-				06DD71B0D352AA3FD5D5112A0F5F0FD7 /* Headers */,
-				46E0AB4439394224DDE1D09DF72BDCA7 /* Sources */,
-				1015AD3119BA5242CABD2C89AE07447A /* Frameworks */,
-				7AEF14274988424F5E12F169ED774172 /* Resources */,
+				6B981020779F509BDD0653C06BE168F4 /* Headers */,
+				EFC209EE8215DDD710C5BEE86F0EF35D /* Sources */,
+				6802B061E50CB269DF56791D18EDB9A5 /* Frameworks */,
+				D45AF4A8AEA8C71378EFA1953D27FB7F /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6C000829E838B642FDDD7583B20B1123 /* PBXTargetDependency */,
+				EBE6890103A24784E99EACC3355546E5 /* PBXTargetDependency */,
+				739483ADA64E034770D46257F4F1688C /* PBXTargetDependency */,
+				59539AF6EF65F1B8C4AFE80014534036 /* PBXTargetDependency */,
 			);
 			name = "Pods-AssentifySdk_Example";
 			productName = Pods_AssentifySdk_Example;
-			productReference = 4EC125F7384A523611CFEFA505C8921A /* Pods-AssentifySdk_Example */;
+			productReference = 4EC125F7384A523611CFEFA505C8921A /* Pods_AssentifySdk_Example.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		98A98149697C80CEF8D5772791E92E66 /* FBSnapshotTestCase */ = {
@@ -471,7 +957,7 @@
 			);
 			name = FBSnapshotTestCase;
 			productName = FBSnapshotTestCase;
-			productReference = 5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase */;
+			productReference = 5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -492,7 +978,7 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = F06008542C9ADB86FA49950D23F3A421 /* Products */;
+			productRefGroup = A09DB994B4B5243A9565F1FC9DA52F25 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -500,6 +986,8 @@
 				98A98149697C80CEF8D5772791E92E66 /* FBSnapshotTestCase */,
 				8FE4C90B995A7A85507E3AC190AFAE07 /* Pods-AssentifySdk_Example */,
 				13165000CD87A0EB9235C570E291368B /* Pods-AssentifySdk_Tests */,
+				AC559E53E13B6FBEF4F5CC310A73AFE6 /* TensorFlowLiteC */,
+				10418167F619D6DA72BADAD10F9EC02B /* TensorFlowLiteSwift */,
 			);
 		};
 /* End PBXProject section */
@@ -512,14 +1000,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		79AE0C2B048FA1ADB8F22DD1DF103C85 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7AEF14274988424F5E12F169ED774172 /* Resources */ = {
+		1E6FEA9911DAC6EE6C3AAC7A13CA3B27 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -533,22 +1014,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		46E0AB4439394224DDE1D09DF72BDCA7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
+		D2887BEBFECFA77A838615524AF28951 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92130C03A987D2F500C685EEF59A982B /* Pods-AssentifySdk_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9CADAB536FBEEB1DB525407A78F8B46F /* Sources */ = {
+		D45AF4A8AEA8C71378EFA1953D27FB7F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		830FCC9623E3840339F9FFCF6DA7CF5E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C8C624380204A8F8E0531A4FE5CF659 /* AssentifySdk-dummy.m in Sources */,
+				BCD2BE10E56BED5AABCB1A74D258686F /* Delegate.swift in Sources */,
+				B97BE8E59C29669A34358576F70AD0C6 /* Interpreter.swift in Sources */,
+				A431B1CDA32B4345460409C23941E9B9 /* InterpreterError.swift in Sources */,
+				3FB81602606D2EAE34A33718341EE3C1 /* Model.swift in Sources */,
+				F7F84162131CC34C771807E681A077A0 /* QuantizationParameters.swift in Sources */,
+				0C34EA761248E494B28AD23A8DE4DFA9 /* Tensor.swift in Sources */,
+				40C1AE47684A65EF417E742CB30EF9AD /* TensorFlowLite.swift in Sources */,
+				8B62B4F06337ED963CA44212AC613649 /* TensorFlowLiteSwift-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +1051,67 @@
 			buildActionMask = 2147483647;
 			files = (
 				105369BA6E261AE279E69C85F798C547 /* Pods-AssentifySdk_Tests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B697E00C2BDA35C4469BC2E983943552 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94D44EC06C23A9DF5D7844FE4C6D79FC /* AssentifySdk.swift in Sources */,
+				BD714C5AA93322AE77CB89BCAF9F2415 /* AssentifySdk-dummy.m in Sources */,
+				6AD54FB0E313800F49E998E6BACE4B70 /* AssentifySdkDelegate .swift in Sources */,
+				2BD743078EB6F52B2D935945D087FCC1 /* BaseResponseDataModel.swift in Sources */,
+				33F9211978781D8660ECBBD251A8F9BB /* BaseUrls.swift in Sources */,
+				329C7689823ACEE4BEC37704570A62B4 /* best-fp16.tflite in Sources */,
+				41391F082AACCB803056956FAD5F9092 /* BlockType.swift in Sources */,
+				5F6958A108E43F2DADDD500004963DCF /* BlurChecker.swift in Sources */,
+				E23F9D0961554630E48508E6F14F5D33 /* BrightnessChecker.swift in Sources */,
+				D32490E7268EF88D84BE4DB42BC71383 /* CameraFeedManager.swift in Sources */,
+				E181F1FB1EAAA0B9D623F75C944D1550 /* CameraSetupDelegate.swift in Sources */,
+				438E7802005EA83A96B8EA3A1389B385 /* CameraView.swift in Sources */,
+				6F0B043A6FAF7E8FD8E1F31E98CD6077 /* classes.txt in Sources */,
+				911E5313D3D0A8E40D888B074EC4E108 /* ConfigModel.swift in Sources */,
+				F3B9AC3490F8E5C23F2876301C7276EC /* ConstantsDefault.swift in Sources */,
+				847499CD910ACDC012375DD8B41CF112 /* ContextAware.swift in Sources */,
+				99751BD09E891CA94C117B987CAAAE86 /* ContextAwareDelegate.swift in Sources */,
+				438F67A5821113F8B5609C5BD6113688 /* ContextAwareSigningModel.swift in Sources */,
+				79D7B96D79D03245FA3A4037D4303EA3 /* CreateUserDocument.swift in Sources */,
+				75F864843901DDDFDBE784A5CCA8B786 /* CVPixelBufferExtension.swift in Sources */,
+				35BF615847FF7601E8E5F47A314BD7BF /* DetectMotion.swift in Sources */,
+				9CF32FD6645143DC8F8DD188E4DC32B7 /* DetectZoom.swift in Sources */,
+				CEA1F3DFB1B5ADCBE9C1EEADE0F7F23D /* DocumentTokensModel.swift in Sources */,
+				FF64EA9106F75AC0348EB3FFFE484784 /* EndPoints.swift in Sources */,
+				8A81410A46AA7441A29582D75BE05B41 /* EnvironmentalConditions.swift in Sources */,
+				BA09C65E0B4B47B911157B6A5B54A9CF /* FaceMatch.swift in Sources */,
+				D95E1ADA74B75591463406145BCDA8E1 /* FaceMatchDelegate.swift in Sources */,
+				0BAE607C9D38CA4CD02C158820B4F9F2 /* HubConnectionFunctions.swift in Sources */,
+				B361E0E5A3EE6CD86A2D77A39F2C3C82 /* HubConnectionTargets.swift in Sources */,
+				5515D1636F6A8A306CA872BFC6F08EBF /* ModelDataHandler.swift in Sources */,
+				6F71DFB7A2E88AEA14B37918CA56FC8C /* MotionType.swift in Sources */,
+				370B09844D438D114D926CAF5D63CC55 /* OverlayView.swift in Sources */,
+				DE91883D00F23EE958B6ED932B5D5175 /* PrePostProcessor.swift in Sources */,
+				C96136E6AA27A4C030C6C7A828B6D57B /* PreviewView.swift in Sources */,
+				2AB4C567889F94EA6B0DCA66B4E8758C /* RemoteClient.swift in Sources */,
+				410828E81DC431EA5B31CB5733BDB583 /* RemoteProcessing.swift in Sources */,
+				4864424670F1CB4443181023E4109B36 /* RemoteProcessingDelegate.swift in Sources */,
+				66524EA5CA7223CC6EA2B7342690A190 /* ScanIDCard.swift in Sources */,
+				7875EDA0E87ED6FB1789EB7E5F4D70ED /* ScanIDCardDelegate.swift in Sources */,
+				0D8CC9AFBB626A5BE0F43B6569EE2B8C /* ScanOther.swift in Sources */,
+				6EDA2D26246F70F71DD246F4B4C949B4 /* ScanOtherDelegate.swift in Sources */,
+				894517B50867ED98751CB17C2AC5AE87 /* ScanPassport.swift in Sources */,
+				4BD0B21D5DCE2E057E73B590132F9486 /* ScanPassportDelegate.swift in Sources */,
+				E248D23F70CB0D2881F970C50ED59780 /* SignalRRequest.swift in Sources */,
+				C1C663F1200E369D791A2B069E0BF746 /* SignatureModel.swift in Sources */,
+				49511D6FDE4DF9DC6611F56E5DE0F62A /* StringExtension.swift in Sources */,
+				E5E83C86E52FC4E8DE2778B79C7EC7C5 /* SubmitData.swift in Sources */,
+				7E74531515A2823DDE77FCE1718541B1 /* SubmitDataDelegate.swift in Sources */,
+				47C223E3888579D896EEB8E54367A08D /* SubmitRequestModel.swift in Sources */,
+				809FA9A4E59CFD5B07D65B3F55E585C9 /* TemplatesByCountry.swift in Sources */,
+				8E284D60D983D13B99869C704AB8CEBD /* ToBase64.swift in Sources */,
+				BDCC7938FBCA70895E9E82D2EFE6D4FE /* UIColorExtension.swift in Sources */,
+				E603CAF5670A9970821D757BDB1BF0BA /* ValidateKeyModel.swift in Sources */,
+				E5314FC7230EABF45E4E69443BF3A2D1 /* ZoomType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,95 +1131,79 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EFC209EE8215DDD710C5BEE86F0EF35D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89C23B5AAE068CE67005C84640FD47AC /* Pods-AssentifySdk_Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6C000829E838B642FDDD7583B20B1123 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AssentifySdk;
-			target = 2E61F2FA7E18D3AA12DE6001D9B4EE97 /* AssentifySdk */;
-			targetProxy = CB29F341A6DB201F86953C4720CF48C5 /* PBXContainerItemProxy */;
-		};
-		A88462541DEF7371F1EF8549594D6CF7 /* PBXTargetDependency */ = {
+		4119AFB4E240F1ED2430C88155213E2D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FBSnapshotTestCase;
 			target = 98A98149697C80CEF8D5772791E92E66 /* FBSnapshotTestCase */;
-			targetProxy = ED3352F3F2ED4553E99FCC99AC26E8AE /* PBXContainerItemProxy */;
+			targetProxy = BF478F377E2967E2878FB897DF59EA3A /* PBXContainerItemProxy */;
 		};
-		DBB74EAEFC185B0FA8019FD154081732 /* PBXTargetDependency */ = {
+		59539AF6EF65F1B8C4AFE80014534036 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TensorFlowLiteSwift;
+			target = 10418167F619D6DA72BADAD10F9EC02B /* TensorFlowLiteSwift */;
+			targetProxy = D602F843E8373D4D8A54FB610C048555 /* PBXContainerItemProxy */;
+		};
+		695B363864FA53CA445AF7CE9CCA0028 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Pods-AssentifySdk_Example";
 			target = 8FE4C90B995A7A85507E3AC190AFAE07 /* Pods-AssentifySdk_Example */;
-			targetProxy = 00B50798E8AAE2BCDC6201E97E85A133 /* PBXContainerItemProxy */;
+			targetProxy = 2B91393089761A7BE343C7BDCF5AC83F /* PBXContainerItemProxy */;
+		};
+		727963954AD1B7C050B8A9D583BCE1C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TensorFlowLiteSwift;
+			target = 10418167F619D6DA72BADAD10F9EC02B /* TensorFlowLiteSwift */;
+			targetProxy = 3AAC02D52796285A73238CE20D4FC8B7 /* PBXContainerItemProxy */;
+		};
+		739483ADA64E034770D46257F4F1688C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TensorFlowLiteC;
+			target = AC559E53E13B6FBEF4F5CC310A73AFE6 /* TensorFlowLiteC */;
+			targetProxy = 9994EC517E9DE389177505F1B8E36852 /* PBXContainerItemProxy */;
+		};
+		979ADAD2EC79725A6E0C7A50CC393368 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TensorFlowLiteC;
+			target = AC559E53E13B6FBEF4F5CC310A73AFE6 /* TensorFlowLiteC */;
+			targetProxy = FE21560961A13FA472CD3A3AFBF55FD0 /* PBXContainerItemProxy */;
+		};
+		EBE6890103A24784E99EACC3355546E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AssentifySdk;
+			target = 2E61F2FA7E18D3AA12DE6001D9B4EE97 /* AssentifySdk */;
+			targetProxy = E7DD77C33CD52F8A3B2986172401A51B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0CF977E736A9F0297ED689DCD07C3E1C /* Release */ = {
+		1BEC2931FBD57D4D1F6F7F349180A556 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4C6513B09838318BD763CFD5390D1DE0 /* FBSnapshotTestCase.release.xcconfig */;
+			baseConfigurationReference = 40CA9D7B17F310279560EEA8FCEF04E8 /* TensorFlowLiteC.release.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap";
-				PRODUCT_MODULE_NAME = FBSnapshotTestCase;
-				PRODUCT_NAME = FBSnapshotTestCase;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		1D627A1CD864F4B26481202A50CCB935 /* Debug */ = {
+		2DFEEC8DF9B0B77176840B0C50CC2FF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 44AA39790A6BEFD4F931BDDAD04315B6 /* AssentifySdk.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/AssentifySdk/AssentifySdk-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/AssentifySdk/AssentifySdk-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/AssentifySdk/AssentifySdk.modulemap";
-				PRODUCT_MODULE_NAME = AssentifySdk;
-				PRODUCT_NAME = AssentifySdk;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		3EE52CB54D9A7A9AF8BF1E5DEFF7A4F8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 54D805A20EEF2A120F628FB6BC89A205 /* Pods-AssentifySdk_Example.release.xcconfig */;
+			baseConfigurationReference = B354B372E1677360D23825ECCEFB048E /* Pods-AssentifySdk_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -678,7 +1217,103 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		3719248ED83FD5CA69AD6E3DEB19DBDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F46BA11DAF3D7CB0B951AED43A70210D /* FBSnapshotTestCase.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap";
+				PRODUCT_MODULE_NAME = FBSnapshotTestCase;
+				PRODUCT_NAME = FBSnapshotTestCase;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		388791BE3622D739454E5BA85F2EE9E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9AFFB99B20098F90A9850D25E9CC3278 /* AssentifySdk.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/AssentifySdk/AssentifySdk-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/AssentifySdk/AssentifySdk-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/AssentifySdk/AssentifySdk.modulemap";
+				PRODUCT_MODULE_NAME = AssentifySdk;
+				PRODUCT_NAME = AssentifySdk;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		416E425CCF43DCD17C395DB81132D7F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86B225B19AE5E204C11DA3895EF35A00 /* Pods-AssentifySdk_Example.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example.modulemap";
@@ -696,11 +1331,10 @@
 			};
 			name = Release;
 		};
-		5E594584FB122D53C2894C7CB282928C /* Release */ = {
+		46A55132427D84BE04697DFF2F650C2D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F4E21A8E67ED79C96635E24FF648B592 /* AssentifySdk.release.xcconfig */;
+			baseConfigurationReference = E279CEBB12BE0336937CD4F037E2D3E8 /* TensorFlowLiteSwift.debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -709,24 +1343,67 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/AssentifySdk/AssentifySdk-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/AssentifySdk/AssentifySdk-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/AssentifySdk/AssentifySdk.modulemap";
-				PRODUCT_MODULE_NAME = AssentifySdk;
-				PRODUCT_NAME = AssentifySdk;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift.modulemap";
+				PRODUCT_MODULE_NAME = TensorFlowLite;
+				PRODUCT_NAME = TensorFlowLite;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
+		};
+		61FD6DE462323C62DACC66FC604B0BD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C4CC865D338B408B195443ADDD778C9 /* FBSnapshotTestCase.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap";
+				PRODUCT_MODULE_NAME = FBSnapshotTestCase;
+				PRODUCT_NAME = FBSnapshotTestCase;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		678533EC3FC25F9803E08225FDF12063 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1EECA7B688B8A61D24F65A999E730884 /* TensorFlowLiteC.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		7EE7A78859F657F6BEFC651185B43192 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -778,7 +1455,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -789,11 +1466,10 @@
 			};
 			name = Release;
 		};
-		820FBA4A9801A0E4C10F357F098BFE17 /* Debug */ = {
+		9F06419D6559581B172AB7E6808D0C9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D38BC7B0FE2B682B5679636E1FC08601 /* Pods-AssentifySdk_Example.debug.xcconfig */;
+			baseConfigurationReference = 1B54F0FF17D65B7FAF29FDD28C972E45 /* AssentifySdk.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -803,28 +1479,29 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/AssentifySdk/AssentifySdk-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/AssentifySdk/AssentifySdk-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				MODULEMAP_FILE = "Target Support Files/AssentifySdk/AssentifySdk.modulemap";
+				PRODUCT_MODULE_NAME = AssentifySdk;
+				PRODUCT_NAME = AssentifySdk;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
-		842C60C4F1EBC85F9C8FF97D39D120FF /* Debug */ = {
+		AEE4E100C9E024B8447F57DB00E3CBBC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9468E867498BBAF36F9AFFE4845F8B09 /* FBSnapshotTestCase.debug.xcconfig */;
+			baseConfigurationReference = AE3CDF4F7143813031C8F99A553097D7 /* TensorFlowLiteSwift.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -834,23 +1511,25 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap";
-				PRODUCT_MODULE_NAME = FBSnapshotTestCase;
-				PRODUCT_NAME = FBSnapshotTestCase;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift.modulemap";
+				PRODUCT_MODULE_NAME = TensorFlowLite;
+				PRODUCT_NAME = TensorFlowLite;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		B56177B58D90370CB90A790FC94FCF70 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -868,7 +1547,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests.modulemap";
@@ -901,7 +1580,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests.modulemap";
@@ -972,7 +1651,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -988,20 +1667,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0B5C2E632B4333B35CC3F71ED551715B /* Build configuration list for PBXNativeTarget "AssentifySdk" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1D627A1CD864F4B26481202A50CCB935 /* Debug */,
-				5E594584FB122D53C2894C7CB282928C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		28DAA9880679133EC375B7072B9AEABB /* Build configuration list for PBXNativeTarget "FBSnapshotTestCase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				842C60C4F1EBC85F9C8FF97D39D120FF /* Debug */,
-				0CF977E736A9F0297ED689DCD07C3E1C /* Release */,
+				61FD6DE462323C62DACC66FC604B0BD1 /* Debug */,
+				3719248ED83FD5CA69AD6E3DEB19DBDB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1015,20 +1685,47 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		74415F9F62343E77BEB59CF40A3BD7C5 /* Build configuration list for PBXNativeTarget "AssentifySdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				388791BE3622D739454E5BA85F2EE9E6 /* Debug */,
+				9F06419D6559581B172AB7E6808D0C9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8CEB496BD07E2A372A87F6E3ED3BA2C5 /* Build configuration list for PBXNativeTarget "TensorFlowLiteSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46A55132427D84BE04697DFF2F650C2D /* Debug */,
+				AEE4E100C9E024B8447F57DB00E3CBBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91BFF486D5C9D82EB99AF82C85CF041E /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DFEEC8DF9B0B77176840B0C50CC2FF1 /* Debug */,
+				416E425CCF43DCD17C395DB81132D7F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95B5C322D5E1135295611DF314093FB3 /* Build configuration list for PBXAggregateTarget "TensorFlowLiteC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				678533EC3FC25F9803E08225FDF12063 /* Debug */,
+				1BEC2931FBD57D4D1F6F7F349180A556 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9A6A8971543BD0FA69564B4824A7D66A /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B56177B58D90370CB90A790FC94FCF70 /* Debug */,
 				B7978A1C80B98B32B74AE124396BF4DD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B4C6ADC39178B6A896B1C94152118B1D /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Example" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				820FBA4A9801A0E4C10F357F098BFE17 /* Debug */,
-				3EE52CB54D9A7A9AF8BF1E5DEFF7A4F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

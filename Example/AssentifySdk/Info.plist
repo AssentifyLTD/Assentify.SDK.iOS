@@ -35,5 +35,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 	</array>
+    <key>NSMicrophoneUsageDescription</key>
+     <string>Need microphone access for uploading audio</string>
+     <key>NSCameraUsageDescription</key>
+     <string>Need camera access for open camera</string>
 </dict>
 </plist>
