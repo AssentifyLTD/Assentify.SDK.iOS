@@ -4,9 +4,9 @@ import Foundation
 
 
 public struct DocumentTokensModel:Codable {
-    let id: Int
-    let templateId: Int
-    let tokenValue: String
-    let displayName: String
-    let tokenTypeEnum: Int
+    public let id: Int
+    public  let templateId: Int
+    public let tokenValue: String
+    public let displayName: String
+    public let tokenTypeEnum: Int
 }

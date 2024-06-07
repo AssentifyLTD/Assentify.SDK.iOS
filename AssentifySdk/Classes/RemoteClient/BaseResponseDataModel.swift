@@ -1,10 +1,10 @@
 
 import Foundation
 public struct RemoteProcessingModel :Codable{
-    var destinationEndpoint: String?
-    var response: String?
-    var error: String?
-    var success: Bool?
+    public  var destinationEndpoint: String?
+    public  var response: String?
+    public  var error: String?
+    public  var success: Bool?
     
 }
 

@@ -10,16 +10,16 @@ import Foundation
 
 
 public struct TemplatesByCountry :Codable{
-    let name: String
-    let sourceCountryCode: String
-    let flag: String
-    let templates: [Templates]
+    public  let name: String
+    public  let sourceCountryCode: String
+    public  let flag: String
+    public  let templates: [Templates]
 }
 
 public struct KycDocumentDetails : Codable {
-    let name: String
-    let order:Int
-    let templateProcessingKeyInformation: String
+    public   let name: String
+    public   let order:Int
+    public   let templateProcessingKeyInformation: String
     
     public init(name: String,order:Int,templateProcessingKeyInformation:String)  {
         self.name = name
@@ -29,12 +29,12 @@ public struct KycDocumentDetails : Codable {
 }
 
 public struct Templates : Codable {
-    let id: Int
-    let sourceCountryFlag: String
-    let sourceCountryCode: String
-    let kycDocumentType: String
-    let sourceCountry: String
-    let kycDocumentDetails: [KycDocumentDetails]
+    public let id: Int
+    public let sourceCountryFlag: String
+    public let sourceCountryCode: String
+    public let kycDocumentType: String
+    public let sourceCountry: String
+    public let kycDocumentDetails: [KycDocumentDetails]
 }
 
 

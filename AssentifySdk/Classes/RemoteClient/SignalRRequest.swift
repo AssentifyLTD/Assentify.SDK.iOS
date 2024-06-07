@@ -9,30 +9,30 @@ import Foundation
 import Foundation
 
 public struct SignalRRequest: Encodable {
-    let connectionId: String?
-    let tenantId: String?
-    let blockId: String?
-    let instanceId: String?
-    let totalNumberOfClipsProcessed: Int
-    let traceIdentifier: String?
-    let isMobile: Bool
-    let saveCapturedVideo: Bool
-    let storeCapturedDocument: Bool
-    let userAgentString: String?
-    let mime: String?
-    let image: String?
-    let requireFaceExtraction: Bool
-    let enableSlimProcessing: Bool
-    let storeImageStream: Bool
-    let processMrz: Bool
-    let templateId: String?
-    let ipAddress: String?
-    let checkForFace: Bool
-    let isLivenessEnabled: Bool
-    let videoClipB64: String?
-    let isVideo: Bool
-    let clips: [String]
-    let secondImage: String
+    public  let connectionId: String?
+    public  let tenantId: String?
+    public  let blockId: String?
+    public  let instanceId: String?
+    public let totalNumberOfClipsProcessed: Int
+    public let traceIdentifier: String?
+    public let isMobile: Bool
+    public  let saveCapturedVideo: Bool
+    public  let storeCapturedDocument: Bool
+    public let userAgentString: String?
+    public let mime: String?
+    public let image: String?
+    public let requireFaceExtraction: Bool
+    public let enableSlimProcessing: Bool
+    public let storeImageStream: Bool
+    public let processMrz: Bool
+    public let templateId: String?
+    public let ipAddress: String?
+    public let checkForFace: Bool
+    public let isLivenessEnabled: Bool
+    public let videoClipB64: String?
+    public let isVideo: Bool
+    public let clips: [String]
+    public let secondImage: String
 
     enum CodingKeys: String, CodingKey {
         case connectionId, tenantId, blockId, instanceId, totalNumberOfClipsProcessed, traceIdentifier, isMobile
