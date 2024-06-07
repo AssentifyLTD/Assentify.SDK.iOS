@@ -3,15 +3,15 @@
 import Foundation
 
 public struct CreateUserDocumentRequestModel:Codable {
-    let userId: String
-    let documentTemplateId: Int
-    let data: [String: String]
-    let outputType: Int
+    public  let userId: String
+    public  let documentTemplateId: Int
+    public  let data: [String: String]
+    public  let outputType: Int
 }
 
 public struct CreateUserDocumentResponseModel:Codable {
-    let templateInstance: String
-    let templateInstanceId: Int
-    let documentId: Int
-    let isPdf: Bool
+    public  let templateInstance: String
+    public  let templateInstanceId: Int
+    public  let documentId: Int
+    public  let isPdf: Bool
 }

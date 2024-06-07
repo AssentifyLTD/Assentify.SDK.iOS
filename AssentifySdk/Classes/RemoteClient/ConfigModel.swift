@@ -2,48 +2,48 @@
 
 import Foundation
 public struct ConfigModel: Codable {
-    let stepId: Int
-    let tenantIdentifier: String
-    let blockIdentifier: String
-    let instanceId: String
-    let flowInstanceId: String
-    let flowIdentifier: String
-    let instanceHash: String
-    let flowName: String
-    let stepDefinitions: [StepDefinitions]
+    public let stepId: Int
+    public let tenantIdentifier: String
+    public let blockIdentifier: String
+    public let instanceId: String
+    public let flowInstanceId: String
+    public let flowIdentifier: String
+    public let instanceHash: String
+    public let flowName: String
+    public let stepDefinitions: [StepDefinitions]
 
 }
 
 public struct StepDefinitions: Codable {
-    let stepId: Int
-    let stepDefinition: String
-    let customization: Customization
-    let outputProperties: [OutputProperties]
+    public  let stepId: Int
+    public  let stepDefinition: String
+    public  let customization: Customization
+    public  let outputProperties: [OutputProperties]
 }
 
 public struct OutputProperties: Codable {
-    let id: Int
-    let key: String
-    let displayName: String
-    let isRequired: Bool
-    let isExcluded: Bool
-    let type: Int
+    public let id: Int
+    public let key: String
+    public  let displayName: String
+    public  let isRequired: Bool
+    public let isExcluded: Bool
+    public  let type: Int
 }
 
 public struct Customization: Codable {
-    let processMrz: Bool?
-    let storeCapturedDocument: Bool?
-    let performLivenessDetection: Bool?
-    let storeImageStream: Bool?
-    let saveCapturedVideo: Bool?
-    let identificationDocuments: [IdentificationDocuments]?
+    public  let processMrz: Bool?
+    public let storeCapturedDocument: Bool?
+    public let performLivenessDetection: Bool?
+    public let storeImageStream: Bool?
+    public let saveCapturedVideo: Bool?
+    public let identificationDocuments: [IdentificationDocuments]?
 }
 
 
 
 public struct IdentificationDocuments : Codable{
-    let key: String?
-    let selectedCountries: [String]?
+    public  let key: String?
+    public let selectedCountries: [String]?
 }
 
 public func encodeStepDefinitionsToJson(data: [StepDefinitions]) -> String {

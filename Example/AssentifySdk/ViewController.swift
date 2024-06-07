@@ -13,6 +13,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     
     func onEnvironmentalConditionsChange(brightness: Double, motion: MotionType) {
         //
+        
     }
     
     func onComplete(dataModel: RemoteProcessingModel, order: Int) {
@@ -105,6 +106,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
 //        print("\(yellowColor)onEnvironmentalConditionsChange:" , brightness)
 //        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion)
 //        print("\(yellowColor)onEnvironmentalConditionsChange:" , zoom)
+        
     }
     
     

@@ -2,12 +2,12 @@
 import Foundation
 
 public struct ValidateKeyModel: Codable {
-    let message: String?
-    let statusCode: Int
-    let error: String?
-    let errorCode: String?
-    let data: DataResponse
-    let isSuccessful: Bool
+    public let message: String?
+    public let statusCode: Int
+    public let error: String?
+    public let errorCode: String?
+    public let data: DataResponse
+    public let isSuccessful: Bool
     
     enum CodingKeys: String, CodingKey {
         case message
@@ -18,8 +18,8 @@ public struct ValidateKeyModel: Codable {
         case isSuccessful
     }
     
-    struct DataResponse: Codable {
-        let tenantIdentifier: String
-        let key: String
+    public struct DataResponse: Codable {
+        public  let tenantIdentifier: String
+        public let key: String
     }
 }

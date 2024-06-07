@@ -2,7 +2,7 @@
 import Foundation
 
 public struct SubmitRequestModel : Codable{
-    let stepId: Int
-    let stepDefinition: String
-    let extractedInformation: [String: String]
+    public   let stepId: Int
+    public  let stepDefinition: String
+    public  let extractedInformation: [String: String]
 }
