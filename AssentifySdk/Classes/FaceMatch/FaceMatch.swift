@@ -9,7 +9,7 @@ import CoreImage
 public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate {
   
     
- 
+    var guide : Guide = Guide();
     var previewView: PreviewView!
     var cameraFeedManager:CameraFeedManager!
     private let overlayView = OverlayView()
@@ -93,7 +93,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
       self.cameraFeedManager.delegate = self
         
       self.remoteProcessing = RemoteProcessing()
-      //self.cameraFeedManager.stopSession()
+    
+        if(environmentalConditions!.enableGuide){
+            self.guide.showFaceGuide(view: self.view)
+            self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+        }
     }
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
@@ -149,7 +153,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
             objectOverlays.append(objectOverlay)
         }
-        self.draw(objectOverlays: objectOverlays)
+        if(environmentalConditions!.enableDetect){
+            self.draw(objectOverlays: objectOverlays)
+        }
     }
     
     func draw(objectOverlays: [ObjectOverlay]) {
@@ -175,9 +181,19 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         if (motion == MotionType.SENDING) {
               modelDataHandler?.customColor = environmentalConditions!.CustomColor;
             sendingFlags.append(MotionType.SENDING);
+            if(environmentalConditions!.enableGuide){
+                DispatchQueue.main.async {
+                    self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.CustomColor)
+                }
+            }
             } else {
                 modelDataHandler?.customColor = environmentalConditions!.HoldHandColor;
                 sendingFlags.removeAll();
+                if(environmentalConditions!.enableGuide){
+                    DispatchQueue.main.async {
+                        self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+                    }
+                }
          }
     
         if (environmentalConditions!.checkConditions(
@@ -194,35 +210,36 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                         self.createVideoFromPixelBuffers(pixelBuffers: self.pixelBuffers, outputURL: outputURL, size: videoSize, videoFrameRate: frameRate) { result in
                             switch result {
                             case .success(let base64String):   
-                                self.pixelBuffers.removeAll();
-                                self.faceMatchDelegate?.onSend();
-                                
-                                self.remoteProcessing?.starProcessing(
-                                    url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                                     videoClip: base64String,
-                                    stepDefinition: "FaceImageAcquisition",
-                                     appConfiguration:self.configModel!,
-                                     templateId: "",
-                                     secondImage: self.secondImage!,
-                                     connectionId: "ConnectionId",
-                                     clipsPath: "ClipsPath",
-                                     checkForFace: true,
-                                    processMrz: self.processMrz!,
-                                    performLivenessDetection: self.performLivenessDetection!,
-                                    saveCapturedVideo: self.saveCapturedVideoID!,
-                                    storeCapturedDocument: self.storeCapturedDocument!,
-                                     isVideo: true,
-                                    storeImageStream: self.storeImageStream!
-                                     ) { result in
-                                    switch result {
-                                    case .success(let model):
-                                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
-                                    case .failure(let error):
-                                        self.start = true;
+                                if(self.start){
+                                    self.pixelBuffers.removeAll();
+                                    self.faceMatchDelegate?.onSend();
+                                    self.remoteProcessing?.starProcessing(
+                                        url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
+                                         videoClip: base64String,
+                                        stepDefinition: "FaceImageAcquisition",
+                                         appConfiguration:self.configModel!,
+                                         templateId: "",
+                                         secondImage: self.secondImage!,
+                                         connectionId: "ConnectionId",
+                                         clipsPath: "ClipsPath",
+                                         checkForFace: true,
+                                        processMrz: self.processMrz!,
+                                        performLivenessDetection: self.performLivenessDetection!,
+                                        saveCapturedVideo: self.saveCapturedVideoID!,
+                                        storeCapturedDocument: self.storeCapturedDocument!,
+                                         isVideo: true,
+                                        storeImageStream: self.storeImageStream!
+                                         ) { result in
+                                        switch result {
+                                        case .success(let model):
+                                            self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                                        case .failure(let error):
+                                            self.start = true;
+                                        }
                                     }
+                                    self.start = false;
                                 }
-              
-                                self.start = false;
+                                
                             case .failure(let error):
                                 self.pixelBuffers.removeAll();
                             }
