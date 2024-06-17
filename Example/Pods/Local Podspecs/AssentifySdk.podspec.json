@@ -1,6 +1,6 @@
 {
   "name": "AssentifySdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "summary": "This iOS Pod provides integration with Assentify services.",
   "description": "This iOS Pod provides integration with Assentify services.",
   "homepage": "https://assentify.com/home",
@@ -13,20 +13,35 @@
   },
   "source": {
     "git": "https://github.com/AssentifyLTD/Assentify.SDK.iOS.git",
-    "tag": "0.0.1"
+    "tag": "0.0.2"
   },
   "platforms": {
     "ios": "14.0"
   },
   "static_framework": true,
+  "swift_versions": [
+    "5.0",
+    "5.1",
+    "5.2",
+    "5.3",
+    "5.4",
+    "5.5"
+  ],
   "source_files": "AssentifySdk/Classes/**/*",
   "resources": [
     "best-fp16.tflite",
-    "classes.txt"
+    "classes.txt",
+    "card_background.svg",
+    "face_background.svg"
   ],
+  "frameworks": "UIKit",
   "dependencies": {
     "TensorFlowLiteSwift": [
 
+    ],
+    "SVGKit": [
+
     ]
-  }
+  },
+  "swift_version": "5.5"
 }

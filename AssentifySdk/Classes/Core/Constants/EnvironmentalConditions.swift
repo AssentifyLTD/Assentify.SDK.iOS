@@ -7,6 +7,10 @@ import Foundation
 public class EnvironmentalConditions {
 
 
+    /**Detect**/
+    var enableDetect: Bool
+      var enableGuide: Bool
+        
     // BRIGHTNESS
     var BRIGHTNESS_HIGH_THRESHOLD: Float
     var BRIGHTNESS_LOW_THRESHOLD: Float
@@ -21,6 +25,8 @@ public class EnvironmentalConditions {
 
 
     public  init(
+        enableDetect: Bool,
+        enableGuide: Bool,
         BRIGHTNESS_HIGH_THRESHOLD: Float,
         BRIGHTNESS_LOW_THRESHOLD: Float,
         PREDICTION_LOW_PERCENTAGE: Float,
@@ -28,6 +34,8 @@ public class EnvironmentalConditions {
         CustomColor: String,
         HoldHandColor: String
     ) {
+        self.enableDetect = enableDetect
+        self.enableGuide = enableGuide
         self.BRIGHTNESS_HIGH_THRESHOLD = BRIGHTNESS_HIGH_THRESHOLD
         self.BRIGHTNESS_LOW_THRESHOLD = BRIGHTNESS_LOW_THRESHOLD
         self.PREDICTION_LOW_PERCENTAGE = PREDICTION_LOW_PERCENTAGE

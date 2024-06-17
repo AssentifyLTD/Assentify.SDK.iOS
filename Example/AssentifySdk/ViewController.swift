@@ -112,6 +112,8 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     
     
     let environmentalConditions = EnvironmentalConditions(
+          enableDetect: true,
+          enableGuide: true ,
           BRIGHTNESS_HIGH_THRESHOLD: 500.0,
           BRIGHTNESS_LOW_THRESHOLD: 0.0,
           PREDICTION_LOW_PERCENTAGE: 50.0,
@@ -164,7 +166,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
         DispatchQueue.main.async {
             
             /* PASSPORT */
-             /*
+           
             self.scanPassport =  self.assentifySdk?.startScanPassport(scanPassportDelegate: self)
             self.addChild(  self.scanPassport!)
             self.view.addSubview(  self.scanPassport!.view)
@@ -176,7 +178,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
                 self.scanPassport!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             ])
             self.scanPassport!.didMove(toParent: self)
-            */
+           
             
             
             /* OTHER */

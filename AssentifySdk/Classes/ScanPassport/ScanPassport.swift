@@ -9,6 +9,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
   
     
  
+    var guide : Guide = Guide();
     var previewView: PreviewView!
     var cameraFeedManager:CameraFeedManager!
     private let overlayView = OverlayView()
@@ -92,8 +93,10 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
 
       self.remoteProcessing = RemoteProcessing()
    
-        
-      //self.cameraFeedManager.stopSession()
+        if(environmentalConditions!.enableGuide){
+            self.guide.showCardGuide(view: self.view)
+            self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+        }
     }
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
@@ -150,7 +153,9 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
             objectOverlays.append(objectOverlay)
         }
-        self.draw(objectOverlays: objectOverlays)
+        if(environmentalConditions!.enableDetect){
+            self.draw(objectOverlays: objectOverlays)
+        }
     }
     
     func draw(objectOverlays: [ObjectOverlay]) {
@@ -175,13 +180,23 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
       }
         
         if (motion == MotionType.SENDING && zoom == ZoomType.SENDING) {
-              modelDataHandler?.customColor = environmentalConditions!.CustomColor;
+            modelDataHandler?.customColor = environmentalConditions!.CustomColor;
             sendingFlagsMotion.append(MotionType.SENDING);
             sendingFlagsZoom.append(ZoomType.SENDING);
+            if(environmentalConditions!.enableGuide){
+                DispatchQueue.main.async {
+                    self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.CustomColor)
+                }
+            }
             } else {
                 modelDataHandler?.customColor = environmentalConditions!.HoldHandColor;
                 sendingFlagsMotion.removeAll();
                 sendingFlagsZoom.removeAll();
+                if(environmentalConditions!.enableGuide){
+                    DispatchQueue.main.async {
+                        self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+                    }
+                }
          }
     
         if (environmentalConditions!.checkConditions(

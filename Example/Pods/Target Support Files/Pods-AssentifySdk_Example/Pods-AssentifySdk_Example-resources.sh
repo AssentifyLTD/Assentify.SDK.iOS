@@ -99,10 +99,14 @@ EOM
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/../../best-fp16.tflite"
   install_resource "${PODS_ROOT}/../../classes.txt"
+  install_resource "${PODS_ROOT}/../../card_background.svg"
+  install_resource "${PODS_ROOT}/../../face_background.svg"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/../../best-fp16.tflite"
   install_resource "${PODS_ROOT}/../../classes.txt"
+  install_resource "${PODS_ROOT}/../../card_background.svg"
+  install_resource "${PODS_ROOT}/../../face_background.svg"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
