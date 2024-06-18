@@ -40,7 +40,11 @@ This iOS Pod provides integration with Assentify services.
   s.dependency 'TensorFlowLiteSwift'
   s.dependency 'SVGKit', '~> 3.0'
 
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
+    'VALID_ARCHS' => 'x86_64'
+  }
 
   # s.resource_bundles = {
   #   'AssentifySdk' => ['AssentifySdk/Assets/*.png']
