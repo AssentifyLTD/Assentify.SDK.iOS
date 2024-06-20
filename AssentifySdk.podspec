@@ -29,17 +29,19 @@ This iOS Pod provides integration with Assentify services.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '14.0'
+
   s.static_framework = true
+  
   
   s.swift_versions = ['5.0', '5.1', '5.2', '5.3', '5.4', '5.5']
 
 
-
   s.source_files = 'AssentifySdk/Classes/**/*'
   s.resources = ["best-fp16.tflite", "classes.txt", "card_background.svg", "face_background.svg"]
+  
   s.frameworks = 'UIKit'
   s.dependency 'TensorFlowLiteSwift'
-  s.dependency 'SwiftSVG'
+  s.dependency 'SVGKit'
 
 
 

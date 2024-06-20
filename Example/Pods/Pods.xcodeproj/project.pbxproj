@@ -63,6 +63,7 @@
 		1B805254E19BFFC2E4F8D57B3E3EC634 /* CSSStyleDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = C952BEE0C82F631411493106827B1C82 /* CSSStyleDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1C057745F2D9415328EE327B14E8A7EE /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138A027E7EA43CB5C02D78C9D221CD7 /* UIColorExtension.swift */; };
 		1F5B4665B3ED010AB4ABAF492039AE67 /* SVGKParserSVG.h in Headers */ = {isa = PBXBuildFile; fileRef = 462B8EFF53B673E826A6D6F83A474F2C /* SVGKParserSVG.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1F84FE646CD1D7BAFFB58C243277AFF8 /* FBSnapshotTestCase-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9748569357917DF5625BDC6850ACB517 /* FBSnapshotTestCase-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1FDF3E6DF9225B9AA7D75D056B9603E6 /* AppleSucksDOMImplementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C42F3E588FDD3D664DF4FC444AA458 /* AppleSucksDOMImplementation.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		223970E3632EE8C72024790C695FFF1A /* StyleSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F2F78E378D6161D58C7C01B9B3BE345 /* StyleSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22C40E5D716522DA8EC7BBD55E79BF91 /* SVGDescriptionElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C141207F07F3EC12B32C896BE0F19623 /* SVGDescriptionElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -79,14 +80,19 @@
 		29188636478D4DCB76ED6F00A9864CAC /* CameraSetupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDEA4C46383A9FD0DAFE800668F7539 /* CameraSetupDelegate.swift */; };
 		292DFA0D6744ABD0C05BA121AC4B316C /* RemoteProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42244AD1BBCB964AD1E18E7247793BE4 /* RemoteProcessing.swift */; };
 		293CDCE80EBA2710C0422E0CD37B51DF /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 57E3A10F6DF6C9AB0DD79260D94A9182 /* DDTTYLogger.m */; };
+		2975A09730FD83DC0897129A11EA6585 /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B550B2B7130E60774470BC1B4B6A7C /* SwiftSupport.swift */; };
 		2AC38DE623D5428FF7147916D9E1523E /* DocumentFragment.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EEB0827660C758DF1B8BA63F20D94D5 /* DocumentFragment.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B88C28DD20CBFA7B3AEB21A365197FE /* FBSnapshotTestController.h in Headers */ = {isa = PBXBuildFile; fileRef = 46FA75112906792F03DFB46079F117AD /* FBSnapshotTestController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2CB61F6FA511CAACB43A50DC3A82E0DD /* UIImage+Snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03743E4FCFE0337DA98C39B1E92402C8 /* UIImage+Snapshot.m */; };
 		2D18CC13A98F43F02D3C4DB2C88BBF26 /* SVGTransformable.h in Headers */ = {isa = PBXBuildFile; fileRef = EA345037ECD5932AE706C10169ADFB5F /* SVGTransformable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D5B06872EE686636B660B5ED60E6623 /* NodeList.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F697A632D9CA8BA3AB6EC4BDF526E02 /* NodeList.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E0968CDB2CC0CAB6B166487F1434B02 /* Pods-AssentifySdk_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BA618B84012E3282B263CD3A30E608A3 /* Pods-AssentifySdk_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E4977DAB6C24D93D17D43BDCA67BA38 /* SVGKPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E522806E74133CC22C60FEFE77436B /* SVGKPattern.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		2ECCAC52EF4C74E1032E0BC646BBE5B9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E9F424047E369455EE9CD1213C78AA9 /* Foundation.framework */; };
 		2F03B2C50E7609A6CAB4A957E3B40B5B /* DDContextFilterLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B77F301D737A38134F722F5108D396B /* DDContextFilterLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F9A6B587E5866C77BD0985B88E23842 /* SubmitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06850C413F1ACE3A44816837602D7D1 /* SubmitData.swift */; };
 		303F99D32028E31EC4EB93A961A8F7B0 /* Text.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A3695B5A250CF1A59CE527740EAB8 /* Text.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		30D475DF57C0C682A723231E7BCA0D14 /* FBSnapshotTestCasePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 79ED3558B681327CC2504104B6581776 /* FBSnapshotTestCasePlatform.m */; };
 		313BE443CDEFB0728EBE7AD5A7DB9012 /* SVGTextPositioningElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 13A78376612C7D131D54DFC416A62E1A /* SVGTextPositioningElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		31B8100080E6FA7830F8C718875CD2A0 /* TensorFlowLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96C1CFD0AC4FC797A2E47BDEE5217A7 /* TensorFlowLite.swift */; };
 		32C5A45CB7998BCE92128D3AC4B42099 /* SVGFitToViewBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B35CB6B00B97C6C84F4CD2D32D10926 /* SVGFitToViewBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -94,6 +100,7 @@
 		342F985C8B7493ADF41A70E489BD514E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D913C6B3EA159FA38C0EC282CEFDBC /* CoreText.framework */; };
 		352659A5BA626301CE53FB14FE18035C /* Pods-AssentifySdk_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C37D2629EBDDD689F8C5B731B2665E5 /* Pods-AssentifySdk_Example-dummy.m */; };
 		354441F3BAFB01DF30A668AE7A2698AC /* BaseClassForAllSVGBasicShapes.h in Headers */ = {isa = PBXBuildFile; fileRef = 25F94C8AF93ABD75689E5FFF3F3A7725 /* BaseClassForAllSVGBasicShapes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		373413256658309F9053CE22BF62077E /* UIImage+Snapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C38E4928DA18EF28DB9CB461236BA9E /* UIImage+Snapshot.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		379CFDBA39004B5C9CE0528965357417 /* RemoteProcessingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BE4EB4E6D98CB9406F87FD18D8E28F /* RemoteProcessingDelegate.swift */; };
 		37DD96BF79B63C77AF4A3D28D532E773 /* SVGKLayeredImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CA27B28BF3782179B47A317A0592E700 /* SVGKLayeredImageView.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		3806182334C04CCF20010F0EDF050E7F /* MediaList.h in Headers */ = {isa = PBXBuildFile; fileRef = 1263F4B38BE33F33E7027A56CC8E6CC4 /* MediaList.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -129,6 +136,7 @@
 		5424300CF189A4DBD0DE75AA5B434305 /* CDATASection.m in Sources */ = {isa = PBXBuildFile; fileRef = 568A457584DC626192F517954C1E1CF1 /* CDATASection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		54BAEC2DAF58C96A9BC6E611A08461BA /* BaseClassForAllSVGBasicShapes_ForSubclasses.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A6A64FFD67E1051B1579E0FA15B5B46 /* BaseClassForAllSVGBasicShapes_ForSubclasses.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54FAD89BEFFC7F3189C281BF1DA6F9E2 /* SVGKImageRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 945173CCB60905451C054839FBFFE56A /* SVGKImageRep.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5558B876B579BC1E79BD3D2B19148329 /* UIApplication+StrictKeyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A84354DCCCF19A23F47C878FB18CDD5 /* UIApplication+StrictKeyWindow.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		56804A028D7AC9AEE0A44971D355E8FA /* SVGKExporterNSData.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4A10C6C6D6C8363CB89B0FACFF4064 /* SVGKExporterNSData.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		5681AF9EC9092B063CFAC9400BC041B8 /* SVGKExporterUIImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 2010BF63AD9D9956504DE724274D41A1 /* SVGKExporterUIImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56BAFB2BEB0C00243A785B6798714D79 /* DDLoggerNames.h in Headers */ = {isa = PBXBuildFile; fileRef = 04D9C3CB7EEFDF37B73457FDF6191443 /* DDLoggerNames.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -137,6 +145,7 @@
 		58D7C22586659E86B19D6C3E4C9A3647 /* CSSStyleRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C548DE87DEC8E2BEADC7490F01F9B5 /* CSSStyleRule.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		5AB8BFA3AC38B99D973BDC00DC43ED63 /* BrightnessChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F1A49BE1596034F52F77D57C99E0EC /* BrightnessChecker.swift */; };
 		5AD8FCF278B1E3B8A9950414DFC5CE2E /* Element.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC979A291C4D0598164AF6EE9B3201F /* Element.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BE525FF6FA14B999ED2CCC0AA4FA0CF /* FBSnapshotTestCase-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E6988A3217AF6A7E2926CD84F0478 /* FBSnapshotTestCase-dummy.m */; };
 		5E2B0F422A4E9ABFDA11EDD7EE5D3DBD /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B61E169808AAB5676D11389A12DE814 /* Node.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		5EDAB519AAB3EA6C95AF52E3D7A94D51 /* SVGSVGElement_Mutable.h in Headers */ = {isa = PBXBuildFile; fileRef = 938FD1A0053C7EB6C5461A65B085E7C6 /* SVGSVGElement_Mutable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5F2000CA00F2A1502277CFD0BE58FD87 /* SVGAnimatedPreserveAspectRatio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A686590FF03A539830087815AC41C68 /* SVGAnimatedPreserveAspectRatio.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -147,11 +156,13 @@
 		636B1CE6F1B895F59804D0A0856393C9 /* SVGStylable.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C2082901C2F6F9A39AD1C95CDE3E256 /* SVGStylable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		636E26F2FE145C2D700C36CCCC50CE1B /* BlurChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3332DD2993D2DC662C6FE8049D032BC2 /* BlurChecker.swift */; };
 		63ED9628EAD3F58B58A3EAE0A8788D6F /* SVGAnimatedPreserveAspectRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = 80C915027A19406644C4503CE547BAD9 /* SVGAnimatedPreserveAspectRatio.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		640CCE9C3A28AA3CA15510899F9140EE /* FBSnapshotTestCasePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 50A62F5010931889A20F311486289610 /* FBSnapshotTestCasePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65E6E8EA485B2DBC0E7B2F3ACA79EA77 /* CSSPrimitiveValue.m in Sources */ = {isa = PBXBuildFile; fileRef = D890682E8AFE141EF10F92886D0E59C0 /* CSSPrimitiveValue.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		661EF4CA591039A4ABDC6B8D5CF13A76 /* DetectMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C7D880F83A78BC7B8DDEAA7CDFDB01 /* DetectMotion.swift */; };
 		6720613F9BB3A52A1E70298068EC049A /* SVGGroupElement.h in Headers */ = {isa = PBXBuildFile; fileRef = E4226BAD6692B8B822E14A7C99435617 /* SVGGroupElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67AC215CBAEB1C5718B36BAD92067DB6 /* SVGImageElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 285AC1B76EA9C491550184FAE88765F3 /* SVGImageElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67B609B5BB4BFE26EE10F7CE47BC1BA1 /* RemoteClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC4DF35E67E27E4FAFA9D963F858754 /* RemoteClient.swift */; };
+		67F1963AA7C9EDB78127AD5F566A4949 /* UIImage+Diff.h in Headers */ = {isa = PBXBuildFile; fileRef = 107B75770334C4A42DBB3DD4BEB9146F /* UIImage+Diff.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		681A004CE31403C952CAD92660DFEDD8 /* SVGPolygonElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C924A6CCF9543B3DE39256DB1F7778 /* SVGPolygonElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		6926D0959F8A8751FD25430BE543457A /* SVGKSourceLocalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B94A2AB9BF288555C0808271E16B384 /* SVGKSourceLocalFile.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		6A41C7B4DF6B69A1AFB85298D2C30F27 /* SVGTextPositioningElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 672CA88A4EA1D451CD85D63DAA825810 /* SVGTextPositioningElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -168,6 +179,7 @@
 		6E29F6226E9E399F1BCAA0F213A0E105 /* SVGTitleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C40C09B232FA5C02A88EBE6B790664 /* SVGTitleElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		70449B10112B017C705C6D79059CFB99 /* PrePostProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6806CF3C3149FA8A523E52EA498EB74F /* PrePostProcessor.swift */; };
 		723CF3071BFE908C5AE59880475C7C94 /* SVGPathElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 609686F30A965F60CF31EFEEC0DE863E /* SVGPathElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		74339C58AC4E5631FB8C0E662668A796 /* UIApplication+StrictKeyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F675A4058E9D7D32E22E211491A9420 /* UIApplication+StrictKeyWindow.m */; };
 		75E43B9C726A2FB304737E71ECAA99D1 /* TinySVGTextAreaElement.m in Sources */ = {isa = PBXBuildFile; fileRef = E8EAEDD706981D34A1ADF27FE67C548B /* TinySVGTextAreaElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		77269D3FE5921FE0292AE01B1E8C5E24 /* SVGPolygonElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 7918E12CC35B6DAE68890656AB267164 /* SVGPolygonElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		77ED75FAFB38992F56DAA550BFBF573D /* SVGRectElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB2B25AE9D371130F7F2709D4664785 /* SVGRectElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -185,6 +197,7 @@
 		7B178E584FDB3ED7EAD9E4860493178B /* Document+Mutable.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A9EBB8550019CB6CFFC346D63D5FC9A /* Document+Mutable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B89743F4561602E19DDF6DEB88C172E /* SVGUnitTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B386CE24987AE094DD623A510D8AAA8 /* SVGUnitTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C3E9AFDC108D4BD78BFE4A1B5ECE3CF /* SVGKPointsAndPathsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 11B8D41C65BAE8840FC1344DFCE2C05F /* SVGKPointsAndPathsParser.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		7C67CBD15D9B5D0B7769B2F469478332 /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 51708DC30423A61C5850A6FA3D9D7189 /* FBSnapshotTestCase.m */; };
 		7D92DD8A7260FCBDBD979314D87EFC5B /* SVGPreserveAspectRatio.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BA9363DF06A7CFC7A2EB1E3B6C8B281 /* SVGPreserveAspectRatio.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E42645C941B4807CFF223936742F4C4 /* SVGElement_ForParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FEC34A0D613C15F376436410527FC0C /* SVGElement_ForParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BEEFA601A99E4C10D5F241BEA9CCD9 /* SVGKParserDefsAndUse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E00D4122310A747394764DC8129ED48 /* SVGKParserDefsAndUse.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -196,12 +209,14 @@
 		84A9AF463FE20F610F5853828BB4DA1D /* SVGLineElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE532AF3B0B26F39B33BB35BBF47154 /* SVGLineElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		84E454EC2AA9F717908235A35153A465 /* SVGUseElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B321D20E7EF17620DD47D8800B0CD06 /* SVGUseElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		86CE5EA064BA093FDE804CDE7573A408 /* CLIColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 25C7A3E40210E7293DE18D5795E338A5 /* CLIColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		875A310EAF4D0C136C3FFFF5E0335BE4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E5FB25655903746CC44E9C922FD7AE /* UIKit.framework */; };
 		88BBE617746C9827755040435F9628F9 /* MotionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC9FE6B87BE241C2972D8C9B1D26E34 /* MotionType.swift */; };
 		8927A483F09B8EF36FB8D573F1D73781 /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9F5314921779BF4DB2F6A294C00B69 /* Delegate.swift */; };
 		89D60BF8913191BBD8ED831E84996394 /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFB9D97ED05FA30CDE82FB1769D392D /* DDContextFilterLogFormatter.m */; };
 		8A0503973ED63446233BC8D077E9CE24 /* TensorFlowLiteSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B232F3AD1FB65BB5DCCF1982758298B6 /* TensorFlowLiteSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A12E53E15A71477F6D90DA44956B70D /* SVGKExporterNSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 12B8C97C6700979EA650EF4F86A056A4 /* SVGKExporterNSImage.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		8A2AAA3A1B737C60FAD720B1149DA51D /* DocumentFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7C2662F54A6B7C50F8733380787A8F /* DocumentFragment.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		8AE19756F0126FE92AF625E36F3D70FE /* UIImage+Compare.h in Headers */ = {isa = PBXBuildFile; fileRef = F05AB86D0E13E7BAFBBE574AA595DDD7 /* UIImage+Compare.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		8B0541E010814BD2841F356886B056BE /* SVGAngle.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CFA98E8ED416DA9840CC33A79BD25D3 /* SVGAngle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8BF2DA41BF9AF51F00B44383F62522BD /* SVGRadialGradientElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 67410EA4955EC4695FBEAF9DD9FDBB6C /* SVGRadialGradientElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		8C8FF3FD83D74E7988D226F6439AF7F1 /* DOMGlobalSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AB2436EE68481288A263995AE81E8F /* DOMGlobalSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -232,6 +247,7 @@
 		9C05FFFCF436797F96DE8282DA693031 /* SVGKParserPatternsAndGradients.h in Headers */ = {isa = PBXBuildFile; fileRef = 632E8672B1A1DE518160B8B390D88728 /* SVGKParserPatternsAndGradients.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CC09C332B8507E1AE8B31AA6C5DFDAE /* AppleSucksDOMImplementation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EDD7D7F591DB8593A3861FFBCE50AF7 /* AppleSucksDOMImplementation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CECDD31BEF8E28FD561427DE2A6C4E5 /* BlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA1CD9C8B13A1B8FF99E75E52030BEA /* BlockType.swift */; };
+		9D3C5E2F56838937146191468A893244 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D0967A86340F342F7A65234226F0C7 /* XCTest.framework */; };
 		9E64017014865EBD17B0B7E833366783 /* SVGKSourceLocalFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 6144C6D3D44C74D0BC02566682B7FF8D /* SVGKSourceLocalFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9EFFC9B956040C39D123161DFAC6FE2E /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD89DB2D695587DFC5879A6B1DF58979 /* Interpreter.swift */; };
 		A00DAE2D304347EC5265037118CD30AE /* Node.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DA2A6380E3A2C49898CEAD4A246B8D9 /* Node.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -267,6 +283,7 @@
 		B3BC31F2C270DF2D2D19E4459963AB58 /* SVGImageElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B49462F3B4950B10DE7286C7117C09 /* SVGImageElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		B4170ABFDBB3B04D483899C8AE58E78F /* QuantizationParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C97FA55ADA4FF31978712326C58934 /* QuantizationParameters.swift */; };
 		B44B70A1A51639716372AEF3D2BEE5A1 /* DDLoggerNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 978542DF712F4E8888E4FCEB1260BAE3 /* DDLoggerNames.m */; };
+		B52281F9F4340D4FC8ABB2FEB1FEC08E /* UIImage+Compare.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F558F2CFB467889B55D5AB221EB2B9 /* UIImage+Compare.m */; };
 		B56A46D0D3D37368DDFCCC032F2B5BEF /* SVGKParserSVG.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7E6A7DA75C02C8C8F230FA5654149D /* SVGKParserSVG.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		B5A0CF7196FAEADB4FACF9AC2D56673D /* CocoaLumberjack-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BEE6D4CF2A33EB8331E4CA4E239D7997 /* CocoaLumberjack-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7564E2B88A2B516C76C18BB2ADE536A /* FaceMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7855BD4C8671B483EE2C6FFE64C757F6 /* FaceMatch.swift */; };
@@ -283,6 +300,7 @@
 		C0F6D0479649BBF0CF5BBAA520E6D9A5 /* SVGGradientLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = F640E70CBD12A3A51FC23F43EC46ED27 /* SVGGradientLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C12184D52C591D97E8F62E8C068FF441 /* SVGGradientElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 493E4EBEE5BFA221237DE27432B91F6E /* SVGGradientElement.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C284ED7941D04557910FE1B3DD5FA0E0 /* CSSValueList.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB807C34C54B10C71929FA7B0FE7D8A /* CSSValueList.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		C390C6005353FB986CB52F474CEF8588 /* FBSnapshotTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A133B790E0005C32C3819FF2DC3C89 /* FBSnapshotTestController.m */; };
 		C4C6AE6A4C1F41BC4E7333B14059538E /* DDAbstractDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 73FC8E5803F5275EAD0B5720AF63701D /* DDAbstractDatabaseLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C4F3ABE17C6E1F34672D5F30BAB642D0 /* SVGKSourceNSData.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1E526265DE83E8FDA644836B166FC1 /* SVGKSourceNSData.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C67AAAC1B40E7E011E6FB29C001FE582 /* CocoaLumberjack.h in Headers */ = {isa = PBXBuildFile; fileRef = 4801731514C12F02D889A3A18B4B962A /* CocoaLumberjack.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -295,6 +313,8 @@
 		C77875581C8AF132AFA74C24BF7B3446 /* DDLegacyMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 245283FE7C3FB49BD878FE3E8BC010FA /* DDLegacyMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7F4AB28C8171369B4B3A8CB5864B67B /* SVGMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ADD78EDDCCFACDD2AF48500D8F7A33E /* SVGMatrix.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C97E77202E982D21CACFAAEEB8479FE0 /* SVGHelperUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06D9C8A3272670932FF84F6B7FF436 /* SVGHelperUtilities.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		C9F76407497DF0205D7460B36D22259F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2E2DE2CD0C89E58071A246FCD526FB /* QuartzCore.framework */; };
+		CA54C09A12400567AFFCB407EEB7E154 /* UIImage+Diff.m in Sources */ = {isa = PBXBuildFile; fileRef = EDED30A4E0FFACF2382DBA2A29507FA5 /* UIImage+Diff.m */; };
 		CAC5D6597DB7320CDD82740C5B162D38 /* SVGTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = F92F9828B2F80D4E63420D23B66CB5EC /* SVGTransform.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		CB19AD27E9354F7345F630AE3FE3E102 /* SVGStyleElement.h in Headers */ = {isa = PBXBuildFile; fileRef = E71D5D373DCEDDE82C32F90E68DD6060 /* SVGStyleElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB6EB8A5B32628F17DACF18C69C9EC43 /* SubmitRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C30092370322206405B510A444F5B7 /* SubmitRequestModel.swift */; };
@@ -374,6 +394,7 @@
 		FDBA79596FD93E9D42AD67888F0048AB /* DDLog+LOGV.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D7AE3DBDC9E10A3150BA48F2CAED2D /* DDLog+LOGV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FE9F74B1DC2F4D3EE2650EAEB076E7F3 /* SVGKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B96B85A7CAA37C1FC4BDFF284993485 /* SVGKImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FF33EC02EC5999EC38CE63B0C3ED3163 /* ConstantsDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1A53BA9816FB01DCDFD2E989DC8971 /* ConstantsDefault.swift */; };
+		FF8307B7346F4D3BA13C11AECFE6EDD0 /* FBSnapshotTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 34795FE2190D546A68DFED5DA7F68485 /* FBSnapshotTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -390,6 +411,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AC559E53E13B6FBEF4F5CC310A73AFE6;
 			remoteInfo = TensorFlowLiteC;
+		};
+		19741FBE67EB9388DAE97DC298E4DB27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 98A98149697C80CEF8D5772791E92E66;
+			remoteInfo = FBSnapshotTestCase;
 		};
 		1CD13F7D2872BA21C98EBD03BD16574B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -624,6 +652,7 @@
 		5B9F5314921779BF4DB2F6A294C00B69 /* Delegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Delegate.swift; path = tensorflow/lite/swift/Sources/Delegate.swift; sourceTree = "<group>"; };
 		5BB807C34C54B10C71929FA7B0FE7D8A /* CSSValueList.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CSSValueList.m; path = "Source/DOM classes/Core DOM/CSSValueList.m"; sourceTree = "<group>"; };
 		5BD4599D7F2D47F853143BF8C55D6D7E /* DDContextFilterLogFormatter+Deprecated.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "DDContextFilterLogFormatter+Deprecated.h"; path = "Sources/CocoaLumberjack/include/CocoaLumberjack/DDContextFilterLogFormatter+Deprecated.h"; sourceTree = "<group>"; };
+		5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC5485144C7C19246526B4EF6F2F699 /* CocoaLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaLumberjack.debug.xcconfig; sourceTree = "<group>"; };
 		5DA2A6380E3A2C49898CEAD4A246B8D9 /* Node.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Node.h; path = "Source/DOM classes/Core DOM/Node.h"; sourceTree = "<group>"; };
 		5ED85DB0316AE54087066C1C020546B4 /* SVGKInlineResource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGKInlineResource.m; path = Source/Utils/SVGKInlineResource.m; sourceTree = "<group>"; };
@@ -709,7 +738,7 @@
 		8BA9363DF06A7CFC7A2EB1E3B6C8B281 /* SVGPreserveAspectRatio.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGPreserveAspectRatio.h; path = "Source/DOM classes/SVG-DOM/SVGPreserveAspectRatio.h"; sourceTree = "<group>"; };
 		8BC08D72847780E48A6CC61FD9F4A9F5 /* SVGKImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGKImage.h; path = Source/SVGKImage.h; sourceTree = "<group>"; };
 		8BDAABD43A8CD676C94C95DAE3ED55A2 /* SVGTransform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGTransform.h; path = "Source/DOM classes/SVG-DOM/SVGTransform.h"; sourceTree = "<group>"; };
-		8C9B64A3616A5667599E436589BD533E /* AssentifySdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AssentifySdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C9B64A3616A5667599E436589BD533E /* AssentifySdk */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AssentifySdk; path = AssentifySdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D08A847CBA39AD798C95906A6DD3CE3 /* SVGKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SVGKit-dummy.m"; sourceTree = "<group>"; };
 		8E1ECE1C0042F42021BF72471242746B /* SVGKSourceURL.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGKSourceURL.m; path = Source/Sources/SVGKSourceURL.m; sourceTree = "<group>"; };
 		90C548DE87DEC8E2BEADC7490F01F9B5 /* CSSStyleRule.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CSSStyleRule.m; path = "Source/DOM classes/Core DOM/CSSStyleRule.m"; sourceTree = "<group>"; };
@@ -786,7 +815,7 @@
 		C141207F07F3EC12B32C896BE0F19623 /* SVGDescriptionElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGDescriptionElement.m; path = "Source/DOM classes/Unported or Partial DOM/SVGDescriptionElement.m"; sourceTree = "<group>"; };
 		C190744AD9A56F348D1A8EC7EC68A10A /* ScanPassportDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScanPassportDelegate.swift; sourceTree = "<group>"; };
 		C1D3D73CEA4836E3CEAF3450E162F9A6 /* SVGKDefine_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGKDefine_Private.h; path = Source/SVGKDefine_Private.h; sourceTree = "<group>"; };
-		C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaLumberjack; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C29EFCA39C33A6B4B4E8A31357649CA3 /* DDASLLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDASLLogger.h; path = Sources/CocoaLumberjack/include/CocoaLumberjack/DDASLLogger.h; sourceTree = "<group>"; };
 		C3F581E553A0F0F7E4FB18F151CADF1D /* TensorFlowLiteSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "TensorFlowLiteSwift-dummy.m"; sourceTree = "<group>"; };
 		C42657C559865625C90D8DD072E29F20 /* Pods-AssentifySdk_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AssentifySdk_Example-umbrella.h"; sourceTree = "<group>"; };
@@ -830,7 +859,7 @@
 		DF7B3E457AA282042503B0B9AEFE195A /* Tensor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Tensor.swift; path = tensorflow/lite/swift/Sources/Tensor.swift; sourceTree = "<group>"; };
 		E06A979F9B76199A16BFE9C3948D26DB /* SVGKFastImageView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGKFastImageView.m; path = Source/ImageViews/SVGKFastImageView.m; sourceTree = "<group>"; };
 		E0ACC9D38EA65AFC3FCD4128E6C2E53F /* SVGKParserStyles.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGKParserStyles.m; path = "Source/Parsers/Parser Extensions/SVGKParserStyles.m"; sourceTree = "<group>"; };
-		E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLiteSwift */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = TensorFlowLiteSwift; path = TensorFlowLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TensorFlowLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E141069703CA97D92B2079F4CFD5BDA0 /* CLIColor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CLIColor.m; path = Sources/CocoaLumberjack/CLI/CLIColor.m; sourceTree = "<group>"; };
 		E180A4EE020948344A43AA701DFF3A4A /* SVGKParserDOM.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGKParserDOM.h; path = "Source/Parsers/Parser Extensions/SVGKParserDOM.h"; sourceTree = "<group>"; };
 		E1E42E19E04D30B9C3E5C735A73F5217 /* SVGElementInstanceList_Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGElementInstanceList_Internal.h; path = "Source/DOM classes/SVG-DOM/SVGElementInstanceList_Internal.h"; sourceTree = "<group>"; };
@@ -925,6 +954,17 @@
 				342F985C8B7493ADF41A70E489BD514E /* CoreText.framework in Frameworks */,
 				41091244A9B499A263F30F313549AFA2 /* Foundation.framework in Frameworks */,
 				6B3C76B7DBDE0EC353ED53A2925348A8 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E3B880388FF17A336FBF90E30E537508 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2ECCAC52EF4C74E1032E0BC646BBE5B9 /* Foundation.framework in Frameworks */,
+				C9F76407497DF0205D7460B36D22259F /* QuartzCore.framework in Frameworks */,
+				875A310EAF4D0C136C3FFFF5E0335BE4 /* UIKit.framework in Frameworks */,
+				9D3C5E2F56838937146191468A893244 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1231,12 +1271,13 @@
 		6FF1003F83D75809CAE15AD9BC8F2579 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8C9B64A3616A5667599E436589BD533E /* AssentifySdk.framework */,
-				C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack */,
+				8C9B64A3616A5667599E436589BD533E /* AssentifySdk */,
+				C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */,
+				5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */,
 				4EC125F7384A523611CFEFA505C8921A /* Pods-AssentifySdk_Example */,
 				CC3869CB8A53BCD209E73DD31F57969D /* Pods-AssentifySdk_Tests */,
 				F8437BE58881E63196CF1F80191B3E2F /* SVGKit.framework */,
-				E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLiteSwift */,
+				E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLite.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1924,6 +1965,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4CF7A53AFE8275DDE075747E8245F97 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF8307B7346F4D3BA13C11AECFE6EDD0 /* FBSnapshotTestCase.h in Headers */,
+				1F84FE646CD1D7BAFFB58C243277AFF8 /* FBSnapshotTestCase-umbrella.h in Headers */,
+				640CCE9C3A28AA3CA15510899F9140EE /* FBSnapshotTestCasePlatform.h in Headers */,
+				2B88C28DD20CBFA7B3AEB21A365197FE /* FBSnapshotTestController.h in Headers */,
+				5558B876B579BC1E79BD3D2B19148329 /* UIApplication+StrictKeyWindow.h in Headers */,
+				8AE19756F0126FE92AF625E36F3D70FE /* UIImage+Compare.h in Headers */,
+				67F1963AA7C9EDB78127AD5F566A4949 /* UIImage+Diff.h in Headers */,
+				373413256658309F9053CE22BF62077E /* UIImage+Snapshot.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DE11F331203994EF8D4086C7E2ADD146 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1951,7 +2007,7 @@
 			);
 			name = TensorFlowLiteSwift;
 			productName = TensorFlowLite;
-			productReference = E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLiteSwift */;
+			productReference = E0B71FE13AA6B05010059EB4B8D87919 /* TensorFlowLite.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		13165000CD87A0EB9235C570E291368B /* Pods-AssentifySdk_Tests */ = {
@@ -1966,6 +2022,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				F8BFE54F72440AE818FB4F5DF3DA7E32 /* PBXTargetDependency */,
 				1C311231F1F1287A2EA33A29E5C7EAB8 /* PBXTargetDependency */,
 			);
 			name = "Pods-AssentifySdk_Tests";
@@ -1990,7 +2047,7 @@
 			);
 			name = AssentifySdk;
 			productName = AssentifySdk;
-			productReference = 8C9B64A3616A5667599E436589BD533E /* AssentifySdk.framework */;
+			productReference = 8C9B64A3616A5667599E436589BD533E /* AssentifySdk */;
 			productType = "com.apple.product-type.framework";
 		};
 		8FE4C90B995A7A85507E3AC190AFAE07 /* Pods-AssentifySdk_Example */ = {
@@ -2014,6 +2071,24 @@
 			name = "Pods-AssentifySdk_Example";
 			productName = Pods_AssentifySdk_Example;
 			productReference = 4EC125F7384A523611CFEFA505C8921A /* Pods-AssentifySdk_Example */;
+			productType = "com.apple.product-type.framework";
+		};
+		98A98149697C80CEF8D5772791E92E66 /* FBSnapshotTestCase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28DAA9880679133EC375B7072B9AEABB /* Build configuration list for PBXNativeTarget "FBSnapshotTestCase" */;
+			buildPhases = (
+				D4CF7A53AFE8275DDE075747E8245F97 /* Headers */,
+				EE210BFC37CDBA0645C09C3819F41723 /* Sources */,
+				E3B880388FF17A336FBF90E30E537508 /* Frameworks */,
+				194C9DCC4899F62F4FB7DDF15C987499 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FBSnapshotTestCase;
+			productName = FBSnapshotTestCase;
+			productReference = 5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B537A1FD6BC67DF7FE8C2B34E5CE6F19 /* SVGKit */ = {
@@ -2050,7 +2125,7 @@
 			);
 			name = CocoaLumberjack;
 			productName = CocoaLumberjack;
-			productReference = C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack */;
+			productReference = C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -2077,6 +2152,7 @@
 			targets = (
 				2E61F2FA7E18D3AA12DE6001D9B4EE97 /* AssentifySdk */,
 				E95654B155D25890BE8E26081FCA8265 /* CocoaLumberjack */,
+				98A98149697C80CEF8D5772791E92E66 /* FBSnapshotTestCase */,
 				8FE4C90B995A7A85507E3AC190AFAE07 /* Pods-AssentifySdk_Example */,
 				13165000CD87A0EB9235C570E291368B /* Pods-AssentifySdk_Tests */,
 				B537A1FD6BC67DF7FE8C2B34E5CE6F19 /* SVGKit */,
@@ -2088,6 +2164,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		16AD533CC3783402FB3B31BC7151C5FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		194C9DCC4899F62F4FB7DDF15C987499 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2360,6 +2443,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EE210BFC37CDBA0645C09C3819F41723 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C67CBD15D9B5D0B7769B2F469478332 /* FBSnapshotTestCase.m in Sources */,
+				5BE525FF6FA14B999ED2CCC0AA4FA0CF /* FBSnapshotTestCase-dummy.m in Sources */,
+				30D475DF57C0C682A723231E7BCA0D14 /* FBSnapshotTestCasePlatform.m in Sources */,
+				C390C6005353FB986CB52F474CEF8588 /* FBSnapshotTestController.m in Sources */,
+				2975A09730FD83DC0897129A11EA6585 /* SwiftSupport.swift in Sources */,
+				74339C58AC4E5631FB8C0E662668A796 /* UIApplication+StrictKeyWindow.m in Sources */,
+				B52281F9F4340D4FC8ABB2FEB1FEC08E /* UIImage+Compare.m in Sources */,
+				CA54C09A12400567AFFCB407EEB7E154 /* UIImage+Diff.m in Sources */,
+				2CB61F6FA511CAACB43A50DC3A82E0DD /* UIImage+Snapshot.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2423,14 +2522,52 @@
 			target = 10418167F619D6DA72BADAD10F9EC02B /* TensorFlowLiteSwift */;
 			targetProxy = EA58FD879CCC8D6DA5DFADD8296673B4 /* PBXContainerItemProxy */;
 		};
+		F8BFE54F72440AE818FB4F5DF3DA7E32 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FBSnapshotTestCase;
+			target = 98A98149697C80CEF8D5772791E92E66 /* FBSnapshotTestCase */;
+			targetProxy = 19741FBE67EB9388DAE97DC298E4DB27 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0AA696D31CC45628135D5908ABB81C7E /* Release */ = {
+		03EAA0FF5410D5BDC8F0BA763FA48CC3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 921C42C713DBF287FDEDA2E36D042C28 /* AssentifySdk.release.xcconfig */;
+			baseConfigurationReference = 3E8151FF1F40A54682B525EB8EE5280F /* CocoaLumberjack.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap";
+				PRODUCT_MODULE_NAME = CocoaLumberjack;
+				PRODUCT_NAME = CocoaLumberjack;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		18E61A74B54EB6BC3CDDC806165D6DED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 50A67B8B5D629AFCB006DF22389F698F /* AssentifySdk.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -2451,24 +2588,19 @@
 				PRODUCT_NAME = AssentifySdk;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_PRODUCT = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		3CD9C4E2825D0444E6BF49F796E28E90 /* Release */ = {
+		1AFF806699C03D894B3E37FA196E16C0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 263E3BC4D64C17DF20BB249BAA977AC6 /* TensorFlowLiteC.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2479,12 +2611,11 @@
 			};
 			name = Release;
 		};
-		3E062EA1C328387BA37D31DD9A5D58D1 /* Debug */ = {
+		2496B3F9E2168B2D23C6076B3E4A6E17 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 50A67B8B5D629AFCB006DF22389F698F /* AssentifySdk.debug.xcconfig */;
+			baseConfigurationReference = A94B05C78CED57EBAAD654B66BAE8D5C /* FBSnapshotTestCase.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -2493,151 +2624,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/AssentifySdk/AssentifySdk-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/AssentifySdk/AssentifySdk-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/AssentifySdk/AssentifySdk.modulemap";
-				PRODUCT_MODULE_NAME = AssentifySdk;
-				PRODUCT_NAME = AssentifySdk;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.5;
-				TARGETED_DEVICE_FAMILY = 1;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		4A130B88C2467EFD6580FFF84EA21039 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 88570CBDB32B396DAD17B7B5911EAAC6 /* SVGKit.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
-				GCC_PREFIX_HEADER = "Target Support Files/SVGKit/SVGKit-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SVGKit/SVGKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SVGKit/SVGKit.modulemap";
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_MODULE_NAME = SVGKit;
-				PRODUCT_NAME = SVGKit;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		7EE7A78859F657F6BEFC651185B43192 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 5.0;
-				SYMROOT = "${SRCROOT}/../build";
-			};
-			name = Release;
-		};
-		8996E064C6936BC87338BBD66ED2FFF7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5F4FB243CCC15D4B3A8C90EDABE9C0EA /* TensorFlowLiteSwift.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift.modulemap";
-				PRODUCT_MODULE_NAME = TensorFlowLite;
-				PRODUCT_NAME = TensorFlowLite;
+				MODULEMAP_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap";
+				PRODUCT_MODULE_NAME = FBSnapshotTestCase;
+				PRODUCT_NAME = FBSnapshotTestCase;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
@@ -2648,12 +2642,79 @@
 			};
 			name = Debug;
 		};
-		9B46D1310B66769876296445E1927DCB /* Debug */ = {
+		2883A753760045BEA34E846417BEDFD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33D73C2F7954A8CC06388C74658FC37D /* Pods-AssentifySdk_Tests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		2B15C72D6019A6299C201C8016E47BB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88570CBDB32B396DAD17B7B5911EAAC6 /* SVGKit.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SVGKit/SVGKit-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SVGKit/SVGKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/SVGKit/SVGKit.modulemap";
+				PRODUCT_MODULE_NAME = SVGKit;
+				PRODUCT_NAME = SVGKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		38147BD674978A2E7880457EBF0FCC5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3BE9A41018CA1AF3E6D452A773553460 /* Pods-AssentifySdk_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -2665,7 +2726,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example.modulemap";
@@ -2682,10 +2743,11 @@
 			};
 			name = Debug;
 		};
-		A4ADA64B4AF03EB0803F14B13650AEB8 /* Debug */ = {
+		3E8925E8E31333705542D129EB623775 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 506CF5D1C43F47F3321F574214F61B08 /* SVGKit.debug.xcconfig */;
+			baseConfigurationReference = 5F4FB243CCC15D4B3A8C90EDABE9C0EA /* TensorFlowLiteSwift.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -2694,35 +2756,31 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
-				GCC_PREFIX_HEADER = "Target Support Files/SVGKit/SVGKit-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SVGKit/SVGKit-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SVGKit/SVGKit.modulemap";
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_MODULE_NAME = SVGKit;
-				PRODUCT_NAME = SVGKit;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift.modulemap";
+				PRODUCT_MODULE_NAME = TensorFlowLite;
+				PRODUCT_NAME = TensorFlowLite;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		B56177B58D90370CB90A790FC94FCF70 /* Debug */ = {
+		42A82861D3FC84A1936FE1FF263F2A60 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 51FDB568F7664DD5C17753D963519759 /* Pods-AssentifySdk_Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -2734,7 +2792,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests.modulemap";
@@ -2751,72 +2809,7 @@
 			};
 			name = Debug;
 		};
-		B7978A1C80B98B32B74AE124396BF4DD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33D73C2F7954A8CC06388C74658FC37D /* Pods-AssentifySdk_Tests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Tests/Pods-AssentifySdk_Tests.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		CFFF0AED8A8C62E798A14186E85A846B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5CC5485144C7C19246526B4EF6F2F699 /* CocoaLumberjack.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap";
-				PRODUCT_MODULE_NAME = CocoaLumberjack;
-				PRODUCT_NAME = CocoaLumberjack;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		D299434AB35E7FD6F7921C8EF24742FF /* Debug */ = {
+		4BC7450F9457737EE3E637BA155B56F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2874,7 +2867,6 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2883,11 +2875,11 @@
 			};
 			name = Debug;
 		};
-		EC2C1D80248D2DF2605DD661E213438A /* Release */ = {
+		4D2D4A5B1E3B4C9C7BBA3F8A574C0C4F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3E8151FF1F40A54682B525EB8EE5280F /* CocoaLumberjack.release.xcconfig */;
+			baseConfigurationReference = 56D54DC05F15DCB22C75803089832546 /* FBSnapshotTestCase.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -2896,14 +2888,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap";
-				PRODUCT_MODULE_NAME = CocoaLumberjack;
-				PRODUCT_NAME = CocoaLumberjack;
+				MODULEMAP_FILE = "Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap";
+				PRODUCT_MODULE_NAME = FBSnapshotTestCase;
+				PRODUCT_NAME = FBSnapshotTestCase;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
@@ -2915,11 +2907,73 @@
 			};
 			name = Release;
 		};
-		F048D445EC2355DF19468621002D6AD7 /* Release */ = {
+		8B5A46FF8D3C1289CDEE3BAFACABCD2A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0CD693BE5BEAEBC0608DE8ADDF193002 /* TensorFlowLiteSwift.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		A0B57F54ED782D71FBB362C2C48C305E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 921C42C713DBF287FDEDA2E36D042C28 /* AssentifySdk.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -2928,19 +2982,19 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/AssentifySdk/AssentifySdk-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/AssentifySdk/AssentifySdk-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift.modulemap";
-				PRODUCT_MODULE_NAME = TensorFlowLite;
-				PRODUCT_NAME = TensorFlowLite;
+				MODULEMAP_FILE = "Target Support Files/AssentifySdk/AssentifySdk.modulemap";
+				PRODUCT_MODULE_NAME = AssentifySdk;
+				PRODUCT_NAME = AssentifySdk;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.5;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2948,26 +3002,12 @@
 			};
 			name = Release;
 		};
-		F31DD3A76EDE1F0F29F4C2AAF8CA7551 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF50489A9EBF89CF39B76DEBFFB41B6C /* TensorFlowLiteC.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		F6FB0066AC044382FC56918C5CC36F36 /* Release */ = {
+		B351976B22CF45A47057AE58BAB1CA3B /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0AE178042E9CC4247CF0FB51F051E4B0 /* Pods-AssentifySdk_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -2979,7 +3019,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AssentifySdk_Example/Pods-AssentifySdk_Example.modulemap";
@@ -2997,14 +3037,132 @@
 			};
 			name = Release;
 		};
+		DD4778936266DEA0E4C49197AD5CF533 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF50489A9EBF89CF39B76DEBFFB41B6C /* TensorFlowLiteC.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EB2D47E6A1E4B4094A61A5D9D0CA028C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CD693BE5BEAEBC0608DE8ADDF193002 /* TensorFlowLiteSwift.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/TensorFlowLiteSwift/TensorFlowLiteSwift.modulemap";
+				PRODUCT_MODULE_NAME = TensorFlowLite;
+				PRODUCT_NAME = TensorFlowLite;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		EDE5E5F1456B05F32000C432A5D2D918 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 506CF5D1C43F47F3321F574214F61B08 /* SVGKit.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SVGKit/SVGKit-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SVGKit/SVGKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/SVGKit/SVGKit.modulemap";
+				PRODUCT_MODULE_NAME = SVGKit;
+				PRODUCT_NAME = SVGKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F6720EA24FD2207DC34CEB7DA091B2A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5CC5485144C7C19246526B4EF6F2F699 /* CocoaLumberjack.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap";
+				PRODUCT_MODULE_NAME = CocoaLumberjack;
+				PRODUCT_NAME = CocoaLumberjack;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		28DAA9880679133EC375B7072B9AEABB /* Build configuration list for PBXNativeTarget "FBSnapshotTestCase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2496B3F9E2168B2D23C6076B3E4A6E17 /* Debug */,
+				4D2D4A5B1E3B4C9C7BBA3F8A574C0C4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D299434AB35E7FD6F7921C8EF24742FF /* Debug */,
-				7EE7A78859F657F6BEFC651185B43192 /* Release */,
+				4BC7450F9457737EE3E637BA155B56F7 /* Debug */,
+				8B5A46FF8D3C1289CDEE3BAFACABCD2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3012,8 +3170,8 @@
 		48B1CF486AFD5E8B79CE711456C3C51B /* Build configuration list for PBXNativeTarget "TensorFlowLiteSwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8996E064C6936BC87338BBD66ED2FFF7 /* Debug */,
-				F048D445EC2355DF19468621002D6AD7 /* Release */,
+				3E8925E8E31333705542D129EB623775 /* Debug */,
+				EB2D47E6A1E4B4094A61A5D9D0CA028C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3021,8 +3179,8 @@
 		4D63C2DC94143E415A34F3AB1C7B18AF /* Build configuration list for PBXNativeTarget "AssentifySdk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3E062EA1C328387BA37D31DD9A5D58D1 /* Debug */,
-				0AA696D31CC45628135D5908ABB81C7E /* Release */,
+				18E61A74B54EB6BC3CDDC806165D6DED /* Debug */,
+				A0B57F54ED782D71FBB362C2C48C305E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3030,8 +3188,8 @@
 		61E1FA7B8977965F998F3D2E7CA03092 /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9B46D1310B66769876296445E1927DCB /* Debug */,
-				F6FB0066AC044382FC56918C5CC36F36 /* Release */,
+				38147BD674978A2E7880457EBF0FCC5E /* Debug */,
+				B351976B22CF45A47057AE58BAB1CA3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3039,8 +3197,8 @@
 		6B1AF37315C7809086550C0DAA17F6D6 /* Build configuration list for PBXNativeTarget "SVGKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A4ADA64B4AF03EB0803F14B13650AEB8 /* Debug */,
-				4A130B88C2467EFD6580FFF84EA21039 /* Release */,
+				EDE5E5F1456B05F32000C432A5D2D918 /* Debug */,
+				2B15C72D6019A6299C201C8016E47BB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3048,8 +3206,8 @@
 		9A6A8971543BD0FA69564B4824A7D66A /* Build configuration list for PBXNativeTarget "Pods-AssentifySdk_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B56177B58D90370CB90A790FC94FCF70 /* Debug */,
-				B7978A1C80B98B32B74AE124396BF4DD /* Release */,
+				42A82861D3FC84A1936FE1FF263F2A60 /* Debug */,
+				2883A753760045BEA34E846417BEDFD5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3057,8 +3215,8 @@
 		B565B2F471ED129F341AA26B21CFBAE3 /* Build configuration list for PBXAggregateTarget "TensorFlowLiteC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F31DD3A76EDE1F0F29F4C2AAF8CA7551 /* Debug */,
-				3CD9C4E2825D0444E6BF49F796E28E90 /* Release */,
+				DD4778936266DEA0E4C49197AD5CF533 /* Debug */,
+				1AFF806699C03D894B3E37FA196E16C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3066,8 +3224,8 @@
 		DD6670AE7DF0E52EADD72BDE55AB43E0 /* Build configuration list for PBXNativeTarget "CocoaLumberjack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CFFF0AED8A8C62E798A14186E85A846B /* Debug */,
-				EC2C1D80248D2DF2605DD661E213438A /* Release */,
+				F6720EA24FD2207DC34CEB7DA091B2A1 /* Debug */,
+				03EAA0FF5410D5BDC8F0BA763FA48CC3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

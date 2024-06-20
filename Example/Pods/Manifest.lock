@@ -22,7 +22,7 @@ PODS:
 
 DEPENDENCIES:
   - AssentifySdk (from `../`)
-  - FBSnapshotTestCase (~> 2.1.4)
+  - FBSnapshotTestCase
 
 SPEC REPOS:
   trunk:
@@ -44,6 +44,6 @@ SPEC CHECKSUMS:
   TensorFlowLiteC: 50d75ed3640c15dcfbaf88ca4326297b445e00a1
   TensorFlowLiteSwift: fe99748dc3d58ae08bd2ff38658e3ade7038670f
 
-PODFILE CHECKSUM: d6a0a7810b991d58f9dd470b73c8fb3d8cd22eb1
+PODFILE CHECKSUM: 0c6e40346d5fe56df269817a70fa69a4c39e9845
 
 COCOAPODS: 1.15.2
