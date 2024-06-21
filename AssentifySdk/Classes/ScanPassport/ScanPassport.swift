@@ -204,7 +204,9 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      && motion == MotionType.SENDING  && zoom == ZoomType.SENDING) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
-                    self.scanPassportDelegate?.onSend();
+                    DispatchQueue.main.async {
+                        self.scanPassportDelegate?.onSend();
+                    }
                     
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.READ_PASSPORT),
@@ -238,62 +240,74 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
           
             
         }
-        self.scanPassportDelegate?.onEnvironmentalConditionsChange(
-                                                                  brightness: imageBrightnessChecker,
-                                                                  motion: motion,zoom:zoom)
+        DispatchQueue.main.async {
+            self.scanPassportDelegate?.onEnvironmentalConditionsChange?(
+                brightness: imageBrightnessChecker,
+                motion: self.motion,zoom:self.zoom)
+        }
             
     }
     
     
      func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
-        motionRectF.removeAll()
-        sendingFlagsMotion.removeAll()
-        sendingFlagsZoom.removeAll()
-        if eventName == HubConnectionTargets.ON_COMPLETE {
-            self.scanPassportDelegate?.onComplete(dataModel:remoteProcessingModel )
-            start = false
-        } else {
-            start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
-        }
-        
-        switch eventName {
-            case HubConnectionTargets.ON_ERROR:
-                self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_RETRY:
-                self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-                self.scanPassportDelegate?.onClipPreparationComplete(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_STATUS_UPDATE:
-                self.scanPassportDelegate?.onStatusUpdated(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPDATE:
-                self.scanPassportDelegate?.onUpdated(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                self.scanPassportDelegate?.onLivenessUpdate(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CARD_DETECTED:
-                self.scanPassportDelegate?.onCardDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_EXTRACTED:
-                self.scanPassportDelegate?.onMrzExtracted(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_DETECTED:
-                self.scanPassportDelegate?.onMrzDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-                self.scanPassportDelegate?.onNoMrzDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_DETECTED:
-                self.scanPassportDelegate?.onFaceDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_FACE_DETECTED:
-                self.scanPassportDelegate?.onNoFaceDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_EXTRACTED:
-                self.scanPassportDelegate?.onFaceExtracted(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-                self.scanPassportDelegate?.onQualityCheckAvailable(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-                self.scanPassportDelegate?.onDocumentCaptured(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-                self.scanPassportDelegate?.onDocumentCropped(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPLOAD_FAILED:
-                self.scanPassportDelegate?.onUploadFailed(dataModel:remoteProcessingModel )
-            default:
-                break
-        }
+         DispatchQueue.main.async {
+             self.motionRectF.removeAll()
+             self.sendingFlagsMotion.removeAll()
+             self.sendingFlagsZoom.removeAll()
+             if eventName == HubConnectionTargets.ON_COMPLETE {
+                 
+                 var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
+                 var passportResponseModel = PassportResponseModel(
+                    destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                    passportExtractedModel: passportExtractedModel,
+                    error: remoteProcessingModel.error,
+                    success: remoteProcessingModel.success
+                 )
+                 self.scanPassportDelegate?.onComplete(dataModel:passportResponseModel )
+                 self.start = false
+             } else {
+                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
+             }
+             
+             switch eventName {
+             case HubConnectionTargets.ON_ERROR:
+                 self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_RETRY:
+                 self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                 self.scanPassportDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_STATUS_UPDATE:
+                 self.scanPassportDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_UPDATE:
+                 self.scanPassportDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                 self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_CARD_DETECTED:
+                 self.scanPassportDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                 self.scanPassportDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_MRZ_DETECTED:
+                 self.scanPassportDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                 self.scanPassportDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_FACE_DETECTED:
+                 self.scanPassportDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                 self.scanPassportDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_FACE_EXTRACTED:
+                 self.scanPassportDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                 self.scanPassportDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                 self.scanPassportDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                 self.scanPassportDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_UPLOAD_FAILED:
+                 self.scanPassportDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+             default:
+                 break
+             }
+         }
     }
 
     

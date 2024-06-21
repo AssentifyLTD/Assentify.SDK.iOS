@@ -215,7 +215,9 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             && motion == MotionType.SENDING  && zoom == ZoomType.SENDING) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
-                    self.scanIDCardDelegate?.onSend();
+                    DispatchQueue.main.async {
+                        self.scanIDCardDelegate?.onSend();
+                    }
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.ID_CARD),
                         videoClip: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
@@ -246,9 +248,11 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             
             
         }
-        self.scanIDCardDelegate?.onEnvironmentalConditionsChange(
-            brightness: imageBrightnessChecker,
-            motion: motion,zoom: zoom)
+        DispatchQueue.main.async {
+            self.scanIDCardDelegate?.onEnvironmentalConditionsChange?(
+                brightness: imageBrightnessChecker,
+                motion: self.motion,zoom: self.zoom)
+        }
         
     }
     
@@ -264,63 +268,72 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     }
     
     func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
-        motionRectF.removeAll()
-        sendingFlagsMotion.removeAll()
-        sendingFlagsZoom.removeAll()
-        if eventName == HubConnectionTargets.ON_COMPLETE {
-            self.scanIDCardDelegate?.onComplete(dataModel:remoteProcessingModel,order:self.order )
-            self.order =   self.order + 1;
-            if(!self.kycDocumentDetails.isEmpty && order < self.kycDocumentDetails.count){
-                self.changeTemplateId(templateId: self.kycDocumentDetails[order].templateProcessingKeyInformation);
+        DispatchQueue.main.async {
+            self.motionRectF.removeAll()
+            self.sendingFlagsMotion.removeAll()
+            self.sendingFlagsZoom.removeAll()
+            if eventName == HubConnectionTargets.ON_COMPLETE {
                 
-            }else{
-                start = false
+                var iDExtractedModel = IDExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
+                var iDResponseModel = IDResponseModel(
+                    destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                    iDExtractedModel: iDExtractedModel,
+                    error: remoteProcessingModel.error,
+                    success: remoteProcessingModel.success
+                )
+                self.scanIDCardDelegate?.onComplete(dataModel:iDResponseModel,order:self.order )
+                self.order =   self.order + 1;
+                if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
+                    self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
+                    
+                }else{
+                    self.start = false
+                }
+                
+            } else {
+                self.start = eventName == HubConnectionTargets.ON_WRONG_TEMPLATE || eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
             }
-          
-        } else {
-            start = eventName == HubConnectionTargets.ON_WRONG_TEMPLATE || eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
-        }
-        
-        switch eventName {
-        case HubConnectionTargets.ON_ERROR:
-            self.scanIDCardDelegate?.onError(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_RETRY:
-            self.scanIDCardDelegate?.onRetry(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-            self.scanIDCardDelegate?.onClipPreparationComplete(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_STATUS_UPDATE:
-            self.scanIDCardDelegate?.onStatusUpdated(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_UPDATE:
-            self.scanIDCardDelegate?.onUpdated(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_LIVENESS_UPDATE:
-            self.scanIDCardDelegate?.onLivenessUpdate(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_CARD_DETECTED:
-            self.scanIDCardDelegate?.onCardDetected(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_MRZ_EXTRACTED:
-            self.scanIDCardDelegate?.onMrzExtracted(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_MRZ_DETECTED:
-            self.scanIDCardDelegate?.onMrzDetected(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-            self.scanIDCardDelegate?.onNoMrzDetected(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_FACE_DETECTED:
-            self.scanIDCardDelegate?.onFaceDetected(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_NO_FACE_DETECTED:
-            self.scanIDCardDelegate?.onNoFaceDetected(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_FACE_EXTRACTED:
-            self.scanIDCardDelegate?.onFaceExtracted(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-            self.scanIDCardDelegate?.onQualityCheckAvailable(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-            self.scanIDCardDelegate?.onDocumentCaptured(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-            self.scanIDCardDelegate?.onDocumentCropped(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_UPLOAD_FAILED:
-            self.scanIDCardDelegate?.onUploadFailed(dataModel:remoteProcessingModel )
-        case HubConnectionTargets.ON_WRONG_TEMPLATE:
-            self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
             
-        default:
-            break
+            switch eventName {
+            case HubConnectionTargets.ON_ERROR:
+                self.scanIDCardDelegate?.onError(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_RETRY:
+                self.scanIDCardDelegate?.onRetry(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                self.scanIDCardDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_STATUS_UPDATE:
+                self.scanIDCardDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_UPDATE:
+                self.scanIDCardDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                self.scanIDCardDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_CARD_DETECTED:
+                self.scanIDCardDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                self.scanIDCardDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_MRZ_DETECTED:
+                self.scanIDCardDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                self.scanIDCardDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_FACE_DETECTED:
+                self.scanIDCardDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                self.scanIDCardDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_FACE_EXTRACTED:
+                self.scanIDCardDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                self.scanIDCardDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                self.scanIDCardDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                self.scanIDCardDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_UPLOAD_FAILED:
+                self.scanIDCardDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+            case HubConnectionTargets.ON_WRONG_TEMPLATE:
+                self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
+            default:
+                break
+            }
         }
     }
     

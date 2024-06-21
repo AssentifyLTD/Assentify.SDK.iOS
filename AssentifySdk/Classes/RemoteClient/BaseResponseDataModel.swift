@@ -1,10 +1,17 @@
 
 import Foundation
-public struct RemoteProcessingModel :Codable{
+@objc public class RemoteProcessingModel : NSObject , Codable {
     public  var destinationEndpoint: String?
     public  var response: String?
     public  var error: String?
     public  var success: Bool?
+    
+    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil) {
+        self.destinationEndpoint = destinationEndpoint
+        self.response = response
+        self.error = error
+        self.success = success
+    }
     
 }
 

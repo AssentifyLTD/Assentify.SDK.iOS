@@ -9,105 +9,71 @@ import AssentifySdk
 
 import UIKit
 
-class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelegate,ScanOtherDelegate,ScanIDCardDelegate,FaceMatchDelegate{
-    
-    func onEnvironmentalConditionsChange(brightness: Double, motion: MotionType) {
-        //
-        
-    }
-    
-    func onComplete(dataModel: RemoteProcessingModel, order: Int) {
+class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
+    func onComplete(dataModel: FaceResponseModel) {
         print("\(yellowColor)onComplete:" )
-        print("\(yellowColor)onComplete: " , order)
-        print("\(yellowColor)onComplete: " , dataModel)
+        print("\(yellowColor)onComplete:1 " , dataModel.destinationEndpoint)
+        print("\(yellowColor)onComplete:2 " , dataModel.success)
+        print("\(yellowColor)onComplete:3 " , dataModel.error)
+        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.baseImageFace)
+        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.secondImageFace)
+        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.percentageMatch)
+        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.isLive)
+        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.outputProperties)
+        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.extractedData)
+ 
+  if let capture = dataModel.faceExtractedModel?.identificationDocumentCapture {
+      print("Printing identificationDocumentCapture data:")
+      Mirror(reflecting: capture).children.forEach { (key, value) in
+          if let key = key {
+              print("\(key): \(value ?? "nil")")
+          }
+      }
+  } else {
+      print("identificationDocumentCapture is nil")
+  }
     }
     
-    func onWrongTemplate(dataModel: RemoteProcessingModel) {
-        print("\(yellowColor)onWrongTemplate:" )
-    }
+  
+    
+
+  
+    
+    
+
     
     func onError(dataModel: RemoteProcessingModel) {
         
     }
     
+    
+    func onEnvironmentalConditionsChange(brightness: Double, motion: MotionType) {
+        print("\(yellowColor)onEnvironmentalConditionsChange:" , brightness)
+        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion)
+    }
+    
+    
+    
     func onSend() {
-        print("\(yellowColor)onSend:" )
+        print("\(yellowColor)onSend:")
+        let textField = UITextField(frame: CGRect(x: 20, y: 100, width: 200, height: 30))
+            textField.placeholder = "Enter text here"
+            textField.borderStyle = .roundedRect
+            textField.textAlignment = .left
+
+        
+            // Add UITextField as a subview
+            self.view.addSubview(textField)
     }
     
     func onRetry(dataModel: RemoteProcessingModel) {
         print("\(yellowColor)onRetry:" , dataModel)
     }
+  
     
-    func onClipPreparationComplete(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onStatusUpdated(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onUpdated(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onLivenessUpdate(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onComplete(dataModel: RemoteProcessingModel) {
-        print("\(yellowColor)onComplete:" , dataModel)
-    }
-    
-    func onCardDetected(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onMrzExtracted(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onMrzDetected(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onNoMrzDetected(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onFaceDetected(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onNoFaceDetected(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onFaceExtracted(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onQualityCheckAvailable(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onDocumentCaptured(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onDocumentCropped(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onUploadFailed(dataModel: RemoteProcessingModel) {
-        
-    }
-    
-    func onEnvironmentalConditionsChange(brightness: Double, motion: MotionType, zoom: ZoomType) {
-//        print("\(yellowColor)onEnvironmentalConditionsChange:" , brightness)
-//        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion)
-//        print("\(yellowColor)onEnvironmentalConditionsChange:" , zoom)
-        
-    }
+
+
+  
     
     
     
@@ -162,11 +128,13 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     
     func onAssentifySdkInitSuccess(configModel: ConfigModel) {
         print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel)
+        print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.blockIdentifier)
+        print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.blockIdentifier)
         assentifySdk?.getTemplates();
         DispatchQueue.main.async {
             
             /* PASSPORT */
-           
+            /*
             self.scanPassport =  self.assentifySdk?.startScanPassport(scanPassportDelegate: self)
             self.addChild(  self.scanPassport!)
             self.view.addSubview(  self.scanPassport!.view)
@@ -178,7 +146,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
                 self.scanPassport!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             ])
             self.scanPassport!.didMove(toParent: self)
-           
+             */
             
             
             /* OTHER */
@@ -218,24 +186,27 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
                             self.scanID!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
                         ])
                         self.scanID!.didMove(toParent: self)
+            
              */
             
-            
             /* FaceMatch   */
-            /*
-            self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:"")
-            self.addChild( self.faceMatch!)
-            self.view.addSubview( self.faceMatch!.view)
-            self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-                self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-            ])
-
-            self.faceMatch!.didMove(toParent: self)
-            */
+            if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
+                if let base64String = self.imageToBase64(from: imageUrl) {
+                    self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
+                    self.addChild( self.faceMatch!)
+                    self.view.addSubview( self.faceMatch!.view)
+                    self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                        self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                        self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                        self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                    ])
+                    
+                    self.faceMatch!.didMove(toParent: self)
+                }
+            }
+            
             
         }
     }
@@ -244,6 +215,17 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     func onHasTemplates(templates: [TemplatesByCountry]) {
         print("\(yellowColor)onHasTemplates:" , templates)
     }
-
+    func imageToBase64(from url: URL) -> String? {
+           // Download image from URL
+           guard let imageData = try? Data(contentsOf: url) else {
+               print("Failed to download image from URL")
+               return nil
+           }
+           
+           // Convert image data to base64
+           let base64String = imageData.base64EncodedString()
+           
+           return base64String
+       }
 }
 
