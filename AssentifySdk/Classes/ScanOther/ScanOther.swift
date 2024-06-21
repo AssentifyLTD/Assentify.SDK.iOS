@@ -199,7 +199,9 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                      && motion == MotionType.SENDING  && zoom == ZoomType.SENDING) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
-                    self.scanOtherDelegate?.onSend();
+                    DispatchQueue.main.async {
+                        self.scanOtherDelegate?.onSend();
+                    }
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.OTHER),
                          videoClip: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
@@ -231,62 +233,74 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
           
             
         }
-        self.scanOtherDelegate?.onEnvironmentalConditionsChange(
-                                                                  brightness: imageBrightnessChecker,
-                                                                  motion: motion,zoom:zoom)
+        DispatchQueue.main.async {
+            self.scanOtherDelegate?.onEnvironmentalConditionsChange?(
+                brightness: imageBrightnessChecker,
+                motion: self.motion,zoom:self.zoom)
+        }
             
     }
     
     
      func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
-        motionRectF.removeAll()
-        sendingFlagsZoom.removeAll()
-        sendingFlagsMotion.removeAll()
-        if eventName == HubConnectionTargets.ON_COMPLETE {
-            self.scanOtherDelegate?.onComplete(dataModel:remoteProcessingModel )
-            start = false
-        } else {
-            start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
-        }
-        
-        switch eventName {
-            case HubConnectionTargets.ON_ERROR:
-                self.scanOtherDelegate?.onError(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_RETRY:
-                self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-                self.scanOtherDelegate?.onClipPreparationComplete(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_STATUS_UPDATE:
-                self.scanOtherDelegate?.onStatusUpdated(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPDATE:
-                self.scanOtherDelegate?.onUpdated(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                self.scanOtherDelegate?.onLivenessUpdate(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CARD_DETECTED:
-                self.scanOtherDelegate?.onCardDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_EXTRACTED:
-                self.scanOtherDelegate?.onMrzExtracted(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_DETECTED:
-                self.scanOtherDelegate?.onMrzDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-                self.scanOtherDelegate?.onNoMrzDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_DETECTED:
-                self.scanOtherDelegate?.onFaceDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_FACE_DETECTED:
-                self.scanOtherDelegate?.onNoFaceDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_EXTRACTED:
-                self.scanOtherDelegate?.onFaceExtracted(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-                self.scanOtherDelegate?.onQualityCheckAvailable(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-                self.scanOtherDelegate?.onDocumentCaptured(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-                self.scanOtherDelegate?.onDocumentCropped(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPLOAD_FAILED:
-                self.scanOtherDelegate?.onUploadFailed(dataModel:remoteProcessingModel )
-            default:
-                break
-        }
+         DispatchQueue.main.async {
+             self.motionRectF.removeAll()
+             self.sendingFlagsZoom.removeAll()
+             self.sendingFlagsMotion.removeAll()
+             if eventName == HubConnectionTargets.ON_COMPLETE {
+                 
+                 var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
+                 var otherResponseModel = OtherResponseModel(
+                    destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                    otherExtractedModel: otherExtractedModel,
+                    error: remoteProcessingModel.error,
+                    success: remoteProcessingModel.success
+                 )
+                 self.scanOtherDelegate?.onComplete(dataModel:otherResponseModel )
+                 self.start = false
+             } else {
+                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
+             }
+             
+             switch eventName {
+             case HubConnectionTargets.ON_ERROR:
+                 self.scanOtherDelegate?.onError(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_RETRY:
+                 self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                 self.scanOtherDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_STATUS_UPDATE:
+                 self.scanOtherDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_UPDATE:
+                 self.scanOtherDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                 self.scanOtherDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_CARD_DETECTED:
+                 self.scanOtherDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                 self.scanOtherDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_MRZ_DETECTED:
+                 self.scanOtherDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                 self.scanOtherDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_FACE_DETECTED:
+                 self.scanOtherDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                 self.scanOtherDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_FACE_EXTRACTED:
+                 self.scanOtherDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                 self.scanOtherDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                 self.scanOtherDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                 self.scanOtherDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_UPLOAD_FAILED:
+                 self.scanOtherDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+             default:
+                 break
+             }
+         }
     }
 
     

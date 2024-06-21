@@ -212,7 +212,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             case .success(let base64String):   
                                 if(self.start){
                                     self.pixelBuffers.removeAll();
-                                    self.faceMatchDelegate?.onSend();
+                                    DispatchQueue.main.async {
+                                        self.faceMatchDelegate?.onSend();
+                                    }
                                     self.remoteProcessing?.starProcessing(
                                         url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                          videoClip: base64String,
@@ -249,9 +251,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
           
             
         }
-        self.faceMatchDelegate?.onEnvironmentalConditionsChange(
-                                                                  brightness: imageBrightnessChecker,
-                                                                   motion: motion)
+        DispatchQueue.main.async {
+            self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
+                brightness: imageBrightnessChecker,
+                motion: self.motion)
+        }
             
     }
     
@@ -259,53 +263,62 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
 
     
      func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
-        motionRectF.removeAll()
-        sendingFlags.removeAll()
-        if eventName == HubConnectionTargets.ON_COMPLETE {
-            self.faceMatchDelegate?.onComplete(dataModel:remoteProcessingModel )
-            start = false
-        } else {
-            start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
-        }
-        
-        switch eventName {
-            case HubConnectionTargets.ON_ERROR:
-                self.faceMatchDelegate?.onError(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_RETRY:
-                self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-                self.faceMatchDelegate?.onClipPreparationComplete(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_STATUS_UPDATE:
-                self.faceMatchDelegate?.onStatusUpdated(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPDATE:
-                self.faceMatchDelegate?.onUpdated(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                self.faceMatchDelegate?.onLivenessUpdate(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CARD_DETECTED:
-                self.faceMatchDelegate?.onCardDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_EXTRACTED:
-                self.faceMatchDelegate?.onMrzExtracted(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_DETECTED:
-                self.faceMatchDelegate?.onMrzDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-                self.faceMatchDelegate?.onNoMrzDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_DETECTED:
-                self.faceMatchDelegate?.onFaceDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_FACE_DETECTED:
-                self.faceMatchDelegate?.onNoFaceDetected(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_EXTRACTED:
-                self.faceMatchDelegate?.onFaceExtracted(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-                self.faceMatchDelegate?.onQualityCheckAvailable(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-                self.faceMatchDelegate?.onDocumentCaptured(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-                self.faceMatchDelegate?.onDocumentCropped(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPLOAD_FAILED:
-                self.faceMatchDelegate?.onUploadFailed(dataModel:remoteProcessingModel )
-            default:
-                break
-        }
+         DispatchQueue.main.async {
+             self.motionRectF.removeAll()
+             self.sendingFlags.removeAll()
+             if eventName == HubConnectionTargets.ON_COMPLETE {
+                 var faceExtractedModel = FaceExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
+                 var faceResponseModel = FaceResponseModel(
+                    destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                    faceExtractedModel: faceExtractedModel,
+                    error: remoteProcessingModel.error,
+                    success: remoteProcessingModel.success
+                 )
+                 self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel )
+                 self.start = false
+             } else {
+                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
+             }
+             
+             switch eventName {
+             case HubConnectionTargets.ON_ERROR:
+                 self.faceMatchDelegate?.onError(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_RETRY:
+                 self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                 self.faceMatchDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_STATUS_UPDATE:
+                 self.faceMatchDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_UPDATE:
+                 self.faceMatchDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                 self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_CARD_DETECTED:
+                 self.faceMatchDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                 self.faceMatchDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_MRZ_DETECTED:
+                 self.faceMatchDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                 self.faceMatchDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_FACE_DETECTED:
+                 self.faceMatchDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                 self.faceMatchDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_FACE_EXTRACTED:
+                 self.faceMatchDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                 self.faceMatchDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                 self.faceMatchDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                 self.faceMatchDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+             case HubConnectionTargets.ON_UPLOAD_FAILED:
+                 self.faceMatchDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+             default:
+                 break
+             }
+         }
     }
 
     
