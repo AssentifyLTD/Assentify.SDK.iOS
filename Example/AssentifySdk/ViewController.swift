@@ -131,6 +131,16 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
         print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.blockIdentifier)
         print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.blockIdentifier)
         assentifySdk?.getTemplates();
+        
+        var extractedInformation: [String: String] = [:]
+        
+        var submitRequestModel : [SubmitRequestModel] = []
+
+        submitRequestModel.append(SubmitRequestModel(
+                    stepId:1,
+                   stepDefinition:"",
+                   extractedInformation:extractedInformation
+                   ))
         DispatchQueue.main.async {
             
             /* PASSPORT */
@@ -206,6 +216,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
                     self.faceMatch!.didMove(toParent: self)
                 }
             }
+            
             
             
         }
