@@ -9,29 +9,15 @@ import AssentifySdk
 
 import UIKit
 
-class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
-    func onComplete(dataModel: FaceResponseModel) {
-        print("\(yellowColor)onComplete:" )
-        print("\(yellowColor)onComplete:1 " , dataModel.destinationEndpoint)
-        print("\(yellowColor)onComplete:2 " , dataModel.success)
-        print("\(yellowColor)onComplete:3 " , dataModel.error)
-        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.baseImageFace)
-        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.secondImageFace)
-        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.percentageMatch)
-        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.isLive)
-        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.outputProperties)
-        print("\(yellowColor)onComplete:4 " , dataModel.faceExtractedModel?.extractedData)
+class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate{
+
+    func onWrongTemplate(dataModel: RemoteProcessingModel) {
+        print("\(yellowColor)onWrongTemplate:" )
+    }
+    
+    func onComplete(dataModel: IDResponseModel, order: Int) {
+        print("\(yellowColor)onComplete: " + order.description )
  
-  if let capture = dataModel.faceExtractedModel?.identificationDocumentCapture {
-      print("Printing identificationDocumentCapture data:")
-      Mirror(reflecting: capture).children.forEach { (key, value) in
-          if let key = key {
-              print("\(key): \(value ?? "nil")")
-          }
-      }
-  } else {
-      print("identificationDocumentCapture is nil")
-  }
     }
     
   
@@ -176,7 +162,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
             
             
             /* ID */
-            /*
+          
             let data = [
                             KycDocumentDetails(
                             name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7"),
@@ -197,26 +183,26 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
                         ])
                         self.scanID!.didMove(toParent: self)
             
-             */
+             
             
             /* FaceMatch   */
-            if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
-                if let base64String = self.imageToBase64(from: imageUrl) {
-                    self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
-                    self.addChild( self.faceMatch!)
-                    self.view.addSubview( self.faceMatch!.view)
-                    self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
-                    NSLayoutConstraint.activate([
-                        self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-                        self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                        self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                        self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-                    ])
-                    
-                    self.faceMatch!.didMove(toParent: self)
-                }
-            }
-            
+//            if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
+//                if let base64String = self.imageToBase64(from: imageUrl) {
+//                    self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
+//                    self.addChild( self.faceMatch!)
+//                    self.view.addSubview( self.faceMatch!.view)
+//                    self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
+//                    NSLayoutConstraint.activate([
+//                        self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+//                        self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+//                        self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+//                        self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+//                    ])
+//                    
+//                    self.faceMatch!.didMove(toParent: self)
+//                }
+//            }
+//            
             
             
         }

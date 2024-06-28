@@ -1,5 +1,6 @@
 PODS:
-  - AssentifySdk (0.0.11):
+  - AssentifySdk (0.0.12):
+    - Sentry
     - SVGKit
     - TensorFlowLiteSwift
   - CocoaLumberjack (3.7.4):
@@ -10,6 +11,9 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
+  - Sentry (8.30.0):
+    - Sentry/Core (= 8.30.0)
+  - Sentry/Core (8.30.0)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
   - TensorFlowLiteC (2.7.0):
@@ -28,6 +32,7 @@ SPEC REPOS:
   trunk:
     - CocoaLumberjack
     - FBSnapshotTestCase
+    - Sentry
     - SVGKit
     - TensorFlowLiteC
     - TensorFlowLiteSwift
@@ -37,9 +42,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AssentifySdk: b829ea443ce447f7dfc7170011c9f28eea5c1b8f
+  AssentifySdk: 2055992f586df7f5072d49f5bbbc4d83fcc3b344
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  Sentry: 37b29280c25d35e49850151b65a27786d94e1a19
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   TensorFlowLiteC: 50d75ed3640c15dcfbaf88ca4326297b445e00a1
   TensorFlowLiteSwift: fe99748dc3d58ae08bd2ff38658e3ade7038670f

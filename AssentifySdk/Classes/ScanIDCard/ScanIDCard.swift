@@ -284,7 +284,9 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                 self.scanIDCardDelegate?.onComplete(dataModel:iDResponseModel,order:self.order )
                 self.order =   self.order + 1;
                 if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
-                    self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                        self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
+                    }
                     
                 }else{
                     self.start = false
