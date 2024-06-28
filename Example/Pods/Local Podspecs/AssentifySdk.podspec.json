@@ -1,6 +1,6 @@
 {
   "name": "AssentifySdk",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "summary": "This iOS Pod provides integration with Assentify services.",
   "description": "This iOS Pod provides integration with Assentify services.",
   "homepage": "https://assentify.com/home",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/AssentifyLTD/Assentify.SDK.iOS.git",
-    "tag": "0.0.11"
+    "tag": "0.0.12"
   },
   "platforms": {
     "ios": "14.0"
@@ -40,6 +40,9 @@
 
     ],
     "SVGKit": [
+
+    ],
+    "Sentry": [
 
     ]
   },
