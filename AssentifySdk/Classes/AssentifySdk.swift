@@ -2,7 +2,6 @@
 
 import Foundation
 import UIKit
-import Sentry
 public class AssentifySdk {
     private let apiKey: String
     private let tenantIdentifier: String
@@ -41,9 +40,6 @@ public class AssentifySdk {
         guard environmentalConditions != nil else { fatalError("EnvironmentalConditions must not be null") }
         guard assentifySdkDelegate != nil else { fatalError("AssentifySdkCallback must not be null") }
         
-        SentrySDK.start { options in
-            options.dsn = SENTRY_DNS
-            }
         validateKey()
     }
  
