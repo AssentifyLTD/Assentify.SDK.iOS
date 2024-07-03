@@ -9,14 +9,21 @@ import AssentifySdk
 
 import UIKit
 
-class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate{
+class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
+
 
     func onWrongTemplate(dataModel: RemoteProcessingModel) {
         print("\(yellowColor)onWrongTemplate:" )
     }
     
+<<<<<<< Updated upstream
     func onComplete(dataModel: IDResponseModel, order: Int) {
         print("\(yellowColor)onComplete: " + order.description )
+=======
+    func onComplete(dataModel: FaceResponseModel) {
+        print("\(yellowColor)onComplete: " + dataModel.description )
+        self.assentifySdk = AssentifySdk()
+>>>>>>> Stashed changes
  
     }
     
@@ -35,7 +42,9 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate
     
     func onEnvironmentalConditionsChange(brightness: Double, motion: MotionType) {
         print("\(yellowColor)onEnvironmentalConditionsChange:" , brightness)
-        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion)
+        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion == MotionType.NO_DETECT )
+        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion == MotionType.SENDING )
+        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion == MotionType.HOLD_YOUR_HAND )
     }
     
     
@@ -115,6 +124,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate
     func onAssentifySdkInitSuccess(configModel: ConfigModel) {
         print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel)
         print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.blockIdentifier)
+        print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.tenantIdentifier)
         print("\(yellowColor)onAssentifySdkInitSuccess:" , configModel.blockIdentifier)
         assentifySdk?.getTemplates();
         
@@ -163,7 +173,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate
             
             /* ID */
           
-            let data = [
+            /*            let data = [
                             KycDocumentDetails(
                             name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7"),
                             KycDocumentDetails(
@@ -183,26 +193,25 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate
                         ])
                         self.scanID!.didMove(toParent: self)
             
-             
+            */
             
             /* FaceMatch   */
-//            if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
-//                if let base64String = self.imageToBase64(from: imageUrl) {
-//                    self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
-//                    self.addChild( self.faceMatch!)
-//                    self.view.addSubview( self.faceMatch!.view)
-//                    self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
-//                    NSLayoutConstraint.activate([
-//                        self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                        self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                        self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                        self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-//                    ])
-//                    
-//                    self.faceMatch!.didMove(toParent: self)
-//                }
-//            }
-//            
+           if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
+               if let base64String = self.imageToBase64(from: imageUrl) {
+                   self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
+                self.addChild( self.faceMatch!)
+                   self.view.addSubview( self.faceMatch!.view)
+                   self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
+                  NSLayoutConstraint.activate([
+                       self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                       self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                      self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                       self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                  ])
+                   
+                   self.faceMatch!.didMove(toParent: self)
+              }
+          }
             
             
         }

@@ -101,11 +101,22 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     }
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
-        if( self.pixelBuffers.count < 10){
-            self.pixelBuffers.append(pixelBuffer)
-        }
         runModel(onPixelBuffer: pixelBuffer)
         openCvCheck(pixelBuffer: pixelBuffer)
+        let cropRect = CGRect(x: 0, y: 0, width: 256, height: 256)
+        let imageBrightnessChecker = cropPixelBuffer(pixelBuffer, toRect: cropRect)!.brightness;
+          if motionRectF.count >= 2 {
+                        let rect1 = motionRectF[motionRectF.count - 2]
+                        let rect2 = motionRectF[motionRectF.count - 1]
+                        motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
+             
+      }
+        
+        DispatchQueue.main.async {
+            self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
+                brightness: imageBrightnessChecker,
+                motion: self.motion)
+        }
     }
     
     @objc func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
@@ -199,8 +210,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         if (environmentalConditions!.checkConditions(
                                                      brightness: imageBrightnessChecker)
                      && motion == MotionType.SENDING) {
-            if (start && sendingFlags.count > MotionLimit && self.pixelBuffers.count  == 10 ) {
-                if (hasFaceOrCard()) {
+            if (start && sendingFlags.count > MotionLimit  ) {
+                if( self.pixelBuffers.count < 10){
+                    self.pixelBuffers.append(pixelBuffer)
+                }
+                if (hasFaceOrCard() && self.pixelBuffers.count  == 10) {
                      let outputURL: URL = self.createTemporaryFileURL()!
                         guard let firstPixelBuffer = self.pixelBuffers.first else {
                             return
@@ -209,7 +223,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                         let frameRate = 30;
                         self.createVideoFromPixelBuffers(pixelBuffers: self.pixelBuffers, outputURL: outputURL, size: videoSize, videoFrameRate: frameRate) { result in
                             switch result {
-                            case .success(let base64String):   
+                            case .success(let base64String):
                                 if(self.start){
                                     self.pixelBuffers.removeAll();
                                     DispatchQueue.main.async {
@@ -251,11 +265,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
           
             
         }
-        DispatchQueue.main.async {
-            self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
-                brightness: imageBrightnessChecker,
-                motion: self.motion)
-        }
+        
             
     }
     
