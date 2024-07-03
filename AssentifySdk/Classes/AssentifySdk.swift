@@ -3,26 +3,48 @@
 import Foundation
 import UIKit
 public class AssentifySdk {
-    private let apiKey: String
-    private let tenantIdentifier: String
-    private let interaction: String
-    private let environmentalConditions: EnvironmentalConditions?
-    private let assentifySdkDelegate : AssentifySdkDelegate?
-    private var processMrz: Bool?
-    private var storeCapturedDocument: Bool?
-    private var performLivenessDetection: Bool?
-    private var storeImageStream: Bool?
-    private var saveCapturedVideoID: Bool?
-    private var saveCapturedVideoFace: Bool?
-    private var isKeyValid: Bool = false
-    private var configModel: ConfigModel?
+    private var apiKey: String = ""
+    private var tenantIdentifier = ""
+    private var interaction = ""
+    private var environmentalConditions: EnvironmentalConditions?
+    private var assentifySdkDelegate : AssentifySdkDelegate?
+    private var processMrz: Bool? =  nil;
+    private var storeCapturedDocument: Bool?  =  nil;
+    private var performLivenessDetection: Bool?  =  nil;
+    private var storeImageStream: Bool?  =  nil;
+    private var saveCapturedVideoID: Bool?  =  nil;
+    private var saveCapturedVideoFace: Bool?  =  nil;
+    private var configModel: ConfigModel?  =  nil;
     private var stepID: Int = -1;
-    private var scanID: ScanIDCard?;
     
     
 
     
-    public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?, processMrz: Bool? = nil, storeCapturedDocument: Bool? = nil, performLivenessDetection: Bool? = nil, storeImageStream: Bool? = nil, saveCapturedVideoID: Bool? = nil, saveCapturedVideoFace: Bool? = nil) {
+    public init() {
+        if let context = UIApplication.shared.delegate?.window??.rootViewController {
+            let assentifySdkPreferencesManager = AssentifySdkPreferencesManager()
+            if let assentifyPreferencesData = assentifySdkPreferencesManager.getAssentifyPreferencesData() {
+                print("AssentifyPreferencesData")
+                print(assentifyPreferencesData.apiKey)
+                print(assentifyPreferencesData.configModel)
+                print(assentifyPreferencesData.tenantIdentifier)
+                print("_________________________")
+                self.apiKey = assentifyPreferencesData.apiKey
+                self.configModel = assentifyPreferencesData.configModel
+                self.tenantIdentifier = assentifyPreferencesData.tenantIdentifier
+                self.interaction = assentifyPreferencesData.interaction
+                self.environmentalConditions = assentifyPreferencesData.environmentalConditions
+                self.processMrz = assentifyPreferencesData.processMrz
+                self.storeCapturedDocument = assentifyPreferencesData.storeCapturedDocument
+                self.performLivenessDetection = assentifyPreferencesData.performLivenessDetection
+                self.storeImageStream = assentifyPreferencesData.storeImageStream
+                self.saveCapturedVideoID = assentifyPreferencesData.saveCapturedVideoID
+                self.saveCapturedVideoFace = assentifyPreferencesData.saveCapturedVideoFace
+            }
+        }
+    }
+    
+    public func initialize(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?, processMrz: Bool? = nil, storeCapturedDocument: Bool? = nil, performLivenessDetection: Bool? = nil, storeImageStream: Bool? = nil, saveCapturedVideoID: Bool? = nil, saveCapturedVideoFace: Bool? = nil) {
         self.apiKey = apiKey
         self.tenantIdentifier = tenantIdentifier
         self.interaction = interaction
@@ -42,6 +64,8 @@ public class AssentifySdk {
         
         validateKey()
     }
+    
+  
  
 
     private func validateKey() {
@@ -59,8 +83,21 @@ public class AssentifySdk {
         remoteGetStart(interActionId: interaction) { result in
             switch result {
             case .success(let configModel):
-                self.isKeyValid  = true;
                 self.configModel = configModel;
+                let assentifySdkPreferencesManager = AssentifySdkPreferencesManager()
+                       assentifySdkPreferencesManager.saveAssentifyPreferencesData(
+                           apiKey: self.apiKey,
+                           configModel: self.configModel!,
+                           tenantIdentifier: self.tenantIdentifier,
+                           interaction: self.interaction,
+                           environmentalConditions: self.environmentalConditions!,
+                           processMrz: self.processMrz,
+                           storeCapturedDocument: self.storeCapturedDocument,
+                           performLivenessDetection: self.performLivenessDetection,
+                           storeImageStream: self.storeImageStream,
+                           saveCapturedVideoID: self.saveCapturedVideoID,
+                           saveCapturedVideoFace: self.saveCapturedVideoFace
+                       )
                 configModel.stepDefinitions.forEach { item in
                     if item.stepDefinition == "IdentificationDocumentCapture" {
                         if self.processMrz == nil {
@@ -102,7 +139,6 @@ public class AssentifySdk {
     }
     
     public func startScanPassport(scanPassportDelegate:ScanPassportDelegate)->UIViewController?{
-        if(isKeyValid){
             let scanPassport = ScanPassport(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
@@ -116,15 +152,9 @@ public class AssentifySdk {
                 
             )
             return scanPassport;
-
-        }else{
-            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-        }
-        return nil;
     }
     
     public func startScanOthers(scanOtherDelegate:ScanOtherDelegate)->UIViewController?{
-        if(isKeyValid){
             let scanOther = ScanOther(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
@@ -138,17 +168,11 @@ public class AssentifySdk {
                 
             )
             return scanOther;
-
-        }else{
-            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-        }
-        return nil;
     }
     
     
     public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails])->UIViewController?{
-        if(isKeyValid){
-             scanID = ScanIDCard(
+            var scanID = ScanIDCard(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
@@ -162,18 +186,12 @@ public class AssentifySdk {
                 
             )
             return scanID;
-
-        }else{
-            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-        }
-        return nil;
     }
    
   
     
     
     public func startFaceMatch(faceMatchDelegate:FaceMatchDelegate,secondImage:String)->UIViewController?{
-        if(isKeyValid){
             let  faceMatch = FaceMatch(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
@@ -187,16 +205,10 @@ public class AssentifySdk {
                 secondImage :secondImage
             );
             return faceMatch;
-
-        }else{
-            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-        }
-        return nil;
     }
     
     
     public func startContextAwareSigning(contextAwareDelegate:ContextAwareDelegate) -> ContextAwareSigning?{
-        if(isKeyValid){
             return ContextAwareSigning(
                 configModel:configModel,
                 apiKey:apiKey,
@@ -205,10 +217,6 @@ public class AssentifySdk {
                 interaction:interaction,
                 contextAwareDelegate:contextAwareDelegate
             );
-        }else{
-            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-        }
-        return nil;
     }
     
     
@@ -217,15 +225,10 @@ public class AssentifySdk {
            submitDataDelegate: SubmitDataDelegate,
            submitRequestModel: [SubmitRequestModel]
        ) -> SubmitData? {
-           if (isKeyValid) {
                return SubmitData(apiKey: apiKey,
                                  submitDataDelegate:submitDataDelegate,
                                  submitRequestModel:submitRequestModel,
                                  configModel:configModel!)
-           } else{
-               NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-           }
-           return nil;
        }
     
     public func getTemplates() {

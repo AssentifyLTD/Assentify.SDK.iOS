@@ -4,7 +4,7 @@ import Foundation
 
 
 
-public class EnvironmentalConditions {
+public class EnvironmentalConditions:Codable {
 
 
     /**Detect**/

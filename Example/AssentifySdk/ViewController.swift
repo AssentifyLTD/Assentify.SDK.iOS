@@ -17,6 +17,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate
     
     func onComplete(dataModel: IDResponseModel, order: Int) {
         print("\(yellowColor)onComplete: " + order.description )
+        self.assentifySdk = AssentifySdk()
  
     }
     
@@ -86,20 +87,20 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanIDCardDelegate
     let yellowColor = "🔥 -> ";
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.assentifySdk = AssentifySdk(
-                apiKey: "NvyTlImKg8lgToRGICsIV5AYGwxgObA2DdJVfCxrXKJFHPnepy0Ur38sPyoT0FJWHEkxh8LJ8uBtO4X4sg",
-                tenantIdentifier: "318e2ca7-fde8-4c47-bbcc-0c94b905630f",
-                interaction: "CA7240AC8456E25F619B0A60CA0334FFFC7440AEF7514768419398ED044C6B9F",
-                environmentalConditions: self.environmentalConditions,
-                assentifySdkDelegate: self,
-                processMrz: true,
-                storeCapturedDocument: true,
-                performLivenessDetection: false,
-                storeImageStream: true,
-                saveCapturedVideoID: true,
-                saveCapturedVideoFace: true
-            )
+        self.assentifySdk = AssentifySdk()
      
+        self.assentifySdk?.initialize(apiKey: "NvyTlImKg8lgToRGICsIV5AYGwxgObA2DdJVfCxrXKJFHPnepy0Ur38sPyoT0FJWHEkxh8LJ8uBtO4X4sg",
+                                             tenantIdentifier: "318e2ca7-fde8-4c47-bbcc-0c94b905630f",
+                                             interaction: "CA7240AC8456E25F619B0A60CA0334FFFC7440AEF7514768419398ED044C6B9F",
+                                             environmentalConditions: self.environmentalConditions,
+                                             assentifySdkDelegate: self,
+                                             processMrz: true,
+                                             storeCapturedDocument: true,
+                                             performLivenessDetection: false,
+                                             storeImageStream: true,
+                                             saveCapturedVideoID: true,
+                                             saveCapturedVideoFace: true)
+       
     }
 
     override func didReceiveMemoryWarning() {

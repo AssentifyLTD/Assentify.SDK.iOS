@@ -127,6 +127,9 @@
 		4E9C158A60D9124DE3477EF827935486 /* SVGElementInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = BA63605A36B00768FF7C84FF4594DBB2 /* SVGElementInstance.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		500383705304562DB0BDF4E465D4E018 /* CSSValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FC01A6CB1CDC54F44A4456965B76B6 /* CSSValue.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		51153959DB4978C96095EF4CA2255357 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = D8CC9D1368900F4FAAABADC0F05A6813 /* DDDispatchQueueLogFormatter.m */; };
+		522480822C354288006BB1A7 /* AssentifyPreferencesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522480812C354288006BB1A7 /* AssentifyPreferencesData.swift */; };
+		522480842C3542BD006BB1A7 /* AssentifyPreferencesKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522480832C3542BD006BB1A7 /* AssentifyPreferencesKeys.swift */; };
+		522480862C3542F1006BB1A7 /* AssentifySdkPreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522480852C3542F1006BB1A7 /* AssentifySdkPreferencesManager.swift */; };
 		526254B077FAD6A7E977A8BA9E32FFAC /* NodeList+Mutable.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FE89161B4CEA045F0981046D346804 /* NodeList+Mutable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		52C35490412B3001C05C70F94EFA1D1C /* DocumentStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 665F55466DCA57168EA1093F3E0E863D /* DocumentStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5493958F089D9C1C8D763CE5F3CD2BD8 /* NSCharacterSet+SVGKExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DEA53BC572EF260D3A8C8FEF53C6D0 /* NSCharacterSet+SVGKExtensions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -635,6 +638,9 @@
 		50A62F5010931889A20F311486289610 /* FBSnapshotTestCasePlatform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCasePlatform.h; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.h; sourceTree = "<group>"; };
 		51708DC30423A61C5850A6FA3D9D7189 /* FBSnapshotTestCase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCase.m; path = FBSnapshotTestCase/FBSnapshotTestCase.m; sourceTree = "<group>"; };
 		51FDB568F7664DD5C17753D963519759 /* Pods-AssentifySdk_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		522480812C354288006BB1A7 /* AssentifyPreferencesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssentifyPreferencesData.swift; sourceTree = "<group>"; };
+		522480832C3542BD006BB1A7 /* AssentifyPreferencesKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssentifyPreferencesKeys.swift; sourceTree = "<group>"; };
+		522480852C3542F1006BB1A7 /* AssentifySdkPreferencesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssentifySdkPreferencesManager.swift; sourceTree = "<group>"; };
 		536EE4E0EC2C2BA6820045090687612A /* DDFileLogger+Buffering.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "DDFileLogger+Buffering.h"; path = "Sources/CocoaLumberjack/include/CocoaLumberjack/DDFileLogger+Buffering.h"; sourceTree = "<group>"; };
 		5480F17EE4641B63816A6D347D91DC2F /* SVGKit.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGKit.m; path = Source/SVGKit.m; sourceTree = "<group>"; };
 		54E1D2FA6CECC5C308F3A8F44B93064D /* SVGGElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGGElement.m; path = "Source/DOM classes/SVG-DOM/SVGGElement.m"; sourceTree = "<group>"; };
@@ -1157,6 +1163,16 @@
 				8AEA329349B5506EC71A86196745DD6A /* ToBase64.swift */,
 			);
 			path = ImageUtils;
+			sourceTree = "<group>";
+		};
+		522480802C354257006BB1A7 /* PreferencesManager */ = {
+			isa = PBXGroup;
+			children = (
+				522480812C354288006BB1A7 /* AssentifyPreferencesData.swift */,
+				522480832C3542BD006BB1A7 /* AssentifyPreferencesKeys.swift */,
+				522480852C3542F1006BB1A7 /* AssentifySdkPreferencesManager.swift */,
+			);
+			name = PreferencesManager;
 			sourceTree = "<group>";
 		};
 		5509E3DC472A4BE054C8AF5C01809B98 /* Core */ = {
@@ -1747,6 +1763,7 @@
 		E51931ACDB30DCC5DED6921BC2086B54 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				522480802C354257006BB1A7 /* PreferencesManager */,
 				00C262A33A3134ECA2BA1F91BC260868 /* Constants */,
 				50FEE6845837144927CCBB3512CE50EC /* ImageUtils */,
 			);
@@ -2255,13 +2272,16 @@
 				C18A1F3CB1EA0FD775DC12AA5F626596 /* CreateUserDocument.swift in Sources */,
 				E7FB7ACAAE4AB71D84356670AC961C79 /* CVPixelBufferExtension.swift in Sources */,
 				3C9B29E13D3298EDA7DE29C50BF0A4A2 /* DetectMotion.swift in Sources */,
+				522480842C3542BD006BB1A7 /* AssentifyPreferencesKeys.swift in Sources */,
 				06B4AB25380F222D401C49A81CD385E7 /* DetectZoom.swift in Sources */,
 				6DBA427FFB2DDAA422A9FEBDE5746D8A /* DocumentTokensModel.swift in Sources */,
 				89C28738BFAC28CEBF24DCCDCE62BF54 /* EndPoints.swift in Sources */,
 				F4E9AF8E69C726BA5428987496C0EE8B /* EnvironmentalConditions.swift in Sources */,
+				522480862C3542F1006BB1A7 /* AssentifySdkPreferencesManager.swift in Sources */,
 				9A8A180C69E378B0886B47946895E294 /* FaceDataModel.swift in Sources */,
 				C3B5E4E81071EABDC0A67DF698B29CEC /* FaceMatch.swift in Sources */,
 				C8359B1518863D12F4395CBDFC169ACC /* FaceMatchDelegate.swift in Sources */,
+				522480822C354288006BB1A7 /* AssentifyPreferencesData.swift in Sources */,
 				75959E97C754DB62B5E68BD8E078F57E /* HubConnectionFunctions.swift in Sources */,
 				C2F52AE312C66C4CAE6D77286DFAF60A /* HubConnectionTargets.swift in Sources */,
 				B91664096EE9B98B616EDD736F4A76E5 /* IDDataModel.swift in Sources */,
