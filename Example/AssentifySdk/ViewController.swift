@@ -15,15 +15,9 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
     func onWrongTemplate(dataModel: RemoteProcessingModel) {
         print("\(yellowColor)onWrongTemplate:" )
     }
-    
-<<<<<<< Updated upstream
-    func onComplete(dataModel: IDResponseModel, order: Int) {
-        print("\(yellowColor)onComplete: " + order.description )
-=======
+
     func onComplete(dataModel: FaceResponseModel) {
         print("\(yellowColor)onComplete: " + dataModel.description )
-        self.assentifySdk = AssentifySdk()
->>>>>>> Stashed changes
  
     }
     
