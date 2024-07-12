@@ -217,7 +217,8 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                          saveCapturedVideo: saveCapturedVideoID!,
                          storeCapturedDocument: storeCapturedDocument!,
                          isVideo: false,
-                         storeImageStream: storeImageStream!
+                         storeImageStream: storeImageStream!,
+                         selfieImage:""
                          ) { result in
                         switch result {
                         case .success(let model):

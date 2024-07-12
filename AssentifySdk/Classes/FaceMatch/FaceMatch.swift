@@ -244,7 +244,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                         saveCapturedVideo: self.saveCapturedVideoID!,
                                         storeCapturedDocument: self.storeCapturedDocument!,
                                          isVideo: true,
-                                        storeImageStream: self.storeImageStream!
+                                        storeImageStream: self.storeImageStream!,
+                                        selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                                          ) { result in
                                         switch result {
                                         case .success(let model):

@@ -17,7 +17,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
     }
 
     func onComplete(dataModel: FaceResponseModel) {
-        print("\(yellowColor)onComplete: " + dataModel.description )
+        print("\(yellowColor)onComplete: " + (dataModel.faceExtractedModel?.baseImageFace)! )
  
     }
     
@@ -35,10 +35,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
     
     
     func onEnvironmentalConditionsChange(brightness: Double, motion: MotionType) {
-        print("\(yellowColor)onEnvironmentalConditionsChange:" , brightness)
-        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion == MotionType.NO_DETECT )
-        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion == MotionType.SENDING )
-        print("\(yellowColor)onEnvironmentalConditionsChange:" , motion == MotionType.HOLD_YOUR_HAND )
+     
     }
     
     
