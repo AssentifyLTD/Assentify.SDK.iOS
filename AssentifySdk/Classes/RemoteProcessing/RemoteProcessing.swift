@@ -52,6 +52,7 @@ class RemoteProcessing {
         storeCapturedDocument: Bool,
         isVideo: Bool,
         storeImageStream: Bool,
+        selfieImage: String,
         completion: @escaping (BaseResult<RemoteProcessingModel?, Error>) -> Void
     ) {
         let traceIdentifier = UUID().uuidString
@@ -101,7 +102,8 @@ class RemoteProcessing {
             "checkForFace":  String(checkForFace),
             "callerConnectionId": connectionId,
             "connectionId": connectionId,
-            "TraceIdentifier":UUID().uuidString
+            "TraceIdentifier":UUID().uuidString,
+            "selfieImage":selfieImage
         ] as [String : String]
 
         
