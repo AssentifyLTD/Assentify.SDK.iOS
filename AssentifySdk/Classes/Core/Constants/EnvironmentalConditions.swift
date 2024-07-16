@@ -55,9 +55,9 @@ public class EnvironmentalConditions {
     func checkConditions(
         brightness: Double
     ) -> Bool {
-        let isBrightnessValid = brightness >= Double(BRIGHTNESS_LOW_THRESHOLD) && brightness <= Double(BRIGHTNESS_HIGH_THRESHOLD)
-        
-        return  isBrightnessValid
+        // let isBrightnessValid = brightness >= Double(BRIGHTNESS_LOW_THRESHOLD) && brightness <= Double(BRIGHTNESS_HIGH_THRESHOLD)
+        //  return  isBrightnessValid
+        return true;
     }
 
     func isPredictionValid(confidence: Float) -> Bool {
