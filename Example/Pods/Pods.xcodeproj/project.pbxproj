@@ -1172,22 +1172,22 @@
 			path = ImageUtils;
 			sourceTree = "<group>";
 		};
-		52C4D9AF2C4F94B70038F99E /* Models */ = {
+		52C4D9BA2C4FEAA40038F99E /* LanguageTransformation */ = {
+			isa = PBXGroup;
+			children = (
+				52C4D9BB2C4FEAD90038F99E /* Models */,
+				52C4D9B22C4F95570038F99E /* LanguageTransformationDelegate.swift */,
+				52C4D9B42C4F96160038F99E /* LanguageTransformation.swift */,
+			);
+			name = LanguageTransformation;
+			sourceTree = "<group>";
+		};
+		52C4D9BB2C4FEAD90038F99E /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				52C4D9B02C4F95150038F99E /* LanguageTransformationModel.swift */,
 			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		52C4D9BA2C4FEAA40038F99E /* LanguageTransformation */ = {
-			isa = PBXGroup;
-			children = (
-				52C4D9B22C4F95570038F99E /* LanguageTransformationDelegate.swift */,
-				52C4D9AF2C4F94B70038F99E /* Models */,
-				52C4D9B42C4F96160038F99E /* LanguageTransformation.swift */,
-			);
-			name = LanguageTransformation;
+			name = Models;
 			sourceTree = "<group>";
 		};
 		5509E3DC472A4BE054C8AF5C01809B98 /* Core */ = {
