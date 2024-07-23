@@ -5,7 +5,8 @@ import AVFoundation
 import Accelerate
 import CoreImage
 
-public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate {
+public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate ,LanguageTransformationDelegate {
+
   
     
  
@@ -33,10 +34,13 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
     private var storeImageStream: Bool?
+    private var language: String
     
     private var remoteProcessing: RemoteProcessing?
     private var motion:MotionType = MotionType.NO_DETECT;
     private var zoom:ZoomType = ZoomType.NO_DETECT;
+    
+    private var passportResponseModel: PassportResponseModel?
 
     private var  start = true;
     init(configModel: ConfigModel!,
@@ -47,7 +51,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
          saveCapturedVideoID:Bool,
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
-         scanPassportDelegate:ScanPassportDelegate
+         scanPassportDelegate:ScanPassportDelegate,
+         language: String
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
@@ -58,6 +63,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         self.storeCapturedDocument = storeCapturedDocument;
         self.storeImageStream = storeImageStream;
         self.scanPassportDelegate = scanPassportDelegate;
+        self.language = language
         
         modelDataHandler?.customColor = environmentalConditions.CustomColor;
 
@@ -256,58 +262,69 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
              self.sendingFlagsMotion.removeAll()
              self.sendingFlagsZoom.removeAll()
              if eventName == HubConnectionTargets.ON_COMPLETE {
-                 
-                 var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
-                 var passportResponseModel = PassportResponseModel(
+                 self.start = false
+                 var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                 self.passportResponseModel = PassportResponseModel(
                     destinationEndpoint: remoteProcessingModel.destinationEndpoint,
                     passportExtractedModel: passportExtractedModel,
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
                  )
-                 self.scanPassportDelegate?.onComplete(dataModel:passportResponseModel )
-                 self.start = false
+                 if(self.language == Language.NON){
+                     self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+                 }else{
+                     let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
+                        transformed.languageTransformation(
+                            langauge: self.language,
+                            transformationModel: preparePropertiesToTranslate(language: self.language, properties: passportExtractedModel?.outputProperties)
+                        )
+                 }
+                 
              } else {
                  self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
+                 switch eventName {
+                 case HubConnectionTargets.ON_ERROR:
+                     self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_RETRY:
+                     self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                     self.scanPassportDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_STATUS_UPDATE:
+                     self.scanPassportDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_UPDATE:
+                     self.scanPassportDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                     self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_CARD_DETECTED:
+                     self.scanPassportDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                     self.scanPassportDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_MRZ_DETECTED:
+                     self.scanPassportDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                     self.scanPassportDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_FACE_DETECTED:
+                     self.scanPassportDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                     self.scanPassportDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_FACE_EXTRACTED:
+                     self.scanPassportDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                     self.scanPassportDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                     self.scanPassportDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                     self.scanPassportDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+                 case HubConnectionTargets.ON_UPLOAD_FAILED:
+                     self.scanPassportDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+                 default:
+                     self.start = true
+                     self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
+                     break
+                 }
              }
              
-             switch eventName {
-             case HubConnectionTargets.ON_ERROR:
-                 self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_RETRY:
-                 self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-                 self.scanPassportDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_STATUS_UPDATE:
-                 self.scanPassportDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_UPDATE:
-                 self.scanPassportDelegate?.onUpdated?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                 self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_CARD_DETECTED:
-                 self.scanPassportDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_MRZ_EXTRACTED:
-                 self.scanPassportDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_MRZ_DETECTED:
-                 self.scanPassportDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-                 self.scanPassportDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_FACE_DETECTED:
-                 self.scanPassportDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_NO_FACE_DETECTED:
-                 self.scanPassportDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_FACE_EXTRACTED:
-                 self.scanPassportDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-                 self.scanPassportDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-                 self.scanPassportDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-                 self.scanPassportDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_UPLOAD_FAILED:
-                 self.scanPassportDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
-             default:
-                 break
-             }
+            
          }
     }
 
@@ -340,6 +357,34 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             }
         }
         return hasCard
+    }
+    
+    
+    public func onTranslatedSuccess(properties: [String : String]?) {
+        if let outputProperties = self.passportResponseModel!.passportExtractedModel?.outputProperties {
+            let ignoredProperties = getIgnoredProperties(properties: outputProperties)
+            var finalProperties = [String: Any]()
+
+            for (key, value) in properties! {
+                finalProperties[key] = value
+            }
+            
+            for (key, value) in ignoredProperties {
+                finalProperties[key] = value
+            }
+
+            self.passportResponseModel!.passportExtractedModel?.transformedProperties?.removeAll()
+
+            for (key, value) in finalProperties {
+                self.passportResponseModel!.passportExtractedModel!.transformedProperties![key] =  "\(value)"
+            }
+            self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+        }
+
+    }
+    
+    public func onTranslatedError(properties: [String : String]?) {
+        self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
     }
     
    

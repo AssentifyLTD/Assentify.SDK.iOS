@@ -18,20 +18,22 @@ import Foundation
 
 @objc public class IDExtractedModel : NSObject  {
     public var outputProperties: [String: Any]?
+    public var transformedProperties: [String: String]?
     public var extractedData: [String: Any]?
     public var imageUrl: String?
     public var faces: [String]?
     public var identificationDocumentCapture: IdentificationDocumentCapture?
 
-    init(outputProperties: [String: Any]? = nil, extractedData: [String: Any]? = nil, imageUrl: String? = nil, faces: [String]? = nil,identificationDocumentCapture:IdentificationDocumentCapture) {
+    init(outputProperties: [String: Any]? = nil, transformedProperties: [String: String],extractedData: [String: Any]? = nil, imageUrl: String? = nil, faces: [String]? = nil,identificationDocumentCapture:IdentificationDocumentCapture) {
         self.outputProperties = outputProperties
         self.extractedData = extractedData
         self.imageUrl = imageUrl
         self.faces = faces
         self.identificationDocumentCapture = identificationDocumentCapture
+        self.transformedProperties = transformedProperties
     }
     
-   static func fromJsonString(responseString: String) -> IDExtractedModel? {
+   static func fromJsonString(responseString: String,transformedProperties: [String: String]) -> IDExtractedModel? {
         guard let  responseData = responseString.data(using: .utf8),
               let response = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else {
             return nil
@@ -56,8 +58,20 @@ import Foundation
                 extractedData[newKey] = value
             }
         }
+       
+       
+       var transformedPropertiesResult: [String: String] = [:];
+       
+       if(transformedProperties.isEmpty){
+           outputProperties?.forEach { (key, value) in
+             transformedPropertiesResult[key] =  "\(value)"
+           }
+       }else{
+           transformedPropertiesResult = transformedProperties;
+       }
+       
         var  identificationDocumentCapture = fillIdentificationDocumentCapture(outputProperties:outputProperties )
-       return IDExtractedModel(outputProperties: outputProperties, extractedData: extractedData, imageUrl: imageUrl, faces: faces,identificationDocumentCapture:identificationDocumentCapture)
+       return IDExtractedModel(outputProperties: outputProperties,transformedProperties:transformedPropertiesResult, extractedData: extractedData, imageUrl: imageUrl, faces: faces,identificationDocumentCapture:identificationDocumentCapture)
     }
 
 }

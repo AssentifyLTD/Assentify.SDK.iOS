@@ -129,6 +129,11 @@
 		51153959DB4978C96095EF4CA2255357 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = D8CC9D1368900F4FAAABADC0F05A6813 /* DDDispatchQueueLogFormatter.m */; };
 		526254B077FAD6A7E977A8BA9E32FFAC /* NodeList+Mutable.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FE89161B4CEA045F0981046D346804 /* NodeList+Mutable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		52C35490412B3001C05C70F94EFA1D1C /* DocumentStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 665F55466DCA57168EA1093F3E0E863D /* DocumentStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		52C4D9B12C4F95150038F99E /* LanguageTransformationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C4D9B02C4F95150038F99E /* LanguageTransformationModel.swift */; };
+		52C4D9B32C4F95570038F99E /* LanguageTransformationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C4D9B22C4F95570038F99E /* LanguageTransformationDelegate.swift */; };
+		52C4D9B52C4F96160038F99E /* LanguageTransformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C4D9B42C4F96160038F99E /* LanguageTransformation.swift */; };
+		52C4D9B72C4F96B90038F99E /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C4D9B62C4F96B90038F99E /* DataType.swift */; };
+		52C4D9B92C4F970A0038F99E /* SupportedLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C4D9B82C4F970A0038F99E /* SupportedLanguage.swift */; };
 		5493958F089D9C1C8D763CE5F3CD2BD8 /* NSCharacterSet+SVGKExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DEA53BC572EF260D3A8C8FEF53C6D0 /* NSCharacterSet+SVGKExtensions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		5558B876B579BC1E79BD3D2B19148329 /* UIApplication+StrictKeyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A84354DCCCF19A23F47C878FB18CDD5 /* UIApplication+StrictKeyWindow.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		5577DFD46315301AA5B70E4649A79AAD /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0147CA77216B0176357DF6E518798B05 /* UIColorExtension.swift */; };
@@ -635,6 +640,11 @@
 		50A62F5010931889A20F311486289610 /* FBSnapshotTestCasePlatform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCasePlatform.h; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.h; sourceTree = "<group>"; };
 		51708DC30423A61C5850A6FA3D9D7189 /* FBSnapshotTestCase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCase.m; path = FBSnapshotTestCase/FBSnapshotTestCase.m; sourceTree = "<group>"; };
 		51FDB568F7664DD5C17753D963519759 /* Pods-AssentifySdk_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AssentifySdk_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		52C4D9B02C4F95150038F99E /* LanguageTransformationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTransformationModel.swift; sourceTree = "<group>"; };
+		52C4D9B22C4F95570038F99E /* LanguageTransformationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTransformationDelegate.swift; sourceTree = "<group>"; };
+		52C4D9B42C4F96160038F99E /* LanguageTransformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTransformation.swift; sourceTree = "<group>"; };
+		52C4D9B62C4F96B90038F99E /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
+		52C4D9B82C4F970A0038F99E /* SupportedLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguage.swift; sourceTree = "<group>"; };
 		536EE4E0EC2C2BA6820045090687612A /* DDFileLogger+Buffering.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "DDFileLogger+Buffering.h"; path = "Sources/CocoaLumberjack/include/CocoaLumberjack/DDFileLogger+Buffering.h"; sourceTree = "<group>"; };
 		5480F17EE4641B63816A6D347D91DC2F /* SVGKit.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGKit.m; path = Source/SVGKit.m; sourceTree = "<group>"; };
 		54E1D2FA6CECC5C308F3A8F44B93064D /* SVGGElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGGElement.m; path = "Source/DOM classes/SVG-DOM/SVGGElement.m"; sourceTree = "<group>"; };
@@ -991,6 +1001,8 @@
 				35CE661E1DD4130956786903FB47D2D6 /* ZoomType.swift */,
 				C95E5ACE0B50713F76E8CA0AD2BC76D2 /* HubConnectionValues */,
 				8E4EAF5AE2F5FF6A9E33AAA45FA8586A /* Routes */,
+				52C4D9B62C4F96B90038F99E /* DataType.swift */,
+				52C4D9B82C4F970A0038F99E /* SupportedLanguage.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -1034,6 +1046,7 @@
 		2602ED6582137A2AB71D705C551BF322 /* AssentifySdk */ = {
 			isa = PBXGroup;
 			children = (
+				52C4D9BA2C4FEAA40038F99E /* LanguageTransformation */,
 				3AD2019D6C58674CF26A5EDF06D0DA43 /* AssentifySdk.swift */,
 				FA2CDC9FC46384D4E4681A6A635BB867 /* AssentifySdkDelegate .swift */,
 				5CE26CCA7EDB13B1CE7B78767E25160C /* best-fp16.tflite */,
@@ -1157,6 +1170,24 @@
 				8AEA329349B5506EC71A86196745DD6A /* ToBase64.swift */,
 			);
 			path = ImageUtils;
+			sourceTree = "<group>";
+		};
+		52C4D9AF2C4F94B70038F99E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				52C4D9B02C4F95150038F99E /* LanguageTransformationModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		52C4D9BA2C4FEAA40038F99E /* LanguageTransformation */ = {
+			isa = PBXGroup;
+			children = (
+				52C4D9B22C4F95570038F99E /* LanguageTransformationDelegate.swift */,
+				52C4D9AF2C4F94B70038F99E /* Models */,
+				52C4D9B42C4F96160038F99E /* LanguageTransformation.swift */,
+			);
+			name = LanguageTransformation;
 			sourceTree = "<group>";
 		};
 		5509E3DC472A4BE054C8AF5C01809B98 /* Core */ = {
@@ -2239,12 +2270,15 @@
 				0EE4E1AFA5F7E28288B055CA7288D51A /* AssentifySdkDelegate .swift in Sources */,
 				17AB8C7B1E3ACA47ABB22D8A140F4B71 /* BaseResponseDataModel.swift in Sources */,
 				3AC8D0C2D4CB7C47BEF3B066702DF529 /* BaseUrls.swift in Sources */,
+				52C4D9B92C4F970A0038F99E /* SupportedLanguage.swift in Sources */,
+				52C4D9B72C4F96B90038F99E /* DataType.swift in Sources */,
 				D9A7037B0C82523E904367F9ED7E09DF /* best-fp16.tflite in Sources */,
 				4B896C42D58335DE19EC05A7036690D5 /* BlockType.swift in Sources */,
 				631429A0E5B0982A16345652416F5228 /* BlurChecker.swift in Sources */,
 				609C90200C4149906ECA594E16EB4C7D /* BrightnessChecker.swift in Sources */,
 				E81ABE836503925A70F3BF4A833C5236 /* CameraFeedManager.swift in Sources */,
 				C0526FC69B38586FECB68746D0C8DB70 /* CameraSetupDelegate.swift in Sources */,
+				52C4D9B32C4F95570038F99E /* LanguageTransformationDelegate.swift in Sources */,
 				F41E9B1358FCA78B2BFCAA2E5EED07DC /* CameraView.swift in Sources */,
 				C651429AAF0C8A73EE4E18D54266F2F8 /* classes.txt in Sources */,
 				64C0C3EEBB945D7920139DA4D1A6C2EB /* ConfigModel.swift in Sources */,
@@ -2268,12 +2302,14 @@
 				E7A2D17F4584F0B0501E8DC22540744B /* IdentificationDocumentCapture.swift in Sources */,
 				F1D1F55FB7581B472A614C999F56B033 /* ModelDataHandler.swift in Sources */,
 				B9F95F38A94094B81713450CCB50625E /* MotionType.swift in Sources */,
+				52C4D9B12C4F95150038F99E /* LanguageTransformationModel.swift in Sources */,
 				BF2517C45B53EE138BC6FB359C69CE6D /* OtherDataModel.swift in Sources */,
 				A7267CD8B244FFF6ED155EB456B849B1 /* OverlayView.swift in Sources */,
 				5E82E0DE28E1B063D57C2BE45E71F7B7 /* PassportDataModel.swift in Sources */,
 				41BE68183BE6EED43F3792566B638AD8 /* PrePostProcessor.swift in Sources */,
 				AEE4010E73F2D5EEBD3259276ED68D55 /* PreviewView.swift in Sources */,
 				E33B32370611F5D17CFC6A7E17E91B4F /* RemoteClient.swift in Sources */,
+				52C4D9B52C4F96160038F99E /* LanguageTransformation.swift in Sources */,
 				CAA3383E226CABBCF9D55B8C2C93BFEF /* RemoteProcessing.swift in Sources */,
 				569C4C57FF952A880377A9758FD94940 /* RemoteProcessingDelegate.swift in Sources */,
 				CEA5262D18513CD5C290641895326029 /* ScanIDCard.swift in Sources */,

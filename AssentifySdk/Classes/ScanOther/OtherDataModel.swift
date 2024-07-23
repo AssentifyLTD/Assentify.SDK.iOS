@@ -19,22 +19,26 @@ import Foundation
 
 @objc public class OtherExtractedModel : NSObject  {
     public var outputProperties: [String: Any]?
+    public var transformedProperties: [String: String]?
     public var extractedData: [String: Any]?
     public var additionalDetails: [String: Any]?
+    public var transformedDetails: [String: String]?
     public var imageUrl: String?
     public var faces: [String]?
     public var identificationDocumentCapture: IdentificationDocumentCapture?
 
-    init(outputProperties: [String: Any]? = nil, extractedData: [String: Any]? = nil,additionalDetails: [String: Any]? = nil , imageUrl: String? = nil, faces: [String]? = nil,identificationDocumentCapture:IdentificationDocumentCapture) {
+    init(outputProperties: [String: Any]? = nil,transformedProperties: [String: String]?, extractedData: [String: Any]? = nil,additionalDetails: [String: Any]? = nil ,transformedDetails: [String: String]?, imageUrl: String? = nil, faces: [String]? = nil,identificationDocumentCapture:IdentificationDocumentCapture) {
         self.outputProperties = outputProperties
         self.extractedData = extractedData
         self.imageUrl = imageUrl
         self.faces = faces
         self.identificationDocumentCapture = identificationDocumentCapture
         self.additionalDetails = additionalDetails
+        self.transformedProperties = transformedProperties
+        self.transformedDetails = transformedDetails
     }
     
-   static func fromJsonString(responseString: String) -> OtherExtractedModel? {
+   static func fromJsonString(responseString: String,transformedProperties: [String: String],transformedDetails: [String: String]) -> OtherExtractedModel? {
         guard let  responseData = responseString.data(using: .utf8),
               let response = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else {
             return nil
@@ -61,7 +65,28 @@ import Foundation
             }
         }
         var  identificationDocumentCapture = fillIdentificationDocumentCapture(outputProperties:outputProperties )
-       return OtherExtractedModel(outputProperties: outputProperties, extractedData: extractedData,additionalDetails:additionalDetails, imageUrl: imageUrl, faces: faces,identificationDocumentCapture:identificationDocumentCapture)
+       
+       var transformedPropertiesResult: [String: String] = [:];
+       
+       if(transformedProperties.isEmpty){
+           outputProperties?.forEach { (key, value) in
+             transformedPropertiesResult[key] =  "\(value)"
+           }
+       }else{
+           transformedPropertiesResult = transformedProperties;
+       }
+       
+       var transformedDetailsResult: [String: String] = [:];
+       
+       if(transformedDetails.isEmpty){
+           additionalDetails?.forEach { (key, value) in
+               transformedDetailsResult[key] =  "\(value)"
+           }
+       }else{
+           transformedDetailsResult = transformedDetails;
+       }
+       
+       return OtherExtractedModel(outputProperties: outputProperties,transformedProperties:transformedPropertiesResult  ,extractedData: extractedData,additionalDetails:additionalDetails,transformedDetails: transformedDetailsResult, imageUrl: imageUrl, faces: faces,identificationDocumentCapture:identificationDocumentCapture)
     }
 
 }

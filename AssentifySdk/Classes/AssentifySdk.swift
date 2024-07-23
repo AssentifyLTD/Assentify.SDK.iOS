@@ -101,7 +101,7 @@ public class AssentifySdk {
         }
     }
     
-    public func startScanPassport(scanPassportDelegate:ScanPassportDelegate)->UIViewController?{
+    public func startScanPassport(scanPassportDelegate:ScanPassportDelegate,language: String = Language.NON)->UIViewController?{
         if(isKeyValid){
             let scanPassport = ScanPassport(
                 configModel:self.configModel,
@@ -112,7 +112,8 @@ public class AssentifySdk {
                 saveCapturedVideoID:self.saveCapturedVideoID!,
                 storeCapturedDocument:self.storeCapturedDocument!,
                 storeImageStream:self.storeImageStream!,
-                scanPassportDelegate :scanPassportDelegate
+                scanPassportDelegate :scanPassportDelegate,
+                language:language
                 
             )
             return scanPassport;
@@ -123,7 +124,7 @@ public class AssentifySdk {
         return nil;
     }
     
-    public func startScanOthers(scanOtherDelegate:ScanOtherDelegate)->UIViewController?{
+    public func startScanOthers(scanOtherDelegate:ScanOtherDelegate,language: String = Language.NON)->UIViewController?{
         if(isKeyValid){
             let scanOther = ScanOther(
                 configModel:self.configModel,
@@ -134,7 +135,9 @@ public class AssentifySdk {
                 saveCapturedVideoID:self.saveCapturedVideoID!,
                 storeCapturedDocument:self.storeCapturedDocument!,
                 storeImageStream:self.storeImageStream!,
-                scanOtherDelegate :scanOtherDelegate
+                scanOtherDelegate :scanOtherDelegate,
+                language:language
+
                 
             )
             return scanOther;
@@ -146,7 +149,7 @@ public class AssentifySdk {
     }
     
     
-    public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails])->UIViewController?{
+    public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON)->UIViewController?{
         if(isKeyValid){
              scanID = ScanIDCard(
                 configModel:self.configModel,
@@ -158,7 +161,8 @@ public class AssentifySdk {
                 storeCapturedDocument:self.storeCapturedDocument!,
                 storeImageStream:self.storeImageStream!,
                 scanIDCardDelegate :scanIDCardDelegate,
-                kycDocumentDetails:kycDocumentDetails
+                kycDocumentDetails:kycDocumentDetails,
+                language:language
                 
             )
             return scanID;
@@ -310,5 +314,21 @@ public class AssentifySdk {
 
         return filteredList
     }
+    
+    public func languageTransformation(
+           languageTransformationDelegate: LanguageTransformationDelegate,
+            language: String,
+            languageTransformationData: [LanguageTransformationModel]
+        ) {
+            if (isKeyValid) {
+                let transformed = LanguageTransformation(apiKey: apiKey,languageTransformationDelegate: languageTransformationDelegate)
+                   transformed.languageTransformation(
+                    langauge: language,
+                    transformationModel: TransformationModel(languageTransformationModels: languageTransformationData)
+                   )
+            } else{
+                NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
+            }
+        }
 
 }

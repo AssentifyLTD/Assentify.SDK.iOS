@@ -4,7 +4,8 @@ import AVFoundation
 import Accelerate
 import CoreImage
 
-public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate {
+public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate , LanguageTransformationDelegate {
+ 
   
     
     var guide : Guide = Guide();
@@ -31,10 +32,12 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
     private var storeImageStream: Bool?
+    private var language: String
     
     private var remoteProcessing: RemoteProcessing?
     private var motion:MotionType = MotionType.NO_DETECT;
     private var zoom:ZoomType = ZoomType.NO_DETECT;
+    private var otherResponseModel : OtherResponseModel?;
 
     private var  start = true;
     init(configModel: ConfigModel!,
@@ -45,7 +48,8 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
          saveCapturedVideoID:Bool,
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
-         scanOtherDelegate:ScanOtherDelegate
+         scanOtherDelegate:ScanOtherDelegate,
+         language:String
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
@@ -56,6 +60,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.storeCapturedDocument = storeCapturedDocument;
         self.storeImageStream = storeImageStream;
         self.scanOtherDelegate = scanOtherDelegate;
+        self.language = language;
         
         modelDataHandler?.customColor = environmentalConditions.CustomColor;
 
@@ -249,20 +254,38 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
              self.sendingFlagsZoom.removeAll()
              self.sendingFlagsMotion.removeAll()
              if eventName == HubConnectionTargets.ON_COMPLETE {
-                 
-                 var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
-                 var otherResponseModel = OtherResponseModel(
+                 self.start = false
+                 var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:],transformedDetails: [:]);
+                 self.otherResponseModel = OtherResponseModel(
                     destinationEndpoint: remoteProcessingModel.destinationEndpoint,
                     otherExtractedModel: otherExtractedModel,
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
                  )
-                 self.scanOtherDelegate?.onComplete(dataModel:otherResponseModel )
-                 self.start = false
-             } else {
-                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
-             }
+                 
+                
+                 if(self.language == Language.NON){
+                     self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! )
+                 }else{
+                     var propertiesToTranslate: [String: String] = [:];
+                     otherExtractedModel?.outputProperties?.forEach { (key, value) in
+                         propertiesToTranslate[key] =  "\(value)"
+                     }
+                     
+                     otherExtractedModel?.additionalDetails?.forEach { (key, value) in
+                         propertiesToTranslate[key] =  "\(value)"
+                     }
+                     let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
+                        transformed.languageTransformation(
+                            langauge: self.language,
+                            transformationModel: preparePropertiesToTranslate(language: self.language, properties: propertiesToTranslate)
+                        )
+                 }
+                 
              
+                
+             } else {
+            self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
              switch eventName {
              case HubConnectionTargets.ON_ERROR:
                  self.scanOtherDelegate?.onError(dataModel:remoteProcessingModel )
@@ -299,7 +322,10 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
              case HubConnectionTargets.ON_UPLOAD_FAILED:
                  self.scanOtherDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
              default:
+                 self.start = true
+                 self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
                  break
+             }
              }
          }
     }
@@ -334,5 +360,42 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         return hasFace
     }
 
+    public func onTranslatedSuccess(properties: [String : String]?) {
+        if let outputProperties = self.otherResponseModel!.otherExtractedModel?.outputProperties {
+            let ignoredProperties = getIgnoredProperties(properties: outputProperties)
+            var finalProperties = [String: Any]()
+
+            for (key, value) in properties! {
+                finalProperties[key] = value
+            }
+            
+            for (key, value) in ignoredProperties {
+                finalProperties[key] = value
+            }
+
+            self.otherResponseModel!.otherExtractedModel?.transformedProperties?.removeAll()
+
+            for (key, value) in finalProperties {
+                if(key.contains("OnBoardMe_IdentificationDocumentCapture")){
+                    self.otherResponseModel!.otherExtractedModel!.transformedProperties![key] =  "\(value)"
+                }
+            }
+            
+            self.otherResponseModel!.otherExtractedModel?.transformedDetails?.removeAll()
+            for (key, value) in properties! {
+                if(!key.contains("OnBoardMe_IdentificationDocumentCapture")){
+                    self.otherResponseModel!.otherExtractedModel!.transformedDetails![key] =  "\(value)"
+                }
+            }
+          
+        }
+        
+        self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel!)
+    }
+    
+    public func onTranslatedError(properties: [String : String]?) {
+        self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! )
+    }
+    
 
 }

@@ -8,7 +8,9 @@ import AVFoundation
 import Accelerate
 import CoreImage
 
-public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate {
+public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate ,LanguageTransformationDelegate{
+   
+    
     
     
     var guide : Guide = Guide();
@@ -38,10 +40,13 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
     private var storeImageStream: Bool?
+    private var language: String?
     
     private var remoteProcessing: RemoteProcessing?
     private var motion:MotionType = MotionType.NO_DETECT;
     private var zoom:ZoomType = ZoomType.NO_DETECT;
+    
+    private var iDResponseModel:IDResponseModel?;
     
     private var  start = true;
     init(configModel: ConfigModel!,
@@ -53,7 +58,8 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
          scanIDCardDelegate:ScanIDCardDelegate,
-           kycDocumentDetails:[KycDocumentDetails]
+           kycDocumentDetails:[KycDocumentDetails],
+         language: String
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
@@ -65,6 +71,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
         self.storeImageStream = storeImageStream;
         self.scanIDCardDelegate = scanIDCardDelegate;
         self.kycDocumentDetails = kycDocumentDetails;
+        self.language = language;
         
        
         modelDataHandler?.customColor = environmentalConditions.CustomColor;
@@ -274,28 +281,38 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             self.sendingFlagsMotion.removeAll()
             self.sendingFlagsZoom.removeAll()
             if eventName == HubConnectionTargets.ON_COMPLETE {
-                
-                var iDExtractedModel = IDExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
-                var iDResponseModel = IDResponseModel(
+                self.start = false
+                var iDExtractedModel = IDExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                self.iDResponseModel = IDResponseModel(
                     destinationEndpoint: remoteProcessingModel.destinationEndpoint,
                     iDExtractedModel: iDExtractedModel,
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
                 )
-                self.scanIDCardDelegate?.onComplete(dataModel:iDResponseModel,order:self.order )
-                self.order =   self.order + 1;
-                if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                        self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
-                    }
+                
+                if(self.language == Language.NON){
+                    self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
+                    self.order =   self.order + 1;
                     
+                    if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                            self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
+                        }
+                        
+                    }else{
+                        self.start = false
+                    }
                 }else{
-                    self.start = false
+                    let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
+                       transformed.languageTransformation(
+                           langauge: self.language!,
+                           transformationModel: preparePropertiesToTranslate(language: self.language!, properties: iDExtractedModel?.outputProperties)
+                       )
                 }
                 
             } else {
                 self.start = eventName == HubConnectionTargets.ON_WRONG_TEMPLATE || eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
-            }
+          
             
             switch eventName {
             case HubConnectionTargets.ON_ERROR:
@@ -335,7 +352,10 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             case HubConnectionTargets.ON_WRONG_TEMPLATE:
                 self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
             default:
+                self.start = true
+                self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
                 break
+            }
             }
         }
     }
@@ -372,7 +392,55 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     }
     
     
+    public func onTranslatedSuccess(properties: [String : String]?) {
+        
+        if let outputProperties = self.iDResponseModel!.iDExtractedModel?.outputProperties {
+            let ignoredProperties = getIgnoredProperties(properties: outputProperties)
+            var finalProperties = [String: Any]()
+
+            for (key, value) in properties! {
+                finalProperties[key] = value
+            }
+            
+            for (key, value) in ignoredProperties {
+                finalProperties[key] = value
+            }
+
+            self.iDResponseModel!.iDExtractedModel!.transformedProperties?.removeAll()
+
+            for (key, value) in finalProperties {
+                self.iDResponseModel!.iDExtractedModel!.transformedProperties![key] =  "\(value)"
+            }
+            self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
+            self.order =   self.order + 1;
+            
+            if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
+                }
+                
+            }else{
+                self.start = false
+            }
+        }
+        
+        
+      
+    }
     
+    public func onTranslatedError(properties: [String : String]?) {
+        self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
+        self.order =   self.order + 1;
+        
+        if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
+            }
+            
+        }else{
+            self.start = false
+        }
+    }
     
     
     

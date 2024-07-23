@@ -1,8 +1,8 @@
-//
-//  DataType.swift
-//  AssentifySdk
-//
-//  Created by TariQ on 23/07/2024.
-//
 
 import Foundation
+
+public struct DataType {
+    public static let Text = "Text"
+    public static let Date = "Date"
+    public static let Number = "Number"
+}
