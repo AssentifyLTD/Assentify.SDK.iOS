@@ -48,7 +48,7 @@ struct IdentificationDocumentCaptureKeys{
         static let idDocumentTypeNumber = "5OnBoardMe_IdentificationDocumentCapture_ID_DocumentTypeNumber"
         static let idFees = "OnBoardMe_IdentificationDocumentCapture_ID_Fees"
         static let idReference = "OnBoardMe_IdentificationDocumentCapture_ID"
-        static let idDegion = "OnBoardMe_IdentificationDocumentCapture_ID_Region"
+        static let idRegion = "OnBoardMe_IdentificationDocumentCapture_ID_Region"
         static let idRegistrationLocation = "OnBoardMe_IdentificationDocumentCapture_ID_RegistrationLocation"
         static let idFaceColor = "OnBoardMe_IdentificationDocumentCapture_ID_FaceColor"
         static let idEyeColor = "OnBoardMe_IdentificationDocumentCapture_ID_EyeColor"
@@ -227,7 +227,7 @@ func fillIdentificationDocumentCapture(outputProperties: [String: Any]?) -> Iden
             identificationDocumentCapture.ID_Fees = value
         } else if key.contains(IdentificationDocumentCaptureKeys.idReference) {
             identificationDocumentCapture.ID_Reference = value
-        } else if key.contains(IdentificationDocumentCaptureKeys.idDegion) {
+        } else if key.contains(IdentificationDocumentCaptureKeys.idRegion) {
             identificationDocumentCapture.ID_Region = value
         } else if key.contains(IdentificationDocumentCaptureKeys.idRegistrationLocation) {
             identificationDocumentCapture.ID_RegistrationLocation = value
@@ -253,4 +253,214 @@ func fillIdentificationDocumentCapture(outputProperties: [String: Any]?) -> Iden
     }
 
     return identificationDocumentCapture
+}
+
+
+
+public func getLanguageTransformationEnum(key: String) -> Int  {
+    let transliterationKeys = [
+        IdentificationDocumentCaptureKeys.name,
+        IdentificationDocumentCaptureKeys.surname,
+        IdentificationDocumentCaptureKeys.idType,
+        IdentificationDocumentCaptureKeys.idPlaceOfResidence,
+        IdentificationDocumentCaptureKeys.idProvince,
+        IdentificationDocumentCaptureKeys.idGovernorate,
+        IdentificationDocumentCaptureKeys.idMothersName,
+        IdentificationDocumentCaptureKeys.idFathersName,
+        IdentificationDocumentCaptureKeys.idPlaceOfBirth,
+        IdentificationDocumentCaptureKeys.idIssuanceAuthority,
+        IdentificationDocumentCaptureKeys.idArmyStatus,
+        IdentificationDocumentCaptureKeys.idReference,
+        IdentificationDocumentCaptureKeys.idRegistrationLocation,
+        IdentificationDocumentCaptureKeys.idPresentAddress,
+        IdentificationDocumentCaptureKeys.idPermanentAddress
+    ]
+    
+    
+    let translationKeys = [
+        IdentificationDocumentCaptureKeys.idCountryOfStay,
+        IdentificationDocumentCaptureKeys.idRegion,
+        IdentificationDocumentCaptureKeys.idMaritalStatus,
+        IdentificationDocumentCaptureKeys.documentType,
+        IdentificationDocumentCaptureKeys.country,
+        IdentificationDocumentCaptureKeys.nationality,
+        IdentificationDocumentCaptureKeys.sex,
+        IdentificationDocumentCaptureKeys.idDateOfIssuance,
+        IdentificationDocumentCaptureKeys.documentNumber,
+        IdentificationDocumentCaptureKeys.birthDate,
+        IdentificationDocumentCaptureKeys.expiryDate,
+        IdentificationDocumentCaptureKeys.idFamilyNumber,
+        IdentificationDocumentCaptureKeys.identityNumberBack,
+        IdentificationDocumentCaptureKeys.idIdentityNumber,
+        IdentificationDocumentCaptureKeys.idFaceColor,
+        IdentificationDocumentCaptureKeys.idEyeColor,
+        IdentificationDocumentCaptureKeys.idSpecialMarks,
+        IdentificationDocumentCaptureKeys.idDocumentTypeNumber,
+        IdentificationDocumentCaptureKeys.idFees,
+        IdentificationDocumentCaptureKeys.idUniqueNumber,
+        IdentificationDocumentCaptureKeys.idProfession,
+        IdentificationDocumentCaptureKeys.idDrivingCategory,
+        IdentificationDocumentCaptureKeys.idBloodType,
+        IdentificationDocumentCaptureKeys.idCivilRegisterNumber,
+        IdentificationDocumentCaptureKeys.faceCapture,
+        IdentificationDocumentCaptureKeys.image,
+        IdentificationDocumentCaptureKeys.capturedVideoFront,
+        IdentificationDocumentCaptureKeys.capturedVideoBack,
+        IdentificationDocumentCaptureKeys.livenessStatus,
+        IdentificationDocumentCaptureKeys.isFrontAuth,
+        IdentificationDocumentCaptureKeys.isBackAuth,
+        IdentificationDocumentCaptureKeys.isExpired,
+        IdentificationDocumentCaptureKeys.isTampering,
+        IdentificationDocumentCaptureKeys.tamperHeatMap,
+        IdentificationDocumentCaptureKeys.isBackTampering,
+        IdentificationDocumentCaptureKeys.backTamperHeatmap,
+        IdentificationDocumentCaptureKeys.originalFrontImage,
+        IdentificationDocumentCaptureKeys.originalBackImage,
+        IdentificationDocumentCaptureKeys.ghostImage,
+        IdentificationDocumentCaptureKeys.isSkippedAfterNFails,
+        IdentificationDocumentCaptureKeys.isFailedFront,
+        IdentificationDocumentCaptureKeys.isFailedBack,
+        IdentificationDocumentCaptureKeys.skippedStatus
+    ]
+    
+    if transliterationKeys.contains(where: key.contains) {
+        return LanguageTransformationEnum.Transliteration
+    } else if translationKeys.contains(where: key.contains) {
+        return LanguageTransformationEnum.Translation
+    } else {
+        return LanguageTransformationEnum.Transliteration
+    }
+}
+
+
+public func getLDataType(key: String) -> String {
+    let textKeys = [
+        IdentificationDocumentCaptureKeys.name,
+        IdentificationDocumentCaptureKeys.surname,
+        IdentificationDocumentCaptureKeys.documentType,
+        IdentificationDocumentCaptureKeys.country,
+        IdentificationDocumentCaptureKeys.nationality,
+        IdentificationDocumentCaptureKeys.idType,
+        IdentificationDocumentCaptureKeys.idMaritalStatus,
+        IdentificationDocumentCaptureKeys.idPlaceOfResidence,
+        IdentificationDocumentCaptureKeys.idProvince,
+        IdentificationDocumentCaptureKeys.idGovernorate,
+        IdentificationDocumentCaptureKeys.idMothersName,
+        IdentificationDocumentCaptureKeys.idFathersName,
+        IdentificationDocumentCaptureKeys.idPlaceOfBirth,
+        IdentificationDocumentCaptureKeys.idDrivingCategory,
+        IdentificationDocumentCaptureKeys.idIssuanceAuthority,
+        IdentificationDocumentCaptureKeys.idArmyStatus,
+        IdentificationDocumentCaptureKeys.idProfession,
+        IdentificationDocumentCaptureKeys.idFees,
+        IdentificationDocumentCaptureKeys.idReference,
+        IdentificationDocumentCaptureKeys.idRegion,
+        IdentificationDocumentCaptureKeys.idRegistrationLocation,
+        IdentificationDocumentCaptureKeys.idFaceColor,
+        IdentificationDocumentCaptureKeys.idEyeColor,
+        IdentificationDocumentCaptureKeys.idSpecialMarks,
+        IdentificationDocumentCaptureKeys.idCountryOfStay,
+        IdentificationDocumentCaptureKeys.idPresentAddress,
+        IdentificationDocumentCaptureKeys.idPermanentAddress,
+        IdentificationDocumentCaptureKeys.sex,
+        IdentificationDocumentCaptureKeys.faceCapture,
+        IdentificationDocumentCaptureKeys.image,
+        IdentificationDocumentCaptureKeys.isSkippedAfterNFails,
+        IdentificationDocumentCaptureKeys.isFailedFront,
+        IdentificationDocumentCaptureKeys.isFailedBack,
+        IdentificationDocumentCaptureKeys.skippedStatus,
+        IdentificationDocumentCaptureKeys.capturedVideoFront,
+        IdentificationDocumentCaptureKeys.capturedVideoBack,
+        IdentificationDocumentCaptureKeys.livenessStatus,
+        IdentificationDocumentCaptureKeys.isFrontAuth,
+        IdentificationDocumentCaptureKeys.isBackAuth,
+        IdentificationDocumentCaptureKeys.isExpired,
+        IdentificationDocumentCaptureKeys.isTampering,
+        IdentificationDocumentCaptureKeys.tamperHeatMap,
+        IdentificationDocumentCaptureKeys.isBackTampering,
+        IdentificationDocumentCaptureKeys.backTamperHeatmap,
+        IdentificationDocumentCaptureKeys.originalFrontImage,
+        IdentificationDocumentCaptureKeys.originalBackImage,
+        IdentificationDocumentCaptureKeys.ghostImage
+    ]
+    
+    let dateKeys = [
+        IdentificationDocumentCaptureKeys.birthDate,
+        IdentificationDocumentCaptureKeys.expiryDate,
+        IdentificationDocumentCaptureKeys.idDateOfIssuance
+    ]
+    
+    let numberKeys = [
+        IdentificationDocumentCaptureKeys.idIdentityNumber,
+        IdentificationDocumentCaptureKeys.idUniqueNumber,
+        IdentificationDocumentCaptureKeys.idFamilyNumber,
+        IdentificationDocumentCaptureKeys.identityNumberBack,
+        IdentificationDocumentCaptureKeys.idDocumentTypeNumber,
+        IdentificationDocumentCaptureKeys.idCivilRegisterNumber,
+        IdentificationDocumentCaptureKeys.documentNumber
+    ]
+    
+    if textKeys.contains(where: key.contains) {
+        return DataType.Text
+    } else if dateKeys.contains(where: key.contains) {
+        return  DataType.Date
+    } else if numberKeys.contains(where: key.contains) {
+        return  DataType.Text // Should be number
+    } else {
+        return DataType.Text
+    }
+}
+
+public func ignoredKeys(key: String) -> Bool {
+    let ignoredKeys = [
+        IdentificationDocumentCaptureKeys.capturedVideoFront,
+        IdentificationDocumentCaptureKeys.capturedVideoBack,
+        IdentificationDocumentCaptureKeys.livenessStatus,
+        IdentificationDocumentCaptureKeys.isFrontAuth,
+        IdentificationDocumentCaptureKeys.isBackAuth,
+        IdentificationDocumentCaptureKeys.isExpired,
+        IdentificationDocumentCaptureKeys.isTampering,
+        IdentificationDocumentCaptureKeys.tamperHeatMap,
+        IdentificationDocumentCaptureKeys.isBackTampering,
+        IdentificationDocumentCaptureKeys.backTamperHeatmap,
+        IdentificationDocumentCaptureKeys.originalFrontImage,
+        IdentificationDocumentCaptureKeys.originalBackImage,
+        IdentificationDocumentCaptureKeys.ghostImage,
+        IdentificationDocumentCaptureKeys.isSkippedAfterNFails,
+        IdentificationDocumentCaptureKeys.isFailedFront,
+        IdentificationDocumentCaptureKeys.isFailedBack,
+        IdentificationDocumentCaptureKeys.skippedStatus,
+        IdentificationDocumentCaptureKeys.image,
+        IdentificationDocumentCaptureKeys.faceCapture
+    ]
+    
+    return ignoredKeys.contains(where: key.contains)
+}
+
+public func getIgnoredProperties(properties: [String: Any]) -> [String: String] {
+    var ignoredProperties: [String: String] = [:]
+    for (key, value) in properties {
+        if ignoredKeys(key: key) {
+            ignoredProperties[key] = "\(value)"
+        }
+    }
+    return ignoredProperties
+}
+
+
+public func preparePropertiesToTranslate(language: String, properties: [String: Any]?) -> TransformationModel {
+    var languageTransformationModels: [LanguageTransformationModel] = []
+    for (key, value) in properties! {
+        if !ignoredKeys(key: key) {
+            let model = LanguageTransformationModel(
+                languageTransformationEnum: getLanguageTransformationEnum(key: key),
+                key: key,
+                value: "\(value)",
+                language: language,
+                dataType: getLDataType(key: key)
+            )
+            languageTransformationModels.append(model)
+        }
+    }
+    return TransformationModel(languageTransformationModels: languageTransformationModels)
 }
