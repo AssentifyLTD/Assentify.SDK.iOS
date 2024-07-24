@@ -18,7 +18,7 @@ public class LanguageTransformation{
             switch result {
             case .success(let transformedData):
                 self.languageTransformationDelegate.onTranslatedSuccess(properties:mergeKeyValue(languageTransformationList: transformedData) )
-           /Users/tariq/Desktop/iOS/LanguageTransformation/LanguageTransformationDelegate.swift case .failure(let error):
+             case .failure(let _error):
                 self.languageTransformationDelegate.onTranslatedError(properties:mergeKeyValue(languageTransformationList:transformationModel.languageTransformationModels) )
             }
         }
