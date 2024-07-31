@@ -20,10 +20,12 @@ public struct KycDocumentDetails : Codable {
     public   let name: String
     public   let order:Int
     public   let templateProcessingKeyInformation: String
+    public   let templateSpecimen: String
     
-    public init(name: String,order:Int,templateProcessingKeyInformation:String)  {
+    public init(name: String,order:Int,templateProcessingKeyInformation:String,templateSpecimen:String)  {
         self.name = name
         self.order = order
+        self.templateSpecimen = templateSpecimen
         self.templateProcessingKeyInformation = templateProcessingKeyInformation
     }
 }

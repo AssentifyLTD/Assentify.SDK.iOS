@@ -201,9 +201,10 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
           
                        let data = [
                             KycDocumentDetails(
-                            name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7"),
+                              
+                            name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7",  templateSpecimen:""),
                             KycDocumentDetails(
-                            name: "", order: 1, templateProcessingKeyInformation: "eae46fac-1763-4d31-9acc-c38d29fe56e4"),
+                            name: "", order: 1, templateProcessingKeyInformation: "eae46fac-1763-4d31-9acc-c38d29fe56e4",  templateSpecimen:""),
                         
                         ]
             self.scanID =  self.assentifySdk?.startScanID(scanIDCardDelegate: self,kycDocumentDetails: data,language: Language.English)
