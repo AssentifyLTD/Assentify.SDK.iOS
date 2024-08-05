@@ -8,7 +8,7 @@ struct BaseUrls {
     static let baseURLAPI = "https://api.gateway.assentify.com/webapi/"
     static let baseURLAuthentication = "https://api.admin.assentify.com/api/Authentication/"
     static let baseURLGateway = "https://api.gateway.assentify.com/webapi/"
-    static let languageTransformationUrl = "https://dev.widgets.socket.assentify.com/api/"
+    static let languageTransformationUrl = "https://widgets.socket.assentify.com/api/"
     
 }
 
