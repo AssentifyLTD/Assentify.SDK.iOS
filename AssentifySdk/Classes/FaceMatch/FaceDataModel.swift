@@ -65,10 +65,9 @@ import Foundation
         var extractedData: [String: Any] = [:]
         
         outputProperties.forEach { (key, value) in
-            let keys = key.split(separator: "_").map(String.init)
-            if let newKey = keys.last {
-                extractedData[newKey] = value
-            }
+            let keys = key.split(separator: "_").map { String($0) }
+            let newKey = key.components(separatedBy: "FaceImageAcquisition_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+            extractedData[newKey] = value
         }
 
         var  identificationDocumentCapture = fillIdentificationDocumentCapture(outputProperties:outputProperties )

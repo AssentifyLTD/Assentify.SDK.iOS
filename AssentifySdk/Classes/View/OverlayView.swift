@@ -16,7 +16,7 @@ class OverlayView: UIView {
   private let stringBgAlpha: CGFloat
     = 0.7
   private let lineWidth: CGFloat = 4
-  private let stringFontColor = UIColor.white
+  private var stringFontColor = UIColor.white
   private let stringHorizontalSpacing: CGFloat = 13.0
   private let stringVerticalSpacing: CGFloat = 7.0
   private let cornerRadius: CGFloat = 10.0
@@ -44,20 +44,29 @@ class OverlayView: UIView {
       
   }
 
-  func drawBackground(of objectOverlay: ObjectOverlay) {
+    func drawBackground(of objectOverlay: ObjectOverlay) {
 
-    let stringBgRect = CGRect(x: objectOverlay.borderRect.origin.x - 25 , y: objectOverlay.borderRect.origin.y , width: 2 * stringHorizontalSpacing + objectOverlay.nameStringSize.width, height: 2 * stringVerticalSpacing + objectOverlay.nameStringSize.height
-    )
+        let stringBgRect = CGRect(
+            x: objectOverlay.borderRect.origin.x - 25,
+            y: objectOverlay.borderRect.origin.y,
+            width: 2 * stringHorizontalSpacing + objectOverlay.nameStringSize.width,
+            height: 2 * stringVerticalSpacing + objectOverlay.nameStringSize.height
+        )
 
-    let stringBgPath = UIBezierPath(rect: stringBgRect)
-    objectOverlay.color.withAlphaComponent(stringBgAlpha).setFill()
-    stringBgPath.fill()
-  }
+        let cornerRadius: CGFloat = 5.0
+
+        let stringBgPath = UIBezierPath(roundedRect: stringBgRect, cornerRadius: cornerRadius)
+        
+        objectOverlay.color.withAlphaComponent(stringBgAlpha).setFill()
+        stringBgPath.stroke()
+    }
+
 
 
   func drawName(of objectOverlay: ObjectOverlay) {
 
-    let stringRect = CGRect(x: objectOverlay.borderRect.origin.x + stringHorizontalSpacing - 25, 
+     stringFontColor = objectOverlay.color;
+    let stringRect = CGRect(x: objectOverlay.borderRect.origin.x + stringHorizontalSpacing - 25,
                             y: objectOverlay.borderRect.origin.y + stringVerticalSpacing, width: objectOverlay.nameStringSize.width, height: objectOverlay.nameStringSize.height)
 
     let attributedString = NSAttributedString(string: objectOverlay.name, attributes: [NSAttributedString.Key.foregroundColor : stringFontColor, NSAttributedString.Key.font : objectOverlay.font])

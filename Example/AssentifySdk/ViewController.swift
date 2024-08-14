@@ -9,28 +9,55 @@ import AssentifySdk
 
 import UIKit
 
-class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransformationDelegate,ScanIDCardDelegate{
-    func onComplete(dataModel: IDResponseModel, order: Int) {
-        print("\(yellowColor)------------------------------------------" + order.description)
-        dataModel.iDExtractedModel?.outputProperties?.forEach({ (key: String, value: Any) in
-            print("\(yellowColor)outputProperties:" + key + " " +  "\(value)")
-        })
- 
-        dataModel.iDExtractedModel?.transformedProperties?.forEach({ (key: String, value: Any) in
-            print("\(yellowColor)transformedProperties:" + key + " " +  "\(value)")
-        })
-        
-
-        print("\(yellowColor)------------------------------------------")
-        
-        dataModel.iDExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
-            print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
-        })
-        print("\(yellowColor)------------------------------------------")
-        print("\(yellowColor)imageUrl:" +  (dataModel.iDExtractedModel?.imageUrl)!)
-        print("\(yellowColor)identificationDocumentCapture:" +  "\(dataModel.iDExtractedModel?.identificationDocumentCapture?.name)" )
-        print("\(yellowColor)------------------------------------------")
+class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransformationDelegate,FaceMatchDelegate{
+    func onComplete(dataModel: FaceResponseModel) {
+                dataModel.faceExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
+                    print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
+                })
     }
+    
+//    func onComplete(dataModel: PassportResponseModel) {
+//        dataModel.passportExtractedModel?.outputProperties?.forEach({ (key: String, value: Any) in
+//            print("\(yellowColor)outputProperties:" + key + " " +  "\(value)")
+//        })
+// 
+//        dataModel.passportExtractedModel?.transformedProperties?.forEach({ (key: String, value: Any) in
+//            print("\(yellowColor)transformedProperties:" + key + " " +  "\(value)")
+//        })
+//        
+//
+//        print("\(yellowColor)------------------------------------------")
+//        
+//        dataModel.passportExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
+//            print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
+//        })
+//        print("\(yellowColor)------------------------------------------")
+//        print("\(yellowColor)imageUrl:" +  (dataModel.passportExtractedModel?.imageUrl)!)
+//        print("\(yellowColor)identificationDocumentCapture:" +  "\(dataModel.passportExtractedModel?.identificationDocumentCapture?.name)" )
+//        print("\(yellowColor)------------------------------------------")
+//    }
+    
+//    func onComplete(dataModel: IDResponseModel, order: Int) {
+//        print("\(yellowColor)------------------------------------------" + order.description)
+//        dataModel.iDExtractedModel?.outputProperties?.forEach({ (key: String, value: Any) in
+//            print("\(yellowColor)outputProperties:" + key + " " +  "\(value)")
+//        })
+// 
+//        dataModel.iDExtractedModel?.transformedProperties?.forEach({ (key: String, value: Any) in
+//            print("\(yellowColor)transformedProperties:" + key + " " +  "\(value)")
+//        })
+//        
+//
+//        print("\(yellowColor)------------------------------------------")
+//        
+//        dataModel.iDExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
+//            print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
+//        })
+//        print("\(yellowColor)------------------------------------------")
+//        print("\(yellowColor)imageUrl:" +  (dataModel.iDExtractedModel?.imageUrl)!)
+//        print("\(yellowColor)identificationDocumentCapture:" +  "\(dataModel.iDExtractedModel?.identificationDocumentCapture?.name)" )
+//        print("\(yellowColor)------------------------------------------")
+//    }
     
     func onWrongTemplate(dataModel: RemoteProcessingModel) {
         
@@ -105,7 +132,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
           BRIGHTNESS_LOW_THRESHOLD: 0.0,
           PREDICTION_LOW_PERCENTAGE: 50.0,
           PREDICTION_HIGH_PERCENTAGE: 100.0,
-          CustomColor: "#61A03A",
+          CustomColor: "#FFFFFF",
           HoldHandColor: "#FFC400"
       )
     
@@ -178,7 +205,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
 //                self.scanPassport!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
 //            ])
 //            self.scanPassport!.didMove(toParent: self)
-             
+//             
             
             
             /* OTHER */
@@ -199,46 +226,46 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
             
             /* ID */
           
-                       let data = [
-                            KycDocumentDetails(
-                              
-                            name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7",  templateSpecimen:""),
-                            KycDocumentDetails(
-                            name: "", order: 1, templateProcessingKeyInformation: "eae46fac-1763-4d31-9acc-c38d29fe56e4",  templateSpecimen:""),
-                        
-                        ]
-            self.scanID =  self.assentifySdk?.startScanID(scanIDCardDelegate: self,kycDocumentDetails: data,language: Language.English)
-                        
-                        self.addChild(self.scanID!)
-                        self.view.addSubview(self.scanID!.view)
-                        self.scanID!.view.translatesAutoresizingMaskIntoConstraints = false
-                        NSLayoutConstraint.activate([
-                            self.scanID!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-                            self.scanID!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                            self.scanID!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                            self.scanID!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-                        ])
-                        self.scanID!.didMove(toParent: self)
+//                       let data = [
+//                            KycDocumentDetails(
+//                              
+//                            name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7",  templateSpecimen:""),
+//                            KycDocumentDetails(
+//                            name: "", order: 1, templateProcessingKeyInformation: "eae46fac-1763-4d31-9acc-c38d29fe56e4",  templateSpecimen:""),
+//                        
+//                        ]
+//            self.scanID =  self.assentifySdk?.startScanID(scanIDCardDelegate: self,kycDocumentDetails: data,language: Language.English)
+//                        
+//                        self.addChild(self.scanID!)
+//                        self.view.addSubview(self.scanID!.view)
+//                        self.scanID!.view.translatesAutoresizingMaskIntoConstraints = false
+//                        NSLayoutConstraint.activate([
+//                            self.scanID!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+//                            self.scanID!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+//                            self.scanID!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+//                            self.scanID!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+//                        ])
+//                        self.scanID!.didMove(toParent: self)
             
            
             
             /* FaceMatch   */
-//           if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
-//               if let base64String = self.imageToBase64(from: imageUrl) {
-//                   self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
-//                self.addChild( self.faceMatch!)
-//                   self.view.addSubview( self.faceMatch!.view)
-//                   self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
-//                  NSLayoutConstraint.activate([
-//                       self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                       self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                      self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                       self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-//                  ])
-//                   
-//                   self.faceMatch!.didMove(toParent: self)
-//              }
-//          }
+           if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
+               if let base64String = self.imageToBase64(from: imageUrl) {
+                   self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
+                self.addChild( self.faceMatch!)
+                   self.view.addSubview( self.faceMatch!.view)
+                   self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
+                  NSLayoutConstraint.activate([
+                       self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                       self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                      self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                       self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                  ])
+                   
+                   self.faceMatch!.didMove(toParent: self)
+              }
+          }
             
 //            let request = [
 //                    LanguageTransformationModel(languageTransformationEnum: LanguageTransformationEnum.Translation, key: "Date", value: "١١/٢/١٩٩٩", language: Language.English, dataType: DataType.Date)
