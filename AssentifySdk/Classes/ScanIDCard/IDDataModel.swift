@@ -50,13 +50,7 @@ import Foundation
 
         let imageUrl = response["IdCardImageUrl"] as? String
         let outputProperties = response["OutputProperties"] as? [String: Any]
-        var extractedData: [String: Any] = [:]
-        
-        outputProperties?.forEach { (key, value) in
-            let keys = key.split(separator: "_").map { String($0) }
-            let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
-            extractedData[newKey] = value
-        }
+      
        
        
        var transformedPropertiesResult: [String: String] = [:];
@@ -67,6 +61,13 @@ import Foundation
            }
        }else{
            transformedPropertiesResult = transformedProperties;
+       }
+       
+       var extractedData: [String: Any] = [:]
+       transformedPropertiesResult.forEach { (key, value) in
+           let keys = key.split(separator: "_").map { String($0) }
+           let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+           extractedData[newKey] = value
        }
        
         var  identificationDocumentCapture = fillIdentificationDocumentCapture(outputProperties:outputProperties )
