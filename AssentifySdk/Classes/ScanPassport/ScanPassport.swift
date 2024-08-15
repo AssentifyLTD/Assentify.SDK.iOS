@@ -374,9 +374,13 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             }
 
             self.passportResponseModel!.passportExtractedModel?.transformedProperties?.removeAll()
+            self.passportResponseModel!.passportExtractedModel?.extractedData?.removeAll()
 
             for (key, value) in finalProperties {
                 self.passportResponseModel!.passportExtractedModel!.transformedProperties![key] =  "\(value)"
+                let keys = key.split(separator: "_").map { String($0) }
+                let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                self.passportResponseModel!.passportExtractedModel!.extractedData![newKey] =  "\(value)"
             }
             self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
         }

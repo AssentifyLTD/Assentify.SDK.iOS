@@ -9,12 +9,12 @@ import AssentifySdk
 
 import UIKit
 
-class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransformationDelegate,FaceMatchDelegate{
-    func onComplete(dataModel: FaceResponseModel) {
-                dataModel.faceExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
-                    print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
-                })
-    }
+class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransformationDelegate,ScanOtherDelegate{
+//    func onComplete(dataModel: FaceResponseModel) {
+//                dataModel.faceExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
+//                    print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
+//                })
+//    }
     
 //    func onComplete(dataModel: PassportResponseModel) {
 //        dataModel.passportExtractedModel?.outputProperties?.forEach({ (key: String, value: Any) in
@@ -58,11 +58,32 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
 //        print("\(yellowColor)identificationDocumentCapture:" +  "\(dataModel.iDExtractedModel?.identificationDocumentCapture?.name)" )
 //        print("\(yellowColor)------------------------------------------")
 //    }
+//    
+//    func onWrongTemplate(dataModel: RemoteProcessingModel) {
+//        
+//    }
     
-    func onWrongTemplate(dataModel: RemoteProcessingModel) {
-        
-    }
     
+        func onComplete(dataModel: OtherResponseModel) {
+            dataModel.otherExtractedModel?.outputProperties?.forEach({ (key: String, value: Any) in
+                print("\(yellowColor)outputProperties:" + key + " " +  "\(value)")
+            })
+    
+            dataModel.otherExtractedModel?.transformedProperties?.forEach({ (key: String, value: Any) in
+                print("\(yellowColor)transformedProperties:" + key + " " +  "\(value)")
+            })
+    
+    
+            print("\(yellowColor)------------------------------------------")
+    
+            dataModel.otherExtractedModel?.extractedData?.forEach({ (key: String, value: Any) in
+                print("\(yellowColor)extractedData:" + key + " " +  "\(value)")
+            })
+            print("\(yellowColor)------------------------------------------")
+            print("\(yellowColor)imageUrl:" +  (dataModel.otherExtractedModel?.imageUrl)!)
+            print("\(yellowColor)identificationDocumentCapture:" +  "\(dataModel.otherExtractedModel?.identificationDocumentCapture?.name)" )
+            print("\(yellowColor)------------------------------------------")
+        }
    
     
     func onTranslatedSuccess(properties: [String : String]?) {
@@ -193,7 +214,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
         DispatchQueue.main.async {
             
             /* PASSPORT */
-            
+//            
 //            self.scanPassport =  self.assentifySdk?.startScanPassport(scanPassportDelegate: self,language: Language.Arabic)
 //            self.addChild(  self.scanPassport!)
 //            self.view.addSubview(  self.scanPassport!.view)
@@ -205,22 +226,22 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
 //                self.scanPassport!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
 //            ])
 //            self.scanPassport!.didMove(toParent: self)
-//             
+             
             
             
             /* OTHER */
             
-//            self.scanOther =  self.assentifySdk?.startScanOthers(scanOtherDelegate: self,language: Language.Arabic);
-//            self.addChild(  self.scanOther!)
-//            self.view.addSubview(  self.scanOther!.view)
-//            self.scanOther!.view.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                self.scanOther!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                self.scanOther!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                self.scanOther!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                self.scanOther!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-//            ])
-//            self.scanOther!.didMove(toParent: self)
+            self.scanOther =  self.assentifySdk?.startScanOthers(scanOtherDelegate: self,language: Language.Arabic);
+            self.addChild(  self.scanOther!)
+            self.view.addSubview(  self.scanOther!.view)
+            self.scanOther!.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                self.scanOther!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                self.scanOther!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                self.scanOther!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                self.scanOther!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            ])
+            self.scanOther!.didMove(toParent: self)
             
             
             
@@ -250,22 +271,22 @@ class ViewController: UIViewController , AssentifySdkDelegate,LanguageTransforma
            
             
             /* FaceMatch   */
-           if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
-               if let base64String = self.imageToBase64(from: imageUrl) {
-                   self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
-                self.addChild( self.faceMatch!)
-                   self.view.addSubview( self.faceMatch!.view)
-                   self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
-                  NSLayoutConstraint.activate([
-                       self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-                       self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                      self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                       self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-                  ])
-                   
-                   self.faceMatch!.didMove(toParent: self)
-              }
-          }
+//           if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
+//               if let base64String = self.imageToBase64(from: imageUrl) {
+//                   self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String)
+//                self.addChild( self.faceMatch!)
+//                   self.view.addSubview( self.faceMatch!.view)
+//                   self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
+//                  NSLayoutConstraint.activate([
+//                       self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+//                       self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+//                      self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+//                       self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+//                  ])
+//                   
+//                   self.faceMatch!.didMove(toParent: self)
+//              }
+//          }
             
 //            let request = [
 //                    LanguageTransformationModel(languageTransformationEnum: LanguageTransformationEnum.Translation, key: "Date", value: "١١/٢/١٩٩٩", language: Language.English, dataType: DataType.Date)

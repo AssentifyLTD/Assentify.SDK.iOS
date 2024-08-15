@@ -374,10 +374,14 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             }
 
             self.otherResponseModel!.otherExtractedModel?.transformedProperties?.removeAll()
+            self.otherResponseModel!.otherExtractedModel?.extractedData?.removeAll()
 
             for (key, value) in finalProperties {
                 if(key.contains("OnBoardMe_IdentificationDocumentCapture")){
                     self.otherResponseModel!.otherExtractedModel!.transformedProperties![key] =  "\(value)"
+                    let keys = key.split(separator: "_").map { String($0) }
+                    let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                    self.otherResponseModel!.otherExtractedModel!.extractedData![newKey] =  "\(value)"
                 }
             }
             

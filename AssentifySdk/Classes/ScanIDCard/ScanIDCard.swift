@@ -407,10 +407,16 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             }
 
             self.iDResponseModel!.iDExtractedModel!.transformedProperties?.removeAll()
+            self.iDResponseModel!.iDExtractedModel!.extractedData?.removeAll()
 
             for (key, value) in finalProperties {
                 self.iDResponseModel!.iDExtractedModel!.transformedProperties![key] =  "\(value)"
+                let keys = key.split(separator: "_").map { String($0) }
+                let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                self.iDResponseModel!.iDExtractedModel!.extractedData![newKey] =  "\(value)"
+                
             }
+            
             self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
             self.order =   self.order + 1;
             

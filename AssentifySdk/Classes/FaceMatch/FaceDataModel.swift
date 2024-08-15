@@ -69,6 +69,8 @@ import Foundation
             let newKey = key.components(separatedBy: "FaceImageAcquisition_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
             extractedData[newKey] = value
         }
+        
+        
 
         var  identificationDocumentCapture = fillIdentificationDocumentCapture(outputProperties:outputProperties )
         return FaceExtractedModel(outputProperties: outputProperties,
