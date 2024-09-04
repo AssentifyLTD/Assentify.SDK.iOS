@@ -340,20 +340,21 @@ func  remoteSignature(
     
  }
 
-func  remoteSubmitData( apiKey: String,
-                        configModel: ConfigModel,
-                submitRequestModel: [SubmitRequestModel],
-                        completion: @escaping (BaseResult<Bool, Error>) -> Void) {
+func remoteSubmitData(apiKey: String,
+                      configModel: ConfigModel,
+                      submitRequestModel: [SubmitRequestModel],
+                      completion: @escaping (BaseResult<Bool, Error>) -> Void) {
     let urlString = BaseUrls.baseURLGateway + "v1/Manager/Submit"
     guard let url = URL(string: urlString) else {
-        completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+        let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        print("Request URL is invalid: \(urlString)")
+        completion(BaseResult.failure(error))
         return
     }
     
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
     request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
     request.setValue("SDK", forHTTPHeaderField: "X-Source-Agent")
     request.setValue(configModel.flowInstanceId, forHTTPHeaderField: "X-Flow-Instance-Id")
@@ -363,41 +364,56 @@ func  remoteSubmitData( apiKey: String,
     request.setValue(configModel.flowIdentifier, forHTTPHeaderField: "X-Flow-Identifier")
     request.setValue(configModel.instanceHash, forHTTPHeaderField: "X-Instance-Hash")
 
- 
     do {
         let jsonEncoder = JSONEncoder()
-        jsonEncoder.outputFormatting = .prettyPrinted 
+        jsonEncoder.outputFormatting = .prettyPrinted
         let jsonData = try jsonEncoder.encode(submitRequestModel)
+        request.httpBody = jsonData
+
+        // Log request details
         if let jsonString = String(data: jsonData, encoding: .utf8) {
-            request.httpBody = jsonData
+            print("Request Submit Headers: \(request.allHTTPHeaderFields ?? [:])")
+            print("Request Submit : \(jsonString)")
         }
     } catch {
+        print("Failed to encode request body: \(error)")
+        completion(BaseResult.failure(error))
+        return
     }
 
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
-     
-        guard let httpResponse = response as? HTTPURLResponse else {
-       
-            completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+        if let error = error {
+            print("Request failed with error: \(error)")
+            completion(BaseResult.failure(error))
             return
         }
-       
-        if(httpResponse.statusCode == 200 || httpResponse.statusCode == 204){
-            guard let responseData = data else {
-                     completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                     return
-                 }
-            if let responseString = String(data: responseData, encoding: .utf8) {
-            }
-                 completion(BaseResult.success(true))
-            
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            let error = NSError(domain: "Invalid response", code: 0, userInfo: nil)
+            print("Invalid response received")
+            completion(BaseResult.failure(error))
+            return
         }
-        
-        
+
+        // Log response details
+        print("Response Status Code: \(httpResponse.statusCode)")
+        if let responseData = data, let responseString = String(data: responseData, encoding: .utf8) {
+            if(!responseString.isEmpty){
+                print("Response Data: \(responseString)")
+            }
+        } else {
+            print("No response data received")
+        }
+
+        if httpResponse.statusCode == 200 || httpResponse.statusCode == 204 {
+            completion(BaseResult.success(true))
+        } else {
+            let error = NSError(domain: "Server error", code: httpResponse.statusCode, userInfo: nil)
+            completion(BaseResult.failure(error))
+        }
     }
     task.resume()
-    
- }
+}
 
 func transformData(apiKey: String, language: String, request: TransformationModel, completion: @escaping (BaseResult<[LanguageTransformationModel], Error>) -> Void) {
     let urlString = BaseUrls.languageTransformationUrl + "LanguageTransform/LanguageTransformation"
