@@ -39,6 +39,9 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var zoom:ZoomType = ZoomType.NO_DETECT;
     private var otherResponseModel : OtherResponseModel?;
 
+    private var detectIfRectFInsideTheScreen = DetectIfRectInsideTheScreen();
+    private var isRectFInsideTheScreen:Bool = false;
+    
     private var  start = true;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
@@ -62,7 +65,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.scanOtherDelegate = scanOtherDelegate;
         self.language = language;
         
-        modelDataHandler?.customColor = environmentalConditions.CustomColor;
+        modelDataHandler?.customColor = ConstantsValues.DetectColor;
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -100,6 +103,17 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
         }
     }
+    
+    public  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+         return .portrait
+     }
+     public  override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+         return .portrait
+     }
+     public   override var shouldAutorotate: Bool {
+         return false
+     }
+     
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
         runModel(onPixelBuffer: pixelBuffer)
@@ -147,6 +161,10 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                 convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
             }
             
+            if(inference.className == "card"){
+                isRectFInsideTheScreen = detectIfRectFInsideTheScreen.isRectWithinMargins(rect: convertedRect);
+            }
+            
             let confidenceValue = Int(inference.confidence * 100.0)
             let string = "\(inference.className) (\(confidenceValue)%)"
             let size = string.size(usingFont: self.displayFont)
@@ -179,13 +197,13 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
              
       }
         
-        if (motion == MotionType.SENDING && zoom == ZoomType.SENDING) {
-              modelDataHandler?.customColor = environmentalConditions!.CustomColor;
+        if (motion == MotionType.SENDING && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
+              modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlagsMotion.append(MotionType.SENDING);
             sendingFlagsZoom.append(ZoomType.SENDING);
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
-                    self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.CustomColor)
+                    self.guide.changeCardColor(view: self.view,to:ConstantsValues.DetectColor)
                 }
             }
             } else {
@@ -201,7 +219,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     
         if (environmentalConditions!.checkConditions(
                                                      brightness: imageBrightnessChecker)
-                     && motion == MotionType.SENDING  && zoom == ZoomType.SENDING) {
+                     && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
                     DispatchQueue.main.async {

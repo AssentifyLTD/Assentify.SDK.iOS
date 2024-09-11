@@ -37,6 +37,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var remoteProcessing: RemoteProcessing?
     private var motion:MotionType = MotionType.NO_DETECT;
 
+    private var detectIfRectFInsideTheScreen = DetectIfRectInsideTheScreen();
+    private var isRectFInsideTheScreen:Bool = false;
+    
     private var  start = true;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
@@ -60,7 +63,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.faceMatchDelegate = faceMatchDelegate;
         self.secondImage = secondImage;
         
-        modelDataHandler?.customColor = environmentalConditions.CustomColor;
+        modelDataHandler?.customColor = ConstantsValues.DetectColor;
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -71,6 +74,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     public override func viewDidLoad() {
+        
+
+        
          guard modelDataHandler != nil else {
              fatalError("Failed to load model")
          }
@@ -98,7 +104,21 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             self.guide.showFaceGuide(view: self.view)
             self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
         }
+        
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        UINavigationController.attemptRotationToDeviceOrientation()
     }
+    
+   public  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    public  override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+    public   override var shouldAutorotate: Bool {
+        return false
+    }
+    
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
         runModel(onPixelBuffer: pixelBuffer)
@@ -158,6 +178,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
             }
             
+            if(inference.className == "face"){
+                isRectFInsideTheScreen = detectIfRectFInsideTheScreen.isRectWithinMargins(rect: convertedRect);
+            }
+            
             let confidenceValue = Int(inference.confidence * 100.0)
             let string = "\(inference.className) (\(confidenceValue)%)"
             let size = string.size(usingFont: self.displayFont)
@@ -189,12 +213,12 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
              
       }
         
-        if (motion == MotionType.SENDING) {
-              modelDataHandler?.customColor = environmentalConditions!.CustomColor;
+        if (motion == MotionType.SENDING && isRectFInsideTheScreen) {
+              modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlags.append(MotionType.SENDING);
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
-                    self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.CustomColor)
+                    self.guide.changeFaceColor(view: self.view,to:ConstantsValues.DetectColor)
                 }
             }
             } else {
@@ -209,7 +233,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
         if (environmentalConditions!.checkConditions(
                                                      brightness: imageBrightnessChecker)
-                     && motion == MotionType.SENDING) {
+                     && motion == MotionType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlags.count > MotionLimit  ) {
                 if( self.pixelBuffers.count < 10){
                     self.pixelBuffers.append(pixelBuffer)
@@ -475,5 +499,6 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             return nil
         }
     }
+    
 
 }
