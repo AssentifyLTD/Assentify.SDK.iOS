@@ -188,9 +188,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
             objectOverlays.append(objectOverlay)
         }
-        if(environmentalConditions!.enableDetect){
             self.draw(objectOverlays: objectOverlays)
-        }
+        
     }
     
     func draw(objectOverlays: [ObjectOverlay]) {
@@ -198,7 +197,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.overlayView.setNeedsDisplay()
         self.overlayView.frame = self.view.bounds
         self.overlayView.backgroundColor = UIColor.clear
-        self.view.addSubview(self.overlayView)
+        if(environmentalConditions!.enableDetect){
+         self.view.addSubview(self.overlayView)
+        }
         
     }
     
