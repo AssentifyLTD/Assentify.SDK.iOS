@@ -189,9 +189,8 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             objectOverlays.append(objectOverlay)
         }
         
-        if(environmentalConditions!.enableDetect){
             self.draw(objectOverlays: objectOverlays)
-        }
+        
     }
     
     func draw(objectOverlays: [ObjectOverlay]) {
@@ -199,8 +198,9 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
         self.overlayView.setNeedsDisplay()
         self.overlayView.frame = self.view.bounds
         self.overlayView.backgroundColor = UIColor.clear
-        self.view.addSubview(self.overlayView)
-        
+        if(environmentalConditions!.enableDetect){
+         self.view.addSubview(self.overlayView)
+        }
     }
     
     
