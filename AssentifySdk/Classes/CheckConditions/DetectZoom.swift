@@ -1,6 +1,8 @@
 
 import Foundation
 
+let ZoomLimit = 25;
+
 func calculatePercentageChangeWidth(rect: CGRect) -> ZoomType {
         let aspectRatioDifference = rect.width
 

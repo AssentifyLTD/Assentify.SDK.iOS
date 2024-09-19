@@ -12,7 +12,7 @@ func convertPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
     }
     let uiImage = UIImage(cgImage: cgImage)
 
-    guard let imageData = uiImage.jpegData(compressionQuality: 0.5) else {
+    guard let imageData = uiImage.jpegData(compressionQuality: 0.3) else {
         return nil
     }
 

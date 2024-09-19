@@ -18,6 +18,7 @@ public class AssentifySdk {
     private var configModel: ConfigModel?
     private var stepID: Int = -1;
     private var scanID: ScanIDCard?;
+    private var templates: [TemplatesByCountry]?;
     
     
 
@@ -94,14 +95,15 @@ public class AssentifySdk {
                 if self.performLivenessDetection == nil || self.storeImageStream == nil || self.saveCapturedVideoFace == nil {
                     self.assentifySdkDelegate?.onAssentifySdkInitError(message:"Please Configure The FaceImageAcquisition { performLivenessDetection , storeImageStream , saveCapturedVideo }")
                 }
-                self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: configModel);
+                self.getTemplatesByCountry();
+               
             case .failure(let error):
                 self.assentifySdkDelegate?.onAssentifySdkInitError(message:error.localizedDescription);
             }
         }
     }
     
-    public func startScanPassport(scanPassportDelegate:ScanPassportDelegate,language: String = Language.NON)->UIViewController?{
+    public func startScanPassport(scanPassportDelegate:ScanPassportDelegate,language: String = Language.NON)->ScanPassport?{
         if(isKeyValid){
             let scanPassport = ScanPassport(
                 configModel:self.configModel,
@@ -124,7 +126,7 @@ public class AssentifySdk {
         return nil;
     }
     
-    public func startScanOthers(scanOtherDelegate:ScanOtherDelegate,language: String = Language.NON)->UIViewController?{
+    public func startScanOthers(scanOtherDelegate:ScanOtherDelegate,language: String = Language.NON)->ScanOther?{
         if(isKeyValid){
             let scanOther = ScanOther(
                 configModel:self.configModel,
@@ -149,7 +151,7 @@ public class AssentifySdk {
     }
     
     
-    public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON)->UIViewController?{
+    public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON)->ScanIDCard?{
         if(isKeyValid){
              scanID = ScanIDCard(
                 configModel:self.configModel,
@@ -176,7 +178,7 @@ public class AssentifySdk {
   
     
     
-    public func startFaceMatch(faceMatchDelegate:FaceMatchDelegate,secondImage:String)->UIViewController?{
+    public func startFaceMatch(faceMatchDelegate:FaceMatchDelegate,secondImage:String)->FaceMatch?{
         if(isKeyValid){
             let  faceMatch = FaceMatch(
                 configModel:self.configModel,
@@ -232,7 +234,7 @@ public class AssentifySdk {
            return nil;
        }
     
-    public func getTemplates() {
+     func getTemplatesByCountry() {
         remoteGetTemplates() { result in
             switch result {
             case .success(let templates):
@@ -252,7 +254,8 @@ public class AssentifySdk {
                     
                    
                 }
-                self.assentifySdkDelegate?.onHasTemplates(templates: self.filterToSupportedCountries(dataList: templatesByCountry)! )
+                self.templates = self.filterToSupportedCountries(dataList: templatesByCountry)!
+                self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: self.configModel!);
             case .failure(_):
                 print("Get Templates Error")
             }
@@ -330,5 +333,9 @@ public class AssentifySdk {
                 NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
             }
         }
+    
+    public func getTemplates() -> [TemplatesByCountry] {
+        return self.templates!
+    }
 
 }

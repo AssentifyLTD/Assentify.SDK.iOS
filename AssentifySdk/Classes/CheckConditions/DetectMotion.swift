@@ -2,8 +2,8 @@
 
 import Foundation
 
-let MotionLimit = 20;
-let ZoomLimit = 20;
+let MotionLimit = 25;
+
 
 func calculatePercentageChange(rect1: CGRect, rect2: CGRect) -> MotionType {
     let centerX1: CGFloat = rect1.midX
