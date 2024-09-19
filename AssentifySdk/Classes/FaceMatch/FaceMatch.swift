@@ -40,7 +40,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var detectIfRectFInsideTheScreen = DetectIfRectInsideTheScreen();
     private var isRectFInsideTheScreen:Bool = false;
     
-    private var  start = true;
+    private var  start = false;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
@@ -246,14 +246,17 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                         }
                         let videoSize = self.getSizeFromFirstPixelBuffer(firstPixelBuffer)
                         let frameRate = 30;
+                      if(self.start){
+                        self.pixelBuffers.removeAll();
+                        DispatchQueue.main.async {
+                            self.faceMatchDelegate?.onSend();
+                        }
+                       }
                         self.createVideoFromPixelBuffers(pixelBuffers: self.pixelBuffers, outputURL: outputURL, size: videoSize, videoFrameRate: frameRate) { result in
                             switch result {
                             case .success(let base64String):
                                 if(self.start){
                                     self.pixelBuffers.removeAll();
-                                    DispatchQueue.main.async {
-                                        self.faceMatchDelegate?.onSend();
-                                    }
                                     self.remoteProcessing?.starProcessing(
                                         url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                          videoClip: base64String,
@@ -501,5 +504,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
     }
     
+    public func startScanning(){
+           start = true;
+    }
 
 }
