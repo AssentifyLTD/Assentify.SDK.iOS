@@ -244,22 +244,12 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                         guard let firstPixelBuffer = self.pixelBuffers.first else {
                             return
                         }
-                        let videoSize = self.getSizeFromFirstPixelBuffer(firstPixelBuffer)
-                        let frameRate = 30;
-                      if(self.start){
-                        self.pixelBuffers.removeAll();
-                        DispatchQueue.main.async {
-                            self.faceMatchDelegate?.onSend();
-                        }
-                       }
-                        self.createVideoFromPixelBuffers(pixelBuffers: self.pixelBuffers, outputURL: outputURL, size: videoSize, videoFrameRate: frameRate) { result in
-                            switch result {
-                            case .success(let base64String):
                                 if(self.start){
+                                    self.faceMatchDelegate?.onSend();
                                     self.pixelBuffers.removeAll();
                                     self.remoteProcessing?.starProcessing(
                                         url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                                         videoClip: base64String,
+                                         videoClip: "",
                                         stepDefinition: "FaceImageAcquisition",
                                          appConfiguration:self.configModel!,
                                          templateId: "",
@@ -285,10 +275,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                     self.start = false;
                                 }
                                 
-                            case .failure(let error):
-                                self.pixelBuffers.removeAll();
-                            }
-                        }
+                           
+                        
                 }
             }
           
