@@ -178,7 +178,7 @@ public class AssentifySdk {
   
     
     
-    public func startFaceMatch(faceMatchDelegate:FaceMatchDelegate,secondImage:String)->FaceMatch?{
+    public func startFaceMatch(faceMatchDelegate:FaceMatchDelegate,secondImage:String,showCountDown:Bool = true)->FaceMatch?{
         if(isKeyValid){
             let  faceMatch = FaceMatch(
                 configModel:self.configModel,
@@ -190,7 +190,8 @@ public class AssentifySdk {
                 storeCapturedDocument:self.storeCapturedDocument!,
                 storeImageStream:self.storeImageStream!,
                 faceMatchDelegate :faceMatchDelegate,
-                secondImage :secondImage
+                secondImage :secondImage,
+                showCountDown: showCountDown
             );
             return faceMatch;
 
