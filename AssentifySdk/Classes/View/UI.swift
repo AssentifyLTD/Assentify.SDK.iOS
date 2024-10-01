@@ -98,6 +98,42 @@ class Guide{
         }
     }
     
+    func showFaceTimer(view: UIView, initialTextColorHex: String,countdownFinished: @escaping () -> Void) -> UIView {
+        
+        let countdownLabel = UILabel()
+        countdownLabel.font = UIFont.boldSystemFont(ofSize: 130)
+        countdownLabel.textAlignment = .center
+        countdownLabel.textColor = UIColor(hexString: initialTextColorHex)
+        countdownLabel.backgroundColor = UIColor.clear
+        countdownLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(countdownLabel)
+        
+        NSLayoutConstraint.activate([
+            countdownLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            countdownLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            countdownLabel.widthAnchor.constraint(equalToConstant: 100),
+            countdownLabel.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
+        var countdownValue = 3
+        countdownLabel.text = "\(countdownValue)"
+        
+        let countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
+            if countdownValue > 1 {
+                countdownValue -= 1
+                countdownLabel.text = "\(countdownValue)"
+            } else {
+                timer.invalidate()
+                countdownLabel.text = "1"
+                countdownFinished()
+                countdownLabel.removeFromSuperview()
+            }
+        }
+        
+        return countdownLabel
+    }
+    
 }
 
 extension UIColor {

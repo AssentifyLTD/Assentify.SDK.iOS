@@ -3,6 +3,7 @@
 import Foundation
 
 let MotionLimit = 25;
+let MotionLimitFace = 5;
 
 
 func calculatePercentageChange(rect1: CGRect, rect2: CGRect) -> MotionType {
