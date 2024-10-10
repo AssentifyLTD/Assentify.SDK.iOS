@@ -23,7 +23,7 @@ pod 'AssentifySdk'
 **0.0.31**
 - Image lossless compression
 
-**0.0.30 **
+**0.0.30**
 - Face Match Countdown
 
 **0.0.29**
