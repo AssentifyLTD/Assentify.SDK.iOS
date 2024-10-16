@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AssentifySdk'
-  s.version          = '0.0.32'
+  s.version          = '0.0.33'
   s.summary          = 'This iOS Pod provides integration with Assentify services.'
 
   # This description is used to generate tags and improve search results.
@@ -23,10 +23,12 @@ Pod::Spec.new do |s|
   This iOS Pod provides integration with Assentify services.
   DESC
 
-  s.homepage         = 'https://assentify.com/home'
+  s.homepage = 'https://github.com/AssentifyLTD/Assentify.SDK.iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Assentify' => 'info.assentify@gmail.com' }
   s.source           = { :git => 'https://github.com/AssentifyLTD/Assentify.SDK.iOS.git', :tag => s.version.to_s }
+  
+  s.documentation_url = 'https://github.com/AssentifyLTD/Assentify.SDK.iOS/blob/main/README.md'
 
   s.ios.deployment_target = '14.0'
 
