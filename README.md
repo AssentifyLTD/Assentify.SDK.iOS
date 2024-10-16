@@ -6,9 +6,10 @@
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+[To run the example project](https://we.tl/t-m1F5sSfrTf)
 
-## Requirements
+## Documentation 
+[Assentify Sdk Documentation](https://we.tl/t-WI6N5FynTY)
 
 ## Installation
 
