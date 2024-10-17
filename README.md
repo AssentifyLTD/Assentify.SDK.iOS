@@ -21,6 +21,9 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.33**
+- bug fixes and performance improvements
+
 **0.0.32**
 - bug fixes and performance improvements
 
