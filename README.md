@@ -9,7 +9,7 @@
 [To run the example project](https://onedrive.live.com/?authkey=%21AJ9rCRs4jE%2DGw30&id=1FA5B54185CEA738%21273&cid=1FA5B54185CEA738&parId=root&parQt=sharedby&o=OneUp)
 
 ## Documentation 
-[Assentify Sdk Documentation](https://onedrive.live.com/?authkey=%21AJARvUctXPS3G80&id=1FA5B54185CEA738%21272&cid=1FA5B54185CEA738&parId=root&parQt=sharedby&o=OneUp)
+[Assentify Sdk Documentation](https://1drv.ms/b/s!AjinzoVBtaUfghST9H5tPKpASJDq?e=BBTZvH)
 
 ## Installation
 
@@ -21,6 +21,9 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.33**
+- bug fixes and performance improvements
+
 **0.0.32**
 - bug fixes and performance improvements
 
