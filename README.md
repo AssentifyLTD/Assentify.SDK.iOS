@@ -21,6 +21,10 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+
+**0.0.34**
+- Enhance The Translation / Transliteration Feature
+
 **0.0.33**
 - bug fixes and performance improvements
 
