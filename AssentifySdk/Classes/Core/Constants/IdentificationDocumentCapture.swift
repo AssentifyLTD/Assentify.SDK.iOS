@@ -47,7 +47,7 @@ struct IdentificationDocumentCaptureKeys{
         static let idUniqueNumber = "OnBoardMe_IdentificationDocumentCapture_ID_UniqueNumber"
         static let idDocumentTypeNumber = "5OnBoardMe_IdentificationDocumentCapture_ID_DocumentTypeNumber"
         static let idFees = "OnBoardMe_IdentificationDocumentCapture_ID_Fees"
-        static let idReference = "OnBoardMe_IdentificationDocumentCapture_ID"
+        static let idReference = "OnBoardMe_IdentificationDocumentCapture_ID_Reference"
         static let idRegion = "OnBoardMe_IdentificationDocumentCapture_ID_Region"
         static let idRegistrationLocation = "OnBoardMe_IdentificationDocumentCapture_ID_RegistrationLocation"
         static let idFaceColor = "OnBoardMe_IdentificationDocumentCapture_ID_FaceColor"
