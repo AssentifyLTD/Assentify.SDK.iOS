@@ -1,9 +1,9 @@
 {
   "name": "AssentifySdk",
-  "version": "0.0.14",
+  "version": "0.0.34",
   "summary": "This iOS Pod provides integration with Assentify services.",
   "description": "This iOS Pod provides integration with Assentify services.",
-  "homepage": "https://assentify.com/home",
+  "homepage": "https://github.com/AssentifyLTD/Assentify.SDK.iOS",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -13,8 +13,9 @@
   },
   "source": {
     "git": "https://github.com/AssentifyLTD/Assentify.SDK.iOS.git",
-    "tag": "0.0.14"
+    "tag": "0.0.34"
   },
+  "documentation_url": "https://github.com/AssentifyLTD/Assentify.SDK.iOS/blob/main/README.md",
   "platforms": {
     "ios": "14.0"
   },
@@ -32,7 +33,8 @@
     "best-fp16.tflite",
     "classes.txt",
     "card_background.svg",
-    "face_background.svg"
+    "face_background.svg",
+    "transmitting_background.svg"
   ],
   "frameworks": "UIKit",
   "dependencies": {

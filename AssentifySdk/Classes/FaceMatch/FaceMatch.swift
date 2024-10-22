@@ -40,7 +40,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var detectIfRectFInsideTheScreen = DetectIfRectInsideTheScreen();
     private var isRectFInsideTheScreen:Bool = false;
     private var showCountDown:Bool = true;
-    
+    private var isCountDownStarted:Bool = true;
     private var  start = false;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
@@ -105,7 +105,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
         if(environmentalConditions!.enableGuide){
             self.guide.showFaceGuide(view: self.view)
-            self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+            self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
         }
         
         UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
@@ -200,8 +200,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.overlayView.setNeedsDisplay()
         self.overlayView.frame = self.view.bounds
         self.overlayView.backgroundColor = UIColor.clear
-        if(environmentalConditions!.enableDetect){
-         self.view.addSubview(self.overlayView)
+        if(environmentalConditions!.enableDetect && start){
+            self.view.addSubview(self.overlayView)
+        }else{
+            self.overlayView.removeFromSuperview()
         }
         
     }
@@ -222,7 +224,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             sendingFlags.append(MotionType.SENDING);
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
-                    self.guide.changeFaceColor(view: self.view,to:ConstantsValues.DetectColor)
+                    self.guide.changeFaceColor(view: self.view,to:ConstantsValues.DetectColor,notTransmitting: self.start)
                 }
             }
             } else {
@@ -230,7 +232,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 sendingFlags.removeAll();
                 if(environmentalConditions!.enableGuide){
                     DispatchQueue.main.async {
-                        self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+                        self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                     }
                 }
          }
@@ -241,41 +243,46 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             if (start && sendingFlags.count > MotionLimitFace  ) {
                 if (hasFaceOrCard()) {
                     if(self.start){
-                        self.start = false;
                         if(self.showCountDown){
-                            DispatchQueue.main.async {
-                            _ = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.HoldHandColor) {
-                                self.faceMatchDelegate?.onSend();
-                                self.remoteProcessing?.starProcessing(
-                                    url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                                    videoClip: "",
-                                    stepDefinition: "FaceImageAcquisition",
-                                    appConfiguration:self.configModel!,
-                                    templateId: "",
-                                    secondImage: self.secondImage!,
-                                    connectionId: "ConnectionId",
-                                    clipsPath: "ClipsPath",
-                                    checkForFace: true,
-                                    processMrz: self.processMrz!,
-                                    performLivenessDetection: self.performLivenessDetection!,
-                                    saveCapturedVideo: self.saveCapturedVideoID!,
-                                    storeCapturedDocument: self.storeCapturedDocument!,
-                                    isVideo: true,
-                                    storeImageStream: self.storeImageStream!,
-                                    selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
-                                ) { result in
-                                    switch result {
-                                    case .success(let model):
-                                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
-                                    case .failure(let error):
-                                        self.start = true;
+                            if(self.isCountDownStarted){
+                            self.isCountDownStarted = false;
+                                DispatchQueue.main.async {
+                                    _ = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.HoldHandColor) {
+                                        self.isCountDownStarted = true;
+                                        self.faceMatchDelegate?.onSend();
+                                        self.start = false;
+                                        self.remoteProcessing?.starProcessing(
+                                            url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
+                                            videoClip: "",
+                                            stepDefinition: "FaceImageAcquisition",
+                                            appConfiguration:self.configModel!,
+                                            templateId: "",
+                                            secondImage: self.secondImage!,
+                                            connectionId: "ConnectionId",
+                                            clipsPath: "ClipsPath",
+                                            checkForFace: true,
+                                            processMrz: self.processMrz!,
+                                            performLivenessDetection: self.performLivenessDetection!,
+                                            saveCapturedVideo: self.saveCapturedVideoID!,
+                                            storeCapturedDocument: self.storeCapturedDocument!,
+                                            isVideo: true,
+                                            storeImageStream: self.storeImageStream!,
+                                            selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                                        ) { result in
+                                            switch result {
+                                            case .success(let model):
+                                                self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                                            case .failure(let error):
+                                                self.start = true;
+                                            }
+                                        }
                                     }
                                 }
-                            }
                         }
                         }else
                         {
                             self.faceMatchDelegate?.onSend();
+                            self.start = false;
                             self.remoteProcessing?.starProcessing(
                                 url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                 videoClip: "",

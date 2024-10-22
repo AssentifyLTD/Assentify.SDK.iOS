@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.35**
+- Removing The Detect And Guide during The Transmitting Process
+
 **0.0.34**
 - Enhance The Translation / Transliteration Feature
 

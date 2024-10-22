@@ -6,6 +6,7 @@ import UIKit
 
 class Guide{
     
+   private var transmittingBackground :SVGKImage?
    private var cardBackground :SVGKImage?
    private var cardSvgImageView :SVGKFastImageView?
     
@@ -22,6 +23,8 @@ class Guide{
                 print("Failed to load SVG image.")
                 return
             }
+        
+        
             cardBackground = svgImage;
             cardSvgImageView = SVGKFastImageView(svgkImage: svgImage)
             cardSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
@@ -32,14 +35,29 @@ class Guide{
                 cardSvgImageView!.widthAnchor.constraint(equalTo: view.widthAnchor),
                 cardSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
                ])
+        
+        guard let modelPathTransmitting = Bundle.main.path(forResource: "transmitting_background", ofType: "svg") else {
+            print("SVG file not found.")
+            return
+        }
+
+        guard let svgImageTransmitting = SVGKImage(contentsOfFile: modelPathTransmitting) else {
+          print("Failed to load SVG image.")
+          return
+         }
+        transmittingBackground = svgImageTransmitting;
     }
     
     
-    func changeCardColor(view:UIView,to color: String) {
+    func changeCardColor(view:UIView,to color: String,notTransmitting: Bool) {
         cardSvgImageView!.removeFromSuperview()
-        let layerIDsToChange = ["Layer_1-1", "Layer_1-2", "Layer_1-3", "Layer_1-4"]
-        self.changeLayerColor(svgImage: self.cardBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
-        cardSvgImageView = SVGKFastImageView(svgkImage: self.cardBackground)
+        if(notTransmitting){
+            let layerIDsToChange = ["Layer_1-1", "Layer_1-2", "Layer_1-3", "Layer_1-4"]
+            self.changeLayerColor(svgImage: self.cardBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
+            cardSvgImageView = SVGKFastImageView(svgkImage: self.cardBackground)
+        }else{
+            cardSvgImageView = SVGKFastImageView(svgkImage: transmittingBackground)
+        }
         cardSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(cardSvgImageView!)
         NSLayoutConstraint.activate([
@@ -72,13 +90,28 @@ class Guide{
                 faceSvgImageView!.widthAnchor.constraint(equalTo: view.widthAnchor),
                 faceSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
                ])
+        guard let modelPathTransmitting = Bundle.main.path(forResource: "transmitting_background", ofType: "svg") else {
+            print("SVG file not found.")
+            return
+        }
+
+        guard let svgImageTransmitting = SVGKImage(contentsOfFile: modelPathTransmitting) else {
+          print("Failed to load SVG image.")
+          return
+         }
+        transmittingBackground = svgImageTransmitting;
     }
 
-    func changeFaceColor(view:UIView,to color: String) {
+    func changeFaceColor(view:UIView,to color: String,notTransmitting:Bool) {
         faceSvgImageView!.removeFromSuperview()
-        let layerIDsToChange = ["Layer_1-1"]
-        self.changeLayerColor(svgImage: self.faceBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
-        faceSvgImageView = SVGKFastImageView(svgkImage: self.faceBackground)
+        
+        if(notTransmitting){
+            let layerIDsToChange = ["Layer_1-1"]
+            self.changeLayerColor(svgImage: self.faceBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
+            faceSvgImageView = SVGKFastImageView(svgkImage: self.faceBackground)
+        }else{
+            faceSvgImageView = SVGKFastImageView(svgkImage: self.transmittingBackground)
+        }
         faceSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(faceSvgImageView!)
         NSLayoutConstraint.activate([

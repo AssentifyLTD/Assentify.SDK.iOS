@@ -100,7 +100,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.remoteProcessing = RemoteProcessing()
         if(environmentalConditions!.enableGuide){
             self.guide.showCardGuide(view: self.view)
-            self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+            self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
         }
     }
     
@@ -180,8 +180,10 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.overlayView.setNeedsDisplay()
         self.overlayView.frame = self.view.bounds
         self.overlayView.backgroundColor = UIColor.clear
-        if(environmentalConditions!.enableDetect){
-         self.view.addSubview(self.overlayView)
+        if(environmentalConditions!.enableDetect && start){
+            self.view.addSubview(self.overlayView)
+        }else{
+            self.overlayView.removeFromSuperview()
         }
         
     }
@@ -204,7 +206,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             sendingFlagsZoom.append(ZoomType.SENDING);
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
-                    self.guide.changeCardColor(view: self.view,to:ConstantsValues.DetectColor)
+                    self.guide.changeCardColor(view: self.view,to:ConstantsValues.DetectColor,notTransmitting: self.start)
                 }
             }
             } else {
@@ -213,7 +215,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                 sendingFlagsMotion.removeAll();
                 if(environmentalConditions!.enableGuide){
                     DispatchQueue.main.async {
-                        self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor)
+                        self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                     }
                 }
          }
