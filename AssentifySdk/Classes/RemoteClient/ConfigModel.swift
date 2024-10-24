@@ -44,6 +44,7 @@ public struct Customization: Codable {
 public struct IdentificationDocuments : Codable{
     public  let key: String?
     public let selectedCountries: [String]?
+    public let supportedIdCards: [String]?
 }
 
 public func encodeStepDefinitionsToJson(data: [StepDefinitions]) -> String {

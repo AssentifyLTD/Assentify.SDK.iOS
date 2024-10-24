@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.36**
+- Matching The Templates With The Admin Portal Selected  Templates
+
 **0.0.35**
 - Removing The Detect And Guide during The Transmitting Process
 
