@@ -245,6 +245,7 @@ public class AssentifySdk {
                 for data in filteredList {
                    
                         let item = TemplatesByCountry(
+                            id: data.id,
                             name: data.sourceCountry,
                             sourceCountryCode: data.sourceCountryCode,
                             flag: data.sourceCountryFlag,
@@ -289,6 +290,7 @@ public class AssentifySdk {
     
     func filterToSupportedCountries(dataList: [TemplatesByCountry]?) -> [TemplatesByCountry]? {
         var selectedCountries: [String] = []
+        var supportedIdCards: [String] = []
         
         for step in self.configModel!.stepDefinitions {
             if step.stepDefinition == "IdentificationDocumentCapture" {
@@ -296,6 +298,7 @@ public class AssentifySdk {
                     for docStep in identificationDocuments {
                         if docStep.key == "IdentificationDocument.IdCard" {
                             selectedCountries = docStep.selectedCountries!
+                            supportedIdCards = docStep.supportedIdCards!
                         }
                     }
                 }
@@ -315,8 +318,29 @@ public class AssentifySdk {
         if selectedCountries.isEmpty {
             return dataList
         }
+        
+        
+        var filteredListByCards = [TemplatesByCountry]()
+          
+        filteredList.forEach(){
+            card in
+            var selectedTemplates : [Templates] = [];
+            card.templates.forEach(){cardTemplates in
+                if supportedIdCards.contains(String(cardTemplates.id)) {
+                    selectedTemplates.append(cardTemplates)
+                }
+            }
+            filteredListByCards.append(TemplatesByCountry(
+                id: card.id,
+                name: card.name,
+                sourceCountryCode: card.sourceCountryCode,
+                flag: card.flag,
+                templates: selectedTemplates))
+        }
+        
+        
 
-        return filteredList
+        return filteredListByCards
     }
     
     public func languageTransformation(

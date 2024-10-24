@@ -10,6 +10,7 @@ import Foundation
 
 
 public struct TemplatesByCountry :Codable{
+    public  let id: Int
     public  let name: String
     public  let sourceCountryCode: String
     public  let flag: String
