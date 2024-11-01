@@ -340,6 +340,8 @@
 				"${PODS_ROOT}/../../card_background.svg",
 				"${PODS_ROOT}/../../face_background.svg",
 				"${PODS_ROOT}/../../transmitting_background.svg",
+				"${PODS_ROOT}/../../check-liveness.tflite",
+				"${PODS_ROOT}/../../1.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -348,6 +350,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/card_background.svg",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/face_background.svg",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/transmitting_background.svg",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/check-liveness.tflite",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/1.png",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

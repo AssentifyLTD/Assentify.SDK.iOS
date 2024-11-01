@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
 
 
   s.source_files = 'AssentifySdk/Classes/**/*'
-  s.resources = ["best-fp16.tflite", "classes.txt", "card_background.svg", "face_background.svg","transmitting_background.svg"]
+  s.resources = ["best-fp16.tflite", "classes.txt", "card_background.svg", "face_background.svg","transmitting_background.svg","check-liveness.tflite"]
   
   s.frameworks = 'UIKit'
   s.dependency 'TensorFlowLiteSwift'

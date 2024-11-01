@@ -9,6 +9,7 @@ import CoreImage
 public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate {
   
     
+    var checkLiveness :CheckLiveness = CheckLiveness();
     var guide : Guide = Guide();
     var previewView: PreviewView!
     var cameraFeedManager:CameraFeedManager!
@@ -142,7 +143,16 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
     }
     
+ 
     @objc func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
+        var isLive = checkLiveness.preprocessAndPredict(pixelBuffer: pixelBuffer);
+        if(isLive?.rawValue == 0){
+            print("Live")
+        }
+        if(isLive?.rawValue == 1){
+            print("No Live")
+        }
+    
         result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
         if (result?.inferences.count == 0) {
             motionRectF.removeAll()

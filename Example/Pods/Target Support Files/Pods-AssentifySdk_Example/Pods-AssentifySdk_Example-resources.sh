@@ -102,6 +102,8 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/../../card_background.svg"
   install_resource "${PODS_ROOT}/../../face_background.svg"
   install_resource "${PODS_ROOT}/../../transmitting_background.svg"
+  install_resource "${PODS_ROOT}/../../check-liveness.tflite"
+  install_resource "${PODS_ROOT}/../../1.png"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/../../best-fp16.tflite"
@@ -109,6 +111,8 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/../../card_background.svg"
   install_resource "${PODS_ROOT}/../../face_background.svg"
   install_resource "${PODS_ROOT}/../../transmitting_background.svg"
+  install_resource "${PODS_ROOT}/../../check-liveness.tflite"
+  install_resource "${PODS_ROOT}/../../1.png"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
