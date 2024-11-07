@@ -15,9 +15,25 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
     }
     
    
-    
+    func onLivenessUpdate(dataModel: RemoteProcessingModel) {
+        print("\(yellowColor)onLivenessUpdate:")
+        DispatchQueue.main.async {
+            // Create a new subview that will be clickable
+            let clickableSubview = UIView()
+            clickableSubview.backgroundColor = .lightGray // Set a background color to make it visible
+            clickableSubview.frame = CGRect(x: 50, y: 50, width: 100, height: 100) // Set frame as per requirement
+            
+            // Add tap gesture to the subview
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapOnSubview))
+            clickableSubview.addGestureRecognizer(tapGesture)
+            self.view.addSubview(clickableSubview)
+        }
+    }
   
-    
+    // The function that gets called when the clickable subview is tapped
+    @objc private func handleTapOnSubview() {
+        self.faceMatch?.startScanning();
+    }
 //    func onComplete(dataModel: FaceResponseModel) {
 //        print("\(yellowColor)onComplete:")
 //    }
@@ -83,7 +99,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
                 assentifySdkDelegate: self,
                 processMrz: true,
                 storeCapturedDocument: true,
-                performLivenessDetection: false,
+                performLivenessDetection: true,
                 storeImageStream: true,
                 saveCapturedVideoID: true,
                 saveCapturedVideoFace: true

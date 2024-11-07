@@ -15,11 +15,9 @@ class CheckLiveness {
             print("Failed to load model file.")
             return
         }
-
         do {
             interpreter = try Interpreter(modelPath: modelPath)
             try interpreter?.allocateTensors()
-            print("Model loaded successfully.")
         } catch {
             print("Failed to initialize interpreter: \(error)")
         }
@@ -90,8 +88,6 @@ class CheckLiveness {
                 Array(UnsafeBufferPointer<Float>(start: $0.baseAddress!.assumingMemoryBound(to: Float.self), count: outputTensor.shape.dimensions.reduce(1, *)))
             }
             
-                 
-            print(output.first!)
             return output.first!  > 0.5 ? LivenessType.NotLive : LivenessType.Live
         } catch {
             print("Error during model inference: \(error)")
