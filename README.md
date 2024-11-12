@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.36-alpha**
+- Local face liveness check
+
 **0.0.36**
 - Matching The Templates With The Admin Portal Selected  Templates
 

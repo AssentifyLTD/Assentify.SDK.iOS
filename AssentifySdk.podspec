@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AssentifySdk'
-  s.version          = '0.0.36'
+  s.version          = '0.0.36-alpha'
   s.summary          = 'This iOS Pod provides integration with Assentify services.'
 
   # This description is used to generate tags and improve search results.
@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
 
 
   s.source_files = 'AssentifySdk/Classes/**/*'
-  s.resources = ["best-fp16.tflite", "classes.txt", "card_background.svg", "face_background.svg","transmitting_background.svg"]
+  s.resources = ["best-fp16.tflite", "classes.txt", "card_background.svg", "face_background.svg","transmitting_background.svg","check-liveness.tflite"]
   
   s.frameworks = 'UIKit'
   s.dependency 'TensorFlowLiteSwift'
