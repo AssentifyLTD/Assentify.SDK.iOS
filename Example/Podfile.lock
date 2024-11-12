@@ -37,7 +37,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AssentifySdk: 67724be61018e66f1004d55dda4e7ed1638232ea
+  AssentifySdk: 8b9c3363a534d4db74f7337c01fc89d91a484130
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea

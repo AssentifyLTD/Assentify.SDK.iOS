@@ -35,8 +35,7 @@
     "card_background.svg",
     "face_background.svg",
     "transmitting_background.svg",
-    "check-liveness.tflite",
-    "1.png"
+    "check-liveness.tflite"
   ],
   "frameworks": "UIKit",
   "dependencies": {
