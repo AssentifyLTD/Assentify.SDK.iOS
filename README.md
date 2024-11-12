@@ -22,7 +22,7 @@ pod 'AssentifySdk'
 
 ## Versions
 
-**0.0.36-alpha**
+**0.0.36.1** Alpha Version
 - Local face liveness check
 
 **0.0.36**
