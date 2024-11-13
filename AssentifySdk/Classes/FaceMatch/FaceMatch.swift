@@ -293,6 +293,12 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                                 self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
                                             case .failure(let error):
                                                 self.start = true;
+                                                self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                                    destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                                    response: "",
+                                                    error: "",
+                                                    success: false
+                                                 ))
                                             }
                                         }
                                     }
@@ -325,6 +331,12 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                     self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
                                 case .failure(let error):
                                     self.start = true;
+                                    self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                        destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                        response: "",
+                                        error: "",
+                                        success: false
+                                     ))
                                 }
                             }
                         }
