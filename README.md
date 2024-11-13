@@ -22,7 +22,7 @@ pod 'AssentifySdk'
 
 ## Versions
 
-**0.0.37** Alpha Version
+**0.0.37**
 - Local face liveness check
 - Handel the intermittent internet connectivity
 
