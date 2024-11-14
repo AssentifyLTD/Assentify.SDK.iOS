@@ -64,6 +64,7 @@ class RemoteProcessing {
             
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
+            request.timeoutInterval = 120
             var stepIdString = "";
             if let stepId = appConfiguration.stepDefinitions.first(where: { $0.stepDefinition == stepDefinition })?.stepId {
               stepIdString = String(stepId)
