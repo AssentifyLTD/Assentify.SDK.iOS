@@ -225,21 +225,21 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlags.append(MotionType.SENDING);
             
-            if(self.performLivenessDetection!){
-                var isLive = checkLiveness.preprocessAndPredict(pixelBuffer: pixelBuffer);
-                if(isLive?.rawValue == 1){ // NOT LIVE
-                    if(start){
-                        self.faceMatchDelegate?.onLivenessUpdate?(dataModel:RemoteProcessingModel(
-                            destinationEndpoint: HubConnectionTargets.ON_LIVENESS_UPDATE,
-                            response:  "",
-                            error:  "",
-                            success:  false
-                        ))
-                    }
-                    start = false;
-                }
-                
-            }
+//            if(self.performLivenessDetection!){
+//                var isLive = checkLiveness.preprocessAndPredict(pixelBuffer: pixelBuffer);
+//                if(isLive?.rawValue == 1){ // NOT LIVE
+//                    if(start){
+//                        self.faceMatchDelegate?.onLivenessUpdate?(dataModel:RemoteProcessingModel(
+//                            destinationEndpoint: HubConnectionTargets.ON_LIVENESS_UPDATE,
+//                            response:  "",
+//                            error:  "",
+//                            success:  false
+//                        ))
+//                    }
+//                    start = false;
+//                }
+//                
+//            }
             
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
