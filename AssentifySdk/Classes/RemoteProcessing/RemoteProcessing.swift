@@ -112,15 +112,6 @@ class RemoteProcessing {
   
 
         request.httpBody = createBody(boundary: boundary, parameters: formData)
-        let yellowColor = "🔥 -> ";
-        let currentDate = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-        let formattedDate = formatter.string(from: currentDate)
-        print("\(yellowColor) Call Here : \(formattedDate)")
-       
-        
-    
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     completion(.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
