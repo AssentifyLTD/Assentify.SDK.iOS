@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.38**
+- Improve scan time performance
+
 **0.0.37**
 - Handel the intermittent internet connectivity
 

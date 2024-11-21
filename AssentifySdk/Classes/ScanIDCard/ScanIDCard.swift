@@ -245,12 +245,13 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
+                    var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {
                         self.scanIDCardDelegate?.onSend();
                     }
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.ID_CARD),
-                        videoClip: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
+                        videoClip: bsee64Image,
                         stepDefinition: "IdentificationDocumentCapture",
                         appConfiguration:self.configModel!,
                         templateId: templateId!,

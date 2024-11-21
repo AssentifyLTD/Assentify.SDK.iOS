@@ -268,8 +268,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 DispatchQueue.main.async {
                                     _ = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.HoldHandColor) {
                                         self.isCountDownStarted = true;
-                                        self.faceMatchDelegate?.onSend();
                                         self.start = false;
+                                        var selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                                        self.faceMatchDelegate?.onSend();
                                         self.remoteProcessing?.starProcessing(
                                             url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                             videoClip: "",
@@ -286,7 +287,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                             storeCapturedDocument: self.storeCapturedDocument!,
                                             isVideo: true,
                                             storeImageStream: self.storeImageStream!,
-                                            selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                                            selfieImage: selfieImage
                                         ) { result in
                                             switch result {
                                             case .success(let model):
@@ -306,8 +307,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             }
                         }else
                         {
-                            self.faceMatchDelegate?.onSend();
                             self.start = false;
+                            var selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                            self.faceMatchDelegate?.onSend();
                             self.remoteProcessing?.starProcessing(
                                 url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                 videoClip: "",
@@ -324,7 +326,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 storeCapturedDocument: self.storeCapturedDocument!,
                                 isVideo: true,
                                 storeImageStream: self.storeImageStream!,
-                                selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                                selfieImage: selfieImage
                             ) { result in
                                 switch result {
                                 case .success(let model):
