@@ -225,12 +225,13 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                      && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
+                    var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {
                         self.scanOtherDelegate?.onSend();
                     }
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.OTHER),
-                         videoClip: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
+                         videoClip: bsee64Image,
                         stepDefinition: "IdentificationDocumentCapture",
                          appConfiguration:self.configModel!,
                          templateId: "",
