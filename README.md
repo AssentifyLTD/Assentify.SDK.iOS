@@ -22,6 +22,10 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.40**
+- Face match improvements
+
+
 **0.0.39**
 - Adding the face liveness check parameter
 - Adding the Document liveness check parameter

@@ -11,6 +11,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     var checkLiveness :CheckLiveness = CheckLiveness();
     var guide : Guide = Guide();
+    var countdownLabel : UIView?;
+    var countdownTimer: Timer?
     var previewView: PreviewView!
     var cameraFeedManager:CameraFeedManager!
     private let overlayView = OverlayView()
@@ -43,7 +45,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var isRectFInsideTheScreen:Bool = false;
     private var showCountDown:Bool = true;
     private var isCountDownStarted:Bool = true;
-    private var  start = false;
+    private var  start = true;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
@@ -258,6 +260,16 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 }
             }
         }
+      
+        if (self.showCountDown ) {
+            if (!hasFaceOrCard() || !isRectFInsideTheScreen) {
+                DispatchQueue.main.async {
+                    self.countdownLabel?.removeFromSuperview();
+                    self.countdownTimer?.invalidate();
+                    self.isCountDownStarted = true;
+                }
+            }
+         }
         
         if (environmentalConditions!.checkConditions(
             brightness: imageBrightnessChecker)
@@ -269,7 +281,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             if(self.isCountDownStarted){
                                 self.isCountDownStarted = false;
                                 DispatchQueue.main.async {
-                                    _ = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.HoldHandColor) {
+                                       (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.HoldHandColor) {
                                         self.isCountDownStarted = true;
                                         self.start = false;
                                         var selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
@@ -567,10 +579,6 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
     }
     
-    public func startScanning(){
-        DispatchQueue.main.async {
-            self.start = true;
-        }
-    }
+   
     
 }
