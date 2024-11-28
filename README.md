@@ -22,6 +22,12 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.39**
+- Adding the face liveness check parameter
+- Adding the Document liveness check parameter
+- Enhance the translate feature
+- Null check for the initialization parameters
+
 **0.0.38**
 - Improve scan time performance
 
