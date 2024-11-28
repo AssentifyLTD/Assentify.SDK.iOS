@@ -131,7 +131,7 @@ class Guide{
         }
     }
     
-    func showFaceTimer(view: UIView, initialTextColorHex: String,countdownFinished: @escaping () -> Void) -> UIView {
+    func showFaceTimer(view: UIView, initialTextColorHex: String,countdownFinished: @escaping () -> Void) -> (countdownView: UIView, countdownTimer: Timer)  {
         
         let countdownLabel = UILabel()
         countdownLabel.font = UIFont.boldSystemFont(ofSize: 130)
@@ -164,7 +164,8 @@ class Guide{
             }
         }
         
-        return countdownLabel
+        return (countdownLabel, countdownTimer)
+
     }
     
 }
