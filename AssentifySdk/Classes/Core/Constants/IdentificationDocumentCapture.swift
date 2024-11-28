@@ -1,64 +1,64 @@
 
 struct IdentificationDocumentCaptureKeys{
-        static let name = "OnBoardMe_IdentificationDocumentCapture_name"
-        static let surname = "OnBoardMe_IdentificationDocumentCapture_surname"
-        static let documentType = "OnBoardMe_IdentificationDocumentCapture_Document_Type"
-        static let birthDate = "OnBoardMe_IdentificationDocumentCapture_Birth_Date"
-        static let documentNumber = "OnBoardMe_IdentificationDocumentCapture_Document_Number"
-        static let sex = "OnBoardMe_IdentificationDocumentCapture_Sex"
-        static let expiryDate = "OnBoardMe_IdentificationDocumentCapture_Expiry_Date"
-        static let country = "OnBoardMe_IdentificationDocumentCapture_Country"
-        static let nationality = "OnBoardMe_IdentificationDocumentCapture_Nationality"
-        static let idType = "OnBoardMe_IdentificationDocumentCapture_IDType"
-        static let faceCapture = "OnBoardMe_IdentificationDocumentCapture_FaceCapture"
-        static let image = "OnBoardMe_IdentificationDocumentCapture_Image"
-        static let isSkippedAfterNFails = "OnBoardMe_IdentificationDocumentCapture_IsSkippedAfterNFails"
-        static let isFailedFront = "OnBoardMe_IdentificationDocumentCapture_IsFailedFront"
-        static let isFailedBack = "OnBoardMe_IdentificationDocumentCapture_IsFailedBack"
-        static let skippedStatus = "OnBoardMe_IdentificationDocumentCapture_SkippedStatus"
-        static let capturedVideoFront = "OnBoardMe_IdentificationDocumentCapture_CapturedVideoFront"
-        static let capturedVideoBack = "OnBoardMe_IdentificationDocumentCapture_CapturedVideoBack"
-        static let livenessStatus = "OnBoardMe_IdentificationDocumentCapture_LivenessStatus"
-        static let isFrontAuth = "OnBoardMe_IdentificationDocumentCapture_IsFrontAuth"
-        static let isBackAuth = "OnBoardMe_IdentificationDocumentCapture_IsBackAuth"
-        static let isExpired = "OnBoardMe_IdentificationDocumentCapture_IsExpired"
-        static let isTampering = "OnBoardMe_IdentificationDocumentCapture_IsTampering"
-        static let tamperHeatMap = "OnBoardMe_IdentificationDocumentCapture_TamperHeatMap"
-        static let isBackTampering = "OnBoardMe_IdentificationDocumentCapture_IsBackTampering"
-        static let backTamperHeatmap = "OnBoardMe_IdentificationDocumentCapture_BackTamperHeatmap"
-        static let originalFrontImage = "OnBoardMe_IdentificationDocumentCapture_OriginalFrontImage"
-        static let originalBackImage = "OnBoardMe_IdentificationDocumentCapture_OriginalBackImage"
-        static let ghostImage = "OnBoardMe_IdentificationDocumentCapture_GhostImage"
-        static let idMaritalStatus = "OnBoardMe_IdentificationDocumentCapture_ID_MaritalStatus"
-        static let idDateOfIssuance = "OnBoardMe_IdentificationDocumentCapture_ID_DateOfIssuance"
-        static let idCivilRegisterNumber = "OnBoardMe_IdentificationDocumentCapture_ID_CivilRegisterNumber"
-        static let idPlaceOfResidence = "OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfResidence"
-        static let idProvince = "OnBoardMe_IdentificationDocumentCapture_ID_Province"
-        static let idGovernorate = "OnBoardMe_IdentificationDocumentCapture_ID_Governorate"
-        static let idMothersName = "OnBoardMe_IdentificationDocumentCapture_ID_MothersName"
-        static let idFathersName = "OnBoardMe_IdentificationDocumentCapture_ID_FathersName"
-        static let idPlaceOfBirth = "OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfBirth"
-        static let idBackImage = "OnBoardMe_IdentificationDocumentCapture_ID_BackImage"
-        static let idBloodType = "OnBoardMe_IdentificationDocumentCapture_ID_BloodType"
-        static let idDrivingCategory = "OnBoardMe_IdentificationDocumentCapture_ID_DrivingCategory"
-        static let idIssuanceAuthority = "OnBoardMe_IdentificationDocumentCapture_ID_IssuanceAuthority"
-        static let idArmyStatus = "OnBoardMe_IdentificationDocumentCapture_ID_ArmyStatus"
-        static let idProfession = "OnBoardMe_IdentificationDocumentCapture_ID_Profession"
-        static let idUniqueNumber = "OnBoardMe_IdentificationDocumentCapture_ID_UniqueNumber"
-        static let idDocumentTypeNumber = "5OnBoardMe_IdentificationDocumentCapture_ID_DocumentTypeNumber"
-        static let idFees = "OnBoardMe_IdentificationDocumentCapture_ID_Fees"
-        static let idReference = "OnBoardMe_IdentificationDocumentCapture_ID_Reference"
-        static let idRegion = "OnBoardMe_IdentificationDocumentCapture_ID_Region"
-        static let idRegistrationLocation = "OnBoardMe_IdentificationDocumentCapture_ID_RegistrationLocation"
-        static let idFaceColor = "OnBoardMe_IdentificationDocumentCapture_ID_FaceColor"
-        static let idEyeColor = "OnBoardMe_IdentificationDocumentCapture_ID_EyeColor"
-        static let idSpecialMarks = "OnBoardMe_IdentificationDocumentCapture_ID_SpecialMarks"
-        static let idCountryOfStay = "OnBoardMe_IdentificationDocumentCapture_ID_CountryOfStay"
-        static let idIdentityNumber = "OnBoardMe_IdentificationDocumentCapture_ID_IdentityNumber"
-        static let idPresentAddress = "OnBoardMe_IdentificationDocumentCapture_ID_PresentAddress"
-        static let idPermanentAddress = "OnBoardMe_IdentificationDocumentCapture_ID_PermanentAddress"
-        static let idFamilyNumber = "OnBoardMe_IdentificationDocumentCapture_ID_FamilyNumber"
-        static let identityNumberBack = "OnBoardMe_IdentificationDocumentCapture_ID_IdentityNumberBack"
+    static let name = "OnBoardMe_IdentificationDocumentCapture_name"
+    static let surname = "OnBoardMe_IdentificationDocumentCapture_surname"
+    static let documentType = "OnBoardMe_IdentificationDocumentCapture_Document_Type"
+    static let birthDate = "OnBoardMe_IdentificationDocumentCapture_Birth_Date"
+    static let documentNumber = "OnBoardMe_IdentificationDocumentCapture_Document_Number"
+    static let sex = "OnBoardMe_IdentificationDocumentCapture_Sex"
+    static let expiryDate = "OnBoardMe_IdentificationDocumentCapture_Expiry_Date"
+    static let country = "OnBoardMe_IdentificationDocumentCapture_Country"
+    static let nationality = "OnBoardMe_IdentificationDocumentCapture_Nationality"
+    static let idType = "OnBoardMe_IdentificationDocumentCapture_IDType"
+    static let faceCapture = "OnBoardMe_IdentificationDocumentCapture_FaceCapture"
+    static let image = "OnBoardMe_IdentificationDocumentCapture_Image"
+    static let isSkippedAfterNFails = "OnBoardMe_IdentificationDocumentCapture_IsSkippedAfterNFails"
+    static let isFailedFront = "OnBoardMe_IdentificationDocumentCapture_IsFailedFront"
+    static let isFailedBack = "OnBoardMe_IdentificationDocumentCapture_IsFailedBack"
+    static let skippedStatus = "OnBoardMe_IdentificationDocumentCapture_SkippedStatus"
+    static let capturedVideoFront = "OnBoardMe_IdentificationDocumentCapture_CapturedVideoFront"
+    static let capturedVideoBack = "OnBoardMe_IdentificationDocumentCapture_CapturedVideoBack"
+    static let livenessStatus = "OnBoardMe_IdentificationDocumentCapture_LivenessStatus"
+    static let isFrontAuth = "OnBoardMe_IdentificationDocumentCapture_IsFrontAuth"
+    static let isBackAuth = "OnBoardMe_IdentificationDocumentCapture_IsBackAuth"
+    static let isExpired = "OnBoardMe_IdentificationDocumentCapture_IsExpired"
+    static let isTampering = "OnBoardMe_IdentificationDocumentCapture_IsTampering"
+    static let tamperHeatMap = "OnBoardMe_IdentificationDocumentCapture_TamperHeatMap"
+    static let isBackTampering = "OnBoardMe_IdentificationDocumentCapture_IsBackTampering"
+    static let backTamperHeatmap = "OnBoardMe_IdentificationDocumentCapture_BackTamperHeatmap"
+    static let originalFrontImage = "OnBoardMe_IdentificationDocumentCapture_OriginalFrontImage"
+    static let originalBackImage = "OnBoardMe_IdentificationDocumentCapture_OriginalBackImage"
+    static let ghostImage = "OnBoardMe_IdentificationDocumentCapture_GhostImage"
+    static let idMaritalStatus = "OnBoardMe_IdentificationDocumentCapture_ID_MaritalStatus"
+    static let idDateOfIssuance = "OnBoardMe_IdentificationDocumentCapture_ID_DateOfIssuance"
+    static let idCivilRegisterNumber = "OnBoardMe_IdentificationDocumentCapture_ID_CivilRegisterNumber"
+    static let idPlaceOfResidence = "OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfResidence"
+    static let idProvince = "OnBoardMe_IdentificationDocumentCapture_ID_Province"
+    static let idGovernorate = "OnBoardMe_IdentificationDocumentCapture_ID_Governorate"
+    static let idMothersName = "OnBoardMe_IdentificationDocumentCapture_ID_MothersName"
+    static let idFathersName = "OnBoardMe_IdentificationDocumentCapture_ID_FathersName"
+    static let idPlaceOfBirth = "OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfBirth"
+    static let idBackImage = "OnBoardMe_IdentificationDocumentCapture_ID_BackImage"
+    static let idBloodType = "OnBoardMe_IdentificationDocumentCapture_ID_BloodType"
+    static let idDrivingCategory = "OnBoardMe_IdentificationDocumentCapture_ID_DrivingCategory"
+    static let idIssuanceAuthority = "OnBoardMe_IdentificationDocumentCapture_ID_IssuanceAuthority"
+    static let idArmyStatus = "OnBoardMe_IdentificationDocumentCapture_ID_ArmyStatus"
+    static let idProfession = "OnBoardMe_IdentificationDocumentCapture_ID_Profession"
+    static let idUniqueNumber = "OnBoardMe_IdentificationDocumentCapture_ID_UniqueNumber"
+    static let idDocumentTypeNumber = "5OnBoardMe_IdentificationDocumentCapture_ID_DocumentTypeNumber"
+    static let idFees = "OnBoardMe_IdentificationDocumentCapture_ID_Fees"
+    static let idReference = "OnBoardMe_IdentificationDocumentCapture_ID_Reference"
+    static let idRegion = "OnBoardMe_IdentificationDocumentCapture_ID_Region"
+    static let idRegistrationLocation = "OnBoardMe_IdentificationDocumentCapture_ID_RegistrationLocation"
+    static let idFaceColor = "OnBoardMe_IdentificationDocumentCapture_ID_FaceColor"
+    static let idEyeColor = "OnBoardMe_IdentificationDocumentCapture_ID_EyeColor"
+    static let idSpecialMarks = "OnBoardMe_IdentificationDocumentCapture_ID_SpecialMarks"
+    static let idCountryOfStay = "OnBoardMe_IdentificationDocumentCapture_ID_CountryOfStay"
+    static let idIdentityNumber = "OnBoardMe_IdentificationDocumentCapture_ID_IdentityNumber"
+    static let idPresentAddress = "OnBoardMe_IdentificationDocumentCapture_ID_PresentAddress"
+    static let idPermanentAddress = "OnBoardMe_IdentificationDocumentCapture_ID_PermanentAddress"
+    static let idFamilyNumber = "OnBoardMe_IdentificationDocumentCapture_ID_FamilyNumber"
+    static let identityNumberBack = "OnBoardMe_IdentificationDocumentCapture_ID_IdentityNumberBack"
 }
 
 @objc public class IdentificationDocumentCapture : NSObject {
@@ -129,7 +129,7 @@ struct IdentificationDocumentCaptureKeys{
 }
 func fillIdentificationDocumentCapture(outputProperties: [String: Any]?) -> IdentificationDocumentCapture {
     var identificationDocumentCapture = IdentificationDocumentCapture()
-
+    
     outputProperties?.forEach { (key, value) in
         if key.contains(IdentificationDocumentCaptureKeys.name) {
             identificationDocumentCapture.name = value
@@ -251,7 +251,7 @@ func fillIdentificationDocumentCapture(outputProperties: [String: Any]?) -> Iden
             identificationDocumentCapture.ID_IdentityNumberBack = value
         }
     }
-
+    
     return identificationDocumentCapture
 }
 
@@ -450,16 +450,40 @@ public func getIgnoredProperties(properties: [String: Any]) -> [String: String] 
 
 public func preparePropertiesToTranslate(language: String, properties: [String: Any]?) -> TransformationModel {
     var languageTransformationModels: [LanguageTransformationModel] = []
+    var name = "";
+    var surname = "";
+    for (key, value) in properties! {
+        if (key.contains(IdentificationDocumentCaptureKeys.name)) {
+            name = "\(value)";
+        }
+        if (key.contains(IdentificationDocumentCaptureKeys.surname)) {
+            surname = "\(value)";
+        }
+    }
+    var  fulName =  name+" "+surname
     for (key, value) in properties! {
         if !ignoredKeys(key: key) {
-            let model = LanguageTransformationModel(
-                languageTransformationEnum: getLanguageTransformationEnum(key: key),
-                key: key,
-                value: "\(value)",
-                language: language,
-                dataType: getLDataType(key: key)
-            )
-            languageTransformationModels.append(model)
+            if (!key.contains(IdentificationDocumentCaptureKeys.name) && !key.contains(
+                IdentificationDocumentCaptureKeys.surname)) {
+                let model = LanguageTransformationModel(
+                    languageTransformationEnum: getLanguageTransformationEnum(key: key),
+                    key: key,
+                    value: "\(value)",
+                    language: language,
+                    dataType: getLDataType(key: key)
+                )
+                languageTransformationModels.append(model)
+            }else{
+                let model = LanguageTransformationModel(
+                    languageTransformationEnum: LanguageTransformationEnum.Transliteration,
+                    key: FullNameKey,
+                    value: fulName,
+                    language: language,
+                    dataType: getLDataType(key: key)
+                )
+                languageTransformationModels.append(model)
+            }
+           
         }
     }
     return TransformationModel(languageTransformationModels: languageTransformationModels)

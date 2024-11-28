@@ -29,7 +29,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var environmentalConditions: EnvironmentalConditions?
     private var apiKey: String
     private var processMrz: Bool?
-    private var performLivenessDetection: Bool?
+    private var performLivenessDocument: Bool?
+    private var performLivenessFace: Bool?
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
     private var storeImageStream: Bool?
@@ -47,7 +48,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
          processMrz:Bool,
-         performLivenessDetection:Bool,
+         performLivenessDocument:Bool,
+         performLivenessFace:Bool,
          saveCapturedVideoID:Bool,
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
@@ -59,7 +61,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
         self.processMrz = processMrz;
-        self.performLivenessDetection = performLivenessDetection;
+        self.performLivenessDocument = performLivenessDocument;
+        self.performLivenessFace = performLivenessFace;
         self.saveCapturedVideoID = saveCapturedVideoID;
         self.storeCapturedDocument = storeCapturedDocument;
         self.storeImageStream = storeImageStream;
@@ -282,7 +285,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                             clipsPath: "ClipsPath",
                                             checkForFace: true,
                                             processMrz: self.processMrz!,
-                                            performLivenessDetection: self.performLivenessDetection!,
+                                            performLivenessDocument:self.performLivenessDocument!,
+                                            performLivenessFace: self.performLivenessFace!,
                                             saveCapturedVideo: self.saveCapturedVideoID!,
                                             storeCapturedDocument: self.storeCapturedDocument!,
                                             isVideo: true,
@@ -321,7 +325,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 clipsPath: "ClipsPath",
                                 checkForFace: true,
                                 processMrz: self.processMrz!,
-                                performLivenessDetection: self.performLivenessDetection!,
+                                performLivenessDocument:self.performLivenessDocument!,
+                                performLivenessFace: self.performLivenessFace!,
                                 saveCapturedVideo: self.saveCapturedVideoID!,
                                 storeCapturedDocument: self.storeCapturedDocument!,
                                 isVideo: true,
@@ -374,7 +379,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel )
                 self.start = false
             } else {
-                self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
+                self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY ||  eventName == HubConnectionTargets.ON_LIVENESS_UPDATE
             }
             
             switch eventName {

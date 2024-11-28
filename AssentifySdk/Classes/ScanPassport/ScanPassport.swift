@@ -30,7 +30,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     private var environmentalConditions: EnvironmentalConditions?
     private var apiKey: String
     private var processMrz: Bool?
-    private var performLivenessDetection: Bool?
+    private var performLivenessDocument: Bool?
+    private var performLivenessFace: Bool?
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
     private var storeImageStream: Bool?
@@ -50,7 +51,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
          processMrz:Bool,
-         performLivenessDetection:Bool,
+         performLivenessDocument:Bool,
+         performLivenessFace:Bool,
          saveCapturedVideoID:Bool,
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
@@ -61,7 +63,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
         self.processMrz = processMrz;
-        self.performLivenessDetection = performLivenessDetection;
+        self.performLivenessDocument = performLivenessDocument;
+        self.performLivenessFace = performLivenessFace;
         self.saveCapturedVideoID = saveCapturedVideoID;
         self.storeCapturedDocument = storeCapturedDocument;
         self.storeImageStream = storeImageStream;
@@ -247,7 +250,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                          clipsPath: "ClipsPath",
                          checkForFace: true,
                          processMrz: processMrz!,
-                         performLivenessDetection: performLivenessDetection!,
+                         performLivenessDocument: performLivenessDocument!,
+                         performLivenessFace: performLivenessFace!,
                          saveCapturedVideo: saveCapturedVideoID!,
                          storeCapturedDocument: storeCapturedDocument!,
                          isVideo: false,
@@ -309,7 +313,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                  }
                  
              } else {
-                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY
+                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY ||  eventName == HubConnectionTargets.ON_LIVENESS_UPDATE
                  switch eventName {
                  case HubConnectionTargets.ON_ERROR:
                      self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
@@ -388,27 +392,63 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     }
     
     
+    var nameKey = "";
+    var nameWordCount = 0;
+    var surnameKey = "";
+    
     public func onTranslatedSuccess(properties: [String : String]?) {
         if let outputProperties = self.passportResponseModel!.passportExtractedModel?.outputProperties {
             let ignoredProperties = getIgnoredProperties(properties: outputProperties)
-            var finalProperties = [String: Any]()
+            var finalProperties : [String: Any] = [:]
 
+            for (key, value) in outputProperties {
+                if key.contains(IdentificationDocumentCaptureKeys.name) {
+                    nameKey = key
+                    if let stringValue = value as? String {
+                        let trimmedValue = stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                        nameWordCount = trimmedValue.isEmpty ? 0 : trimmedValue.split(separator: " ").count
+                    } else {
+                        nameWordCount = 0
+                    }
+                }
+
+                if key.contains(IdentificationDocumentCaptureKeys.surname) {
+                    surnameKey = key
+                }
+            }
+            
+            
             for (key, value) in properties! {
-                finalProperties[key] = value
+                if (key == FullNameKey) {
+                    if !nameKey.isEmpty {
+                        let selectedWords = getSelectedWords(input: String(describing: value), numberOfWords: nameWordCount)
+                        finalProperties[nameKey] = selectedWords
+                    }
+
+                    if !surnameKey.isEmpty {
+                        let remainingWords = getRemainingWords(input: String(describing: value), numberOfWords: nameWordCount)
+                        finalProperties[surnameKey] = remainingWords
+                    }
+
+                }else{
+                    finalProperties[key] = value
+                }
             }
             
             for (key, value) in ignoredProperties {
                 finalProperties[key] = value
             }
+        
 
             self.passportResponseModel!.passportExtractedModel?.transformedProperties?.removeAll()
             self.passportResponseModel!.passportExtractedModel?.extractedData?.removeAll()
 
             for (key, value) in finalProperties {
-                self.passportResponseModel!.passportExtractedModel!.transformedProperties![key] =  "\(value)"
-                let keys = key.split(separator: "_").map { String($0) }
-                let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
-                self.passportResponseModel!.passportExtractedModel!.extractedData![newKey] =  "\(value)"
+                    self.passportResponseModel!.passportExtractedModel!.transformedProperties![key] =  "\(value)"
+                    let keys = key.split(separator: "_").map { String($0) }
+                    let newKey = key.components(separatedBy: "IdentificationDocumentCapture_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                    self.passportResponseModel!.passportExtractedModel!.extractedData![newKey] =  "\(value)"
+               
             }
             self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
         }

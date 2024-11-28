@@ -1,6 +1,21 @@
 
 import Foundation
 
+var  FullNameKey = "FullName"
+
+func getSelectedWords(input: String, numberOfWords: Int) -> String {
+    guard !input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "" }
+    let words = input.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ")
+    return words.prefix(numberOfWords).joined(separator: " ")
+}
+
+func getRemainingWords(input: String, numberOfWords: Int) -> String {
+    guard !input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "" }
+    let words = input.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ")
+    return words.count <= numberOfWords ? "" : words.dropFirst(numberOfWords).joined(separator: " ")
+}
+
+
 public struct Language {
       public static let Text = "Text"
       public static let English = "en"
