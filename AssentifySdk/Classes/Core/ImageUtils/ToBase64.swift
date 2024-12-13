@@ -30,7 +30,7 @@ extension UIImage {
         let mutableData = NSMutableData()
         let imageDestination = CGImageDestinationCreateWithData(mutableData, kUTTypeJPEG2000, 1, nil)!
         let options: NSDictionary = [
-            kCGImageDestinationLossyCompressionQuality:0.7
+            kCGImageDestinationLossyCompressionQuality:0.5
         ]
         CGImageDestinationAddImage(imageDestination, cgImage, options)
         CGImageDestinationFinalize(imageDestination)
