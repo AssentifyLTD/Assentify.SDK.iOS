@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.41**
+- Improve scanning speed
+
 **0.0.40**
 - Face match improvements
 
