@@ -89,11 +89,11 @@ public class ContextAwareSigning{
         }
     }
     
-public func signature(documentInstanceId: Int,
+    public func signature(documentId:Int,documentInstanceId: Int,
                           signature: String){
         let signatureRequestModel =
         SignatureRequestModel(
-                     documentId : templateId,
+                     documentId : documentId,
                      documentInstanceId : documentInstanceId,
                      documentName : "documentName",
                      username : "UserId",
