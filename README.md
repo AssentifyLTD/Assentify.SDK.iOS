@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.42**
+- Context Aware Signing Step
+
 **0.0.41**
 - Improve scanning speed
 

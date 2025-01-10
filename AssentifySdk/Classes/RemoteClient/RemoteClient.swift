@@ -202,7 +202,7 @@ func  remoteGetStep( apiKey: String,
 
 func  remoteGetTokens(
                        templateId: Int,completion: @escaping (BaseResult<[DocumentTokensModel], Error>) -> Void) {
-    let urlString = BaseUrls.baseURLSigning + "Tokens/\(templateId)"
+    let urlString = BaseUrls.baseURLSigning + "Tokens/sdk/gettokens/\(templateId)"
     guard let url = URL(string: urlString) else {
         completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
         return
