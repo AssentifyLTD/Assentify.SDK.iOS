@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.43**
+- UI Fixes
+
 **0.0.42**
 - Context Aware Signing Step
 

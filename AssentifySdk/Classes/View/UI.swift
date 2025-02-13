@@ -8,10 +8,10 @@ class Guide{
     
    private var transmittingBackground :SVGKImage?
    private var cardBackground :SVGKImage?
-   private var cardSvgImageView :SVGKFastImageView?
+   var cardSvgImageView :SVGKFastImageView?
     
     private var faceBackground :SVGKImage?
-    private var faceSvgImageView :SVGKFastImageView?
+    var faceSvgImageView :SVGKFastImageView?
     
     func showCardGuide(view:UIView){
            guard let modelPath = Bundle.main.path(forResource: "card_background", ofType: "svg") else {

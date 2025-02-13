@@ -110,8 +110,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.remoteProcessing = RemoteProcessing()
         
         if(environmentalConditions!.enableGuide){
-            self.guide.showFaceGuide(view: self.view)
-            self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+            if(self.guide.faceSvgImageView == nil){
+               self.guide.showFaceGuide(view: self.view)
+            }
+             self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
         }
         
         UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
@@ -248,6 +250,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
+                    if(self.guide.faceSvgImageView == nil){
+                        self.guide.showFaceGuide(view: self.view)
+                    }
                     self.guide.changeFaceColor(view: self.view,to:ConstantsValues.DetectColor,notTransmitting: self.start)
                 }
             }
@@ -256,6 +261,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             sendingFlags.removeAll();
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
+                    if(self.guide.faceSvgImageView == nil){
+                        self.guide.showFaceGuide(view: self.view)
+                    }
                     self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
             }

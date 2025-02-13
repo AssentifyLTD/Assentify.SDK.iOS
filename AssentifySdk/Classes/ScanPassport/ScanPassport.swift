@@ -106,7 +106,9 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
       self.remoteProcessing = RemoteProcessing()
    
         if(environmentalConditions!.enableGuide){
-            self.guide.showCardGuide(view: self.view)
+            if(self.guide.cardSvgImageView == nil){
+                self.guide.showCardGuide(view: self.view)
+            }
             self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
         }
     }
@@ -215,6 +217,9 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             sendingFlagsZoom.append(ZoomType.SENDING);
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
+                    if(self.guide.cardSvgImageView == nil){
+                        self.guide.showCardGuide(view: self.view)
+                    }
                     self.guide.changeCardColor(view: self.view,to:ConstantsValues.DetectColor,notTransmitting: self.start)
                 }
             }
@@ -224,6 +229,9 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                 sendingFlagsZoom.removeAll();
                 if(environmentalConditions!.enableGuide){
                     DispatchQueue.main.async {
+                        if(self.guide.cardSvgImageView == nil){
+                            self.guide.showCardGuide(view: self.view)
+                        }
                         self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                     }
                 }
