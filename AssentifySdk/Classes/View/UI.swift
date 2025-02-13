@@ -50,6 +50,9 @@ class Guide{
     
     
     func changeCardColor(view:UIView,to color: String,notTransmitting: Bool) {
+        if cardSvgImageView == nil {
+            showCardGuide(view: view)
+        }
         cardSvgImageView!.removeFromSuperview()
         if(notTransmitting){
             let layerIDsToChange = ["Layer_1-1", "Layer_1-2", "Layer_1-3", "Layer_1-4"]
@@ -103,6 +106,9 @@ class Guide{
     }
 
     func changeFaceColor(view:UIView,to color: String,notTransmitting:Bool) {
+        if faceSvgImageView == nil {
+                  showFaceGuide(view: view)
+        }
         faceSvgImageView!.removeFromSuperview()
         
         if(notTransmitting){

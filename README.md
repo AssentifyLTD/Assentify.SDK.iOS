@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.44**
+- Bug Fixes
+
 **0.0.43**
 - UI Fixes
 
