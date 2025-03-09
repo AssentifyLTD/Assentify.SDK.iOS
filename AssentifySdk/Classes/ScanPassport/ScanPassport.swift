@@ -89,7 +89,6 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
           self.previewView = PreviewView();
           self.previewView.translatesAutoresizingMaskIntoConstraints = false
           self.previewView.contentMode = .scaleToFill
-          self.previewView.backgroundColor = UIColor(white: 1, alpha: 1)
           view.addSubview(self.previewView)
           NSLayoutConstraint.activate([
               self.previewView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -211,7 +210,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
              
       }
         
-        if (motion == MotionType.SENDING && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
+        if (motion == MotionType.SENDING && zoom == ZoomType.SENDING && isRectFInsideTheScreen && environmentalConditions!.checkConditions(
+            brightness: imageBrightnessChecker)  == BrightnessEvents.Good) {
             modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlagsMotion.append(MotionType.SENDING);
             sendingFlagsZoom.append(ZoomType.SENDING);
@@ -238,7 +238,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
          }
     
         if (environmentalConditions!.checkConditions(
-                                                     brightness: imageBrightnessChecker)
+                                                     brightness: imageBrightnessChecker)  == BrightnessEvents.Good
                      && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
@@ -289,7 +289,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         }
         DispatchQueue.main.async {
             self.scanPassportDelegate?.onEnvironmentalConditionsChange?(
-                brightness: imageBrightnessChecker,
+                brightnessEvents: self.environmentalConditions!.checkConditions(
+                    brightness: imageBrightnessChecker),
                 motion: self.motion,zoom:self.zoom)
         }
             

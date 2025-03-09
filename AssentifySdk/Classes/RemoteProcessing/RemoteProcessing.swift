@@ -54,6 +54,7 @@ class RemoteProcessing {
         isVideo: Bool,
         storeImageStream: Bool,
         selfieImage: String,
+        clips: [String] = [],
         completion: @escaping (BaseResult<RemoteProcessingModel?, Error>) -> Void
     ) {
         let traceIdentifier = UUID().uuidString
@@ -70,6 +71,7 @@ class RemoteProcessing {
             if let stepId = appConfiguration.stepDefinitions.first(where: { $0.stepDefinition == stepDefinition })?.stepId {
               stepIdString = String(stepId)
             }
+        
         
             request.setValue(stepIdString, forHTTPHeaderField: "x-step-id")
             request.setValue(appConfiguration.blockIdentifier, forHTTPHeaderField: "x-block-identifier")
@@ -106,13 +108,11 @@ class RemoteProcessing {
             "callerConnectionId": connectionId,
             "connectionId": connectionId,
             "TraceIdentifier":UUID().uuidString,
-            "selfieImage":selfieImage
-        ] as [String : String]
+            "selfieImage":selfieImage,
+            "clips":clips
+        ] as [String : Any]
 
-        
-        
-  
-
+    
         request.httpBody = createBody(boundary: boundary, parameters: formData)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let httpResponse = response as? HTTPURLResponse else {
@@ -154,28 +154,43 @@ class RemoteProcessing {
     }
 
   
-    func createBody(boundary: String, parameters: [String: String]) -> Data {
+    func createBody(boundary: String, parameters: [String: Any]) -> Data {
         let lineBreak = "\r\n"
         var body = Data()
+        
         for (key, value) in parameters {
-            if let stringDataBoundary = "--\(boundary + lineBreak)".data(using: .utf8) {
-                body.append(stringDataBoundary)
+            if let arrayValue = value as? [String] {
+                for item in arrayValue {
+                    if let stringDataBoundary = "--\(boundary + lineBreak)".data(using: .utf8) {
+                        body.append(stringDataBoundary)
+                    }
+                    if let stringDataKey = "Content-Disposition: form-data; name=\"\(key)[]\"\(lineBreak + lineBreak)".data(using: .utf8) {
+                        body.append(stringDataKey)
+                    }
+                    if let stringDataValue = "\(item + lineBreak)".data(using: .utf8) {
+                        body.append(stringDataValue)
+                    }
+                }
+            } else if let stringValue = value as? String {
+                if let stringDataBoundary = "--\(boundary + lineBreak)".data(using: .utf8) {
+                    body.append(stringDataBoundary)
+                }
+                if let stringDataKey = "Content-Disposition: form-data; name=\"\(key)\"\(lineBreak + lineBreak)".data(using: .utf8) {
+                    body.append(stringDataKey)
+                }
+                if let stringDataValue = "\(stringValue + lineBreak)".data(using: .utf8) {
+                    body.append(stringDataValue)
+                }
             }
-            
-            if let stringDataKey = "Content-Disposition: form-data; name=\"\(key)\"\(lineBreak + lineBreak)".data(using: .utf8) {
-                body.append(stringDataKey)
-            }
-            if let stringDataValue = "\(value + lineBreak)".data(using: .utf8) {
-                body.append(stringDataValue)
-            }
-            
-
         }
+        
         if let stringDataBoundary = "--\(boundary)--\(lineBreak)".data(using: .utf8) {
             body.append(stringDataBoundary)
         }
+        
         return body
     }
+
 
 
 

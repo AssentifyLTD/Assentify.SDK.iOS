@@ -42,8 +42,10 @@ import Foundation
     @objc optional func onUploadFailed(dataModel: RemoteProcessingModel )
 
     @objc optional func onEnvironmentalConditionsChange(
-           brightness: Double,
-           motion: MotionType
+           brightnessEvents: BrightnessEvents,
+           motion: MotionType,
+           faceEvents: FaceEvents,
+           zoom: ZoomType
        )
     
 
