@@ -6,7 +6,7 @@
 
 ## Example
 
-[To run the example project](https://onedrive.live.com/?authkey=%21AJ9rCRs4jE%2DGw30&id=1FA5B54185CEA738%21273&cid=1FA5B54185CEA738&parId=root&parQt=sharedby&o=OneUp)
+[To run the example project](https://github.com/AssentifyLTD/Assentify.IOS.Demo)
 
 ## Documentation 
 [Assentify Sdk Documentation](https://drive.google.com/file/d/17xAbfnnWM07JL3RBntw4NeTR3-YyJEdu/view?usp=drive_link)
