@@ -22,13 +22,17 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.46**
+- Face liveness improvements
+- Parameters change :onEnvironmentalConditionsChange 
+- Parameters change :EnvironmentalConditions
+
 **0.0.45**
 - Face events improvements
 - Face zoom improvements
 - Face brightness improvements
 - Face liveness improvements
-- Parameters change :onEnvironmentalConditionsChange 
-- Parameters change :EnvironmentalConditions
+
 
 **0.0.44**
 - Bug Fixes
