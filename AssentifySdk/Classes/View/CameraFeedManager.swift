@@ -29,7 +29,7 @@ class CameraFeedManager: NSObject {
 
     super.init()
 
-    session.sessionPreset = .high
+    session.sessionPreset = .hd1920x1080
     self.previewView.session = session
     self.previewView.previewLayer.connection?.videoOrientation = .portrait
     self.previewView.previewLayer.videoGravity = .resizeAspectFill

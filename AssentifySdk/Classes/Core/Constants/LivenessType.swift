@@ -3,7 +3,7 @@ import Foundation
 
 
 @objc public enum LivenessType :Int{
-    case Live
-    case NotLive
-    case Non
+    case LIVE
+    case NOT_LIVE
+    case NON
 }

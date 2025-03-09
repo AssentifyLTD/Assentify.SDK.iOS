@@ -86,7 +86,6 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
           self.previewView = PreviewView();
           self.previewView.translatesAutoresizingMaskIntoConstraints = false
           self.previewView.contentMode = .scaleToFill
-          self.previewView.backgroundColor = UIColor(white: 1, alpha: 1)
           view.addSubview(self.previewView)
           NSLayoutConstraint.activate([
               self.previewView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -205,7 +204,8 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
              
       }
         
-        if (motion == MotionType.SENDING && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
+        if (motion == MotionType.SENDING && zoom == ZoomType.SENDING && isRectFInsideTheScreen && environmentalConditions!.checkConditions(
+            brightness: imageBrightnessChecker)  == BrightnessEvents.Good) {
               modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlagsMotion.append(MotionType.SENDING);
             sendingFlagsZoom.append(ZoomType.SENDING);
@@ -232,7 +232,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
          }
     
         if (environmentalConditions!.checkConditions(
-                                                     brightness: imageBrightnessChecker)
+                                                     brightness: imageBrightnessChecker)  == BrightnessEvents.Good
                      && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
@@ -281,7 +281,8 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
         DispatchQueue.main.async {
             self.scanOtherDelegate?.onEnvironmentalConditionsChange?(
-                brightness: imageBrightnessChecker,
+                brightnessEvents: self.environmentalConditions!.checkConditions(
+                    brightness: imageBrightnessChecker),
                 motion: self.motion,zoom:self.zoom)
         }
             

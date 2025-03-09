@@ -2,6 +2,7 @@
 import Foundation
 
 let ZoomLimit = 25;
+let FaceZoomLimit = 10;
 
 func calculatePercentageChangeWidth(rect: CGRect) -> ZoomType {
         let aspectRatioDifference = rect.width

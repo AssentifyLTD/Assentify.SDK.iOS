@@ -19,10 +19,10 @@ import Foundation
 @objc public class FaceExtractedModel : NSObject  {
     public var outputProperties: [String: Any]?
     public var extractedData: [String: Any]?
-    public var  baseImageFace :String?
-    public var  secondImageFace:String?
-    public var  percentageMatch:Int?;
-    public var  isLive:Bool?;
+    public var baseImageFace :String?
+    public var secondImageFace:String?
+    public var percentageMatch:Int?;
+    public var isLive:Bool?;
     
     public var identificationDocumentCapture: IdentificationDocumentCapture?
 

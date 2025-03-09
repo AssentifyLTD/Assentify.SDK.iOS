@@ -88,7 +88,7 @@ class CheckLiveness {
                 Array(UnsafeBufferPointer<Float>(start: $0.baseAddress!.assumingMemoryBound(to: Float.self), count: outputTensor.shape.dimensions.reduce(1, *)))
             }
             
-            return output.first!  > 0.5 ? LivenessType.NotLive : LivenessType.Live
+            return output.first!  > 0.5 ? LivenessType.NOT_LIVE : LivenessType.LIVE
         } catch {
             print("Error during model inference: \(error)")
             return nil
