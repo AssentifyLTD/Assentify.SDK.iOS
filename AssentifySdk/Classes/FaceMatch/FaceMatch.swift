@@ -51,6 +51,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var isCountDownStarted:Bool = true;
     private var  start = true;
     private var  localLivenessLimit = 0;
+    private var  frameCounter = 0;
+    private var  processEveryNFrames = 3;
+
+    
     private var faceQualityCheck = FaceQualityCheck()
     private var faceEvent = FaceEvents.NO_DETECT;
     
@@ -255,9 +259,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             sendingFlagsZoom.append(ZoomType.SENDING);
             if(self.performLivenessFace!){
                 if(livenessCheckArray.count < self.localLivenessLimit){
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.livenessCheckArray.append(pixelBuffer)
-                    }
+                     frameCounter += 1
+                      if frameCounter % processEveryNFrames == 0 {
+                          self.livenessCheckArray.append(pixelBuffer)
+                      }
                     if (self.checkLiveness.preprocessAndPredict(pixelBuffer:pixelBuffer) == LivenessType.LIVE){
                         self.livenessTypeResults.append(LivenessType.LIVE)
                      }
@@ -453,6 +458,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
         DispatchQueue.main.async {
+            self.frameCounter = 0;
             self.motionRectF.removeAll()
             self.sendingFlags.removeAll()
             self.sendingFlagsZoom.removeAll()
