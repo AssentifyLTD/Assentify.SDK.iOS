@@ -40,50 +40,7 @@ extension CVPixelBuffer {
 
 
 
-func compressPixelBuffer(_ pixelBuffer: CVPixelBuffer, compressionQuality: CGFloat) -> CVPixelBuffer? {
-    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-    
-    let context = CIContext()
-    
-    guard let compressedImage = context.createCGImage(ciImage, from: ciImage.extent) else {
-        return nil
-    }
-    
-    var compressedPixelBuffer: CVPixelBuffer?
-    let options: [String: Any] = [
-        kCVPixelBufferCGImageCompatibilityKey as String: true,
-        kCVPixelBufferCGBitmapContextCompatibilityKey as String: true
-    ]
-    let status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                     Int(compressedImage.width),
-                                     Int(compressedImage.height),
-                                     kCVPixelFormatType_32ARGB,
-                                     options as CFDictionary,
-                                     &compressedPixelBuffer)
-    
-    guard status == kCVReturnSuccess, let outputPixelBuffer = compressedPixelBuffer else {
-        return nil
-    }
-    
-    CVPixelBufferLockBaseAddress(outputPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-    
-    let pixelData = CVPixelBufferGetBaseAddress(outputPixelBuffer)
-    
-    let bitmapInfo = CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue
-    let bitmapContext = CGContext(data: pixelData,
-                                  width: Int(compressedImage.width),
-                                  height: Int(compressedImage.height),
-                                  bitsPerComponent: 8,
-                                  bytesPerRow: CVPixelBufferGetBytesPerRow(outputPixelBuffer),
-                                  space: CGColorSpaceCreateDeviceRGB(),
-                                  bitmapInfo: bitmapInfo)
-    
-    bitmapContext?.draw(compressedImage, in: CGRect(x: 0, y: 0, width: compressedImage.width, height: compressedImage.height))
-    
-    CVPixelBufferUnlockBaseAddress(outputPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-    
-    return outputPixelBuffer
-}
+
 
 func cropPixelBuffer(_ pixelBuffer: CVPixelBuffer, toRect rect: CGRect) -> CVPixelBuffer? {
     let outputWidth = Int(rect.width)

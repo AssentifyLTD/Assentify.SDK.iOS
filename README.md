@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.48**
+- Face detect improvements
+
 **0.0.47**
 - Face match improvements
 
