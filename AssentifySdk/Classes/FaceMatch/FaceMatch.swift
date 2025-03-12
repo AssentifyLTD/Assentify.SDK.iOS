@@ -243,10 +243,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
             zoom = calculatePercentageChangeWidth(rect: rect2)
         }
-        faceQualityCheck.checkQuality(pixelBuffer: pixelBuffer) { faceEvent in
-           self.faceEvent = faceEvent;
+        if let downscaledBuffer = downscalePixelBuffer(pixelBuffer, scaleFactor: 0.3) {
+            faceQualityCheck.checkQuality(pixelBuffer: downscaledBuffer) { faceEvent in
+                self.faceEvent = faceEvent
+            }
         }
-        
         if (motion == MotionType.SENDING && zoom == ZoomType.SENDING  && isRectFInsideTheScreen && environmentalConditions!.checkConditions(
             brightness: cropPixelBuffer.brightness) == BrightnessEvents.Good && self.faceEvent == FaceEvents.GOOD) {
             modelDataHandler?.customColor = ConstantsValues.DetectColor;

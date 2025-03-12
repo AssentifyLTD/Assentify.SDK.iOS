@@ -12,8 +12,6 @@ class FaceQualityCheck {
         options.performanceMode = .fast
         options.landmarkMode = .all
         options.contourMode = .all
-        options.contourMode = .all
-        options.classificationMode = .all
         self.faceDetector = FaceDetector.faceDetector(options: options)
     }
     

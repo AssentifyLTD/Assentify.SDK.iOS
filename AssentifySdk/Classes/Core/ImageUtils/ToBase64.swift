@@ -43,6 +43,26 @@ func convertClipsPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
     return base64String
 }
 
+func downscalePixelBuffer(_ pixelBuffer: CVPixelBuffer, scaleFactor: CGFloat) -> CVPixelBuffer? {
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+    let transform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
+    let scaledImage = ciImage.transformed(by: transform)
+    
+    let context = CIContext()
+    var scaledPixelBuffer: CVPixelBuffer?
+    CVPixelBufferCreate(nil,
+                        Int(scaledImage.extent.width),
+                        Int(scaledImage.extent.height),
+                        CVPixelBufferGetPixelFormatType(pixelBuffer),
+                        nil,
+                        &scaledPixelBuffer)
+    
+    if let scaledPixelBuffer = scaledPixelBuffer {
+        context.render(scaledImage, to: scaledPixelBuffer)
+    }
+    
+    return scaledPixelBuffer
+}
 
 extension UIImage {
     func jpeg2000DataLossless() -> Data? {
