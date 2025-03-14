@@ -10,9 +10,9 @@ struct ConstantsValues {
     static let BRIGHTNESS_HIGH_THRESHOLD: Double = 255.0
     static let BRIGHTNESS_LOW_THRESHOLD: Double = 50.0
     static let LIVENESS_THRESHOLD  = 0.9;
-    static let FaceCheckQualityThresholdPositive = 5.0;
-    static let FaceCheckQualityThresholdNegative = -5.0;
-    static let FaceCheckQualityThresholdNPositivePitch = 5.0;
-    static let FaceCheckQualityThresholdNegativePitch = -10.0;
+    static let FaceCheckQualityThresholdPositive = 15.0;
+    static let FaceCheckQualityThresholdNegative = -15.0;
+    static let FaceCheckQualityThresholdNPositivePitch = 15.0;
+    static let FaceCheckQualityThresholdNegativePitch = -15.0;
 }
 
