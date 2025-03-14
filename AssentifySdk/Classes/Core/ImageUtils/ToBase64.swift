@@ -34,14 +34,35 @@ func convertClipsPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
         return nil
     }
     
+    
     guard let imageData = uiImage.jpeg2000DataLosslessClips() else {
         return nil
     }
     
     
     let base64String = imageData.base64EncodedString()
+    
+
     return base64String
 }
+
+func saveBase64ImageToGallery(base64String: String) {
+    guard let imageData = Data(base64Encoded: base64String) else {
+        print("Failed to decode Base64 string to Data")
+        return
+    }
+    
+    guard let uiImage = UIImage(data: imageData) else {
+        print("Failed to create UIImage from decoded Data")
+        return
+    }
+    
+    // Save the image to the photo gallery
+    UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
+    print("Image saved to gallery")
+}
+
+
 
 func downscalePixelBuffer(_ pixelBuffer: CVPixelBuffer, scaleFactor: CGFloat) -> CVPixelBuffer? {
     let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
@@ -64,6 +85,53 @@ func downscalePixelBuffer(_ pixelBuffer: CVPixelBuffer, scaleFactor: CGFloat) ->
     return scaledPixelBuffer
 }
 
+
+func copyPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
+    let width = CVPixelBufferGetWidth(pixelBuffer)
+    let height = CVPixelBufferGetHeight(pixelBuffer)
+    let pixelFormatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
+    
+    var copiedBuffer: CVPixelBuffer?
+    let attributes: [CFString: Any] = [
+        kCVPixelBufferCGImageCompatibilityKey: true,
+        kCVPixelBufferCGBitmapContextCompatibilityKey: true
+    ]
+    
+    let status = CVPixelBufferCreate(
+        kCFAllocatorDefault,
+        width,
+        height,
+        pixelFormatType,
+        attributes as CFDictionary,
+        &copiedBuffer
+    )
+    
+    guard status == kCVReturnSuccess, let newBuffer = copiedBuffer else {
+        print("Failed to create pixel buffer copy")
+        return nil
+    }
+    
+    CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+    CVPixelBufferLockBaseAddress(newBuffer, [])
+    
+    if let sourceBaseAddress = CVPixelBufferGetBaseAddress(pixelBuffer),
+       let destinationBaseAddress = CVPixelBufferGetBaseAddress(newBuffer) {
+        let sourceBytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let destinationBytesPerRow = CVPixelBufferGetBytesPerRow(newBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        
+        for row in 0..<height {
+            memcpy(destinationBaseAddress + row * destinationBytesPerRow,
+                   sourceBaseAddress + row * sourceBytesPerRow,
+                   sourceBytesPerRow)
+        }
+    }
+    
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+    CVPixelBufferUnlockBaseAddress(newBuffer, [])
+    
+    return newBuffer
+}
 extension UIImage {
     func jpeg2000DataLossless() -> Data? {
         guard let cgImage = self.cgImage else {

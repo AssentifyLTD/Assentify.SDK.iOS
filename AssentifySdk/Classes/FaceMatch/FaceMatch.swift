@@ -25,7 +25,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     var motionRectF: [CGRect] = []
     var sendingFlags: [MotionType] = []
     var sendingFlagsZoom: [ZoomType] = []
-    var livenessCheckArray: [CVPixelBuffer] = []
+    var livenessCheckArray: [CVPixelBuffer] = [] {
+        didSet {
+            DispatchQueue.main.async {}
+        }
+    }
     var livenessTypeResults: [LivenessType] = []
     
     private var faceMatchDelegate: FaceMatchDelegate?
@@ -261,7 +265,15 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 if(livenessCheckArray.count < self.localLivenessLimit){
                      frameCounter += 1
                       if frameCounter % processEveryNFrames == 0 {
-                          self.livenessCheckArray.append(pixelBuffer)
+                          DispatchQueue.global(qos: .background).async { [weak self] in
+                              guard let self = self else { return }
+                              
+                              if let copiedBuffer = copyPixelBuffer(pixelBuffer) {
+                                  DispatchQueue.main.async {
+                                      self.livenessCheckArray.append(copiedBuffer)
+                                  }
+                              }
+                          }
                       }
                     if (self.checkLiveness.preprocessAndPredict(pixelBuffer:pixelBuffer) == LivenessType.LIVE){
                         self.livenessTypeResults.append(LivenessType.LIVE)
@@ -541,127 +553,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     
-    
-    func filterBySourceCountryCode(dataList: [Templates]) -> [Templates] {
-        var filteredList = [Templates]()
-        var uniqueSourceCountryCodes = [String]()
-        
-        for data in dataList {
-            if !uniqueSourceCountryCodes.contains(data.sourceCountryCode) {
-                filteredList.append(data)
-                uniqueSourceCountryCodes.append(data.sourceCountryCode)
-            }
-            
-        }
-        return filteredList
-    }
-    
-    func filterTemplatesCountryCode(dataList: [Templates], countryCode: String) -> [Templates] {
-        var filteredList = [Templates]()
-        
-        for data in dataList {
-            if data.sourceCountryCode == countryCode {
-                filteredList.append(data)
-            }
-        }
-        return filteredList
-    }
-    
-    
-    
-    enum ResultVideo<Success, Failure: Error> {
-        case success(Success)
-        case failure(Failure)
-    }
-    
-    
-    func createVideoFromPixelBuffers(pixelBuffers: [CVPixelBuffer], outputURL: URL, size: CGSize, videoFrameRate: Int, completion: @escaping (ResultVideo<String, Error>) -> Void) {
-        
-        let compressionProperties: [String: Any] = [
-            AVVideoAverageBitRateKey: 2500000,
-            AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel
-        ]
-        
-        let videoSettings: [String: Any] = [
-            AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: size.width,
-            AVVideoHeightKey: size.height,
-            AVVideoCompressionPropertiesKey: compressionProperties
-            
-        ]
-        
-        // Initialize AVAssetWriter
-        guard let assetWriter = try? AVAssetWriter(outputURL: outputURL, fileType: .mp4) else {
-            completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Error creating asset writer"])))
-            return
-        }
-        
-        // Initialize video input
-        let videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
-        videoInput.expectsMediaDataInRealTime = false
-        
-        // Add input to asset writer
-        guard assetWriter.canAdd(videoInput) else {
-            completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot add video input to asset writer"])))
-            return
-        }
-        assetWriter.add(videoInput)
-        
-        // Initialize pixel buffer adaptor
-        let pixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: nil)
-        
-        // Start writing
-        assetWriter.startWriting()
-        assetWriter.startSession(atSourceTime: .zero)
-        
-        // Calculate frame duration
-        let frameDuration = CMTimeMake(value: 1, timescale: Int32(videoFrameRate))
-        var frameTime = CMTime.zero
-        
-        // Append pixel buffers
-        for pixelBuffer in pixelBuffers {
-            while !videoInput.isReadyForMoreMediaData {}
-            
-            let presentationTime = CMTimeAdd(frameTime, frameDuration)
-            pixelBufferAdaptor.append(pixelBuffer, withPresentationTime: presentationTime)
-            
-            frameTime = CMTimeAdd(frameTime, frameDuration)
-        }
-        
-        // Finish writing
-        videoInput.markAsFinished()
-        assetWriter.finishWriting {
-            if let error = assetWriter.error {
-                completion(.failure(error))
-            } else {
-                // Convert video file to base64
-                do {
-                    let videoData = try Data(contentsOf: outputURL)
-                    let base64String = videoData.base64EncodedString()
-                    completion(.success(base64String))
-                } catch {
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-    
-    func getSizeFromFirstPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CGSize {
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        return CGSize(width: CGFloat(width), height: CGFloat(height))
-    }
-    
-    func createTemporaryFileURL() -> URL? {
-        do {
-            let temporaryDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory())
-            let uniqueFilename = ProcessInfo.processInfo.globallyUniqueString + ".mp4"
-            let temporaryFileURL = temporaryDirectoryURL.appendingPathComponent(uniqueFilename)
-            return temporaryFileURL
-        } catch {
-            return nil
-        }
-    }
+
     
    
     
