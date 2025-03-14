@@ -91,7 +91,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
         
         if(performLivenessFace){
-            localLivenessLimit = 14;
+            localLivenessLimit = 12;
         }else{
             localLivenessLimit = 0;
         }
