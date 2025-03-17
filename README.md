@@ -21,6 +21,8 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.50**
+- Face match improvements
 
 **0.0.49**
 - Face events threshold improvements
