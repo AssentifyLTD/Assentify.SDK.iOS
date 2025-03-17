@@ -292,8 +292,6 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             modelDataHandler?.customColor = environmentalConditions!.HoldHandColor;
             sendingFlags.removeAll();
             sendingFlagsZoom.removeAll();
-            livenessCheckArray.removeAll();
-            livenessTypeResults.removeAll();
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
                     if(self.guide.faceSvgImageView == nil){
