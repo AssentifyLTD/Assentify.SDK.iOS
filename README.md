@@ -21,6 +21,9 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.51**
+- Detect improvements
+
 **0.0.50**
 - Face match improvements
 

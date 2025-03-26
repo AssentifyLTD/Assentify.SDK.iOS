@@ -25,4 +25,12 @@ class PreviewView: UIView {
   override class var layerClass: AnyClass {
     return AVCaptureVideoPreviewLayer.self
   }
+    
+    
+  func stopSession() {
+     guard let session = previewLayer.session else { return }
+        DispatchQueue.global(qos: .userInitiated).async {
+            session.stopRunning()
+      }
+    }
 }
