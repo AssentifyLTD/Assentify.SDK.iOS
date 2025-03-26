@@ -473,5 +473,9 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! )
     }
     
+    public func stopScanning(){
+        self.previewView.stopSession();
+        self.cameraFeedManager.stopSession();
+    }
 
 }

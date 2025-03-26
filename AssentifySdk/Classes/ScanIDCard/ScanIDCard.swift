@@ -523,6 +523,10 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
         }
     }
     
+    public func stopScanning(){
+        self.previewView.stopSession();
+        self.cameraFeedManager.stopSession();
+    }
     
     
 }

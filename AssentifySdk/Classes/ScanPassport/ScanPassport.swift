@@ -246,7 +246,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                     DispatchQueue.main.async {
                         self.scanPassportDelegate?.onSend();
                     }
-                    
+                                        
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.READ_PASSPORT),
                          videoClip: bsee64Image,
@@ -466,6 +466,11 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     
     public func onTranslatedError(properties: [String : String]?) {
         self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+    }
+    
+    public func stopScanning(){
+        self.previewView.stopSession();
+        self.cameraFeedManager.stopSession();
     }
     
    

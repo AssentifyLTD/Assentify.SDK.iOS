@@ -551,7 +551,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     
-
+    public func stopScanning(){
+        self.previewView.stopSession();
+        self.cameraFeedManager.stopSession();
+    }
     
    
     
