@@ -17,7 +17,7 @@ class FaceQualityCheck {
     
     func checkQuality(pixelBuffer: CVPixelBuffer, completion: @escaping (FaceEvents) -> Void) {
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        let flippedCIImage = ciImage.transformed(by: CGAffineTransform(scaleX: -1, y: 1)) // Flip horizontally
+        let flippedCIImage = ciImage.transformed(by: CGAffineTransform(scaleX: -1, y: 1))
 
         let context = CIContext(options: nil)
         guard let cgImage = context.createCGImage(flippedCIImage, from: flippedCIImage.extent) else {

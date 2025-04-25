@@ -46,7 +46,13 @@ import Foundation
            motion: MotionType,
            faceEvents: FaceEvents,
            zoom: ZoomType
-       )
+    )
+    
+    @objc optional func onCurrentLiveMoveChange(
+        activeLiveEvents: ActiveLiveEvents
+    )
+    
+    
     
 
 }

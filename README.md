@@ -21,6 +21,9 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.52**
+- Active liveness
+
 **0.0.51**
 - Detect improvements
 

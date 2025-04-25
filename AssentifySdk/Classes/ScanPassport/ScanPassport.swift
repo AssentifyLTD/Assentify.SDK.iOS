@@ -47,6 +47,9 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     private var isRectFInsideTheScreen:Bool = false;
     
     private var  start = true;
+    
+    private var audioPlayer = AssetsAudioPlayer();
+    
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
@@ -245,8 +248,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                     var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {
                         self.scanPassportDelegate?.onSend();
+                        self.audioPlayer.playAudio(fileName: ConstantsValues.AudioCardSuccess)
                     }
-                                        
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.READ_PASSPORT),
                          videoClip: bsee64Image,
@@ -469,6 +472,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     }
     
     public func stopScanning(){
+        audioPlayer.stopAudio();
         self.previewView.stopSession();
         self.cameraFeedManager.stopSession();
     }

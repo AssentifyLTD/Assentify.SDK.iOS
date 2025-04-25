@@ -10,8 +10,9 @@ class Guide{
    private var cardBackground :SVGKImage?
    var cardSvgImageView :SVGKFastImageView?
     
-    private var faceBackground :SVGKImage?
-    var faceSvgImageView :SVGKFastImageView?
+   private var faceBackground :SVGKImage?
+   var faceSvgImageView :SVGKFastImageView?
+    
     
     func showCardGuide(view:UIView){
            guard let modelPath = Bundle.main.path(forResource: "card_background", ofType: "svg") else {
@@ -127,6 +128,149 @@ class Guide{
             faceSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
           ])
     }
+    
+    
+    func showSuccessLiveCheck(view: UIView) -> UIView {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .clear
+        containerView.layer.cornerRadius = 20
+        containerView.layer.masksToBounds = true
+        guard let modelPath = Bundle.main.path(forResource: "success_layout", ofType: "svg") else {
+            print("SVG file not found.")
+            return containerView
+        }
+        
+        guard let svgImage = SVGKImage(contentsOfFile: modelPath) else {
+            print("Failed to load SVG image.")
+            return containerView
+        }
+        
+     
+        
+        let svgImageView = SVGKFastImageView(svgkImage: svgImage)
+        svgImageView!.translatesAutoresizingMaskIntoConstraints = false
+        svgImageView!.contentMode = .scaleAspectFit
+        
+        containerView.addSubview(svgImageView!)
+        view.addSubview(containerView)
+        
+        NSLayoutConstraint.activate([
+            svgImageView!.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            svgImageView!.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            svgImageView!.topAnchor.constraint(equalTo: containerView.topAnchor),
+            svgImageView!.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            svgImageView!.widthAnchor.constraint(equalToConstant: 400),
+            svgImageView!.heightAnchor.constraint(equalToConstant: 400),
+            
+            containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            containerView.widthAnchor.constraint(equalTo: svgImageView!.widthAnchor),
+            containerView.heightAnchor.constraint(equalTo: svgImageView!.heightAnchor)
+        ])
+        
+        containerView.isUserInteractionEnabled = true
+        
+        return containerView
+    }
+    
+    
+    func showErrorLiveCheck(view: UIView) -> UIView {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .clear
+        containerView.layer.cornerRadius = 20
+        containerView.layer.masksToBounds = true
+        
+        guard let modelPath = Bundle.main.path(forResource: "error_layout", ofType: "svg") else {
+            print("SVG file not found.")
+            return containerView
+        }
+        
+        guard let svgImage = SVGKImage(contentsOfFile: modelPath) else {
+            print("Failed to load SVG image.")
+            return containerView
+        }
+        
+        let svgImageView = SVGKFastImageView(svgkImage: svgImage)
+        svgImageView!.translatesAutoresizingMaskIntoConstraints = false
+        svgImageView!.contentMode = .scaleAspectFit
+        
+        containerView.addSubview(svgImageView!)
+        view.addSubview(containerView)
+        
+        NSLayoutConstraint.activate([
+            svgImageView!.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            svgImageView!.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            svgImageView!.topAnchor.constraint(equalTo: containerView.topAnchor),
+            svgImageView!.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            svgImageView!.widthAnchor.constraint(equalToConstant: 400),
+            svgImageView!.heightAnchor.constraint(equalToConstant: 400),
+            
+            containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            containerView.widthAnchor.constraint(equalTo: svgImageView!.widthAnchor),
+            containerView.heightAnchor.constraint(equalTo: svgImageView!.heightAnchor)
+        ])
+        
+        containerView.isUserInteractionEnabled = true
+        
+        return containerView
+    }
+    
+    
+    func setActiveLiveMove(view: UIView,event:FaceEvents) -> UIView {
+        let containerView = UIView()
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            containerView.backgroundColor = UIColor.clear // Set to clear or any desired background color
+            containerView.layer.cornerRadius = 20
+            containerView.layer.masksToBounds = true
+
+            let imageView = UIImageView()
+        
+        var gifImage: UIImage?
+
+        if event == .PITCH_UP {
+            gifImage = UIImage.gifImageWithName("up")
+        } else if event == .PITCH_DOWN {
+            gifImage = UIImage.gifImageWithName("down")
+        } else if event == .YAW_RIGHT {
+            gifImage = UIImage.gifImageWithName("right")
+        } else if event == .YAW_LEFT {
+            gifImage = UIImage.gifImageWithName("left")
+        } else if event == .GOOD {
+            // do nothing
+        }
+        
+         imageView.image = gifImage
+          
+            imageView.contentMode = .scaleAspectFit
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+
+            containerView.addSubview(imageView)
+            view.addSubview(containerView)
+
+            NSLayoutConstraint.activate([
+                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                imageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                imageView.widthAnchor.constraint(equalToConstant: 600),
+                imageView.heightAnchor.constraint(equalToConstant: 600)
+            ])
+
+            NSLayoutConstraint.activate([
+                containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                containerView.widthAnchor.constraint(equalTo: imageView.widthAnchor),
+                containerView.heightAnchor.constraint(equalTo: imageView.heightAnchor)
+            ])
+            
+            containerView.isUserInteractionEnabled = true
+
+            return containerView
+    }
+    
  
     /// Color
     func changeLayerColor(svgImage: SVGKImage, layerIDs: [String], newColor: UIColor) {

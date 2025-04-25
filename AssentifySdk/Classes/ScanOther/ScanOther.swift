@@ -44,6 +44,8 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var isRectFInsideTheScreen:Bool = false;
     
     private var  start = true;
+    private var audioPlayer = AssetsAudioPlayer();
+    
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
@@ -239,6 +241,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                     var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {
                         self.scanOtherDelegate?.onSend();
+                        self.audioPlayer.playAudio(fileName: ConstantsValues.AudioCardSuccess)
                     }
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.OTHER),
@@ -474,6 +477,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     }
     
     public func stopScanning(){
+         audioPlayer.stopAudio();
         self.previewView.stopSession();
         self.cameraFeedManager.stopSession();
     }
