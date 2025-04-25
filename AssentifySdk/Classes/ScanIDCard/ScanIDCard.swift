@@ -53,6 +53,8 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     private var detectIfRectFInsideTheScreen = DetectIfRectInsideTheScreen();
     private var isRectFInsideTheScreen:Bool = false;
     
+    private var audioPlayer = AssetsAudioPlayer();
+    
     private var  start = true;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
@@ -259,6 +261,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                     var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {
                         self.scanIDCardDelegate?.onSend();
+                        self.audioPlayer.playAudio(fileName: ConstantsValues.AudioCardSuccess)
                     }
                     remoteProcessing?.starProcessing(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.ID_CARD),
@@ -524,6 +527,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     }
     
     public func stopScanning(){
+        audioPlayer.stopAudio();
         self.previewView.stopSession();
         self.cameraFeedManager.stopSession();
     }

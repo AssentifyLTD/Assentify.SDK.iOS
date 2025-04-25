@@ -159,4 +159,46 @@ extension UIImage {
         CGImageDestinationFinalize(imageDestination)
         return mutableData as Data
     }
+    
+    class func gifImageWithName(_ name: String) -> UIImage? {
+           guard let bundleURL = Bundle.main.url(forResource: name, withExtension: "gif") else {
+               return nil
+           }
+           guard let imageData = try? Data(contentsOf: bundleURL) else {
+               return nil
+           }
+           return UIImage.gifImageWithData(imageData)
+       }
+       
+       class func gifImageWithData(_ data: Data) -> UIImage? {
+           guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+               return nil
+           }
+           return UIImage.animatedImageWithSource(source)
+       }
+       
+       class func animatedImageWithSource(_ source: CGImageSource) -> UIImage? {
+           let count = CGImageSourceGetCount(source)
+           var images = [UIImage]()
+           var duration = 0.0
+           
+           for i in 0..<count {
+               guard let image = CGImageSourceCreateImageAtIndex(source, i, nil) else {
+                   continue
+               }
+               guard let properties = CGImageSourceCopyPropertiesAtIndex(source, i, nil) as? [String: Any] else {
+                   continue
+               }
+               guard let gifDictionary = properties[kCGImagePropertyGIFDictionary as String] as? [String: Any] else {
+                   continue
+               }
+               guard let gifDelayTime = gifDictionary[kCGImagePropertyGIFDelayTime as String] as? Double else {
+                   continue
+               }
+               duration += gifDelayTime
+               images.append(UIImage(cgImage: image, scale: UIScreen.main.scale, orientation: .up))
+           }
+           
+           return UIImage.animatedImage(with: images, duration: duration)
+       }
 }
