@@ -21,6 +21,9 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.53**
+- UI enhancement
+
 **0.0.52**
 - Active liveness
 
