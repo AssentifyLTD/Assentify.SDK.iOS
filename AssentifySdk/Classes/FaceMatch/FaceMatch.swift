@@ -156,7 +156,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
-        if (!self.performLivenessFace!) {
+       if (self.areAllEventsDone()) {
             self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents: ActiveLiveEvents.GOOD);
         }
         
