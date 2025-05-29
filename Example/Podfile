@@ -1,0 +1,13 @@
+use_frameworks!
+
+#platform :ios, '14.0'
+
+target 'AssentifySdk_Example' do
+  pod 'AssentifySdk', :path => '../'
+
+  target 'AssentifySdk_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase'
+  end
+end
