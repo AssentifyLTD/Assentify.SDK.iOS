@@ -11,15 +11,27 @@ public struct ConfigModel: Codable {
     public let instanceHash: String
     public let flowName: String
     public let stepDefinitions: [StepDefinitions]
+    public let stepMap: [StepMap]
 
 }
-
 public struct StepDefinitions: Codable {
     public  let stepId: Int
     public  let stepDefinition: String
     public  let customization: Customization
     public  let outputProperties: [OutputProperties]
 }
+
+public struct StepMap: Codable {
+    public let id: Int
+    public let stepType: Int
+    public let stepName: String
+    public let stepDefinition: String
+    public let parentStepId: Int?
+    public let numberOfBranches: Int?
+    public let isVirtual: Bool
+}
+
+
 
 public struct OutputProperties: Codable {
     public let id: Int
