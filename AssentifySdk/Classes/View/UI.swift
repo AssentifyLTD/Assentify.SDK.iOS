@@ -12,7 +12,8 @@ class Guide{
     
    private var faceBackground :SVGKImage?
    var faceSvgImageView :SVGKFastImageView?
-    
+   private var topFaceShadow = UIView()
+   private var bottomFaceShadow = UIView()
     
     func showCardGuide(view:UIView){
            guard let modelPath = Bundle.main.path(forResource: "card_background", ofType: "svg") else {
@@ -75,25 +76,49 @@ class Guide{
     //// Face
     
     func showFaceGuide(view:UIView){
-           guard let modelPath = Bundle.main.path(forResource: "face_background", ofType: "svg") else {
-                  print("SVG file not found.")
-                  return
-            }
+        guard let modelPath = Bundle.main.path(forResource: "face_background", ofType: "svg") else {
+              print("SVG file not found.")
+              return
+          }
 
-            guard let svgImage = SVGKImage(contentsOfFile: modelPath) else {
-                print("Failed to load SVG image.")
-                return
-            }
-            faceBackground = svgImage;
-            faceSvgImageView = SVGKFastImageView(svgkImage: svgImage)
-            faceSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(faceSvgImageView!)
-             NSLayoutConstraint.activate([
-                faceSvgImageView!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                faceSvgImageView!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                faceSvgImageView!.widthAnchor.constraint(equalTo: view.widthAnchor),
-                faceSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
-               ])
+          guard let svgImage = SVGKImage(contentsOfFile: modelPath) else {
+              print("Failed to load SVG image.")
+              return
+          }
+
+          faceBackground = svgImage
+          faceSvgImageView = SVGKFastImageView(svgkImage: svgImage)
+          faceSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
+
+          let topShadow = UIView()
+          let bottomShadow = UIView()
+          [topShadow, bottomShadow].forEach {
+              $0.translatesAutoresizingMaskIntoConstraints = false
+              $0.backgroundColor = .black
+              $0.alpha = 0.5 // Adjust shadow intensity
+              view.addSubview($0)
+          }
+
+          view.addSubview(faceSvgImageView!)
+          topFaceShadow = topShadow;
+          bottomFaceShadow = bottomShadow;
+        
+          NSLayoutConstraint.activate([
+              topShadow.topAnchor.constraint(equalTo: view.topAnchor),
+              topShadow.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+              topShadow.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+              topShadow.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.08),
+
+              bottomShadow.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+              bottomShadow.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+              bottomShadow.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+              bottomShadow.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.08),
+
+              faceSvgImageView!.topAnchor.constraint(equalTo: topShadow.bottomAnchor),
+              faceSvgImageView!.bottomAnchor.constraint(equalTo: bottomShadow.topAnchor),
+              faceSvgImageView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+              faceSvgImageView!.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+          ])
         guard let modelPathTransmitting = Bundle.main.path(forResource: "transmitting_background", ofType: "svg") else {
             print("SVG file not found.")
             return
@@ -106,28 +131,56 @@ class Guide{
         transmittingBackground = svgImageTransmitting;
     }
 
-    func changeFaceColor(view:UIView,to color: String,notTransmitting:Bool) {
+    func changeFaceColor(view: UIView, to color: String, notTransmitting: Bool) {
         if faceSvgImageView == nil {
-                  showFaceGuide(view: view)
+            showFaceGuide(view: view)
+            return
         }
+
         faceSvgImageView!.removeFromSuperview()
-        
-        if(notTransmitting){
+        topFaceShadow.removeFromSuperview()
+        bottomFaceShadow.removeFromSuperview()
+        if notTransmitting {
             let layerIDsToChange = ["Layer_1-1"]
-            self.changeLayerColor(svgImage: self.faceBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
+            self.changeLayerColor(svgImage: self.faceBackground!, layerIDs: layerIDsToChange, newColor: UIColor(hexString: color))
             faceSvgImageView = SVGKFastImageView(svgkImage: self.faceBackground)
-        }else{
+        } else {
             faceSvgImageView = SVGKFastImageView(svgkImage: self.transmittingBackground)
         }
+
         faceSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
+
+        let topShadow = UIView()
+        let bottomShadow = UIView()
+        topFaceShadow = topShadow;
+        bottomFaceShadow = bottomShadow;
+        [topShadow, bottomShadow].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.backgroundColor = .black
+            $0.alpha = 0.5
+            view.addSubview($0)
+        }
+
         view.addSubview(faceSvgImageView!)
+
         NSLayoutConstraint.activate([
-            faceSvgImageView!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            faceSvgImageView!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            faceSvgImageView!.widthAnchor.constraint(equalTo: view.widthAnchor),
-            faceSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
-          ])
+            topShadow.topAnchor.constraint(equalTo: view.topAnchor),
+            topShadow.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topShadow.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topShadow.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.08),
+
+            bottomShadow.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomShadow.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomShadow.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomShadow.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier:0.08),
+
+            faceSvgImageView!.topAnchor.constraint(equalTo: topShadow.bottomAnchor),
+            faceSvgImageView!.bottomAnchor.constraint(equalTo: bottomShadow.topAnchor),
+            faceSvgImageView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            faceSvgImageView!.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
+
     
     
     func showSuccessLiveCheck(view: UIView) -> UIView {
@@ -160,8 +213,8 @@ class Guide{
             svgImageView!.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             svgImageView!.topAnchor.constraint(equalTo: containerView.topAnchor),
             svgImageView!.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            svgImageView!.widthAnchor.constraint(equalToConstant: 400),
-            svgImageView!.heightAnchor.constraint(equalToConstant: 400),
+            svgImageView!.widthAnchor.constraint(equalToConstant: 550),
+            svgImageView!.heightAnchor.constraint(equalToConstant: 550),
             
             containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -204,8 +257,8 @@ class Guide{
             svgImageView!.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             svgImageView!.topAnchor.constraint(equalTo: containerView.topAnchor),
             svgImageView!.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            svgImageView!.widthAnchor.constraint(equalToConstant: 400),
-            svgImageView!.heightAnchor.constraint(equalToConstant: 400),
+            svgImageView!.widthAnchor.constraint(equalToConstant: 550),
+            svgImageView!.heightAnchor.constraint(equalToConstant: 550),
             
             containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -251,12 +304,12 @@ class Guide{
             view.addSubview(containerView)
 
             NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,),
+                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,),
                 imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
                 imageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-                imageView.widthAnchor.constraint(equalToConstant: 600),
-                imageView.heightAnchor.constraint(equalToConstant: 600)
+                imageView.widthAnchor.constraint(equalToConstant: 800),
+                imageView.heightAnchor.constraint(equalToConstant: 800)
             ])
 
             NSLayoutConstraint.activate([
