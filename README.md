@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.56**
+- Detect improvements
+
 **0.0.55**
 - Active liveness Design improvements
 - Adding Steps Map
