@@ -304,8 +304,8 @@ class Guide{
             view.addSubview(containerView)
 
             NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,),
-                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,),
+                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
                 imageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
                 imageView.widthAnchor.constraint(equalToConstant: 800),

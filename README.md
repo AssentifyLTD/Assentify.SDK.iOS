@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.57**
+- Pods update
+
 **0.0.56**
 - Detect improvements
 
