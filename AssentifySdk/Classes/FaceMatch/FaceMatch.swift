@@ -32,6 +32,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var processMrz: Bool?
     private var performLivenessDocument: Bool?
     private var performLivenessFace: Bool?
+    private var performPassiveLivenessFace: Bool?
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
     private var storeImageStream: Bool?
@@ -67,6 +68,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
          processMrz:Bool,
          performLivenessDocument:Bool,
          performLivenessFace:Bool,
+         performPassiveLivenessFace:Bool,
          saveCapturedVideoID:Bool,
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
@@ -80,6 +82,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.processMrz = processMrz;
         self.performLivenessDocument = performLivenessDocument;
         self.performLivenessFace = performLivenessFace;
+        self.performPassiveLivenessFace = performPassiveLivenessFace;
         self.saveCapturedVideoID = saveCapturedVideoID;
         self.storeCapturedDocument = storeCapturedDocument;
         self.storeImageStream = storeImageStream;
@@ -371,7 +374,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                             checkForFace: true,
                                             processMrz: self.processMrz!,
                                             performLivenessDocument:self.performLivenessDocument!,
-                                            performLivenessFace: self.performLivenessFace!,
+                                            performLivenessFace: self.performPassiveLivenessFace!,
                                             saveCapturedVideo: self.saveCapturedVideoID!,
                                             storeCapturedDocument: self.storeCapturedDocument!,
                                             isVideo: true,
@@ -412,7 +415,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 checkForFace: true,
                                 processMrz: self.processMrz!,
                                 performLivenessDocument:self.performLivenessDocument!,
-                                performLivenessFace: self.performLivenessFace!,
+                                performLivenessFace: self.performPassiveLivenessFace!,
                                 saveCapturedVideo: self.saveCapturedVideoID!,
                                 storeCapturedDocument: self.storeCapturedDocument!,
                                 isVideo: true,

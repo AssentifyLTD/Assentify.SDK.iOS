@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.58**
+- Face Liveness flags control
+
 **0.0.57**
 - Pods update
 
