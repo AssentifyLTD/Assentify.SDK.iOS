@@ -145,7 +145,94 @@ class RemoteProcessing {
         }
     
 
-
+    func starQrProcessing(
+        url: String,
+        videoClip: String,
+        appConfiguration: ConfigModel,
+        templateId: String,
+        connectionId: String,
+        stepIdString: String,
+        metadata: String,
+        completion: @escaping (BaseResult<RemoteProcessingModel?, Error>) -> Void
+    ) {
+        let traceIdentifier = UUID().uuidString
+        let urlString = url
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 120
+        
+        
+        
+        request.setValue(stepIdString, forHTTPHeaderField: "x-step-id")
+        request.setValue(appConfiguration.blockIdentifier, forHTTPHeaderField: "x-block-identifier")
+        request.setValue(appConfiguration.flowIdentifier, forHTTPHeaderField: "x-flow-identifier")
+        request.setValue(appConfiguration.flowInstanceId, forHTTPHeaderField: "x-flow-instance-id")
+        request.setValue(appConfiguration.instanceHash, forHTTPHeaderField: "x-instance-hash")
+        request.setValue(appConfiguration.instanceId, forHTTPHeaderField: "x-instance-id")
+        request.setValue(appConfiguration.tenantIdentifier, forHTTPHeaderField: "x-tenant-identifier")
+        
+        
+        
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        
+        
+        let formData = [
+            "tenantId": appConfiguration.tenantIdentifier,
+            "blockId": appConfiguration.blockIdentifier,
+            "instanceId": appConfiguration.instanceId,
+            "templateId": templateId,
+            "isVideo": "false",
+            "clipsPath": "clipsPath",
+            "isMobile": "true",
+            "videoClipB64": videoClip,
+            "callerConnectionId": connectionId,
+            "connectionId": connectionId,
+            "Metadata": metadata,
+        ] as [String : Any]
+        
+        
+        request.httpBody = createBody(boundary: boundary, parameters: formData)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+                return
+            }
+            
+            
+            if(httpResponse.statusCode == 200){
+                guard let responseData = data else {
+                    completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+                    return
+                }
+                if let responseString = String(data: responseData, encoding: .utf8) {
+                }
+                do {
+                    let decoder = JSONDecoder()
+                    if let dictionary = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                        let dataResult =  parseDataToRemoteProcessingModel(data: dictionary);
+                        completion(BaseResult.success(dataResult))
+                    } else {
+                    }
+                    
+                    
+                } catch {
+                    completion(BaseResult.failure(error))
+                }
+            }else{
+                completion(BaseResult.failure(NSError(domain: "Invalid Key", code: 0, userInfo: nil)))
+            }
+        }
+        task.resume()
+    }
+    
     func setDelegate(delegate: RemoteProcessingDelegate?) {
         self.delegate = delegate
     }
@@ -194,7 +281,7 @@ class RemoteProcessing {
   
 
     
-
+  
 
    
 }

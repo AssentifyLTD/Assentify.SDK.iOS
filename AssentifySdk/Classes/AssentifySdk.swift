@@ -200,6 +200,32 @@ public class AssentifySdk {
         return nil;
     }
    
+    
+    public func startScanQr(scanQrDelegate:ScanQrDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON,stepId: Int? = nil)->ScanQr?{
+        if(isKeyValid){
+           var  scanQr = ScanQr(
+                configModel:self.configModel,
+                environmentalConditions:self.environmentalConditions!,
+                apiKey:self.apiKey,
+                processMrz: self.processMrz!,
+                performLivenessDocument: self.performLivenessDocument!,
+                performLivenessFace:  self.performPassiveLivenessFace!,
+                saveCapturedVideoID:self.saveCapturedVideoID!,
+                storeCapturedDocument:self.storeCapturedDocument!,
+                storeImageStream:self.storeImageStream!,
+                scanQrDelegate :scanQrDelegate,
+                kycDocumentDetails:kycDocumentDetails,
+                language:language
+                
+            )
+            scanQr.setStepId(stepId)
+            return scanQr;
+
+        }else{
+            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
+        }
+        return nil;
+    }
   
     
     
