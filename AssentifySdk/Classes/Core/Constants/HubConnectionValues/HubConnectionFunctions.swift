@@ -14,9 +14,9 @@ class HubConnectionFunctions {
             return "api/IdentificationDocument/Other"
         case BlockType.FACE_MATCH:
             return "api/IdentificationDocument/FaceMatchWithImage"
-        case BlockType.SIGNATURE:
-            return "SIGNATURE"
-        }
+        case BlockType.QR:
+            return "api/IdentificationDocument/ReadIdQrCode"
+       }
     }
 }
 

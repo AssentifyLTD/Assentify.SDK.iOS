@@ -5,5 +5,5 @@ enum BlockType {
     case ID_CARD
     case OTHER
     case FACE_MATCH
-    case SIGNATURE
+    case QR
 }

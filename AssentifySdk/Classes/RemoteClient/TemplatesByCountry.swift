@@ -22,12 +22,14 @@ public struct KycDocumentDetails : Codable {
     public   let order:Int
     public   let templateProcessingKeyInformation: String
     public   let templateSpecimen: String
+    public   let hasQrCode:Bool
     
-    public init(name: String,order:Int,templateProcessingKeyInformation:String,templateSpecimen:String)  {
+    public init(name: String,order:Int,templateProcessingKeyInformation:String,templateSpecimen:String,hasQrCode:Bool)  {
         self.name = name
         self.order = order
         self.templateSpecimen = templateSpecimen
         self.templateProcessingKeyInformation = templateProcessingKeyInformation
+        self.hasQrCode = hasQrCode
     }
 }
 
