@@ -22,6 +22,10 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.60**
+- Qr improvements
+- Face improvements
+
 **0.0.59**
 - Qr Scanning
 

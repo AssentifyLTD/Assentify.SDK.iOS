@@ -581,53 +581,58 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     private func successActiveLive() {
-        self.canCheckLive = false;
-        audioPlayer.playAudio(fileName: ConstantsValues.AudioFaceSuccess);
-        DispatchQueue.main.async {
-            self.clearLiveUi();
-            self.successLiveView =  self.guide.showSuccessLiveCheck(view: self.view)
-        }
-        if areAllEventsDone() {
-            self.clearLiveUi();
-            if(self.successLiveView != nil){
-                self.successLiveView?.removeFromSuperview();
-            }
-            start = true
+        if(self.canCheckLive){
+            self.canCheckLive = false;
+            audioPlayer.playAudio(fileName: ConstantsValues.AudioFaceSuccess);
             DispatchQueue.main.async {
-                if(self.environmentalConditions!.enableGuide){
-                    if(self.guide.faceSvgImageView == nil){
-                        self.guide.showFaceGuide(view: self.view)
+                self.clearLiveUi();
+                self.successLiveView =  self.guide.showSuccessLiveCheck(view: self.view)
+            }
+            if areAllEventsDone() {
+                self.clearLiveUi();
+                if(self.successLiveView != nil){
+                    self.successLiveView?.removeFromSuperview();
+                }
+                start = true
+                DispatchQueue.main.async {
+                    if(self.environmentalConditions!.enableGuide){
+                        if(self.guide.faceSvgImageView == nil){
+                            self.guide.showFaceGuide(view: self.view)
+                        }
+                        self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                     }
-                    self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                    self.canCheckLive = true;
+                    self.nextMove();
                 }
             }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                self.canCheckLive = true;
-                self.nextMove();
-            }
         }
+        
     }
     
     
     func resetActiveLive() {
-        self.canCheckLive = false
-        audioPlayer.playAudio(fileName: ConstantsValues.AudioWrong);
-        DispatchQueue.main.async {
-            self.clearLiveUi();
-            if(self.successLiveView != nil){
-                self.successLiveView?.removeFromSuperview();
-            }
-            self.errorLiveView =  self.guide.showErrorLiveCheck(view: self.view)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+        if(self.canCheckLive){
+            self.canCheckLive = false
+            audioPlayer.playAudio(fileName: ConstantsValues.AudioWrong);
             DispatchQueue.main.async {
-                if(self.errorLiveView != nil){
-                    self.errorLiveView?.removeFromSuperview();
-                    self.errorLiveView  = nil
+                self.clearLiveUi();
+                if(self.successLiveView != nil){
+                    self.successLiveView?.removeFromSuperview();
                 }
+                self.errorLiveView =  self.guide.showErrorLiveCheck(view: self.view)
             }
-            self.fillCompletionMap()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                DispatchQueue.main.async {
+                    if(self.errorLiveView != nil){
+                        self.errorLiveView?.removeFromSuperview();
+                        self.errorLiveView  = nil
+                    }
+                }
+                self.fillCompletionMap()
+            }
         }
     }
     
