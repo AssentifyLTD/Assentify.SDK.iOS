@@ -120,10 +120,10 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
         }
         
         if(environmentalConditions!.enableGuide){
-            if(self.guide.cardSvgImageView == nil){
-                self.guide.showCardGuide(view: self.view)
+            if(self.guide.qrSvgImageView == nil){
+                self.guide.showQrGuide(view: self.view)
             }
-            self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+            self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
         }
     }
     
@@ -155,10 +155,10 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
                             self.start = false;
                             self.scanQrDelegate?.onStartQrScan();
                             if(self.environmentalConditions!.enableGuide){
-                                if(self.guide.cardSvgImageView == nil){
-                                    self.guide.showCardGuide(view: self.view)
+                                if(self.guide.qrSvgImageView == nil){
+                                    self.guide.showQrGuide(view: self.view)
                                 }
-                                self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+                                self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                             }
                         }
                         var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
@@ -249,10 +249,10 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
             } else {
                 self.start = true;
                 if(self.environmentalConditions!.enableGuide){
-                    if(self.guide.cardSvgImageView == nil){
-                        self.guide.showCardGuide(view: self.view)
+                    if(self.guide.qrSvgImageView == nil){
+                        self.guide.showQrGuide(view: self.view)
                     }
-                    self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+                    self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
                 self.scanQrDelegate?.onErrorQrScan(message: remoteProcessingModel.error!)
             }

@@ -9,6 +9,7 @@ class Guide{
    private var transmittingBackground :SVGKImage?
    private var cardBackground :SVGKImage?
    var cardSvgImageView :SVGKFastImageView?
+   var qrSvgImageView :SVGKFastImageView?
     
    private var faceBackground :SVGKImage?
    var faceSvgImageView :SVGKFastImageView?
@@ -181,6 +182,65 @@ class Guide{
         ])
     }
 
+    //// Qr
+    
+    func showQrGuide(view:UIView){
+           guard let modelPath = Bundle.main.path(forResource: "qr_background", ofType: "svg") else {
+                  print("SVG file not found.")
+                  return
+            }
+
+            guard let svgImage = SVGKImage(contentsOfFile: modelPath) else {
+                print("Failed to load SVG image.")
+                return
+            }
+        
+        
+            cardBackground = svgImage;
+            qrSvgImageView = SVGKFastImageView(svgkImage: svgImage)
+            qrSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(qrSvgImageView!)
+             NSLayoutConstraint.activate([
+                qrSvgImageView!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                qrSvgImageView!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                qrSvgImageView!.widthAnchor.constraint(equalTo: view.widthAnchor),
+                qrSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
+               ])
+        
+        guard let modelPathTransmitting = Bundle.main.path(forResource: "transmitting_background", ofType: "svg") else {
+            print("SVG file not found.")
+            return
+        }
+
+        guard let svgImageTransmitting = SVGKImage(contentsOfFile: modelPathTransmitting) else {
+          print("Failed to load SVG image.")
+          return
+         }
+        transmittingBackground = svgImageTransmitting;
+    }
+    
+    
+    func changeQrColor(view:UIView,to color: String,notTransmitting: Bool) {
+        if qrSvgImageView == nil {
+            showCardGuide(view: view)
+        }
+        qrSvgImageView!.removeFromSuperview()
+        if(notTransmitting){
+            let layerIDsToChange = ["Layer_1-1", "Layer_1-2", "Layer_1-3", "Layer_1-4"]
+            self.changeLayerColor(svgImage: self.cardBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
+            qrSvgImageView = SVGKFastImageView(svgkImage: self.cardBackground)
+        }else{
+            qrSvgImageView = SVGKFastImageView(svgkImage: transmittingBackground)
+        }
+        qrSvgImageView!.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(qrSvgImageView!)
+        NSLayoutConstraint.activate([
+            qrSvgImageView!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            qrSvgImageView!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            qrSvgImageView!.widthAnchor.constraint(equalTo: view.widthAnchor),
+            qrSvgImageView!.heightAnchor.constraint(equalTo: view.heightAnchor)
+          ])
+    }
     
     
     func showSuccessLiveCheck(view: UIView) -> UIView {
