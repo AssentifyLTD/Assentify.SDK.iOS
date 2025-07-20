@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.61**
+- NFC Scanning
+
 **0.0.60**
 - Qr improvements
 - Face improvements

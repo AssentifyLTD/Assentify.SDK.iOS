@@ -2,7 +2,7 @@
 
 import Foundation
 
-let MotionLimit = 10;
+let MotionLimit = 30;
 let MotionLimitFace = 5;
 
 
