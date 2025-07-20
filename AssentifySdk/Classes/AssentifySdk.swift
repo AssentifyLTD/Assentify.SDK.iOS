@@ -147,6 +147,23 @@ public class AssentifySdk {
         return nil;
     }
     
+    public func startScanNfc(scanNfcDelegate:ScanNfcDelegate,language: String = Language.NON,stepId: Int? = nil)->ScanNfc?{
+        if(isKeyValid){
+            let scanNfc = ScanNfc(
+                configModel:self.configModel,
+                apiKey:self.apiKey,
+                language:language,
+                scanNfcDelegate:scanNfcDelegate
+            )
+            return scanNfc;
+
+        }else{
+            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
+        }
+        return nil;
+    }
+    
+    
     public func startScanOthers(scanOtherDelegate:ScanOtherDelegate,language: String = Language.NON,stepId: Int? = nil)->ScanOther?{
         if(isKeyValid){
             let scanOther = ScanOther(

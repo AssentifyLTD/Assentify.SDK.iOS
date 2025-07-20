@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AssentifySdk'
-  s.version          = '0.0.60'
+  s.version          = '0.0.61'
   s.summary          = 'This iOS Pod provides integration with Assentify services.'
 
   # This description is used to generate tags and improve search results.
@@ -62,6 +62,7 @@ Pod::Spec.new do |s|
   s.dependency 'TensorFlowLiteSwift' , '2.7.0'
   s.dependency 'SVGKit'
   s.dependency 'GoogleMLKit/FaceDetection'
+  s.dependency 'NFCPassportReader'
 
 
 
