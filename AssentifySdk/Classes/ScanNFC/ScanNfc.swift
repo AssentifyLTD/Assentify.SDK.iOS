@@ -87,7 +87,7 @@ public class ScanNfc :LanguageTransformationDelegate{
                            default:
                                return nil
                            }
-                       },
+                       }
                     
                    )
             if(!passportModel.documentNumber.isEmpty){
