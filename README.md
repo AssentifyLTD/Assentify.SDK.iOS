@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.62**
+- Swift Versions Handling
+
 **0.0.61**
 - NFC Scanning
 
