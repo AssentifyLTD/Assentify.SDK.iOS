@@ -169,7 +169,7 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
                             templateId: self.templateId!,
                             connectionId: "ConnectionId",
                             stepIdString: String(self.stepId!),
-                            metadata: url,
+                            metadata: url
                         ) { result in
                             switch result {
                             case .success(let model):
