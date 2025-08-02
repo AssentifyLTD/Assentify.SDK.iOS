@@ -6,6 +6,7 @@ import MLKitVision
 class FaceQualityCheck {
     
     private let faceDetector: FaceDetector
+    private let faceDetectorWink: FaceDetector
     
     init() {
         let options = FaceDetectorOptions()
@@ -13,9 +14,16 @@ class FaceQualityCheck {
         options.landmarkMode = .all
         options.contourMode = .all
         self.faceDetector = FaceDetector.faceDetector(options: options)
+        
+        let optionsWink = FaceDetectorOptions()
+        optionsWink.performanceMode = .fast
+        optionsWink.landmarkMode = .all
+        optionsWink.contourMode = .all
+        optionsWink.classificationMode = .all
+        self.faceDetectorWink = FaceDetector.faceDetector(options: optionsWink)
     }
     
-    func checkQuality(pixelBuffer: CVPixelBuffer, completion: @escaping (FaceEvents) -> Void) {
+    func checkQualityAction(pixelBuffer: CVPixelBuffer, completion: @escaping (FaceEvents) -> Void) {
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         let flippedCIImage = ciImage.transformed(by: CGAffineTransform(scaleX: -1, y: 1))
 
@@ -77,5 +85,46 @@ class FaceQualityCheck {
             completion(.NO_DETECT)
         }
     }
+    
+    func checkQualityWink(pixelBuffer: CVPixelBuffer, completion: @escaping (FaceEvents) -> Void) {
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let flippedCIImage = ciImage.transformed(by: CGAffineTransform(scaleX: -1, y: 1))
+
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(flippedCIImage, from: flippedCIImage.extent) else {
+            print("Failed to create flipped CGImage from CVPixelBuffer")
+            completion(.NO_DETECT)
+            return
+        }
+
+        let uiImage = UIImage(cgImage: cgImage)
+        let visionImage = VisionImage(image: uiImage)
+
+        faceDetectorWink.process(visionImage) { faces, error in
+            guard error == nil, let faces = faces, !faces.isEmpty else {
+                completion(.NO_DETECT)
+                return
+            }
+
+            for face in faces {
+                let leftEyeOpen = face.leftEyeOpenProbability
+                let rightEyeOpen = face.rightEyeOpenProbability
+            
+                let closedThreshold: CGFloat = 0.2
+                let openThreshold: CGFloat = 0.8
+
+                if leftEyeOpen < closedThreshold && rightEyeOpen > openThreshold {
+                    completion(.WINK_LEFT)
+                    return
+                } else if rightEyeOpen < closedThreshold && leftEyeOpen > openThreshold {
+                    completion(.WINK_RIGHT)
+                    return
+                }
+            }
+
+            completion(.NO_DETECT)
+        }
+    }
+
     
 }

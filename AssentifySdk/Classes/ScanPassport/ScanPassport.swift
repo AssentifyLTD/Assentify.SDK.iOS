@@ -263,7 +263,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         if (environmentalConditions!.checkConditions(
                                                      brightness: imageBrightnessChecker)  == BrightnessEvents.Good
                      && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
-            if (start && sendingFlagsMotion.count > MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
+            if (start && sendingFlagsMotion.count > environmentalConditions!.MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
                     var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {

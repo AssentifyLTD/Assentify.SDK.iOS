@@ -15,17 +15,36 @@ public class EnvironmentalConditions {
     var HoldHandColor: String
 
 
+    var BRIGHTNESS_HIGH_THRESHOLD: Double
+    var BRIGHTNESS_LOW_THRESHOLD: Double
+    
+    
+    var MotionLimit : Int
+    var MotionLimitFace : Int
+    
+    var activeLiveType: ActiveLiveType
+    
 
     public  init(
         enableDetect: Bool = true,
         enableGuide:Bool = true,
         CustomColor: String,
-        HoldHandColor: String
+        HoldHandColor: String,
+        BRIGHTNESS_HIGH_THRESHOLD :Double  = 255.0,
+        BRIGHTNESS_LOW_THRESHOLD:Double = 50.0,
+        MotionLimit:Int = 30,
+        MotionLimitFace:Int = 5,
+        activeLiveType:ActiveLiveType = ActiveLiveType.NON
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
         self.CustomColor = CustomColor
         self.HoldHandColor = HoldHandColor
+        self.BRIGHTNESS_HIGH_THRESHOLD = BRIGHTNESS_HIGH_THRESHOLD
+        self.BRIGHTNESS_LOW_THRESHOLD = BRIGHTNESS_LOW_THRESHOLD
+        self.MotionLimit = MotionLimit
+        self.MotionLimitFace = MotionLimitFace
+        self.activeLiveType = activeLiveType
 
         // Perform validation checks
         precondition(!self.CustomColor.isEmpty, "Invalid CustomColor value")
@@ -33,9 +52,9 @@ public class EnvironmentalConditions {
     }
 
     func checkConditions(brightness: Double) -> BrightnessEvents {
-        if brightness < ConstantsValues.BRIGHTNESS_LOW_THRESHOLD {
+        if brightness < BRIGHTNESS_LOW_THRESHOLD {
             return BrightnessEvents.TooDark
-        } else if brightness > ConstantsValues.BRIGHTNESS_HIGH_THRESHOLD {
+        } else if brightness > BRIGHTNESS_HIGH_THRESHOLD {
             return BrightnessEvents.TooBright
         } else {
             return BrightnessEvents.Good
