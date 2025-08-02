@@ -147,7 +147,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         
         
         
-        if (self.performLivenessFace!) {
+        if (self.performLivenessFace! && self.environmentalConditions?.activeLiveType != ActiveLiveType.NON) {
             self.fillCompletionMap();
         } else {
             eventCompletionMap = [:]
@@ -296,17 +296,31 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         frameCounter += 1
         if frameCounter % processEveryNFrames == 0 {
             if let downscaledBuffer = downscalePixelBuffer(pixelBuffer, scaleFactor: 0.3) {
-                faceQualityCheck.checkQuality(pixelBuffer: downscaledBuffer) { faceEvent in
+                faceQualityCheck.checkQualityAction(pixelBuffer: downscaledBuffer) { faceEvent in
                     DispatchQueue.main.async {
                         self.faceEvent = faceEvent
-                        if (self.performLivenessFace! && !self.areAllEventsDone()) {
-                            if(self.canCheckLive){
-                                self.isSpecificItemFlagEqualTo(targetEvent: faceEvent);
+                        if (self.performLivenessFace! && !self.areAllEventsDone() && self.environmentalConditions?.activeLiveType != ActiveLiveType.NON) {
+                            if(self.canCheckLive && self.environmentalConditions?.activeLiveType == ActiveLiveType.ACTIONS){
+                                self.isSpecificItemFlagEqualToActions(targetEvent: faceEvent);
                             }
                             
                         }
                     }
                 }
+                
+                if(self.environmentalConditions?.activeLiveType == ActiveLiveType.WINK){
+                    faceQualityCheck.checkQualityWink(pixelBuffer: downscaledBuffer) { faceEvent in
+                        DispatchQueue.main.async {
+                            if (self.performLivenessFace! && !self.areAllEventsDone() && self.environmentalConditions?.activeLiveType != ActiveLiveType.NON) {
+                                if(self.canCheckLive){
+                                    self.isSpecificItemFlagEqualToWink(targetEvent: faceEvent);
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+               
             }
         }
         
@@ -351,7 +365,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         if (environmentalConditions!.checkConditions(
             brightness: cropPixelBuffer.brightness) == BrightnessEvents.Good
             && motion == MotionType.SENDING && zoom == ZoomType.SENDING  && isRectFInsideTheScreen && self.faceEvent == FaceEvents.GOOD) {
-            if (start && sendingFlags.count > MotionLimitFace && sendingFlagsZoom.count > FaceZoomLimit ) {
+            if (start && sendingFlags.count > environmentalConditions!.MotionLimitFace && sendingFlagsZoom.count > FaceZoomLimit ) {
                 if (hasFaceOrCard()) {
                     if(self.start){
                         if(self.showCountDown){
@@ -540,7 +554,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             self.start = false
             self.canCheckLive = true
             self.eventCompletionMap.removeAll();
-            for event in getRandomEvents() {
+            for event in getRandomEvents(activeLiveType: self.environmentalConditions!.activeLiveType) {
                 switch event {
                 case .PITCH_UP:
                     self.eventCompletionMap[.PITCH_UP] = false
@@ -550,6 +564,12 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     self.eventCompletionMap[.YAW_RIGHT] = false
                 case .YAW_LEFT:
                     self.eventCompletionMap[.YAW_LEFT] = false
+                case .WINK_LEFT:
+                    self.eventCompletionMap[.WINK_LEFT] = false
+                case .WINK_RIGHT:
+                    self.eventCompletionMap[.WINK_RIGHT] = false
+                case .WINK:
+                    self.eventCompletionMap[.WINK] = false
                 case .GOOD:
                     break
                 }
@@ -559,7 +579,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     }
     
     
-    func isSpecificItemFlagEqualTo(targetEvent: FaceEvents) {
+    func isSpecificItemFlagEqualToActions(targetEvent: FaceEvents) {
         if let firstUncompleted = eventCompletionMap.first(where: { !$0.value }) {
             let (key, _) = firstUncompleted
             if key == targetEvent {
@@ -569,7 +589,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 if targetEvent != .NO_DETECT &&
                     targetEvent != .GOOD &&
                     targetEvent != .ROLL_RIGHT &&
-                    targetEvent != .ROLL_LEFT {
+                    targetEvent != .ROLL_LEFT &&
+                    targetEvent != .WINK &&
+                    targetEvent != .WINK_LEFT &&
+                    targetEvent != .WINK_RIGHT
+                {
                     if(self.errorLiveView == nil){
                         resetActiveLive()
                     }
@@ -578,6 +602,40 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
         
     }
+    
+    func isSpecificItemFlagEqualToWink(targetEvent: FaceEvents) {
+        if let firstUncompleted = eventCompletionMap.first(where: { !$0.value }) {
+            var currentKey = firstUncompleted.key
+            if currentKey == .WINK {
+                let lastKey = Array(eventCompletionMap.keys).last
+                if lastKey == .WINK_RIGHT {
+                    currentKey = .WINK_LEFT
+                } else {
+                    currentKey = .WINK_RIGHT
+                }
+            }
+
+            if currentKey == targetEvent {
+                eventCompletionMap[firstUncompleted.key] = true
+                self.successActiveLive()
+            } else {
+                if targetEvent != .NO_DETECT &&
+                    targetEvent != .GOOD &&
+                    targetEvent != .ROLL_RIGHT &&
+                    targetEvent != .ROLL_LEFT &&
+                    targetEvent != .PITCH_UP &&
+                    targetEvent != .PITCH_DOWN &&
+                    targetEvent != .YAW_LEFT &&
+                    targetEvent != .YAW_RIGHT
+                {
+                    if self.errorLiveView == nil {
+                        resetActiveLive()
+                    }
+                }
+            }
+        }
+    }
+
     
     
     private func successActiveLive() {
@@ -648,22 +706,37 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 }
                 if let firstUncompleted = self.eventCompletionMap.first(where: { !$0.value }) {
                     let (key, _) = firstUncompleted
-                    switch key {
-                    case .PITCH_UP:
-                        self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents: .PITCH_UP)
-                    case .PITCH_DOWN:
-                        self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents:  .PITCH_DOWN)
-                    case .YAW_RIGHT:
-                        self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents:  .YAW_RIGHT)
-                    case .YAW_LEFT:
-                        self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents: .YAW_LEFT)
-                    default:
-                        break
+
+                    if key == .WINK {
+                        let lastKey = Array(self.eventCompletionMap.keys).last
+                        if lastKey == .WINK_RIGHT {
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_LEFT)
+                            self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: .WINK_LEFT)
+                        } else {
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_RIGHT)
+                            self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: .WINK_RIGHT)
+                        }
+                    } else {
+                        switch key {
+                        case .PITCH_UP:
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .PITCH_UP)
+                        case .PITCH_DOWN:
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .PITCH_DOWN)
+                        case .YAW_RIGHT:
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .YAW_RIGHT)
+                        case .YAW_LEFT:
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .YAW_LEFT)
+                        case .WINK_LEFT:
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_LEFT)
+                        case .WINK_RIGHT:
+                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_RIGHT)
+                        default:
+                            break
+                        }
+                        self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: key)
                     }
-                    self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view,event: key)
-                    
-                    
                 }
+
             }
             
         }

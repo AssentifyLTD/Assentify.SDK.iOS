@@ -22,6 +22,12 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.63**
+- Wink Liveness
+- Liveness Controller
+- Motion Controller
+- Brightness Controller
+
 **0.0.62**
 - Swift Versions Handling
 

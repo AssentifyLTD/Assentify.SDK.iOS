@@ -351,6 +351,10 @@ class Guide{
             gifImage = UIImage.gifImageWithName("right")
         } else if event == .YAW_LEFT {
             gifImage = UIImage.gifImageWithName("left")
+        } else if event == .WINK_LEFT {
+            gifImage = UIImage.gifImageWithName("wink_left")
+        } else if event == .WINK_RIGHT {
+            gifImage = UIImage.gifImageWithName("wink_right")
         } else if event == .GOOD {
             // do nothing
         }
@@ -368,9 +372,21 @@ class Guide{
                 imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
                 imageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+             
+             
+            ])
+        
+        if event == .WINK_RIGHT || event == .WINK_LEFT {
+            NSLayoutConstraint.activate([
+                imageView.widthAnchor.constraint(equalToConstant: 450),
+                imageView.heightAnchor.constraint(equalToConstant: 450)
+            ])
+        }else{
+            NSLayoutConstraint.activate([
                 imageView.widthAnchor.constraint(equalToConstant: 800),
                 imageView.heightAnchor.constraint(equalToConstant: 800)
             ])
+        }
 
             NSLayoutConstraint.activate([
                 containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
