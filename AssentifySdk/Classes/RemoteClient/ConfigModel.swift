@@ -46,6 +46,7 @@ public struct Customization: Codable {
     public  let processMrz: Bool?
     public let storeCapturedDocument: Bool?
     public let performLivenessDetection: Bool?
+    public let documentLiveness: Bool?
     public let storeImageStream: Bool?
     public let saveCapturedVideo: Bool?
     public let identificationDocuments: [IdentificationDocuments]?

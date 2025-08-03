@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.64**
+- Face Liveness Improvements
+
 **0.0.63**
 - Wink Liveness
 - Liveness Controller

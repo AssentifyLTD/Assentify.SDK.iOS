@@ -25,7 +25,7 @@ public class AssentifySdk {
     
 
     
-    public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?, processMrz: Bool? = nil, storeCapturedDocument: Bool? = nil, performLivenessDocument: Bool? = nil,performActiveLivenessFace: Bool? = nil, performPassiveLivenessFace: Bool? = nil,storeImageStream: Bool? = nil, saveCapturedVideoID: Bool? = nil, saveCapturedVideoFace: Bool? = nil) {
+    public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?, processMrz: Bool? = nil, storeCapturedDocument: Bool? = nil,performActiveLivenessFace: Bool? = nil,storeImageStream: Bool? = nil, saveCapturedVideoID: Bool? = nil, saveCapturedVideoFace: Bool? = nil) {
         self.apiKey = apiKey
         self.tenantIdentifier = tenantIdentifier
         self.interaction = interaction
@@ -33,9 +33,7 @@ public class AssentifySdk {
         self.assentifySdkDelegate = assentifySdkDelegate
         self.processMrz = processMrz
         self.storeCapturedDocument = storeCapturedDocument
-        self.performLivenessDocument = performLivenessDocument
         self.performActiveLivenessFace = performActiveLivenessFace
-        self.performPassiveLivenessFace = performPassiveLivenessFace
         self.storeImageStream = storeImageStream
         self.saveCapturedVideoID = saveCapturedVideoID
         self.saveCapturedVideoFace = saveCapturedVideoFace
@@ -81,7 +79,7 @@ public class AssentifySdk {
                 configModel.stepDefinitions.forEach { item in
                     if item.stepDefinition == "IdentificationDocumentCapture" {
                         if self.performLivenessDocument == nil {
-                            self.performLivenessDocument = item.customization.performLivenessDetection
+                            self.performLivenessDocument = item.customization.documentLiveness
                         }
                         if self.processMrz == nil {
                             self.processMrz = item.customization.processMrz

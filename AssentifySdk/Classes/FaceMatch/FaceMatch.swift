@@ -60,8 +60,16 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var successLiveView : UIView?
     private var activeLiveMove : UIView?
     private var  frameCounter = 0;
+    private var  frameCounterLivness = 0;
     private var  processEveryNFrames = 2;
     
+    var livenessCheckArray: [CVPixelBuffer] = [] {
+           didSet {
+               DispatchQueue.main.async {}
+           }
+       }
+    private var  localLivenessLimit = 0;
+
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
@@ -92,7 +100,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
         
-        
+        if(performPassiveLivenessFace){
+                   localLivenessLimit = 12;
+               }else{
+                   localLivenessLimit = 0;
+         }
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -330,6 +342,22 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlags.append(MotionType.SENDING);
             sendingFlagsZoom.append(ZoomType.SENDING);
+            if(self.performPassiveLivenessFace!){
+                   if(livenessCheckArray.count < self.localLivenessLimit){
+                       frameCounterLivness += 1
+                         if frameCounterLivness % processEveryNFrames == 0 {
+                             DispatchQueue.global(qos: .background).async { [weak self] in
+                                         guard let self = self else { return }
+                                         if let copiedBuffer = copyPixelBuffer(pixelBuffer) {
+                                             DispatchQueue.main.async {
+                                                 self.livenessCheckArray.append(copiedBuffer)
+                                             }
+                                         }
+                                     }
+                                 }
+                               
+                           }
+                       }
             if(environmentalConditions!.enableGuide && self.areAllEventsDone()){
                 DispatchQueue.main.async {
                     if(self.guide.faceSvgImageView == nil){
@@ -365,7 +393,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         if (environmentalConditions!.checkConditions(
             brightness: cropPixelBuffer.brightness) == BrightnessEvents.Good
             && motion == MotionType.SENDING && zoom == ZoomType.SENDING  && isRectFInsideTheScreen && self.faceEvent == FaceEvents.GOOD) {
-            if (start && sendingFlags.count > environmentalConditions!.MotionLimitFace && sendingFlagsZoom.count > FaceZoomLimit ) {
+            if (start && sendingFlags.count > environmentalConditions!.MotionLimitFace && sendingFlagsZoom.count > FaceZoomLimit && livenessCheckArray.count == self.localLivenessLimit) {
                 if (hasFaceOrCard()) {
                     if(self.start){
                         if(self.showCountDown){
@@ -376,6 +404,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                         self.isCountDownStarted = true;
                                         self.start = false;
                                         self.faceMatchDelegate?.onSend();
+                                        
+                                        let converter = ParallelImageProcessing()
+                                        converter.setPixelBuffers(self.livenessCheckArray)
+                                        converter.convertBuffers {
                                         self.remoteProcessing?.starProcessing(
                                             url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                             videoClip: "",
@@ -393,7 +425,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                             storeCapturedDocument: self.storeCapturedDocument!,
                                             isVideo: true,
                                             storeImageStream: self.storeImageStream!,
-                                            selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                                            selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
+                                            clips: converter.getClips()
                                         ) { result in
                                             switch result {
                                             case .success(let model):
@@ -407,7 +440,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                                     success: false
                                                 ))
                                             }
-                                        }
+                                        }}
                                         
                                         
                                     }
@@ -417,6 +450,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                         {
                             self.start = false;
                             self.faceMatchDelegate?.onSend();
+                            let converter = ParallelImageProcessing()
+                            converter.setPixelBuffers(self.livenessCheckArray)
+                            converter.convertBuffers {
                             self.remoteProcessing?.starProcessing(
                                 url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                 videoClip: "",
@@ -434,7 +470,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 storeCapturedDocument: self.storeCapturedDocument!,
                                 isVideo: true,
                                 storeImageStream: self.storeImageStream!,
-                                selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                                selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
+                                clips:converter.getClips()
                             ) { result in
                                 switch result {
                                 case .success(let model):
@@ -448,7 +485,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                         success: false
                                     ))
                                 }
-                            }
+                            }}
                             
                         }
                         
@@ -473,6 +510,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             self.motionRectF.removeAll()
             self.sendingFlags.removeAll()
             self.sendingFlagsZoom.removeAll()
+            self.livenessCheckArray.removeAll();
+
             if eventName == HubConnectionTargets.ON_COMPLETE {
                 var faceExtractedModel = FaceExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
                 var faceResponseModel = FaceResponseModel(
