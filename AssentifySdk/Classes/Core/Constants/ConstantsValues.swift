@@ -18,5 +18,6 @@ struct ConstantsValues {
     static let AudioFaceSuccess = "audio_face_success.mp3";
     static let AudioCardSuccess = "audio_card_success.mp3";
     static let AudioWrong = "audio_wrong.mp3";
+    static let ClarityProjectId = "spm0s4tjn6";
+    static let BugsnagApiKey = "c12519c59137bf34f18a4be3963f61ed";
 }
-

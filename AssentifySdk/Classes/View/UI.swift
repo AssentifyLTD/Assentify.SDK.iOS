@@ -355,7 +355,9 @@ class Guide{
             gifImage = UIImage.gifImageWithName("wink_left")
         } else if event == .WINK_RIGHT {
             gifImage = UIImage.gifImageWithName("wink_right")
-        } else if event == .GOOD {
+        } else if event == .BLINK {
+            gifImage = UIImage.gifImageWithName("blink")
+        }else if event == .GOOD {
             // do nothing
         }
         
@@ -376,7 +378,7 @@ class Guide{
              
             ])
         
-        if event == .WINK_RIGHT || event == .WINK_LEFT {
+        if event == .WINK_RIGHT || event == .WINK_LEFT || event == .BLINK{
             NSLayoutConstraint.activate([
                 imageView.widthAnchor.constraint(equalToConstant: 450),
                 imageView.heightAnchor.constraint(equalToConstant: 450)

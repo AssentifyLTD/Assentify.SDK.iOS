@@ -53,7 +53,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     private var faceQualityCheck = FaceQualityCheck()
     private var faceEvent = FaceEvents.NO_DETECT;
-    private var eventCompletionMap: [FaceEvents: Bool] = [:]
+    private var eventCompletionList: [FaceEventStatus] = []
     private var audioPlayer = AssetsAudioPlayer();
     
     private var errorLiveView : UIView?
@@ -106,6 +106,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                    localLivenessLimit = 0;
          }
         
+        ClarityLogging.initialize();
+        BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -159,10 +161,10 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         
         
         
-        if (self.performLivenessFace! && self.environmentalConditions?.activeLiveType != ActiveLiveType.NON) {
+        if (self.performLivenessFace! && self.environmentalConditions?.activeLiveType != ActiveLiveType.NONE && environmentalConditions?.activeLivenessCheckCount != 0) {
             self.fillCompletionMap();
         } else {
-            eventCompletionMap = [:]
+            eventCompletionList = []
         }
         
         
@@ -311,7 +313,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 faceQualityCheck.checkQualityAction(pixelBuffer: downscaledBuffer) { faceEvent in
                     DispatchQueue.main.async {
                         self.faceEvent = faceEvent
-                        if (self.performLivenessFace! && !self.areAllEventsDone() && self.environmentalConditions?.activeLiveType != ActiveLiveType.NON) {
+                        if (self.performLivenessFace! && !self.areAllEventsDone() && self.environmentalConditions?.activeLiveType != ActiveLiveType.NONE && self.environmentalConditions?.activeLivenessCheckCount != 0) {
                             if(self.canCheckLive && self.environmentalConditions?.activeLiveType == ActiveLiveType.ACTIONS){
                                 self.isSpecificItemFlagEqualToActions(targetEvent: faceEvent);
                             }
@@ -320,12 +322,12 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     }
                 }
                 
-                if(self.environmentalConditions?.activeLiveType == ActiveLiveType.WINK){
-                    faceQualityCheck.checkQualityWink(pixelBuffer: downscaledBuffer) { faceEvent in
+                if(self.environmentalConditions?.activeLiveType == ActiveLiveType.WINK || self.environmentalConditions?.activeLiveType == ActiveLiveType.BLINK  ){
+                    faceQualityCheck.checkQualityWinkAndBLINK(pixelBuffer: downscaledBuffer) { faceEvent in
                         DispatchQueue.main.async {
-                            if (self.performLivenessFace! && !self.areAllEventsDone() && self.environmentalConditions?.activeLiveType != ActiveLiveType.NON) {
+                            if (self.performLivenessFace! && !self.areAllEventsDone() && self.environmentalConditions?.activeLiveType != ActiveLiveType.NONE && self.environmentalConditions?.activeLivenessCheckCount != 0) {
                                 if(self.canCheckLive){
-                                    self.isSpecificItemFlagEqualToWink(targetEvent: faceEvent);
+                                    self.isSpecificItemFlagEqualToWinkAndBLINK(targetEvent: faceEvent);
                                 }
                                 
                             }
@@ -592,23 +594,23 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         DispatchQueue.main.async {
             self.start = false
             self.canCheckLive = true
-            self.eventCompletionMap.removeAll();
-            for event in getRandomEvents(activeLiveType: self.environmentalConditions!.activeLiveType) {
+            self.eventCompletionList.removeAll();
+            for event in getRandomEvents(activeLiveType: self.environmentalConditions!.activeLiveType,activeLivenessCheckCount: self.environmentalConditions!.activeLivenessCheckCount) {
                 switch event {
                 case .PITCH_UP:
-                    self.eventCompletionMap[.PITCH_UP] = false
+                    self.eventCompletionList.append(FaceEventStatus(event: .PITCH_UP,isCompleted: false))
                 case .PITCH_DOWN:
-                    self.eventCompletionMap[.PITCH_DOWN] = false
+                    self.eventCompletionList.append(FaceEventStatus(event: .PITCH_DOWN,isCompleted: false))
                 case .YAW_RIGHT:
-                    self.eventCompletionMap[.YAW_RIGHT] = false
+                    self.eventCompletionList.append(FaceEventStatus(event: .YAW_RIGHT,isCompleted: false))
                 case .YAW_LEFT:
-                    self.eventCompletionMap[.YAW_LEFT] = false
+                    self.eventCompletionList.append(FaceEventStatus(event: .YAW_LEFT,isCompleted: false))
                 case .WINK_LEFT:
-                    self.eventCompletionMap[.WINK_LEFT] = false
+                    self.eventCompletionList.append(FaceEventStatus(event: .WINK_LEFT,isCompleted: false))
                 case .WINK_RIGHT:
-                    self.eventCompletionMap[.WINK_RIGHT] = false
-                case .WINK:
-                    self.eventCompletionMap[.WINK] = false
+                    self.eventCompletionList.append(FaceEventStatus(event: .WINK_RIGHT,isCompleted: false))
+                case .BLINK:
+                    self.eventCompletionList.append(FaceEventStatus(event: .BLINK,isCompleted: false))
                 case .GOOD:
                     break
                 }
@@ -619,43 +621,33 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     func isSpecificItemFlagEqualToActions(targetEvent: FaceEvents) {
-        if let firstUncompleted = eventCompletionMap.first(where: { !$0.value }) {
-            let (key, _) = firstUncompleted
-            if key == targetEvent {
-                eventCompletionMap[key] = true
+        if let firstUncompleted = eventCompletionList.first(where: { !$0.isCompleted }) {
+            if firstUncompleted.event == targetEvent {
+                firstUncompleted.isCompleted = true
                 self.successActiveLive()
             } else {
                 if targetEvent != .NO_DETECT &&
                     targetEvent != .GOOD &&
+                    targetEvent != .BLINK &&
                     targetEvent != .ROLL_RIGHT &&
                     targetEvent != .ROLL_LEFT &&
-                    targetEvent != .WINK &&
                     targetEvent != .WINK_LEFT &&
                     targetEvent != .WINK_RIGHT
                 {
-                    if(self.errorLiveView == nil){
+                    if self.errorLiveView == nil {
                         resetActiveLive()
                     }
                 }
             }
         }
-        
     }
-    
-    func isSpecificItemFlagEqualToWink(targetEvent: FaceEvents) {
-        if let firstUncompleted = eventCompletionMap.first(where: { !$0.value }) {
-            var currentKey = firstUncompleted.key
-            if currentKey == .WINK {
-                let lastKey = Array(eventCompletionMap.keys).last
-                if lastKey == .WINK_RIGHT {
-                    currentKey = .WINK_LEFT
-                } else {
-                    currentKey = .WINK_RIGHT
-                }
-            }
 
+    
+    func isSpecificItemFlagEqualToWinkAndBLINK(targetEvent: FaceEvents) {
+        if let firstUncompleted = eventCompletionList.first(where: { !$0.isCompleted }) {
+            let currentKey = firstUncompleted.event
             if currentKey == targetEvent {
-                eventCompletionMap[firstUncompleted.key] = true
+                firstUncompleted.isCompleted = true
                 self.successActiveLive()
             } else {
                 if targetEvent != .NO_DETECT &&
@@ -674,6 +666,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             }
         }
     }
+
 
     
     
@@ -700,7 +693,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     }
                 }
             } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     self.canCheckLive = true;
                     self.nextMove();
                 }
@@ -721,7 +714,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 }
                 self.errorLiveView =  self.guide.showErrorLiveCheck(view: self.view)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                 DispatchQueue.main.async {
                     if(self.errorLiveView != nil){
                         self.errorLiveView?.removeFromSuperview();
@@ -736,59 +729,48 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     func nextMove() {
         DispatchQueue.main.async {
-            if(self.activeLiveMove == nil){
-                if(self.errorLiveView != nil){
-                    self.errorLiveView?.removeFromSuperview();
-                }
-                if(self.successLiveView != nil){
-                    self.successLiveView?.removeFromSuperview();
-                }
-                if let firstUncompleted = self.eventCompletionMap.first(where: { !$0.value }) {
-                    let (key, _) = firstUncompleted
+            if self.activeLiveMove == nil {
+                self.errorLiveView?.removeFromSuperview()
+                self.successLiveView?.removeFromSuperview()
 
-                    if key == .WINK {
-                        let lastKey = Array(self.eventCompletionMap.keys).last
-                        if lastKey == .WINK_RIGHT {
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_LEFT)
-                            self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: .WINK_LEFT)
-                        } else {
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_RIGHT)
-                            self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: .WINK_RIGHT)
-                        }
-                    } else {
-                        switch key {
-                        case .PITCH_UP:
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .PITCH_UP)
-                        case .PITCH_DOWN:
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .PITCH_DOWN)
-                        case .YAW_RIGHT:
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .YAW_RIGHT)
-                        case .YAW_LEFT:
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .YAW_LEFT)
-                        case .WINK_LEFT:
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_LEFT)
-                        case .WINK_RIGHT:
-                            self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_RIGHT)
-                        default:
-                            break
-                        }
-                        self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: key)
+                if let firstUncompleted = self.eventCompletionList.first(where: { !$0.isCompleted }) {
+                    let key = firstUncompleted.event
+
+                    switch key {
+                    case .PITCH_UP:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .PITCH_UP)
+                    case .PITCH_DOWN:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .PITCH_DOWN)
+                    case .YAW_RIGHT:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .YAW_RIGHT)
+                    case .YAW_LEFT:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .YAW_LEFT)
+                    case .WINK_LEFT:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_LEFT)
+                    case .WINK_RIGHT:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .WINK_RIGHT)
+                    case .BLINK:
+                        self.faceMatchDelegate?.onCurrentLiveMoveChange?(activeLiveEvents: .BLINK)
+                    default:
+                        break
                     }
-                }
 
+                    self.activeLiveMove = self.guide.setActiveLiveMove(view: self.view, event: key)
+                }
             }
-            
         }
     }
+
     
     func areAllEventsDone() -> Bool {
-        for isDone in eventCompletionMap.values {
-            if !isDone {
+        for status in eventCompletionList {
+            if !status.isCompleted {
                 return false
             }
         }
         return true
     }
+
     
     func clearLiveUi(){
         DispatchQueue.main.async {

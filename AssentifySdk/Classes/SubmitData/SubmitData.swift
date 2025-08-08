@@ -18,22 +18,42 @@ public class SubmitData{
         self.submitDataDelegate = submitDataDelegate;
         self.submitRequestModel = submitRequestModel;
         self.configModel = configModel;
-       submitData();
+        submitData();
     }
     
-    private func  submitData(){
+    private func submitData() {
+        BugsnagObject.logInfo(message: "Data submission started. \(submitRequestModelLog(submitRequestModel: submitRequestModel))", configModel:configModel)
+        
         remoteSubmitData(
             apiKey: apiKey,
-            configModel: self.configModel, submitRequestModel:submitRequestModel
-            ){ result in
+            configModel: self.configModel,
+            submitRequestModel: submitRequestModel
+        ) { result in
             switch result {
             case .success(_):
-                self.submitDataDelegate.onSubmitSuccess();
-             case .failure(let error):
-                self.submitDataDelegate.onSubmitError(message: error.localizedDescription);
+                BugsnagObject.logInfo(message: "Data submission success", configModel:self.configModel)
+                self.submitDataDelegate.onSubmitSuccess()
+                
+            case .failure(let error):
+                BugsnagObject.logInfo(message: "Data submission failed: \(error.localizedDescription)", configModel:self.configModel)
+                self.submitDataDelegate.onSubmitError(message: error.localizedDescription)
             }
         }
     }
+    
+    private func submitRequestModelLog(submitRequestModel: [SubmitRequestModel]) -> [String: Any] {
+        var stepsMap = [String: Any]()
+        
+        for model in submitRequestModel {
+            let key = "\(model.stepDefinition) : \(model.stepId)"
+            let value = "Extracted Information Size : \(model.extractedInformation.count)"
+            stepsMap[key] = value
+        }
+        
+        return stepsMap
+    }
+
+
      
     
 }
