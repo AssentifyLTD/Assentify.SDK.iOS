@@ -37,7 +37,7 @@ public class EnvironmentalConditions {
         MotionLimit:Int = 30,
         MotionLimitFace:Int = 5,
         activeLiveType:ActiveLiveType = ActiveLiveType.NONE,
-        activeLivenessCheckCount:Int = 0,
+        activeLivenessCheckCount:Int = 0
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
