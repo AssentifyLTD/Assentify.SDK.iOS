@@ -69,7 +69,6 @@ class RemoteProcessing {
             request.timeoutInterval = 120
            
         
-        
             request.setValue(stepIdString, forHTTPHeaderField: "x-step-id")
             request.setValue(appConfiguration.blockIdentifier, forHTTPHeaderField: "x-block-identifier")
             request.setValue(appConfiguration.flowIdentifier, forHTTPHeaderField: "x-flow-identifier")

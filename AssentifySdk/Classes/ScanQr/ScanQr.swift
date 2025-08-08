@@ -71,7 +71,8 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
         self.kycDocumentDetails = kycDocumentDetails;
         self.language = language;
         
-               
+        ClarityLogging.initialize();
+        BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
     

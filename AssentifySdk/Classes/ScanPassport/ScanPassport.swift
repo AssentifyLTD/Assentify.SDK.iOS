@@ -77,7 +77,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
     
-
+        ClarityLogging.initialize();
+        BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
     

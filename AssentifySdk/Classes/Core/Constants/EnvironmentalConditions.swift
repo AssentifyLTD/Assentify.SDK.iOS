@@ -24,6 +24,8 @@ public class EnvironmentalConditions {
     
     var activeLiveType: ActiveLiveType
     
+    var activeLivenessCheckCount:Int
+    
 
     public  init(
         enableDetect: Bool = true,
@@ -34,7 +36,8 @@ public class EnvironmentalConditions {
         BRIGHTNESS_LOW_THRESHOLD:Double = 50.0,
         MotionLimit:Int = 30,
         MotionLimitFace:Int = 5,
-        activeLiveType:ActiveLiveType = ActiveLiveType.NON
+        activeLiveType:ActiveLiveType = ActiveLiveType.NONE,
+        activeLivenessCheckCount:Int = 0,
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
@@ -45,6 +48,7 @@ public class EnvironmentalConditions {
         self.MotionLimit = MotionLimit
         self.MotionLimitFace = MotionLimitFace
         self.activeLiveType = activeLiveType
+        self.activeLivenessCheckCount = activeLivenessCheckCount
 
         // Perform validation checks
         precondition(!self.CustomColor.isEmpty, "Invalid CustomColor value")

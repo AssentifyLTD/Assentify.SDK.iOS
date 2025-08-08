@@ -86,6 +86,8 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
        
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
         
+        ClarityLogging.initialize();
+        BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
     

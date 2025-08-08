@@ -86,7 +86,7 @@ class FaceQualityCheck {
         }
     }
     
-    func checkQualityWink(pixelBuffer: CVPixelBuffer, completion: @escaping (FaceEvents) -> Void) {
+    func checkQualityWinkAndBLINK(pixelBuffer: CVPixelBuffer, completion: @escaping (FaceEvents) -> Void) {
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         let flippedCIImage = ciImage.transformed(by: CGAffineTransform(scaleX: -1, y: 1))
 
@@ -113,7 +113,10 @@ class FaceQualityCheck {
                 let closedThreshold: CGFloat = 0.2
                 let openThreshold: CGFloat = 0.8
 
-                if leftEyeOpen < closedThreshold && rightEyeOpen > openThreshold {
+                if leftEyeOpen < closedThreshold && rightEyeOpen < closedThreshold {
+                    completion(.BLINK)
+                    return
+                } else if leftEyeOpen < closedThreshold && rightEyeOpen > openThreshold {
                     completion(.WINK_LEFT)
                     return
                 } else if rightEyeOpen < closedThreshold && leftEyeOpen > openThreshold {
@@ -125,6 +128,7 @@ class FaceQualityCheck {
             completion(.NO_DETECT)
         }
     }
+
 
     
 }
