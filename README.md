@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.67**
+- Logs Improvements
+
 **0.0.66**
 - Blink Improvements
 
