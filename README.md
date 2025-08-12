@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.68**
+- Supports iOS 18.6
+
 **0.0.67**
 - Logs Improvements
 

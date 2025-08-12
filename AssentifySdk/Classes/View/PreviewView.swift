@@ -26,6 +26,10 @@ class PreviewView: UIView {
     return AVCaptureVideoPreviewLayer.self
   }
     
+  override func layoutSubviews() {
+            super.layoutSubviews()
+            previewLayer.frame = bounds
+  }
     
   func stopSession() {
      guard let session = previewLayer.session else { return }

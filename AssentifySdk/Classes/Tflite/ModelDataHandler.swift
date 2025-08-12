@@ -103,11 +103,8 @@ class ModelDataHandler: NSObject {
         
         let scaledSize = CGSize(width: inputWidth, height: inputHeight)
         var scaledPixelBuffer:CVPixelBuffer?;
-            if(self.isFront){
-                scaledPixelBuffer = pixelBuffer.resizedAndHorizontallyFlipped(to: scaledSize);
-            }else{
-                scaledPixelBuffer = pixelBuffer.resized(to: scaledSize);
-            }
+         scaledPixelBuffer = pixelBuffer.resized(to: scaledSize);
+        
       
         
         let interval: TimeInterval
