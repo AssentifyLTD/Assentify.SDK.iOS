@@ -14,7 +14,7 @@ import Foundation
 
     func onRetry(dataModel: RemoteProcessingModel )
 
-    func onComplete(dataModel: OtherResponseModel )
+    func onComplete(dataModel: OtherResponseModel,doneFlag:DoneFlags )
     
     @objc optional  func onClipPreparationComplete(dataModel: RemoteProcessingModel )
 

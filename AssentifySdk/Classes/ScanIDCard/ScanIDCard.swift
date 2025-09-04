@@ -56,6 +56,10 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     
     private var audioPlayer = AssetsAudioPlayer();
     
+    private var  retryCount = 0;
+    private var  isManual = false;
+    private var  currentImage : CVPixelBuffer?;
+    
     private var  start = true;
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
@@ -68,7 +72,8 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
          storeImageStream:Bool,
          scanIDCardDelegate:ScanIDCardDelegate,
            kycDocumentDetails:[KycDocumentDetails],
-         language: String
+         language: String,
+         isManual:Bool
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
@@ -82,11 +87,11 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
         self.scanIDCardDelegate = scanIDCardDelegate;
         self.kycDocumentDetails = kycDocumentDetails;
         self.language = language;
+        self.isManual = isManual;
         
        
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
         
-        ClarityLogging.initialize();
         BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
@@ -159,8 +164,20 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
      
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
-        runModel(onPixelBuffer: pixelBuffer)
-        openCvCheck(pixelBuffer: pixelBuffer)
+        if(self.isManual){
+            self.currentImage = pixelBuffer
+            DispatchQueue.main.async {
+                if(self.environmentalConditions!.enableGuide){
+                    if(self.guide.cardSvgImageView == nil){
+                        self.guide.showCardGuide(view: self.view)
+                    }
+                    self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+                }
+            }
+        }else{
+            runModel(onPixelBuffer: pixelBuffer)
+            openCvCheck(pixelBuffer: pixelBuffer)
+        }
     }
     
     @objc func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
@@ -239,7 +256,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             let rect1 = motionRectF[motionRectF.count - 2]
             let rect2 = motionRectF[motionRectF.count - 1]
             motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
-            zoom = calculatePercentageChangeWidth(rect: rect1)
+            zoom = calculatePercentageChangeWidth(rect: rect1,pixelBuffer: pixelBuffer)
         }
         
       
@@ -330,8 +347,9 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     }
     
     
-    private func changeTemplateId( templateId:String) {
+    public func changeTemplateId( templateId:String) {
         DispatchQueue.main.async {
+            self.retryCount = 0;
             self.motionRectF.removeAll()
             self.sendingFlagsMotion.removeAll()
             self.sendingFlagsZoom.removeAll()
@@ -356,17 +374,10 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                 )
                 
                 if(self.language == Language.NON){
-                    self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
+                    self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order,doneFlag: DoneFlags.Success )
                     self.order =   self.order + 1;
+                    self.start = false
                     
-                    if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                            self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
-                        }
-                        
-                    }else{
-                        self.start = false
-                    }
                 }else{
                     let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
                        transformed.languageTransformation(
@@ -375,23 +386,72 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                        )
                 }
                 
-            } else {
-                self.start = eventName == HubConnectionTargets.ON_WRONG_TEMPLATE || eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY ||  eventName == HubConnectionTargets.ON_LIVENESS_UPDATE
-          
+            }  else if eventName == HubConnectionTargets.ON_RETRY{
+                self.retryCount = self.retryCount + 1;
+                if(self.retryCount == self.environmentalConditions?.retryCount){
+                    var iDExtractedModel = IDExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                    self.iDResponseModel = IDResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        iDExtractedModel: iDExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                    )
+                    self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel! ,order:self.order,doneFlag: DoneFlags.ExtractFailed)
+                    self.order =   self.order + 1;
+                    self.start = false
+                }else{
+                    self.scanIDCardDelegate?.onRetry(dataModel:remoteProcessingModel )
+                    self.start = true
+                }
+            }
+            else if eventName == HubConnectionTargets.ON_LIVENESS_UPDATE {
+                self.retryCount = self.retryCount + 1;
+                if(self.retryCount == self.environmentalConditions?.retryCount){
+                    var iDExtractedModel = IDExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                    self.iDResponseModel = IDResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        iDExtractedModel: iDExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                    )
+                    self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel! ,order:self.order,doneFlag: DoneFlags.LivenessFailed)
+                    self.order =   self.order + 1;
+                    self.start = false
+                }else{
+                    self.scanIDCardDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                    self.start = true
+                }
+            } else if eventName == HubConnectionTargets.ON_WRONG_TEMPLATE{
+                self.retryCount = self.retryCount + 1;
+                if(self.retryCount == self.environmentalConditions?.retryCount){
+                    var iDExtractedModel = IDExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                    self.iDResponseModel = IDResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        iDExtractedModel: iDExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                    )
+                    self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel! ,order:self.order,doneFlag: DoneFlags.WrongTemplate)
+                    self.order =   self.order + 1;
+                    self.start = false
+                }else{
+                    self.scanIDCardDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                    self.start = true
+                }
             
+            }
+            else {
+                self.start =  eventName == HubConnectionTargets.ON_ERROR
+          
             switch eventName {
             case HubConnectionTargets.ON_ERROR:
                 self.scanIDCardDelegate?.onError(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_RETRY:
-                self.scanIDCardDelegate?.onRetry(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
                 self.scanIDCardDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_STATUS_UPDATE:
                 self.scanIDCardDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_UPDATE:
                 self.scanIDCardDelegate?.onUpdated?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                self.scanIDCardDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_CARD_DETECTED:
                 self.scanIDCardDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_MRZ_EXTRACTED:
@@ -414,8 +474,6 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                 self.scanIDCardDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_UPLOAD_FAILED:
                 self.scanIDCardDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_WRONG_TEMPLATE:
-                self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
             default:
                 self.start = true
                 self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
@@ -514,17 +572,10 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                 
             }
             
-            self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
+            self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order,doneFlag: DoneFlags.Success )
             self.order =   self.order + 1;
+             self.start = false
             
-            if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
-                }
-                
-            }else{
-                self.start = false
-            }
         }
         
         
@@ -532,17 +583,10 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     }
     
     public func onTranslatedError(properties: [String : String]?) {
-        self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order )
+        self.scanIDCardDelegate?.onComplete(dataModel:self.iDResponseModel!,order:self.order,doneFlag: DoneFlags.Success )
         self.order =   self.order + 1;
+        self.start = false
         
-        if(!self.kycDocumentDetails.isEmpty && self.order < self.kycDocumentDetails.count){
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                self.changeTemplateId(templateId: self.kycDocumentDetails[  self.order].templateProcessingKeyInformation);
-            }
-            
-        }else{
-            self.start = false
-        }
     }
     
     public func stopScanning(){
@@ -551,5 +595,56 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
         self.cameraFeedManager.stopSession();
     }
     
+    public func takePicture(){
+        if(start){
+            result = self.modelDataHandler?.runModel(onFrame: self.currentImage!)
+            if(hasFaceOrCard()){
+                start = false;
+                self.scanIDCardDelegate?.onSend();
+                var bsee64Image = convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!
+                remoteProcessing?.starProcessing(
+                    url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.ID_CARD),
+                    videoClip: bsee64Image,
+                    stepIdString: String(self.stepId!),
+                    appConfiguration:self.configModel!,
+                    templateId: templateId!,
+                    secondImage: "",
+                    connectionId: "ConnectionId",
+                    clipsPath: "ClipsPath",
+                    checkForFace: hasFace(),
+                    processMrz: processMrz!,
+                    performLivenessDocument:performLivenessDocument!,
+                    performLivenessFace: performLivenessFace!,
+                    saveCapturedVideo: saveCapturedVideoID!,
+                    storeCapturedDocument: storeCapturedDocument!,
+                    isVideo: false,
+                    storeImageStream: storeImageStream!,
+                    selfieImage:""
+                ) { result in
+                    switch result {
+                    case .success(let model):
+                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                    case .failure(let error):
+                        self.start = true;
+                        self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                            destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                            response: "",
+                            error: "",
+                            success: false
+                         ))
+                    }
+                }
+            }else{
+                self.scanIDCardDelegate?.onRetry(dataModel:RemoteProcessingModel(
+                    destinationEndpoint: HubConnectionTargets.ON_RETRY,
+                    response: "",
+                    error: "",
+                    success: false
+                ) )
+            }
+            
+        }
+       
+    }
     
 }

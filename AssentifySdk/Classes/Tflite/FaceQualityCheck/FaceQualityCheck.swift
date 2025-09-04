@@ -116,10 +116,10 @@ class FaceQualityCheck {
                     completion(.BLINK)
                     return
                 } else if leftEyeOpen < closedThreshold && rightEyeOpen > openThreshold {
-                    completion(.WINK_LEFT)
+                    completion(.WINK_RIGHT)
                     return
                 } else if rightEyeOpen < closedThreshold && leftEyeOpen > openThreshold {
-                    completion(.WINK_RIGHT)
+                    completion(.WINK_LEFT)
                     return
                 }
             }

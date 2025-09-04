@@ -133,7 +133,8 @@ public class AssentifySdk {
                 storeCapturedDocument:self.storeCapturedDocument!,
                 storeImageStream:self.storeImageStream!,
                 scanPassportDelegate :scanPassportDelegate,
-                language:language
+                language:language,
+                isManual: self.isManual()
                 
             )
             scanPassport.setStepId(stepId)
@@ -175,7 +176,8 @@ public class AssentifySdk {
                 storeCapturedDocument:self.storeCapturedDocument!,
                 storeImageStream:self.storeImageStream!,
                 scanOtherDelegate :scanOtherDelegate,
-                language:language
+                language:language,
+                isManual: self.isManual()
 
                 
             )
@@ -203,7 +205,8 @@ public class AssentifySdk {
                 storeImageStream:self.storeImageStream!,
                 scanIDCardDelegate :scanIDCardDelegate,
                 kycDocumentDetails:kycDocumentDetails,
-                language:language
+                language:language,
+                isManual: self.isManual()
                 
             )
             scanID!.setStepId(stepId)
@@ -259,7 +262,8 @@ public class AssentifySdk {
                 storeImageStream:self.storeImageStream!,
                 faceMatchDelegate :faceMatchDelegate,
                 secondImage :secondImage,
-                showCountDown: showCountDown
+                showCountDown: showCountDown,
+                isManual: self.isManual()
             );
             faceMatch.setStepId(stepId)
             return faceMatch;
@@ -430,6 +434,21 @@ public class AssentifySdk {
     
     public func getTemplates() -> [TemplatesByCountry] {
         return self.templates!
+    }
+    
+    public func isManual() -> Bool {
+           let totalRamGB = getTotalRAMInGB()
+           let cores = ProcessInfo.processInfo.processorCount
+           
+           print("Total RAM: \(totalRamGB) GB")
+           print("CPU Cores: \(cores)")
+           
+        return (totalRamGB < self.environmentalConditions!.minRam) || (cores < self.environmentalConditions!.minCPUCores)
+       }
+       
+    private  func getTotalRAMInGB() -> UInt64 {
+           let physicalMemory = ProcessInfo.processInfo.physicalMemory
+           return physicalMemory / (1024 * 1024 * 1024)
     }
 
 }
