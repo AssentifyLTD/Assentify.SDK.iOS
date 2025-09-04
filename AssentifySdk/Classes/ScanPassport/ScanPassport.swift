@@ -50,7 +50,10 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     private var  start = true;
     
     private var audioPlayer = AssetsAudioPlayer();
-    
+    private var  retryCount = 0;
+    private var  isManual = false;
+    private var  currentImage : CVPixelBuffer?;
+
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
@@ -61,7 +64,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
          storeCapturedDocument:Bool,
          storeImageStream:Bool,
          scanPassportDelegate:ScanPassportDelegate,
-         language: String
+         language: String,
+         isManual: Bool
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
@@ -74,10 +78,10 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         self.storeImageStream = storeImageStream;
         self.scanPassportDelegate = scanPassportDelegate;
         self.language = language
+        self.isManual = isManual
         
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
     
-        ClarityLogging.initialize();
         BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
@@ -148,8 +152,21 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
      
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
-        runModel(onPixelBuffer: pixelBuffer)
-        openCvCheck(pixelBuffer: pixelBuffer)
+        if(self.isManual){
+            self.currentImage = pixelBuffer
+            DispatchQueue.main.async {
+                if(self.environmentalConditions!.enableGuide){
+                    if(self.guide.cardSvgImageView == nil){
+                        self.guide.showCardGuide(view: self.view)
+                    }
+                    self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+                }
+            }
+        }else{
+            runModel(onPixelBuffer: pixelBuffer)
+            openCvCheck(pixelBuffer: pixelBuffer)
+        }
+    
 
     }
     
@@ -230,7 +247,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                         let rect1 = motionRectF[motionRectF.count - 2]
                         let rect2 = motionRectF[motionRectF.count - 1]
                         motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
-                        zoom = calculatePercentageChangeWidth(rect: rect2)
+                        zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
              
       }
         
@@ -336,30 +353,77 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                     success: remoteProcessingModel.success
                  )
                  if(self.language == Language.NON){
-                     self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+                     self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel!,doneFlag: DoneFlags.Success )
                  }else{
                      let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
-                        transformed.languageTransformation(
-                            langauge: self.language,
-                            transformationModel: preparePropertiesToTranslate(language: self.language, properties: passportExtractedModel?.outputProperties)
-                        )
+                     transformed.languageTransformation(
+                        langauge: self.language,
+                        transformationModel: preparePropertiesToTranslate(language: self.language, properties: passportExtractedModel?.outputProperties)
+                     )
                  }
                  
-             } else {
-                 self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY ||  eventName == HubConnectionTargets.ON_LIVENESS_UPDATE
+             } else if eventName == HubConnectionTargets.ON_RETRY{
+                 self.retryCount = self.retryCount + 1;
+                 if(self.retryCount == self.environmentalConditions?.retryCount){
+                     var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                     self.passportResponseModel = PassportResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        passportExtractedModel: passportExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                     )
+                     self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.ExtractFailed)
+                     self.start = false
+                 }else{
+                     self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
+                     self.start = true
+                 }
+             }
+             else if eventName == HubConnectionTargets.ON_LIVENESS_UPDATE {
+                 self.retryCount = self.retryCount + 1;
+                 if(self.retryCount == self.environmentalConditions?.retryCount){
+                     var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                     self.passportResponseModel = PassportResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        passportExtractedModel: passportExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                     )
+                     self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.LivenessFailed)
+                     self.start = false
+                 }else{
+                     self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                     self.start = true
+                 }
+             }
+             else if eventName == HubConnectionTargets.ON_WRONG_TEMPLATE{
+                 self.retryCount = self.retryCount + 1;
+                 if(self.retryCount == self.environmentalConditions?.retryCount){
+                     var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
+                     self.passportResponseModel = PassportResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        passportExtractedModel: passportExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                     )
+                     self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.WrongTemplate)
+                     self.start = false
+                 }else{
+                     self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                     self.start = true
+                 }
+             
+             } else{
+                 self.start = eventName == HubConnectionTargets.ON_ERROR
                  switch eventName {
                  case HubConnectionTargets.ON_ERROR:
                      self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
-                 case HubConnectionTargets.ON_RETRY:
-                     self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
                  case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
                      self.scanPassportDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
                  case HubConnectionTargets.ON_STATUS_UPDATE:
                      self.scanPassportDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
                  case HubConnectionTargets.ON_UPDATE:
                      self.scanPassportDelegate?.onUpdated?(dataModel:remoteProcessingModel )
-                 case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                     self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                  case HubConnectionTargets.ON_CARD_DETECTED:
                      self.scanPassportDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
                  case HubConnectionTargets.ON_MRZ_EXTRACTED:
@@ -483,13 +547,13 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                     self.passportResponseModel!.passportExtractedModel!.extractedData![newKey] =  "\(value)"
                
             }
-            self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+            self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.Success )
         }
 
     }
     
     public func onTranslatedError(properties: [String : String]?) {
-        self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+        self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.Success )
     }
     
     public func stopScanning(){
@@ -498,5 +562,56 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         self.cameraFeedManager.stopSession();
     }
     
+    public func takePicture(){
+        if(start){
+            result = self.modelDataHandler?.runModel(onFrame: self.currentImage!)
+            if(hasFaceOrCard()){
+                start = false;
+                self.scanPassportDelegate?.onSend();
+                var bsee64Image = convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!
+                remoteProcessing?.starProcessing(
+                    url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.READ_PASSPORT),
+                     videoClip: bsee64Image,
+                     stepIdString: String(self.stepId!),
+                     appConfiguration:self.configModel!,
+                     templateId: "",
+                     secondImage: "",
+                     connectionId: "ConnectionId",
+                     clipsPath: "ClipsPath",
+                     checkForFace: true,
+                     processMrz: processMrz!,
+                     performLivenessDocument: performLivenessDocument!,
+                     performLivenessFace: performLivenessFace!,
+                     saveCapturedVideo: saveCapturedVideoID!,
+                     storeCapturedDocument: storeCapturedDocument!,
+                     isVideo: false,
+                     storeImageStream: storeImageStream!,
+                     selfieImage:""
+                     ) { result in
+                    switch result {
+                    case .success(let model):
+                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                    case .failure(let error):
+                        self.start = true;
+                        self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                            destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                            response: "",
+                            error: "",
+                            success: false
+                         ))
+                    }
+                }
+            }else{
+                self.scanPassportDelegate?.onRetry(dataModel:RemoteProcessingModel(
+                    destinationEndpoint: HubConnectionTargets.ON_RETRY,
+                    response: "",
+                    error: "",
+                    success: false
+                ) )
+            }
+            
+        }
+       
+    }
    
 }

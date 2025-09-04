@@ -1,6 +1,9 @@
 import UIKit
 import CoreImage
 import MobileCoreServices
+import CoreVideo
+import Accelerate
+
 func convertPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
     let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
     let context = CIContext()
@@ -22,29 +25,74 @@ func convertPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
     return base64String
 }
 
-func convertClipsPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
-    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-    let context = CIContext()
-    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
-        return nil
-    }
-    let uiImage = UIImage(cgImage: cgImage)
-    
-    guard let pngData = uiImage.pngData() else {
-        return nil
-    }
-    
-    
-    guard let imageData = uiImage.jpeg2000DataLosslessClips() else {
-        return nil
-    }
-    
-    
-    let base64String = imageData.base64EncodedString()
-    
 
-    return base64String
+
+
+
+private let sharedCIContext: CIContext = {
+    return CIContext(options: nil)
+}()
+
+
+func convertClipsPixelBufferToBase64(
+    _ pixelBuffer: CVPixelBuffer,
+    targetSize: CGSize,
+    targetAspect: CGSize,
+    jpegQuality: CGFloat = 0.8
+) -> String? {
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+
+    let cropped = crop(ciImage: ciImage, toAspect: targetAspect)
+
+    let resized = lanczosResize(ciImage: cropped, to: targetSize)
+
+    guard let cg = sharedCIContext.createCGImage(resized, from: resized.extent) else { return nil }
+
+    let ui = UIImage(cgImage: cg)
+    guard let data = ui.jpegData(compressionQuality: jpegQuality) else { return nil }
+    return data.base64EncodedString()
 }
+
+private func crop(ciImage: CIImage, toAspect aspect: CGSize) -> CIImage {
+    let src = ciImage.extent
+    let srcW = src.width
+    let srcH = src.height
+    let srcAR = srcW / srcH
+    let tgtAR = aspect.width / aspect.height
+
+    var cropW = srcW
+    var cropH = srcH
+
+    if srcAR > tgtAR {
+        cropW = srcH * tgtAR
+        cropH = srcH
+    } else {
+        cropW = srcW
+        cropH = srcW / tgtAR
+    }
+
+    let cropX = src.origin.x + (srcW - cropW) / 2.0
+    let cropY = src.origin.y + (srcH - cropH) / 2.0
+    let cropRect = CGRect(x: cropX, y: cropY, width: cropW, height: cropH)
+
+    return ciImage.cropped(to: cropRect)
+}
+
+private func lanczosResize(ciImage: CIImage, to targetSize: CGSize) -> CIImage {
+    let src = ciImage.extent
+    let scaleX = targetSize.width / src.width
+    let scaleY = targetSize.height / src.height
+    let scale = min(scaleX, scaleY)
+
+    let filter = CIFilter(name: "CILanczosScaleTransform")!
+    filter.setValue(ciImage, forKey: kCIInputImageKey)
+    filter.setValue(scale, forKey: kCIInputScaleKey)
+    filter.setValue(1.0, forKey: kCIInputAspectRatioKey) // already cropped to aspect
+    return filter.outputImage!
+}
+
+
+
 
 func saveBase64ImageToGallery(base64String: String) {
     guard let imageData = Data(base64Encoded: base64String) else {

@@ -128,6 +128,10 @@ public final class CameraFeedManager: NSObject {
     }
 
     private func setBestPreset(for session: AVCaptureSession) {
+//        if session.canSetSessionPreset(.vga640x480) {
+//               // ✅ This is 4:3
+//               session.sessionPreset = .vga640x480
+//        } else
         if session.canSetSessionPreset(.hd1920x1080) {
             session.sessionPreset = .hd1920x1080
         } else if session.canSetSessionPreset(.high) {

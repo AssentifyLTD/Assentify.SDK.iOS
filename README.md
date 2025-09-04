@@ -22,6 +22,11 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.70**
+- Manual Capture
+- Retry Logic
+- Support Low Capabilities Devices
+
 **0.0.69**
 - Bug fixes 
 

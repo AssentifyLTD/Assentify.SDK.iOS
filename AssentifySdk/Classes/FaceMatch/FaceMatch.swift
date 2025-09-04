@@ -49,6 +49,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var isCountDownStarted:Bool = true;
     private var  start = true;
     private var  canCheckLive = true;
+    private var  isManual = false;
     
     
     private var faceQualityCheck = FaceQualityCheck()
@@ -62,6 +63,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var  frameCounter = 0;
     private var  frameCounterLivness = 0;
     private var  processEveryNFrames = 2;
+    private var  currentImage : CVPixelBuffer?;
+    private var  livnessRetryCount = 0;
+    private var  retryCount = 0;
     
     var livenessCheckArray: [CVPixelBuffer] = [] {
            didSet {
@@ -82,7 +86,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
          storeImageStream:Bool,
          faceMatchDelegate:FaceMatchDelegate,
          secondImage:String,
-         showCountDown:Bool
+         showCountDown:Bool,
+         isManual:Bool
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
@@ -97,6 +102,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.faceMatchDelegate = faceMatchDelegate;
         self.secondImage = secondImage;
         self.showCountDown = showCountDown;
+        self.isManual = isManual;
         
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
         
@@ -106,7 +112,6 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                    localLivenessLimit = 0;
          }
         
-        ClarityLogging.initialize();
         BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
@@ -160,20 +165,29 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.remoteProcessing = RemoteProcessing()
         
         
-        
-        if (self.performLivenessFace! && self.environmentalConditions?.activeLiveType != ActiveLiveType.NONE && environmentalConditions?.activeLivenessCheckCount != 0) {
-            self.fillCompletionMap();
-        } else {
-            eventCompletionList = []
-        }
-        
-        
-        if(environmentalConditions!.enableGuide && !self.performLivenessFace!){
-            if(self.guide.faceSvgImageView == nil){
-                self.guide.showFaceGuide(view: self.view)
+        if(self.isManual){
+            if(environmentalConditions!.enableGuide){
+                if(self.guide.faceSvgImageView == nil){
+                    self.guide.showFaceGuide(view: self.view)
+                }
+                self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
             }
-            self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+        }else{
+            if (self.performLivenessFace! && self.environmentalConditions?.activeLiveType != ActiveLiveType.NONE && environmentalConditions?.activeLivenessCheckCount != 0) {
+                self.fillCompletionMap();
+            } else {
+                eventCompletionList = []
+            }
+            
+            
+            if(environmentalConditions!.enableGuide && !self.performLivenessFace!){
+                if(self.guide.faceSvgImageView == nil){
+                    self.guide.showFaceGuide(view: self.view)
+                }
+                self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+            }
         }
+       
         
         UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         UINavigationController.attemptRotationToDeviceOrientation()
@@ -191,38 +205,52 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
-        if (self.areAllEventsDone()) {
-            self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents: ActiveLiveEvents.GOOD);
-        }
-        
-        if(self.areAllEventsDone()){
-            DispatchQueue.main.async {
-                self.clearLiveUi();
-                if(self.errorLiveView != nil){
-                    self.errorLiveView?.removeFromSuperview();
-                }
-                if(self.successLiveView != nil){
-                    self.successLiveView?.removeFromSuperview();
+       
+        if(self.isManual){
+            self.currentImage = pixelBuffer
+            if(environmentalConditions!.enableGuide){
+                DispatchQueue.main.async {
+                    if(self.guide.faceSvgImageView == nil){
+                        self.guide.showFaceGuide(view: self.view)
+                    }
+                    self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
             }
+        }else{
+            if (self.areAllEventsDone()) {
+                self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents: ActiveLiveEvents.GOOD);
+            }
+            
+            if(self.areAllEventsDone()){
+                DispatchQueue.main.async {
+                    self.clearLiveUi();
+                    if(self.errorLiveView != nil){
+                        self.errorLiveView?.removeFromSuperview();
+                    }
+                    if(self.successLiveView != nil){
+                        self.successLiveView?.removeFromSuperview();
+                    }
+                }
+            }
+            runModel(onPixelBuffer: pixelBuffer)
+            openCvCheck(pixelBuffer: pixelBuffer)
+            let cropRect = CGRect(x: 0, y: 0, width: 256, height: 256)
+            let imageBrightnessChecker = cropPixelBuffer(pixelBuffer, toRect: cropRect)!.brightness;
+            if motionRectF.count >= 2 {
+                let rect1 = motionRectF[motionRectF.count - 2]
+                let rect2 = motionRectF[motionRectF.count - 1]
+                motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
+                zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
+            }
+            
+            DispatchQueue.main.async {
+                self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
+                    brightnessEvents:self.environmentalConditions!.checkConditions(
+                        brightness: imageBrightnessChecker),
+                    motion: self.motion,faceEvents:!self.start && self.areAllEventsDone() ? FaceEvents.GOOD : self.faceEvent,zoom: self.zoom)
+            }
         }
-        runModel(onPixelBuffer: pixelBuffer)
-        openCvCheck(pixelBuffer: pixelBuffer)
-        let cropRect = CGRect(x: 0, y: 0, width: 256, height: 256)
-        let imageBrightnessChecker = cropPixelBuffer(pixelBuffer, toRect: cropRect)!.brightness;
-        if motionRectF.count >= 2 {
-            let rect1 = motionRectF[motionRectF.count - 2]
-            let rect2 = motionRectF[motionRectF.count - 1]
-            motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
-            zoom = calculatePercentageChangeWidth(rect: rect2)
-        }
-        
-        DispatchQueue.main.async {
-            self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
-                brightnessEvents:self.environmentalConditions!.checkConditions(
-                    brightness: imageBrightnessChecker),
-                motion: self.motion,faceEvents:!self.start && self.areAllEventsDone() ? FaceEvents.GOOD : self.faceEvent,zoom: self.zoom)
-        }
+       
     }
     
     
@@ -303,7 +331,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             let rect1 = motionRectF[motionRectF.count - 2]
             let rect2 = motionRectF[motionRectF.count - 1]
             motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
-            zoom = calculatePercentageChangeWidth(rect: rect2)
+            zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
         }
         
         
@@ -522,50 +550,81 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
                 )
-                self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel )
+                self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.Success)
                 self.start = false
-            } else {
-                self.start = eventName == HubConnectionTargets.ON_ERROR || eventName == HubConnectionTargets.ON_RETRY ||  eventName == HubConnectionTargets.ON_LIVENESS_UPDATE
+            } else if eventName == HubConnectionTargets.ON_RETRY {
+                self.retryCount = self.retryCount + 1;
+                if(self.retryCount == self.environmentalConditions?.retryCount){
+                    var faceExtractedModel = FaceExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
+                    var faceResponseModel = FaceResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        faceExtractedModel: faceExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                    )
+                    self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.MatchFailed)
+                    self.start = false
+                }else{
+                    self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
+                    self.start = true
+                }
+            } else if eventName == HubConnectionTargets.ON_LIVENESS_UPDATE {
+                self.livnessRetryCount = self.livnessRetryCount + 1;
+                if(self.livnessRetryCount == self.environmentalConditions?.faceLivenessRetryCount){
+                    var faceExtractedModel = FaceExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
+                    var faceResponseModel = FaceResponseModel(
+                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
+                        faceExtractedModel: faceExtractedModel,
+                        error: remoteProcessingModel.error,
+                        success: remoteProcessingModel.success
+                    )
+                    self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.LivenessFailed)
+                    self.start = false
+                }else{
+                    self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                    self.start = true
+                }
+            } else{
+                self.start = true
+                switch eventName {
+                case HubConnectionTargets.ON_ERROR:
+                    self.faceMatchDelegate?.onError(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                    self.faceMatchDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_STATUS_UPDATE:
+                    self.faceMatchDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_UPDATE:
+                    self.faceMatchDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                    self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_CARD_DETECTED:
+                    self.faceMatchDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                    self.faceMatchDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_MRZ_DETECTED:
+                    self.faceMatchDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                    self.faceMatchDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_FACE_DETECTED:
+                    self.faceMatchDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                    self.faceMatchDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_FACE_EXTRACTED:
+                    self.faceMatchDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                    self.faceMatchDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                    self.faceMatchDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                    self.faceMatchDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_UPLOAD_FAILED:
+                    self.faceMatchDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+                default:
+                    break
+                }
             }
             
-            switch eventName {
-            case HubConnectionTargets.ON_ERROR:
-                self.faceMatchDelegate?.onError(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_RETRY:
-                self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-                self.faceMatchDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_STATUS_UPDATE:
-                self.faceMatchDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPDATE:
-                self.faceMatchDelegate?.onUpdated?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_LIVENESS_UPDATE:
-                self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_CARD_DETECTED:
-                self.faceMatchDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_EXTRACTED:
-                self.faceMatchDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_MRZ_DETECTED:
-                self.faceMatchDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-                self.faceMatchDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_DETECTED:
-                self.faceMatchDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_NO_FACE_DETECTED:
-                self.faceMatchDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_FACE_EXTRACTED:
-                self.faceMatchDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-                self.faceMatchDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-                self.faceMatchDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-                self.faceMatchDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
-            case HubConnectionTargets.ON_UPLOAD_FAILED:
-                self.faceMatchDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
-            default:
-                break
-            }
+           
         }
     }
     
@@ -786,6 +845,58 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         audioPlayer.stopAudio();
         self.previewView.stopSession();
         self.cameraFeedManager.stopSession();
+    }
+    
+    public func takePicture(){
+        if(start){
+            result = self.modelDataHandler?.runModel(onFrame: self.currentImage!)
+            if(hasFaceOrCard()){
+                self.start = false;
+                self.faceMatchDelegate?.onSend();
+                self.remoteProcessing?.starProcessing(
+                    url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
+                    videoClip: "",
+                    stepIdString: String(self.stepId!),
+                    appConfiguration:self.configModel!,
+                    templateId: "",
+                    secondImage: self.secondImage!,
+                    connectionId: "ConnectionId",
+                    clipsPath: "ClipsPath",
+                    checkForFace: true,
+                    processMrz: self.processMrz!,
+                    performLivenessDocument:self.performLivenessDocument!,
+                    performLivenessFace: self.performPassiveLivenessFace!,
+                    saveCapturedVideo: self.saveCapturedVideoID!,
+                    storeCapturedDocument: self.storeCapturedDocument!,
+                    isVideo: true,
+                    storeImageStream: self.storeImageStream!,
+                    selfieImage: convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!,
+                    clips:[]
+                ) { result in
+                    switch result {
+                    case .success(let model):
+                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                    case .failure(let error):
+                        self.start = true;
+                        self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                            destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                            response: "",
+                            error: "",
+                            success: false
+                        ))
+                    }
+                }
+            }else{
+                self.faceMatchDelegate?.onRetry(dataModel:RemoteProcessingModel(
+                    destinationEndpoint: HubConnectionTargets.ON_RETRY,
+                    response: "",
+                    error: "",
+                    success: false
+                ) )
+            }
+            
+        }
+       
     }
     
     

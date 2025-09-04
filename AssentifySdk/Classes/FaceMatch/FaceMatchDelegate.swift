@@ -9,7 +9,7 @@ import Foundation
 
     func onRetry(dataModel: RemoteProcessingModel )
     
-    func onComplete(dataModel: FaceResponseModel )
+    func onComplete(dataModel: FaceResponseModel,doneFlag:DoneFlags )
 
     @objc optional  func onClipPreparationComplete(dataModel: RemoteProcessingModel )
 

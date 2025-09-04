@@ -22,3 +22,13 @@ struct HubConnectionTargets {
     static let ON_UPLOAD_FAILED = "onUploadFailed"
     static let ON_WRONG_TEMPLATE = "onWrongTemplate"
 }
+
+@objc public enum DoneFlags:Int {
+    case Success
+    case LivenessFailed
+    case ExtractFailed
+    case MatchFailed
+    case WrongTemplate
+}
+
+

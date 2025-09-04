@@ -26,6 +26,12 @@ public class EnvironmentalConditions {
     
     var activeLivenessCheckCount:Int
     
+    
+    var retryCount : Int = 3
+    var faceLivenessRetryCount : Int = 2
+
+    var minRam : Int = 2
+    var minCPUCores : Int = 6
 
     public  init(
         enableDetect: Bool = true,
@@ -37,7 +43,11 @@ public class EnvironmentalConditions {
         MotionLimit:Int = 30,
         MotionLimitFace:Int = 5,
         activeLiveType:ActiveLiveType = ActiveLiveType.NONE,
-        activeLivenessCheckCount:Int = 0
+        activeLivenessCheckCount:Int = 0,
+        retryCount:Int = 3,
+        faceLivenessRetryCount:Int = 2,
+        minRam:Int = 8,
+        minCPUCores:Int = 6
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
@@ -49,6 +59,10 @@ public class EnvironmentalConditions {
         self.MotionLimitFace = MotionLimitFace
         self.activeLiveType = activeLiveType
         self.activeLivenessCheckCount = activeLivenessCheckCount
+        self.retryCount = retryCount
+        self.faceLivenessRetryCount = faceLivenessRetryCount
+        self.minRam = minRam
+        self.minCPUCores = minCPUCores
 
         // Perform validation checks
         precondition(!self.CustomColor.isEmpty, "Invalid CustomColor value")

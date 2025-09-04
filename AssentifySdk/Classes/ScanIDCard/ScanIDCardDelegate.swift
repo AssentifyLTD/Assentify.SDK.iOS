@@ -10,7 +10,7 @@ import Foundation
 
     func onRetry(dataModel: RemoteProcessingModel )
 
-    func onComplete(dataModel: IDResponseModel ,order:Int )
+    func onComplete(dataModel: IDResponseModel ,order:Int,doneFlag:DoneFlags )
     
     func onWrongTemplate(dataModel: RemoteProcessingModel )
     
