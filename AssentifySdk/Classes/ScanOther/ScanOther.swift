@@ -397,25 +397,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                      self.scanOtherDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                      self.start = true
                  }
-             }
-             else if eventName == HubConnectionTargets.ON_WRONG_TEMPLATE{
-                 self.retryCount = self.retryCount + 1;
-                 if(self.retryCount == self.environmentalConditions?.retryCount){
-                     var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:],transformedDetails: [:]);
-                     self.otherResponseModel = OtherResponseModel(
-                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
-                        otherExtractedModel: otherExtractedModel,
-                        error: remoteProcessingModel.error,
-                        success: remoteProcessingModel.success
-                     )
-                     self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! ,doneFlag: DoneFlags.WrongTemplate)
-                     self.start = false
-                 }else{
-                     self.scanOtherDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
-                     self.start = true
-                 }
-             
-             }  else {
+             } else {
             self.start = eventName == HubConnectionTargets.ON_ERROR
              switch eventName {
              case HubConnectionTargets.ON_ERROR:

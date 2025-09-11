@@ -409,7 +409,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.WrongTemplate)
                      self.start = false
                  }else{
-                     self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                     self.scanPassportDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
                      self.start = true
                  }
              
