@@ -22,6 +22,10 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.71**
+- Callbacks Improvements
+- Captured Image Improvements
+
 **0.0.70**
 - Manual Capture
 - Retry Logic

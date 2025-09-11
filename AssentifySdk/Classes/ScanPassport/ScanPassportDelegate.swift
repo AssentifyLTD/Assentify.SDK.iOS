@@ -11,6 +11,8 @@ import Foundation
 
     func onComplete(dataModel: PassportResponseModel ,doneFlag:DoneFlags)
     
+     func onWrongTemplate(dataModel: RemoteProcessingModel )
+    
     @objc optional  func onClipPreparationComplete(dataModel: RemoteProcessingModel )
 
     @objc optional func onStatusUpdated(dataModel: RemoteProcessingModel )

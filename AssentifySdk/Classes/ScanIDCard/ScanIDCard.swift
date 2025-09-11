@@ -435,7 +435,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                     self.order =   self.order + 1;
                     self.start = false
                 }else{
-                    self.scanIDCardDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                    self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
                     self.start = true
                 }
             

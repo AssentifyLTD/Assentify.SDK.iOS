@@ -12,17 +12,12 @@ func convertPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
     }
     let uiImage = UIImage(cgImage: cgImage)
     
-    guard let pngData = uiImage.pngData() else {
+    
+    guard let imageData = uiImage.jpegData(compressionQuality: 0.6) else {
         return nil
     }
     
-    guard let imageData = uiImage.jpeg2000DataLossless() else {
-        return nil
-    }
-    
-    
-    let base64String = imageData.base64EncodedString()
-    return base64String
+    return imageData.base64EncodedString()
 }
 
 
@@ -181,33 +176,7 @@ func copyPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
     return newBuffer
 }
 extension UIImage {
-    func jpeg2000DataLossless() -> Data? {
-        guard let cgImage = self.cgImage else {
-            return nil
-        }
-        let mutableData = NSMutableData()
-        let imageDestination = CGImageDestinationCreateWithData(mutableData, kUTTypeJPEG2000, 1, nil)!
-        let options: NSDictionary = [
-            kCGImageDestinationLossyCompressionQuality:0.5
-        ]
-        CGImageDestinationAddImage(imageDestination, cgImage, options)
-        CGImageDestinationFinalize(imageDestination)
-        return mutableData as Data
-    }
-    func jpeg2000DataLosslessClips() -> Data? {
-        guard let cgImage = self.cgImage else {
-            return nil
-        }
-        let mutableData = NSMutableData()
-        let imageDestination = CGImageDestinationCreateWithData(mutableData, kUTTypeJPEG2000, 1, nil)!
-        let options: NSDictionary = [
-            kCGImageDestinationLossyCompressionQuality:0.1
-        ]
-        CGImageDestinationAddImage(imageDestination, cgImage, options)
-        CGImageDestinationFinalize(imageDestination)
-        return mutableData as Data
-    }
-    
+
     class func gifImageWithName(_ name: String) -> UIImage? {
            guard let bundleURL = Bundle.main.url(forResource: name, withExtension: "gif") else {
                return nil
