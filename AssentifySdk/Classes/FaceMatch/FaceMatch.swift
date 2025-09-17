@@ -247,7 +247,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
                     brightnessEvents:self.environmentalConditions!.checkConditions(
                         brightness: imageBrightnessChecker),
-                    motion: self.motion,faceEvents:!self.start && self.areAllEventsDone() ? FaceEvents.GOOD : self.faceEvent,zoom: self.zoom)
+                    motion: self.motion,faceEvents:!self.start && self.areAllEventsDone() ? FaceEvents.GOOD : self.faceEvent,zoom: self.zoom,detectedFaces: self.faces())
             }
         }
        
@@ -257,6 +257,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     @objc func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
         result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
         if (result?.inferences.count == 0) {
+            livenessCheckArray.removeAll()
             motionRectF.removeAll()
             sendingFlagsZoom.removeAll()
             sendingFlags.removeAll()
@@ -400,6 +401,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             modelDataHandler?.customColor = environmentalConditions!.HoldHandColor;
             sendingFlags.removeAll();
             sendingFlagsZoom.removeAll();
+            livenessCheckArray.removeAll()
             if(environmentalConditions!.enableGuide && self.areAllEventsDone()){
                 DispatchQueue.main.async {
                     if(self.guide.faceSvgImageView == nil){
@@ -411,7 +413,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
         
         if (self.showCountDown ) {
-            if (!hasFaceOrCard() || !isRectFInsideTheScreen ||  self.faceEvent != FaceEvents.GOOD) {
+            if (!hasFace() || !isRectFInsideTheScreen ||  self.faceEvent != FaceEvents.GOOD) {
                 DispatchQueue.main.async {
                     self.countdownLabel?.removeFromSuperview();
                     self.countdownTimer?.invalidate();
@@ -424,7 +426,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             brightness: cropPixelBuffer.brightness) == BrightnessEvents.Good
             && motion == MotionType.SENDING && zoom == ZoomType.SENDING  && isRectFInsideTheScreen && self.faceEvent == FaceEvents.GOOD) {
             if (start && sendingFlags.count > environmentalConditions!.MotionLimitFace && sendingFlagsZoom.count > FaceZoomLimit && livenessCheckArray.count == self.localLivenessLimit) {
-                if (hasFaceOrCard()) {
+                if (hasFace()) {
                     if(self.start){
                         if(self.showCountDown){
                             if(self.isCountDownStarted){
@@ -438,6 +440,16 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                         let converter = ParallelImageProcessing()
                                         converter.setPixelBuffers(self.livenessCheckArray)
                                         converter.convertBuffers {
+                                        ///
+                                        let clips = converter.getClips()
+                                        let selfieImage: String
+                                        if !clips.isEmpty {
+                                                let middleIndex = clips.count / 2
+                                                selfieImage = clips[middleIndex]
+                                         } else {
+                                                selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer) ?? ""
+                                        }
+                                        ///
                                         self.remoteProcessing?.starProcessing(
                                             url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                             videoClip: "",
@@ -455,8 +467,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                             storeCapturedDocument: self.storeCapturedDocument!,
                                             isVideo: true,
                                             storeImageStream: self.storeImageStream!,
-                                            selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
-                                            clips: converter.getClips()
+                                            selfieImage: selfieImage,
+                                            clips: clips
                                         ) { result in
                                             switch result {
                                             case .success(let model):
@@ -483,6 +495,16 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             let converter = ParallelImageProcessing()
                             converter.setPixelBuffers(self.livenessCheckArray)
                             converter.convertBuffers {
+                            ///
+                             let clips = converter.getClips()
+                             let selfieImage: String
+                              if !clips.isEmpty {
+                                        let middleIndex = clips.count / 2
+                                        selfieImage = clips[middleIndex]
+                                 } else {
+                                        selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer) ?? ""
+                                }
+                            ///
                             self.remoteProcessing?.starProcessing(
                                 url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
                                 videoClip: "",
@@ -500,8 +522,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 storeCapturedDocument: self.storeCapturedDocument!,
                                 isVideo: true,
                                 storeImageStream: self.storeImageStream!,
-                                selfieImage: convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!,
-                                clips:converter.getClips()
+                                selfieImage: selfieImage,
+                                clips: clips
                             ) { result in
                                 switch result {
                                 case .success(let model):
@@ -633,19 +655,16 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         
     }
     
-    func hasFaceOrCard() -> Bool {
-        return hasFace()
+    func hasFace() -> Bool {
+        return faces() == 1;
     }
     
-    func hasFace() -> Bool {
-        var hasFace = false
-        for item in result!.inferences {
-            if item.className == "face" && environmentalConditions!.isPredictionValid(confidence: item.confidence) {
-                hasFace = true
-                break
+    func faces() -> Int {
+        let validFaces = self.result!.inferences.filter { item in
+                item.className == "face" &&
+            self.environmentalConditions!.isPredictionValid(confidence: item.confidence)
             }
-        }
-        return hasFace
+        return validFaces.count;
     }
     
     
@@ -850,7 +869,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     public func takePicture(){
         if(start){
             result = self.modelDataHandler?.runModel(onFrame: self.currentImage!)
-            if(hasFaceOrCard()){
+            if(hasFace()){
                 self.start = false;
                 self.faceMatchDelegate?.onSend();
                 self.remoteProcessing?.starProcessing(

@@ -45,7 +45,8 @@ import Foundation
            brightnessEvents: BrightnessEvents,
            motion: MotionType,
            faceEvents: FaceEvents,
-           zoom: ZoomType
+           zoom: ZoomType,
+           detectedFaces:Int
     )
     
     @objc optional func onCurrentLiveMoveChange(
