@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.72**
+- Face Liveness Improvements
+
 **0.0.71**
 - Callbacks Improvements
 - Captured Image Improvements
