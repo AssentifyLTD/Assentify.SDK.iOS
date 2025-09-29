@@ -27,12 +27,6 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
     private var configModel: ConfigModel?
     private var environmentalConditions: EnvironmentalConditions?
     private var apiKey: String
-    private var processMrz: Bool?
-    private var performLivenessDocument: Bool?
-    private var performLivenessFace: Bool?
-    private var saveCapturedVideoID: Bool?
-    private var storeCapturedDocument: Bool?
-    private var storeImageStream: Bool?
     private var language: String?
     private var stepId:Int?;
     
@@ -44,32 +38,24 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
     
     
     private var  start = true;
+    private var  isManual = false;
+    private var  currentImage : CVPixelBuffer?;
     
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
-         processMrz:Bool,
-         performLivenessDocument:Bool,
-         performLivenessFace:Bool,
-         saveCapturedVideoID:Bool,
-         storeCapturedDocument:Bool,
-         storeImageStream:Bool,
          scanQrDelegate:ScanQrDelegate,
          kycDocumentDetails:[KycDocumentDetails],
-         language: String
+         language: String,
+         isManual: Bool
     ) {
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
-        self.processMrz = processMrz;
-        self.performLivenessDocument = performLivenessDocument;
-        self.performLivenessFace = performLivenessFace;
-        self.saveCapturedVideoID = saveCapturedVideoID;
-        self.storeCapturedDocument = storeCapturedDocument;
-        self.storeImageStream = storeImageStream;
         self.scanQrDelegate = scanQrDelegate;
         self.kycDocumentDetails = kycDocumentDetails;
         self.language = language;
+        self.isManual = isManual;
         
         BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
@@ -139,7 +125,11 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
      
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
-        openCvCheck(pixelBuffer: pixelBuffer)
+        if(self.isManual){
+            self.currentImage = pixelBuffer
+        }else{
+            openCvCheck(pixelBuffer: pixelBuffer)
+        }
     }
  
     func onVideCreated(videoBase64: String) {
@@ -339,5 +329,53 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
         self.cameraFeedManager.stopSession();
     }
     
+    
+    public func takePicture(){
+        if(start){
+            detectQRCode(from: self.currentImage!) { qrCode in
+                 if let url = qrCode {
+                     if(self.start == true){
+                         DispatchQueue.main.async {
+                             self.start = false;
+                             self.scanQrDelegate?.onStartQrScan();
+                             if(self.environmentalConditions!.enableGuide){
+                                 if(self.guide.qrSvgImageView == nil){
+                                     self.guide.showQrGuide(view: self.view)
+                                 }
+                                 self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+                             }
+                         }
+                         var bsee64Image = convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!
+                         self.remoteProcessing?.starQrProcessing(
+                             url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.QR),
+                             videoClip: bsee64Image,
+                             appConfiguration:self.configModel!,
+                             templateId: self.templateId!,
+                             connectionId: "ConnectionId",
+                             stepIdString: String(self.stepId!),
+                             metadata: url
+                         ) { result in
+                             switch result {
+                             case .success(let model):
+                                 self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                             case .failure(let error):
+                                 self.start = true;
+                                 self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                     destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                     response: "",
+                                     error: "",
+                                     success: false
+                                 ))
+                             }
+                         }
+                     }
+               
+                 }
+                 
+             }
+            
+        }
+       
+    }
     
 }

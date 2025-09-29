@@ -22,6 +22,20 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.73**
+1. *Simplified SDK Initialization*  
+   - You no longer need to pass the following parameters when initializing the SDK:  
+     - `processMrz`  
+     - `performLivenessDocument`  
+     - `performPassiveLivenessFace`  
+     - `saveCapturedVideo`  
+     - `storeCapturedDocument`  
+     - `storeImageStream`  
+   - These options are now fully configurable from the **portal**, removing the need for extra code changes.  
+
+2. *New Feature: Manual QR Scan*  
+   - Added support for **manual QR code scanning**, allowing users to scan QR codes manually on low-capability devices.  
+
 **0.0.72**
 - Face Liveness Improvements
 
