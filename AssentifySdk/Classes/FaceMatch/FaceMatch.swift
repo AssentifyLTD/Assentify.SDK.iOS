@@ -29,12 +29,9 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var configModel: ConfigModel?
     private var environmentalConditions: EnvironmentalConditions?
     private var apiKey: String
-    private var processMrz: Bool?
-    private var performLivenessDocument: Bool?
     private var performLivenessFace: Bool?
     private var performPassiveLivenessFace: Bool?
-    private var saveCapturedVideoID: Bool?
-    private var storeCapturedDocument: Bool?
+    private var saveCapturedVideoFace: Bool?
     private var storeImageStream: Bool?
     private var secondImage: String?
     private var stepId:Int?;
@@ -77,13 +74,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
-         processMrz:Bool,
-         performLivenessDocument:Bool,
          performLivenessFace:Bool,
-         performPassiveLivenessFace:Bool,
-         saveCapturedVideoID:Bool,
-         storeCapturedDocument:Bool,
-         storeImageStream:Bool,
          faceMatchDelegate:FaceMatchDelegate,
          secondImage:String,
          showCountDown:Bool,
@@ -92,13 +83,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
-        self.processMrz = processMrz;
-        self.performLivenessDocument = performLivenessDocument;
         self.performLivenessFace = performLivenessFace;
-        self.performPassiveLivenessFace = performPassiveLivenessFace;
-        self.saveCapturedVideoID = saveCapturedVideoID;
-        self.storeCapturedDocument = storeCapturedDocument;
-        self.storeImageStream = storeImageStream;
         self.faceMatchDelegate = faceMatchDelegate;
         self.secondImage = secondImage;
         self.showCountDown = showCountDown;
@@ -106,11 +91,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
         
-        if(performPassiveLivenessFace){
-                   localLivenessLimit = 12;
-               }else{
-                   localLivenessLimit = 0;
-         }
+       
         
         BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
@@ -135,6 +116,26 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 }
             }
         }
+        for item in self.configModel!.stepDefinitions {
+            if let stepIdInt = self.stepId, stepIdInt == item.stepId {
+                if performPassiveLivenessFace == nil {
+                    performPassiveLivenessFace = item.customization.performLivenessDetection
+                }
+                if saveCapturedVideoFace == nil {
+                    saveCapturedVideoFace = item.customization.saveCapturedVideo
+                }
+                if storeImageStream == nil {
+                    storeImageStream = item.customization.storeImageStream
+                }
+            }
+        }
+        
+        
+        if(self.performPassiveLivenessFace!){
+                   localLivenessLimit = 12;
+               }else{
+                   localLivenessLimit = 0;
+         }
     }
     
     
@@ -460,11 +461,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                             connectionId: "ConnectionId",
                                             clipsPath: "ClipsPath",
                                             checkForFace: true,
-                                            processMrz: self.processMrz!,
-                                            performLivenessDocument:self.performLivenessDocument!,
+                                            processMrz:true,
+                                            performLivenessDocument:true,
                                             performLivenessFace: self.performPassiveLivenessFace!,
-                                            saveCapturedVideo: self.saveCapturedVideoID!,
-                                            storeCapturedDocument: self.storeCapturedDocument!,
+                                            saveCapturedVideo: self.saveCapturedVideoFace!,
+                                            storeCapturedDocument:true,
                                             isVideo: true,
                                             storeImageStream: self.storeImageStream!,
                                             selfieImage: selfieImage,
@@ -515,11 +516,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                 connectionId: "ConnectionId",
                                 clipsPath: "ClipsPath",
                                 checkForFace: true,
-                                processMrz: self.processMrz!,
-                                performLivenessDocument:self.performLivenessDocument!,
+                                processMrz: true,
+                                performLivenessDocument:true,
                                 performLivenessFace: self.performPassiveLivenessFace!,
-                                saveCapturedVideo: self.saveCapturedVideoID!,
-                                storeCapturedDocument: self.storeCapturedDocument!,
+                                saveCapturedVideo: self.saveCapturedVideoFace!,
+                                storeCapturedDocument:true,
                                 isVideo: true,
                                 storeImageStream: self.storeImageStream!,
                                 selfieImage: selfieImage,
@@ -882,11 +883,11 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     connectionId: "ConnectionId",
                     clipsPath: "ClipsPath",
                     checkForFace: true,
-                    processMrz: self.processMrz!,
-                    performLivenessDocument:self.performLivenessDocument!,
+                    processMrz:true,
+                    performLivenessDocument:true,
                     performLivenessFace: self.performPassiveLivenessFace!,
-                    saveCapturedVideo: self.saveCapturedVideoID!,
-                    storeCapturedDocument: self.storeCapturedDocument!,
+                    saveCapturedVideo: self.saveCapturedVideoFace!,
+                    storeCapturedDocument: true,
                     isVideo: true,
                     storeImageStream: self.storeImageStream!,
                     selfieImage: convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!,

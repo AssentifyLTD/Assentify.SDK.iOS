@@ -31,10 +31,8 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     private var apiKey: String
     private var processMrz: Bool?
     private var performLivenessDocument: Bool?
-    private var performLivenessFace: Bool?
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
-    private var storeImageStream: Bool?
     private var language: String
     private var stepId:Int?;
     
@@ -57,12 +55,6 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
-         processMrz:Bool,
-         performLivenessDocument:Bool,
-         performLivenessFace:Bool,
-         saveCapturedVideoID:Bool,
-         storeCapturedDocument:Bool,
-         storeImageStream:Bool,
          scanPassportDelegate:ScanPassportDelegate,
          language: String,
          isManual: Bool
@@ -70,12 +62,6 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
-        self.processMrz = processMrz;
-        self.performLivenessDocument = performLivenessDocument;
-        self.performLivenessFace = performLivenessFace;
-        self.saveCapturedVideoID = saveCapturedVideoID;
-        self.storeCapturedDocument = storeCapturedDocument;
-        self.storeImageStream = storeImageStream;
         self.scanPassportDelegate = scanPassportDelegate;
         self.language = language
         self.isManual = isManual
@@ -106,6 +92,23 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                 }
             }
         }
+        for item in self.configModel!.stepDefinitions {
+            if let stepIdInt = self.stepId, stepIdInt == item.stepId {
+                if performLivenessDocument == nil {
+                    performLivenessDocument = item.customization.documentLiveness
+                }
+                if processMrz == nil {
+                    processMrz = item.customization.processMrz
+                }
+                if storeCapturedDocument == nil {
+                    storeCapturedDocument = item.customization.storeCapturedDocument
+                }
+                if saveCapturedVideoID == nil {
+                    saveCapturedVideoID = item.customization.saveCapturedVideo
+                }
+            }
+        }
+
     }
     
     
@@ -300,11 +303,11 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                          checkForFace: true,
                          processMrz: processMrz!,
                          performLivenessDocument: performLivenessDocument!,
-                         performLivenessFace: performLivenessFace!,
+                         performLivenessFace: true,
                          saveCapturedVideo: saveCapturedVideoID!,
                          storeCapturedDocument: storeCapturedDocument!,
                          isVideo: false,
-                         storeImageStream: storeImageStream!,
+                         storeImageStream: true,
                          selfieImage:""
                          ) { result in
                         switch result {
@@ -581,11 +584,11 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      checkForFace: true,
                      processMrz: processMrz!,
                      performLivenessDocument: performLivenessDocument!,
-                     performLivenessFace: performLivenessFace!,
+                     performLivenessFace: true,
                      saveCapturedVideo: saveCapturedVideoID!,
                      storeCapturedDocument: storeCapturedDocument!,
                      isVideo: false,
-                     storeImageStream: storeImageStream!,
+                     storeImageStream: true,
                      selfieImage:""
                      ) { result in
                     switch result {

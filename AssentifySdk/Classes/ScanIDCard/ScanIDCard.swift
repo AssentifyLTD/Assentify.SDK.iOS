@@ -37,10 +37,8 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     private var apiKey: String
     private var processMrz: Bool?
     private var performLivenessDocument: Bool?
-    private var performLivenessFace: Bool?
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
-    private var storeImageStream: Bool?
     private var language: String?
     private var stepId:Int?;
     
@@ -64,12 +62,6 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
     init(configModel: ConfigModel!,
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
-         processMrz:Bool,
-         performLivenessDocument:Bool,
-         performLivenessFace:Bool,
-         saveCapturedVideoID:Bool,
-         storeCapturedDocument:Bool,
-         storeImageStream:Bool,
          scanIDCardDelegate:ScanIDCardDelegate,
            kycDocumentDetails:[KycDocumentDetails],
          language: String,
@@ -78,12 +70,6 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
         self.configModel = configModel;
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
-        self.processMrz = processMrz;
-        self.performLivenessDocument = performLivenessDocument;
-        self.performLivenessFace = performLivenessFace;
-        self.saveCapturedVideoID = saveCapturedVideoID;
-        self.storeCapturedDocument = storeCapturedDocument;
-        self.storeImageStream = storeImageStream;
         self.scanIDCardDelegate = scanIDCardDelegate;
         self.kycDocumentDetails = kycDocumentDetails;
         self.language = language;
@@ -112,6 +98,23 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
             } else {
                 if self.stepId == nil {
                     fatalError("Step ID is required because multiple 'Identification Document Capture' steps are present.")
+                }
+            }
+        }
+        
+        for item in self.configModel!.stepDefinitions {
+            if let stepIdInt = self.stepId, stepIdInt == item.stepId {
+                if performLivenessDocument == nil {
+                    performLivenessDocument = item.customization.documentLiveness
+                }
+                if processMrz == nil {
+                    processMrz = item.customization.processMrz
+                }
+                if storeCapturedDocument == nil {
+                    storeCapturedDocument = item.customization.storeCapturedDocument
+                }
+                if saveCapturedVideoID == nil {
+                    saveCapturedVideoID = item.customization.saveCapturedVideo
                 }
             }
         }
@@ -311,11 +314,11 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                         checkForFace: hasFace(),
                         processMrz: processMrz!,
                         performLivenessDocument:performLivenessDocument!,
-                        performLivenessFace: performLivenessFace!,
+                        performLivenessFace: true,
                         saveCapturedVideo: saveCapturedVideoID!,
                         storeCapturedDocument: storeCapturedDocument!,
                         isVideo: false,
-                        storeImageStream: storeImageStream!,
+                        storeImageStream: true,
                         selfieImage:""
                     ) { result in
                         switch result {
@@ -614,11 +617,11 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                     checkForFace: hasFace(),
                     processMrz: processMrz!,
                     performLivenessDocument:performLivenessDocument!,
-                    performLivenessFace: performLivenessFace!,
+                    performLivenessFace: true,
                     saveCapturedVideo: saveCapturedVideoID!,
                     storeCapturedDocument: storeCapturedDocument!,
                     isVideo: false,
-                    storeImageStream: storeImageStream!,
+                    storeImageStream: true,
                     selfieImage:""
                 ) { result in
                     switch result {

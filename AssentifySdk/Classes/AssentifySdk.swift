@@ -8,14 +8,7 @@ public class AssentifySdk {
     private let interaction: String
     private let environmentalConditions: EnvironmentalConditions?
     private let assentifySdkDelegate : AssentifySdkDelegate?
-    private var processMrz: Bool?
-    private var storeCapturedDocument: Bool?
-    private var performLivenessDocument: Bool?
     private var performActiveLivenessFace: Bool?
-    private var performPassiveLivenessFace: Bool?
-    private var storeImageStream: Bool?
-    private var saveCapturedVideoID: Bool?
-    private var saveCapturedVideoFace: Bool?
     private var isKeyValid: Bool = false
     private var configModel: ConfigModel?
     private var stepID: Int = -1;
@@ -25,18 +18,13 @@ public class AssentifySdk {
     
 
     
-    public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?, processMrz: Bool? = nil, storeCapturedDocument: Bool? = nil,performActiveLivenessFace: Bool? = nil,storeImageStream: Bool? = nil, saveCapturedVideoID: Bool? = nil, saveCapturedVideoFace: Bool? = nil) {
+    public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?,  performActiveLivenessFace: Bool? = nil,) {
         self.apiKey = apiKey
         self.tenantIdentifier = tenantIdentifier
         self.interaction = interaction
         self.environmentalConditions = environmentalConditions
         self.assentifySdkDelegate = assentifySdkDelegate
-        self.processMrz = processMrz
-        self.storeCapturedDocument = storeCapturedDocument
         self.performActiveLivenessFace = performActiveLivenessFace
-        self.storeImageStream = storeImageStream
-        self.saveCapturedVideoID = saveCapturedVideoID
-        self.saveCapturedVideoFace = saveCapturedVideoFace
         if apiKey.isEmpty {
             print("AssentifySdk Init Error: ApiKey must not be blank or nil")
         }
@@ -77,40 +65,9 @@ public class AssentifySdk {
                 self.isKeyValid  = true;
                 self.configModel = configModel;
                 configModel.stepDefinitions.forEach { item in
-                    if item.stepDefinition == "IdentificationDocumentCapture" {
-                        if self.performLivenessDocument == nil {
-                            self.performLivenessDocument = item.customization.documentLiveness
-                        }
-                        if self.processMrz == nil {
-                            self.processMrz = item.customization.processMrz
-                        }
-                        if self.storeCapturedDocument == nil {
-                            self.storeCapturedDocument = item.customization.storeCapturedDocument
-                        }
-                        if self.saveCapturedVideoID == nil {
-                            self.saveCapturedVideoID = item.customization.saveCapturedVideo
-                        }
-                    }
-                    if item.stepDefinition == "FaceImageAcquisition" {
-                        if self.performPassiveLivenessFace == nil {
-                            self.performPassiveLivenessFace = item.customization.performLivenessDetection
-                        }
-                        if self.storeImageStream == nil {
-                            self.storeImageStream = item.customization.storeImageStream
-                        }
-                        if self.saveCapturedVideoFace == nil {
-                            self.saveCapturedVideoFace = item.customization.saveCapturedVideo
-                        }
-                    }
                     if item.stepDefinition == "ContextAwareSigning" {
                         self.stepID = item.stepId
                     }
-                }
-                if self.performLivenessDocument == nil ||  self.processMrz == nil || self.storeCapturedDocument == nil || self.saveCapturedVideoID == nil {
-                    self.assentifySdkDelegate?.onAssentifySdkInitError(message:"Please Configure The IdentificationDocumentCapture { performLivenessDocument , processMrz , storeCapturedDocument , saveCapturedVideo }")
-                }
-                if self.performPassiveLivenessFace == nil || self.storeImageStream == nil || self.saveCapturedVideoFace == nil {
-                    self.assentifySdkDelegate?.onAssentifySdkInitError(message:"Please Configure The FaceImageAcquisition { performLivenessFace , storeImageStream , saveCapturedVideo }")
                 }
                 self.getTemplatesByCountry();
                
@@ -126,12 +83,6 @@ public class AssentifySdk {
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
-                processMrz: self.processMrz!,
-                performLivenessDocument: self.performLivenessDocument!,
-                performLivenessFace:  self.performPassiveLivenessFace!,
-                saveCapturedVideoID:self.saveCapturedVideoID!,
-                storeCapturedDocument:self.storeCapturedDocument!,
-                storeImageStream:self.storeImageStream!,
                 scanPassportDelegate :scanPassportDelegate,
                 language:language,
                 isManual: self.isManual()
@@ -169,12 +120,6 @@ public class AssentifySdk {
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
-                processMrz: self.processMrz!,
-                performLivenessDocument: self.performLivenessDocument!,
-                performLivenessFace:  self.performPassiveLivenessFace!,
-                saveCapturedVideoID:self.saveCapturedVideoID!,
-                storeCapturedDocument:self.storeCapturedDocument!,
-                storeImageStream:self.storeImageStream!,
                 scanOtherDelegate :scanOtherDelegate,
                 language:language,
                 isManual: self.isManual()
@@ -197,12 +142,6 @@ public class AssentifySdk {
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
-                processMrz: self.processMrz!,
-                performLivenessDocument: self.performLivenessDocument!,
-                performLivenessFace:  self.performPassiveLivenessFace!,
-                saveCapturedVideoID:self.saveCapturedVideoID!,
-                storeCapturedDocument:self.storeCapturedDocument!,
-                storeImageStream:self.storeImageStream!,
                 scanIDCardDelegate :scanIDCardDelegate,
                 kycDocumentDetails:kycDocumentDetails,
                 language:language,
@@ -225,15 +164,10 @@ public class AssentifySdk {
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
-                processMrz: self.processMrz!,
-                performLivenessDocument: self.performLivenessDocument!,
-                performLivenessFace:  self.performPassiveLivenessFace!,
-                saveCapturedVideoID:self.saveCapturedVideoID!,
-                storeCapturedDocument:self.storeCapturedDocument!,
-                storeImageStream:self.storeImageStream!,
                 scanQrDelegate :scanQrDelegate,
                 kycDocumentDetails:kycDocumentDetails,
-                language:language
+                language:language,
+                isManual: self.isManual()
                 
             )
             scanQr.setStepId(stepId)
@@ -253,13 +187,7 @@ public class AssentifySdk {
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
-                processMrz: self.processMrz!,
-                performLivenessDocument: self.performLivenessDocument!,
                 performLivenessFace:  self.performActiveLivenessFace!,
-                performPassiveLivenessFace:  self.performPassiveLivenessFace!,
-                saveCapturedVideoID:self.saveCapturedVideoID!,
-                storeCapturedDocument:self.storeCapturedDocument!,
-                storeImageStream:self.storeImageStream!,
                 faceMatchDelegate :faceMatchDelegate,
                 secondImage :secondImage,
                 showCountDown: showCountDown,
