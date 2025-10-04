@@ -22,6 +22,9 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.74**
+ 1. *Fixes issues related to old swift versions*  
+
 **0.0.73**
 1. *Simplified SDK Initialization*  
    - You no longer need to pass the following parameters when initializing the SDK:  
