@@ -261,7 +261,6 @@ public func getLanguageTransformationEnum(key: String) -> Int  {
     let transliterationKeys = [
         IdentificationDocumentCaptureKeys.name,
         IdentificationDocumentCaptureKeys.surname,
-        IdentificationDocumentCaptureKeys.idType,
         IdentificationDocumentCaptureKeys.idPlaceOfResidence,
         IdentificationDocumentCaptureKeys.idProvince,
         IdentificationDocumentCaptureKeys.idGovernorate,
@@ -269,7 +268,6 @@ public func getLanguageTransformationEnum(key: String) -> Int  {
         IdentificationDocumentCaptureKeys.idFathersName,
         IdentificationDocumentCaptureKeys.idPlaceOfBirth,
         IdentificationDocumentCaptureKeys.idIssuanceAuthority,
-        IdentificationDocumentCaptureKeys.idArmyStatus,
         IdentificationDocumentCaptureKeys.idReference,
         IdentificationDocumentCaptureKeys.idRegistrationLocation,
         IdentificationDocumentCaptureKeys.idPresentAddress,
@@ -278,6 +276,8 @@ public func getLanguageTransformationEnum(key: String) -> Int  {
     
     
     let translationKeys = [
+        IdentificationDocumentCaptureKeys.idType,
+        IdentificationDocumentCaptureKeys.idArmyStatus,
         IdentificationDocumentCaptureKeys.idCountryOfStay,
         IdentificationDocumentCaptureKeys.idRegion,
         IdentificationDocumentCaptureKeys.idMaritalStatus,

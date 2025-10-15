@@ -22,6 +22,10 @@ pod 'AssentifySdk'
 
 ## Versions
 
+**0.0.75**
+ 1. *Add "applicationId" to the Config Model*  
+ 2. *Change idType and idArmyStatus from Transliteration to Translation*  
+  
 **0.0.74**
  1. *Fixes issues related to old swift versions*  
 
