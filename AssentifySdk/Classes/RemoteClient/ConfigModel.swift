@@ -6,6 +6,7 @@ public struct ConfigModel: Codable {
     public let tenantIdentifier: String
     public let blockIdentifier: String
     public let instanceId: String
+    public let applicationId: String
     public let flowInstanceId: String
     public let flowIdentifier: String
     public let instanceHash: String
