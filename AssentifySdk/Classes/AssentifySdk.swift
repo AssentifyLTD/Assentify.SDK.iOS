@@ -14,6 +14,7 @@ public class AssentifySdk {
     private var stepID: Int = -1;
     private var scanID: ScanIDCard?;
     private var templates: [TemplatesByCountry]?;
+    private var timeStarted: String;
     
     
 
@@ -25,6 +26,7 @@ public class AssentifySdk {
         self.environmentalConditions = environmentalConditions
         self.assentifySdkDelegate = assentifySdkDelegate
         self.performActiveLivenessFace = performActiveLivenessFace
+        self.timeStarted = getTimeUTC()
         if apiKey.isEmpty {
             print("AssentifySdk Init Error: ApiKey must not be blank or nil")
         }
@@ -223,12 +225,104 @@ public class AssentifySdk {
     
     public func startSubmitData(
            submitDataDelegate: SubmitDataDelegate,
-           submitRequestModel: [SubmitRequestModel]
+           submitRequestModel: [SubmitRequestModel],
+           customProperties: [String: String] = [:]
        ) -> SubmitData? {
            if (isKeyValid) {
+               
+              var submitList: [SubmitRequestModel] = []
+              submitList.append(contentsOf: submitRequestModel)
+              let initSteps = self.configModel!.stepDefinitions
+               
+              // MARK: - WrapUp
+              var valuesWrapUp: [String: String] = [:]
+                   
+                   initSteps.forEach { item in
+                       if item.stepDefinition == StepsNames.wrapUp {
+                           item.outputProperties.forEach { property in
+                               if property.key.contains(WrapUpKeys.timeEnded) {
+                                   valuesWrapUp[property.key] = getTimeUTC()
+                               }
+                           }
+                       }
+                   }
+                   if !submitList.contains(where: { $0.stepDefinition == StepsNames.wrapUp }) {
+                       if let wrapUpStep = initSteps.first(where: { $0.stepDefinition == StepsNames.wrapUp }) {
+                           let wrapUpSubmit = SubmitRequestModel(
+                               stepId: wrapUpStep.stepId,
+                               stepDefinition: StepsNames.wrapUp,
+                               extractedInformation: valuesWrapUp
+                           )
+                           submitList.append(wrapUpSubmit)
+                       }
+                   }
+               
+               
+               // MARK: - BlockLoader
+                  var valuesBlockLoader: [String: String] = [:]
+                  
+                  initSteps.forEach { item in
+                      if item.stepDefinition == StepsNames.blockLoader {
+                          
+                          // Fill from standard keys
+                          item.outputProperties.forEach { property in
+                              
+                              if property.key.contains(BlockLoaderKeys.timeStarted) {
+                                  valuesBlockLoader[property.key] = timeStarted
+                              }
+                              
+                              if property.key.contains(BlockLoaderKeys.deviceName) {
+                                  let deviceName = "\(UIDevice.current.model) \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+                                  valuesBlockLoader[property.key] = deviceName
+                              }
+                              
+                              if property.key.contains(BlockLoaderKeys.application) {
+                                  valuesBlockLoader[property.key] = self.configModel!.applicationId
+                              }
+                              
+                              if property.key.contains(BlockLoaderKeys.flowName) {
+                                  valuesBlockLoader[property.key] = self.configModel!.flowName
+                              }
+                              
+                              if property.key.contains(BlockLoaderKeys.instanceHash) {
+                                  valuesBlockLoader[property.key] = self.configModel!.instanceHash
+                              }
+                              
+                              if property.key.contains(BlockLoaderKeys.userAgent) {
+                                  let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
+                                  valuesBlockLoader[property.key] = userAgent
+                              }
+                              
+                              if property.key.contains(BlockLoaderKeys.interactionID) {
+                                  valuesBlockLoader[property.key] = self.configModel!.instanceId
+                              }
+                          }
+                          
+                          // Override / extend with customProperties
+                          item.outputProperties.forEach { property in
+                              customProperties.forEach { key, value in
+                                  if property.key.contains(key) {
+                                      valuesBlockLoader[property.key] = String(describing: value)
+                                  }
+                              }
+                          }
+                      }
+                  }
+                  
+                  if !submitList.contains(where: { $0.stepDefinition == StepsNames.blockLoader }) {
+                      if let blockLoaderStep = initSteps.first(where: { $0.stepDefinition == StepsNames.blockLoader }) {
+                          let blockLoaderSubmit = SubmitRequestModel(
+                              stepId: blockLoaderStep.stepId,
+                              stepDefinition: StepsNames.blockLoader,
+                              extractedInformation: valuesBlockLoader
+                          )
+                          submitList.append(blockLoaderSubmit)
+                      }
+                  }
+               
                return SubmitData(apiKey: apiKey,
                                  submitDataDelegate:submitDataDelegate,
-                                 submitRequestModel:submitRequestModel,
+                                 submitRequestModel:submitList,
                                  configModel:configModel!)
            } else{
                NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()

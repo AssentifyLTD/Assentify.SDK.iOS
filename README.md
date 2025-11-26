@@ -21,6 +21,8 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.76**
+ 1. *Improved Submit Flow Handling , When calling start SubmitData, it is no longer necessary to include the BlockLoader or WrapUp steps in the submitList.*  
 
 **0.0.75**
  1. *Add "applicationId" to the Config Model*  

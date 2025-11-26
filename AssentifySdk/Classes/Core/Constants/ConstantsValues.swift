@@ -21,3 +21,41 @@ struct ConstantsValues {
     static let ClarityProjectId = "spm0s4tjn6";
     static let BugsnagApiKey = "c43ad13958ab6db91b5a46670021a2f4";
 }
+
+
+public struct StepsNames {
+    public   static let wrapUp = "WrapUp"
+    public    static let blockLoader = "BlockLoader"
+    public   static let termsConditions = "TermsConditions"
+    public    static let assistedDataEntry = "AssistedDataEntry"
+    public    static let faceImageAcquisition = "FaceImageAcquisition"
+    public    static let identificationDocumentCapture = "IdentificationDocumentCapture"
+    public    static let contextAwareSigning = "ContextAwareSigning"
+}
+
+public struct WrapUpKeys {
+    public   static let timeEnded = "OnBoardMe_WrapUp_TimeEnded"
+}
+
+
+
+public struct BlockLoaderKeys {
+    public  static let deviceName = "OnBoardMe_BlockLoader_DeviceName"
+    public   static let flowName = "OnBoardMe_BlockLoader_FlowName"
+    public   static let timeStarted = "OnBoardMe_BlockLoader_TimeStarted"
+    public   static let application = "OnBoardMe_BlockLoader_Application"
+    public   static let userAgent = "OnBoardMe_BlockLoader_UserAgent"
+    public   static let instanceHash = "OnBoardMe_BlockLoader_InstanceHash"
+    public   static let interactionID = "OnBoardMe_BlockLoader_Interaction"
+}
+
+
+public func getTimeUTC() -> String {
+      let currentDate = Date()
+      let formatter = DateFormatter()
+      formatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+      formatter.timeZone = TimeZone(abbreviation: "UTC")
+      formatter.locale = Locale(identifier: "en_US_POSIX")
+      let utcTime = formatter.string(from: currentDate)
+      return utcTime
+  }
