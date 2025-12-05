@@ -453,23 +453,32 @@ class Guide{
 
 extension UIColor {
     convenience init(hexString: String) {
-        let hexString: String = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        let scanner = Scanner(string: hexString)
+        var hex = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        if (hexString.hasPrefix("#")) {
-            scanner.scanLocation = 1
+        if hex.hasPrefix("#") {
+            hex.removeFirst()
         }
 
-        var color: UInt32 = 0
-        scanner.scanHexInt32(&color)
+        var color: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&color)
 
-        let mask = 0x000000FF
-        let red = CGFloat(Int(color >> 16) & mask) / 255.0
-        let green = CGFloat(Int(color >> 8) & mask) / 255.0
-        let blue = CGFloat(Int(color) & mask) / 255.0
+        let a, r, g, b: CGFloat
 
-        self.init(red: red, green: green, blue: blue, alpha: 1)
+        if hex.count == 8 {
+            a = CGFloat((color & 0xFF000000) >> 24) / 255
+            r = CGFloat((color & 0x00FF0000) >> 16) / 255
+            g = CGFloat((color & 0x0000FF00) >> 8) / 255
+            b = CGFloat(color & 0x000000FF) / 255
+        } else { // fallback for RRGGBB
+            a = 1
+            r = CGFloat((color & 0xFF0000) >> 16) / 255
+            g = CGFloat((color & 0x00FF00) >> 8) / 255
+            b = CGFloat(color & 0x0000FF) / 255
+        }
+
+        self.init(red: r, green: g, blue: b, alpha: a)
     }
 }
+
 
 
