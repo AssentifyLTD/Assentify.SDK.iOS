@@ -140,7 +140,7 @@ class ModelDataHandler: NSObject {
 
         var inference: [Inference] = []
         for prediction in nmsPredictions {
-            let pred = Inference(confidence: prediction.score, className: labels[prediction.classIndex], rect: prediction.rect, displayColor: UIColor(hex: self.customColor))
+            let pred = Inference(confidence: prediction.score, className: labels[prediction.classIndex], rect: prediction.rect, displayColor: UIColor(hexString: self.customColor))
             inference.append(pred)
         }
         let result = Result(inferenceTime: interval, inferences: inference)
@@ -174,7 +174,7 @@ class ModelDataHandler: NSObject {
 
             let newRect = rect.applying(CGAffineTransform(scaleX: width, y: height))
             
-            let colorToAssign = UIColor(hex: self.customColor)
+            let colorToAssign = UIColor(hexString: self.customColor)
             let inference = Inference(confidence: score,
                                       className: outputClass,
                                       rect: newRect,
