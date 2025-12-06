@@ -244,7 +244,8 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
                     }
                     self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
-                self.scanQrDelegate?.onErrorQrScan(message: remoteProcessingModel.error!)
+                
+                self.scanQrDelegate?.onErrorQrScan(message: EventsErrorMessages.OnRetryCardMessage)
             }
         }
     }

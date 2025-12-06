@@ -329,7 +329,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                             self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                                 destinationEndpoint: HubConnectionTargets.ON_ERROR,
                                 response: "",
-                                error: "",
+                                error: EventsErrorMessages.OnErrorMessage,
                                 success: false
                              ))
                         }
@@ -403,6 +403,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                     self.order =   self.order + 1;
                     self.start = false
                 }else{
+                    remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
                     self.scanIDCardDelegate?.onRetry(dataModel:remoteProcessingModel )
                     self.start = true
                 }
@@ -421,6 +422,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                     self.order =   self.order + 1;
                     self.start = false
                 }else{
+                    remoteProcessingModel.error = EventsErrorMessages.OnLivenessCardUpdateMessage
                     self.scanIDCardDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                     self.start = true
                 }
@@ -438,6 +440,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                     self.order =   self.order + 1;
                     self.start = false
                 }else{
+                    remoteProcessingModel.error = EventsErrorMessages.OnWrongTemplateMessage
                     self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
                     self.start = true
                 }
@@ -448,6 +451,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
           
             switch eventName {
             case HubConnectionTargets.ON_ERROR:
+                remoteProcessingModel.error =  EventsErrorMessages.OnErrorMessage
                 self.scanIDCardDelegate?.onError(dataModel:remoteProcessingModel )
             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
                 self.scanIDCardDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
@@ -479,6 +483,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                 self.scanIDCardDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
             default:
                 self.start = true
+                remoteProcessingModel.error = EventsErrorMessages.OnWrongTemplateMessage
                 self.scanIDCardDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
                 break
             }
@@ -632,7 +637,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                         self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                             destinationEndpoint: HubConnectionTargets.ON_ERROR,
                             response: "",
-                            error: "",
+                            error: EventsErrorMessages.OnErrorMessage,
                             success: false
                          ))
                     }
@@ -641,7 +646,7 @@ public class ScanIDCard :UIViewController, CameraSetupDelegate , RemoteProcessin
                 self.scanIDCardDelegate?.onRetry(dataModel:RemoteProcessingModel(
                     destinationEndpoint: HubConnectionTargets.ON_RETRY,
                     response: "",
-                    error: "",
+                    error: EventsErrorMessages.OnRetryCardMessage,
                     success: false
                 ) )
             }

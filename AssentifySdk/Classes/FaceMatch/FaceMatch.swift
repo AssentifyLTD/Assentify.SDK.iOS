@@ -433,7 +433,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             if(self.isCountDownStarted){
                                 self.isCountDownStarted = false;
                                 DispatchQueue.main.async {
-                                    (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.HoldHandColor) {
+                                    (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.CountdownMumbersColor) {
                                         self.isCountDownStarted = true;
                                         self.start = false;
                                         self.faceMatchDelegate?.onSend();
@@ -479,7 +479,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                                 self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                                                     destinationEndpoint: HubConnectionTargets.ON_ERROR,
                                                     response: "",
-                                                    error: "",
+                                                    error: EventsErrorMessages.OnErrorMessage,
                                                     success: false
                                                 ))
                                             }
@@ -534,7 +534,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                     self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                                         destinationEndpoint: HubConnectionTargets.ON_ERROR,
                                         response: "",
-                                        error: "",
+                                        error: EventsErrorMessages.OnErrorMessage,
                                         success: false
                                     ))
                                 }
@@ -588,6 +588,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.MatchFailed)
                     self.start = false
                 }else{
+                    remoteProcessingModel.error = EventsErrorMessages.OnRetryFaceMessage
                     self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
                     self.start = true
                 }
@@ -604,6 +605,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.LivenessFailed)
                     self.start = false
                 }else{
+                    remoteProcessingModel.error = EventsErrorMessages.OnLivenessFaceUpdateMessage
                     self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                     self.start = true
                 }
@@ -611,6 +613,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 self.start = true
                 switch eventName {
                 case HubConnectionTargets.ON_ERROR:
+                    remoteProcessingModel.error = EventsErrorMessages.OnErrorMessage
                     self.faceMatchDelegate?.onError(dataModel:remoteProcessingModel )
                 case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
                     self.faceMatchDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
@@ -619,6 +622,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 case HubConnectionTargets.ON_UPDATE:
                     self.faceMatchDelegate?.onUpdated?(dataModel:remoteProcessingModel )
                 case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                    remoteProcessingModel.error = EventsErrorMessages.OnLivenessFaceUpdateMessage
                     self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                 case HubConnectionTargets.ON_CARD_DETECTED:
                     self.faceMatchDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
@@ -901,7 +905,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                         self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                             destinationEndpoint: HubConnectionTargets.ON_ERROR,
                             response: "",
-                            error: "",
+                            error: EventsErrorMessages.OnErrorMessage,
                             success: false
                         ))
                     }
@@ -910,7 +914,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 self.faceMatchDelegate?.onRetry(dataModel:RemoteProcessingModel(
                     destinationEndpoint: HubConnectionTargets.ON_RETRY,
                     response: "",
-                    error: "",
+                    error: EventsErrorMessages.OnRetryFaceMessage,
                     success: false
                 ) )
             }

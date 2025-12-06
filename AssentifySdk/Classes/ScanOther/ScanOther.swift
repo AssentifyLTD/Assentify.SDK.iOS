@@ -309,7 +309,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                             self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                                 destinationEndpoint: HubConnectionTargets.ON_ERROR,
                                 response: "",
-                                error: "",
+                                error: EventsErrorMessages.OnErrorMessage,
                                 success: false
                              ))
                         }
@@ -380,6 +380,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                      self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! ,doneFlag: DoneFlags.ExtractFailed)
                      self.start = false
                  }else{
+                     remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage;
                      self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
                      self.start = true
                  }
@@ -397,6 +398,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                      self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! ,doneFlag: DoneFlags.LivenessFailed)
                      self.start = false
                  }else{
+                     remoteProcessingModel.error = EventsErrorMessages.OnLivenessCardUpdateMessage
                      self.scanOtherDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                      self.start = true
                  }
@@ -404,6 +406,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             self.start = eventName == HubConnectionTargets.ON_ERROR
              switch eventName {
              case HubConnectionTargets.ON_ERROR:
+                 remoteProcessingModel.error = EventsErrorMessages.OnErrorMessage
                  self.scanOtherDelegate?.onError(dataModel:remoteProcessingModel )
              case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
                  self.scanOtherDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
@@ -435,6 +438,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                  self.scanOtherDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
              default:
                  self.start = true
+                 remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
                  self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
                  break
              }
@@ -584,7 +588,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                         self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                             destinationEndpoint: HubConnectionTargets.ON_ERROR,
                             response: "",
-                            error: "",
+                            error: EventsErrorMessages.OnErrorMessage,
                             success: false
                          ))
                     }
@@ -593,7 +597,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                 self.scanOtherDelegate?.onRetry(dataModel:RemoteProcessingModel(
                     destinationEndpoint: HubConnectionTargets.ON_RETRY,
                     response: "",
-                    error: "",
+                    error: EventsErrorMessages.OnRetryCardMessage,
                     success: false
                 ) )
             }
