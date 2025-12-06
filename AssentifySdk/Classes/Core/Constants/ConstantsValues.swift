@@ -25,18 +25,29 @@ struct ConstantsValues {
 
 public struct StepsNames {
     public   static let wrapUp = "WrapUp"
-    public    static let blockLoader = "BlockLoader"
+    public   static let blockLoader = "BlockLoader"
     public   static let termsConditions = "TermsConditions"
-    public    static let assistedDataEntry = "AssistedDataEntry"
-    public    static let faceImageAcquisition = "FaceImageAcquisition"
-    public    static let identificationDocumentCapture = "IdentificationDocumentCapture"
-    public    static let contextAwareSigning = "ContextAwareSigning"
+    public   static let assistedDataEntry = "AssistedDataEntry"
+    public   static let faceImageAcquisition = "FaceImageAcquisition"
+    public   static let identificationDocumentCapture = "IdentificationDocumentCapture"
+    public   static let contextAwareSigning = "ContextAwareSigning"
 }
 
 public struct WrapUpKeys {
     public   static let timeEnded = "OnBoardMe_WrapUp_TimeEnded"
 }
 
+
+public struct EventsErrorMessages {
+    public   static let OnErrorMessage = "Your internet connection seems unstable. Please check your connection and try again"
+
+    public   static let OnWrongTemplateMessage = "Please double-check that you selected the correct ID type and presenting this ID type"
+    public   static let OnRetryCardMessage = "We could not read your card. Try again in better lighting and make sure the card is clear and visible"
+    public   static let OnLivenessCardUpdateMessage = "Please use your original physical ID card, not a photo or copy"
+
+    public   static let OnRetryFaceMessage = "We could not complete your request"
+    public   static let OnLivenessFaceUpdateMessage = "Please make sure your face is well lit, look directly at the camera, and avoid using photos or videos"
+}
 
 
 public struct BlockLoaderKeys {

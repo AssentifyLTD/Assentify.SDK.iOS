@@ -21,6 +21,9 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.78**
+ 2. *Error Message handling*  
+
 **0.0.77**
  1. *Ability to add transparent color in the initialization*  
  

@@ -318,7 +318,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                             self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                                 destinationEndpoint: HubConnectionTargets.ON_ERROR,
                                 response: "",
-                                error: "",
+                                error: EventsErrorMessages.OnErrorMessage,
                                 success: false
                              ))
                         }
@@ -378,6 +378,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.ExtractFailed)
                      self.start = false
                  }else{
+                     remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
                      self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
                      self.start = true
                  }
@@ -395,6 +396,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.LivenessFailed)
                      self.start = false
                  }else{
+                     remoteProcessingModel.error = EventsErrorMessages.OnLivenessCardUpdateMessage
                      self.scanPassportDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
                      self.start = true
                  }
@@ -412,6 +414,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! ,doneFlag: DoneFlags.WrongTemplate)
                      self.start = false
                  }else{
+                     remoteProcessingModel.error = EventsErrorMessages.OnWrongTemplateMessage
                      self.scanPassportDelegate?.onWrongTemplate(dataModel:remoteProcessingModel )
                      self.start = true
                  }
@@ -420,6 +423,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                  self.start = eventName == HubConnectionTargets.ON_ERROR
                  switch eventName {
                  case HubConnectionTargets.ON_ERROR:
+                     remoteProcessingModel.error = EventsErrorMessages.OnErrorMessage
                      self.scanPassportDelegate?.onError(dataModel:remoteProcessingModel )
                  case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
                      self.scanPassportDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
@@ -451,6 +455,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                      self.scanPassportDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
                  default:
                      self.start = true
+                     remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
                      self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
                      break
                  }
@@ -599,7 +604,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                         self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
                             destinationEndpoint: HubConnectionTargets.ON_ERROR,
                             response: "",
-                            error: "",
+                            error:EventsErrorMessages.OnErrorMessage,
                             success: false
                          ))
                     }
@@ -608,7 +613,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                 self.scanPassportDelegate?.onRetry(dataModel:RemoteProcessingModel(
                     destinationEndpoint: HubConnectionTargets.ON_RETRY,
                     response: "",
-                    error: "",
+                    error: EventsErrorMessages.OnRetryCardMessage,
                     success: false
                 ) )
             }

@@ -11,7 +11,7 @@ public class EnvironmentalConditions {
     var enableDetect: Bool
     var enableGuide: Bool
 
-    var CustomColor: String
+    var CountdownMumbersColor: String
     var HoldHandColor: String
 
 
@@ -36,7 +36,7 @@ public class EnvironmentalConditions {
     public  init(
         enableDetect: Bool = true,
         enableGuide:Bool = true,
-        CustomColor: String,
+        CountdownMumbersColor: String = "#00FFFFFF",
         HoldHandColor: String,
         BRIGHTNESS_HIGH_THRESHOLD :Double  = 255.0,
         BRIGHTNESS_LOW_THRESHOLD:Double = 50.0,
@@ -51,7 +51,7 @@ public class EnvironmentalConditions {
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
-        self.CustomColor = CustomColor
+        self.CountdownMumbersColor = CountdownMumbersColor
         self.HoldHandColor = HoldHandColor
         self.BRIGHTNESS_HIGH_THRESHOLD = BRIGHTNESS_HIGH_THRESHOLD
         self.BRIGHTNESS_LOW_THRESHOLD = BRIGHTNESS_LOW_THRESHOLD
@@ -65,7 +65,6 @@ public class EnvironmentalConditions {
         self.minCPUCores = minCPUCores
 
         // Perform validation checks
-        precondition(!self.CustomColor.isEmpty, "Invalid CustomColor value")
         precondition(!self.HoldHandColor.isEmpty, "Invalid HoldHandColor value")
     }
 
