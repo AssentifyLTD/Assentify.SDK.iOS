@@ -21,8 +21,11 @@ pod 'AssentifySdk'
 ```
 
 ## Versions
+**0.0.79**
+ 1. *Update MLKit Face Detection *  
+
 **0.0.78**
- 2. *Error Message handling*  
+ 1. *Error Message handling*  
 
 **0.0.77**
  1. *Ability to add transparent color in the initialization*  
