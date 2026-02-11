@@ -19,8 +19,12 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'AssentifySdk'
 ```
-
+  
 ## Versions
+
+**1.0.0-alpha.1**
+ 1. *Full Flows integration*
+
 **0.0.79**
  1. *Update MLKit Face Detection *  
 

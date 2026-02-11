@@ -433,7 +433,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             if(self.isCountDownStarted){
                                 self.isCountDownStarted = false;
                                 DispatchQueue.main.async {
-                                    (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.CountdownMumbersColor) {
+                                    (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.CountDownNumbersColor) {
                                         self.isCountDownStarted = true;
                                         self.start = false;
                                         self.faceMatchDelegate?.onSend();

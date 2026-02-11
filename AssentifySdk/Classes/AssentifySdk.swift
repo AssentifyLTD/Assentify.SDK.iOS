@@ -2,6 +2,8 @@
 
 import Foundation
 import UIKit
+import SwiftUI
+
 public class AssentifySdk {
     private let apiKey: String
     private let tenantIdentifier: String
@@ -11,13 +13,15 @@ public class AssentifySdk {
     private var performActiveLivenessFace: Bool?
     private var isKeyValid: Bool = false
     private var configModel: ConfigModel?
+    private var tenantThemeModel: TenantThemeModel?
     private var stepID: Int = -1;
     private var scanID: ScanIDCard?;
     private var templates: [TemplatesByCountry]?;
     private var timeStarted: String;
+    private var flowController:FlowController?;
     
     
-
+    
     
     public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?,  performActiveLivenessFace: Bool? = nil) {
         self.apiKey = apiKey
@@ -45,10 +49,10 @@ public class AssentifySdk {
         if !apiKey.isEmpty && !interaction.isEmpty && !tenantIdentifier.isEmpty {
             validateKey()
         }
-
+        
     }
- 
-
+    
+    
     private func validateKey() {
         remoteValidateKey(apiKey: apiKey, tenantIdentifier: tenantIdentifier, agentSource: "SDK") { result in
             switch result {
@@ -71,8 +75,31 @@ public class AssentifySdk {
                         self.stepID = item.stepId
                     }
                 }
+                self.getTenantTheme();
+                
+            case .failure(let error):
+                self.assentifySdkDelegate?.onAssentifySdkInitError(message:error.localizedDescription);
+            }
+        }
+    }
+    
+    private func getTenantTheme(){
+        remotegGetTenantTheme(apiKey: apiKey,
+                              userAgent: "SDK",
+                              flowInstanceId: configModel!.flowInstanceId,
+                              tenantIdentifier: self.tenantIdentifier,
+                              blockIdentifier: configModel!.blockIdentifier,
+                              instanceId: configModel!.instanceId,
+                              flowIdentifier: configModel!.flowIdentifier,
+                              instanceHash: configModel!.instanceHash,
+        )
+        { result in
+            switch result {
+            case .success(let tenantThemeModel):
+                self.isKeyValid  = true;
+                self.tenantThemeModel = tenantThemeModel;
                 self.getTemplatesByCountry();
-               
+                
             case .failure(let error):
                 self.assentifySdkDelegate?.onAssentifySdkInitError(message:error.localizedDescription);
             }
@@ -92,7 +119,7 @@ public class AssentifySdk {
             )
             scanPassport.setStepId(stepId)
             return scanPassport;
-
+            
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
@@ -108,7 +135,7 @@ public class AssentifySdk {
                 scanNfcDelegate:scanNfcDelegate
             )
             return scanNfc;
-
+            
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
@@ -125,12 +152,12 @@ public class AssentifySdk {
                 scanOtherDelegate :scanOtherDelegate,
                 language:language,
                 isManual: self.isManual()
-
+                
                 
             )
             scanOther.setStepId(stepId)
             return scanOther;
-
+            
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
@@ -140,7 +167,7 @@ public class AssentifySdk {
     
     public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON,stepId: Int? = nil)->ScanIDCard?{
         if(isKeyValid){
-             scanID = ScanIDCard(
+            scanID = ScanIDCard(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
@@ -152,17 +179,17 @@ public class AssentifySdk {
             )
             scanID!.setStepId(stepId)
             return scanID;
-
+            
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
         return nil;
     }
-   
+    
     
     public func startScanQr(scanQrDelegate:ScanQrDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON,stepId: Int? = nil)->ScanQr?{
         if(isKeyValid){
-           var  scanQr = ScanQr(
+            var  scanQr = ScanQr(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
@@ -174,13 +201,13 @@ public class AssentifySdk {
             )
             scanQr.setStepId(stepId)
             return scanQr;
-
+            
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
         return nil;
     }
-  
+    
     
     
     public func startFaceMatch(faceMatchDelegate:FaceMatchDelegate,secondImage:String,showCountDown:Bool = true,stepId: Int? = nil)->FaceMatch?{
@@ -197,7 +224,7 @@ public class AssentifySdk {
             );
             faceMatch.setStepId(stepId)
             return faceMatch;
-
+            
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
@@ -224,132 +251,132 @@ public class AssentifySdk {
     
     
     public func startSubmitData(
-           submitDataDelegate: SubmitDataDelegate,
-           submitRequestModel: [SubmitRequestModel],
-           customProperties: [String: String] = [:]
-       ) -> SubmitData? {
-           if (isKeyValid) {
-               
-              var submitList: [SubmitRequestModel] = []
-              submitList.append(contentsOf: submitRequestModel)
-              let initSteps = self.configModel!.stepDefinitions
-               
-              // MARK: - WrapUp
-              var valuesWrapUp: [String: String] = [:]
-                   
-                   initSteps.forEach { item in
-                       if item.stepDefinition == StepsNames.wrapUp {
-                           item.outputProperties.forEach { property in
-                               if property.key.contains(WrapUpKeys.timeEnded) {
-                                   valuesWrapUp[property.key] = getTimeUTC()
-                               }
-                           }
-                       }
-                   }
-                   if !submitList.contains(where: { $0.stepDefinition == StepsNames.wrapUp }) {
-                       if let wrapUpStep = initSteps.first(where: { $0.stepDefinition == StepsNames.wrapUp }) {
-                           let wrapUpSubmit = SubmitRequestModel(
-                               stepId: wrapUpStep.stepId,
-                               stepDefinition: StepsNames.wrapUp,
-                               extractedInformation: valuesWrapUp
-                           )
-                           submitList.append(wrapUpSubmit)
-                       }
-                   }
-               
-               
-               // MARK: - BlockLoader
-                  var valuesBlockLoader: [String: String] = [:]
-                  
-                  initSteps.forEach { item in
-                      if item.stepDefinition == StepsNames.blockLoader {
-                          
-                          // Fill from standard keys
-                          item.outputProperties.forEach { property in
-                              
-                              if property.key.contains(BlockLoaderKeys.timeStarted) {
-                                  valuesBlockLoader[property.key] = timeStarted
-                              }
-                              
-                              if property.key.contains(BlockLoaderKeys.deviceName) {
-                                  let deviceName = "\(UIDevice.current.model) \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-                                  valuesBlockLoader[property.key] = deviceName
-                              }
-                              
-                              if property.key.contains(BlockLoaderKeys.application) {
-                                  valuesBlockLoader[property.key] = self.configModel!.applicationId
-                              }
-                              
-                              if property.key.contains(BlockLoaderKeys.flowName) {
-                                  valuesBlockLoader[property.key] = self.configModel!.flowName
-                              }
-                              
-                              if property.key.contains(BlockLoaderKeys.instanceHash) {
-                                  valuesBlockLoader[property.key] = self.configModel!.instanceHash
-                              }
-                              
-                              if property.key.contains(BlockLoaderKeys.userAgent) {
-                                  let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
-                                  valuesBlockLoader[property.key] = userAgent
-                              }
-                              
-                              if property.key.contains(BlockLoaderKeys.interactionID) {
-                                  valuesBlockLoader[property.key] = self.configModel!.instanceId
-                              }
-                          }
-                          
-                          // Override / extend with customProperties
-                          item.outputProperties.forEach { property in
-                              customProperties.forEach { key, value in
-                                  if property.key.contains(key) {
-                                      valuesBlockLoader[property.key] = String(describing: value)
-                                  }
-                              }
-                          }
-                      }
-                  }
-                  
-                  if !submitList.contains(where: { $0.stepDefinition == StepsNames.blockLoader }) {
-                      if let blockLoaderStep = initSteps.first(where: { $0.stepDefinition == StepsNames.blockLoader }) {
-                          let blockLoaderSubmit = SubmitRequestModel(
-                              stepId: blockLoaderStep.stepId,
-                              stepDefinition: StepsNames.blockLoader,
-                              extractedInformation: valuesBlockLoader
-                          )
-                          submitList.append(blockLoaderSubmit)
-                      }
-                  }
-               
-               return SubmitData(apiKey: apiKey,
-                                 submitDataDelegate:submitDataDelegate,
-                                 submitRequestModel:submitList,
-                                 configModel:configModel!)
-           } else{
-               NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-           }
-           return nil;
-       }
+        submitDataDelegate: SubmitDataDelegate,
+        submitRequestModel: [SubmitRequestModel],
+        customProperties: [String: String] = [:]
+    ) -> SubmitData? {
+        if (isKeyValid) {
+            
+            var submitList: [SubmitRequestModel] = []
+            submitList.append(contentsOf: submitRequestModel)
+            let initSteps = self.configModel!.stepDefinitions
+            
+            // MARK: - WrapUp
+            var valuesWrapUp: [String: String] = [:]
+            
+            initSteps.forEach { item in
+                if item.stepDefinition == StepsNames.wrapUp {
+                    item.outputProperties.forEach { property in
+                        if property.key.contains(WrapUpKeys.timeEnded) {
+                            valuesWrapUp[property.key] = getTimeUTC()
+                        }
+                    }
+                }
+            }
+            if !submitList.contains(where: { $0.stepDefinition == StepsNames.wrapUp }) {
+                if let wrapUpStep = initSteps.first(where: { $0.stepDefinition == StepsNames.wrapUp }) {
+                    let wrapUpSubmit = SubmitRequestModel(
+                        stepId: wrapUpStep.stepId,
+                        stepDefinition: StepsNames.wrapUp,
+                        extractedInformation: valuesWrapUp
+                    )
+                    submitList.append(wrapUpSubmit)
+                }
+            }
+            
+            
+            // MARK: - BlockLoader
+            var valuesBlockLoader: [String: String] = [:]
+            
+            initSteps.forEach { item in
+                if item.stepDefinition == StepsNames.blockLoader {
+                    
+                    // Fill from standard keys
+                    item.outputProperties.forEach { property in
+                        
+                        if property.key.contains(BlockLoaderKeys.timeStarted) {
+                            valuesBlockLoader[property.key] = timeStarted
+                        }
+                        
+                        if property.key.contains(BlockLoaderKeys.deviceName) {
+                            let deviceName = "\(UIDevice.current.model) \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+                            valuesBlockLoader[property.key] = deviceName
+                        }
+                        
+                        if property.key.contains(BlockLoaderKeys.application) {
+                            valuesBlockLoader[property.key] = self.configModel!.applicationId
+                        }
+                        
+                        if property.key.contains(BlockLoaderKeys.flowName) {
+                            valuesBlockLoader[property.key] = self.configModel!.flowName
+                        }
+                        
+                        if property.key.contains(BlockLoaderKeys.instanceHash) {
+                            valuesBlockLoader[property.key] = self.configModel!.instanceHash
+                        }
+                        
+                        if property.key.contains(BlockLoaderKeys.userAgent) {
+                            let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
+                            valuesBlockLoader[property.key] = userAgent
+                        }
+                        
+                        if property.key.contains(BlockLoaderKeys.interactionID) {
+                            valuesBlockLoader[property.key] = self.configModel!.instanceId
+                        }
+                    }
+                    
+                    // Override / extend with customProperties
+                    item.outputProperties.forEach { property in
+                        customProperties.forEach { key, value in
+                            if property.key.contains(key) {
+                                valuesBlockLoader[property.key] = String(describing: value)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if !submitList.contains(where: { $0.stepDefinition == StepsNames.blockLoader }) {
+                if let blockLoaderStep = initSteps.first(where: { $0.stepDefinition == StepsNames.blockLoader }) {
+                    let blockLoaderSubmit = SubmitRequestModel(
+                        stepId: blockLoaderStep.stepId,
+                        stepDefinition: StepsNames.blockLoader,
+                        extractedInformation: valuesBlockLoader
+                    )
+                    submitList.append(blockLoaderSubmit)
+                }
+            }
+            
+            return SubmitData(apiKey: apiKey,
+                              submitDataDelegate:submitDataDelegate,
+                              submitRequestModel:submitList,
+                              configModel:configModel!)
+        } else{
+            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
+        }
+        return nil;
+    }
     
-     func getTemplatesByCountry() {
+    func getTemplatesByCountry() {
         remoteGetTemplates() { result in
             switch result {
             case .success(let templates):
                 var filteredList = self.filterBySourceCountryCode(dataList:templates )
                 var templatesByCountry = [TemplatesByCountry]()
-
+                
                 for data in filteredList {
-                   
-                        let item = TemplatesByCountry(
-                            id: data.id,
-                            name: data.sourceCountry,
-                            sourceCountryCode: data.sourceCountryCode,
-                            flag: data.sourceCountryFlag,
-                            templates: self.filterTemplatesCountryCode(dataList: templates, countryCode: data.sourceCountryCode)
-                        )
-
-                        templatesByCountry.append(item)
                     
-                   
+                    let item = TemplatesByCountry(
+                        id: data.id,
+                        name: data.sourceCountry,
+                        sourceCountryCode: data.sourceCountryCode,
+                        flag: data.sourceCountryFlag,
+                        templates: self.filterTemplatesCountryCode(dataList: templates, countryCode: data.sourceCountryCode)
+                    )
+                    
+                    templatesByCountry.append(item)
+                    
+                    
                 }
                 self.templates = self.filterToSupportedCountries(dataList: templatesByCountry)!
                 self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: self.configModel!);
@@ -364,21 +391,21 @@ public class AssentifySdk {
         var uniqueSourceCountryCodes = [String]()
         
         for data in dataList {
-                if !uniqueSourceCountryCodes.contains(data.sourceCountryCode) {
-                    filteredList.append(data)
-                    uniqueSourceCountryCodes.append(data.sourceCountryCode)
-                }
+            if !uniqueSourceCountryCodes.contains(data.sourceCountryCode) {
+                filteredList.append(data)
+                uniqueSourceCountryCodes.append(data.sourceCountryCode)
+            }
         }
         return filteredList
     }
-
+    
     func filterTemplatesCountryCode(dataList: [Templates], countryCode: String) -> [Templates] {
         var filteredList = [Templates]()
         
         for data in dataList {
-                if data.sourceCountryCode == countryCode {
-                    filteredList.append(data)
-                }
+            if data.sourceCountryCode == countryCode {
+                filteredList.append(data)
+            }
         }
         return filteredList
     }
@@ -416,7 +443,7 @@ public class AssentifySdk {
         
         
         var filteredListByCards = [TemplatesByCountry]()
-          
+        
         filteredList.forEach(){
             card in
             var selectedTemplates : [Templates] = [];
@@ -434,43 +461,100 @@ public class AssentifySdk {
         }
         
         
-
+        
         return filteredListByCards
     }
     
     public func languageTransformation(
-           languageTransformationDelegate: LanguageTransformationDelegate,
-            language: String,
-            languageTransformationData: [LanguageTransformationModel]
-        ) {
-            if (isKeyValid) {
-                let transformed = LanguageTransformation(apiKey: apiKey,languageTransformationDelegate: languageTransformationDelegate)
-                   transformed.languageTransformation(
-                    langauge: language,
-                    transformationModel: TransformationModel(languageTransformationModels: languageTransformationData)
-                   )
-            } else{
-                NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
-            }
+        languageTransformationDelegate: LanguageTransformationDelegate,
+        language: String,
+        languageTransformationData: [LanguageTransformationModel]
+    ) {
+        if (isKeyValid) {
+            let transformed = LanguageTransformation(apiKey: apiKey,languageTransformationDelegate: languageTransformationDelegate)
+            transformed.languageTransformation(
+                langauge: language,
+                transformationModel: TransformationModel(languageTransformationModels: languageTransformationData)
+            )
+        } else{
+            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }
+    }
     
     public func getTemplates() -> [TemplatesByCountry] {
         return self.templates!
     }
     
     public func isManual() -> Bool {
-           let totalRamGB = getTotalRAMInGB()
-           let cores = ProcessInfo.processInfo.processorCount
-           
-           print("Total RAM: \(totalRamGB) GB")
-           print("CPU Cores: \(cores)")
-           
+        let totalRamGB = getTotalRAMInGB()
+        let cores = ProcessInfo.processInfo.processorCount
+        
+        print("Total RAM: \(totalRamGB) GB")
+        print("CPU Cores: \(cores)")
+        
         return (totalRamGB < self.environmentalConditions!.minRam) || (cores < self.environmentalConditions!.minCPUCores)
-       }
-       
-    private  func getTotalRAMInGB() -> UInt64 {
-           let physicalMemory = ProcessInfo.processInfo.physicalMemory
-           return physicalMemory / (1024 * 1024 * 1024)
     }
+    
+    private  func getTotalRAMInGB() -> UInt64 {
+        let physicalMemory = ProcessInfo.processInfo.physicalMemory
+        return physicalMemory / (1024 * 1024 * 1024)
+    }
+    
+    // Flow
+    public func startFlow(from presenter: UIViewController,flowDelegate:FlowDelegate,flowEnvironmentalConditions:FlowEnvironmentalConditions) {
+        if (flowEnvironmentalConditions.logoUrl.isEmpty) {
+            flowEnvironmentalConditions.logoUrl = tenantThemeModel!.logoIcon!;
+        }
+        if (flowEnvironmentalConditions.svgBackgroundImageUrl.isEmpty) {
+            flowEnvironmentalConditions.svgBackgroundImageUrl =
+            "tenantThemeModel!!.svgBackgroundImageUrl!!";
+        }
+        if (flowEnvironmentalConditions.textColor.isEmpty) {
+            flowEnvironmentalConditions.textColor = tenantThemeModel!.textColor;
+        }
+        if (flowEnvironmentalConditions.secondaryTextColor.isEmpty) {
+            flowEnvironmentalConditions.secondaryTextColor = tenantThemeModel!.secondaryTextColor;
+        }
+        if (flowEnvironmentalConditions.backgroundCardColor.isEmpty) {
+            flowEnvironmentalConditions.backgroundCardColor =
+            tenantThemeModel!.backgroundCardColor;
+        }
+        if (flowEnvironmentalConditions.accentColor.isEmpty) {
+            flowEnvironmentalConditions.accentColor = tenantThemeModel!.accentColor;
+        }
+        if (flowEnvironmentalConditions.backgroundColor == nil) {
+            if (flowEnvironmentalConditions.backgroundType == BackgroundType.color) {
+                flowEnvironmentalConditions.backgroundColor =
+                BackgroundStyle.solid(hex:tenantThemeModel!.backgroundBodyColor)
+            } else {
+                flowEnvironmentalConditions.backgroundColor =
+                BackgroundStyle.solid(hex:tenantThemeModel!.backgroundCardColor)
+            }
+        }
+        if (flowEnvironmentalConditions.clickColor == nil) {
+            flowEnvironmentalConditions.clickColor =
+            BackgroundStyle.solid(hex:tenantThemeModel!.accentColor)
+        }
+        
+        ApiKeyObject.shared.set(self.apiKey)
+        FlowEnvironmentalConditionsObject.shared.set(flowEnvironmentalConditions)
+        ConfigModelObject.shared.set(self.configModel!)
 
+        
+        let nav = UINavigationController()
+        nav.modalPresentationStyle = .fullScreen
+        
+        let controller = FlowController(navigationController: nav,flowDelegate: flowDelegate)
+        self.flowController = controller
+        
+        let blockLoader = BlockLoaderScreen(
+            flowController: controller
+        )
+        
+        let rootVC = UIHostingController(rootView: blockLoader)
+        nav.setViewControllers([rootVC], animated: false)
+        
+        presenter.present(nav, animated: true)
+    }
+    
 }

@@ -11,23 +11,25 @@ public class EnvironmentalConditions {
     var enableDetect: Bool
     var enableGuide: Bool
 
-    var CountdownMumbersColor: String
     var HoldHandColor: String
+    var CountDownNumbersColor: String
 
 
-    var BRIGHTNESS_HIGH_THRESHOLD: Double
-    var BRIGHTNESS_LOW_THRESHOLD: Double
-    
-    
     var MotionLimit : Int
     var MotionLimitFace : Int
     
+    
+    var BRIGHTNESS_HIGH_THRESHOLD: Double
+    var BRIGHTNESS_LOW_THRESHOLD: Double
+    
+
     var activeLiveType: ActiveLiveType
     
     var activeLivenessCheckCount:Int
     
-    
+    /// TODOSDK
     var retryCount : Int = 3
+    
     var faceLivenessRetryCount : Int = 2
 
     var minRam : Int = 2
@@ -36,7 +38,7 @@ public class EnvironmentalConditions {
     public  init(
         enableDetect: Bool = true,
         enableGuide:Bool = true,
-        CountdownMumbersColor: String = "#00FFFFFF",
+        CountDownNumbersColor: String = "#00FFFFFF",
         HoldHandColor: String,
         BRIGHTNESS_HIGH_THRESHOLD :Double  = 255.0,
         BRIGHTNESS_LOW_THRESHOLD:Double = 50.0,
@@ -51,7 +53,7 @@ public class EnvironmentalConditions {
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
-        self.CountdownMumbersColor = CountdownMumbersColor
+        self.CountDownNumbersColor = CountDownNumbersColor
         self.HoldHandColor = HoldHandColor
         self.BRIGHTNESS_HIGH_THRESHOLD = BRIGHTNESS_HIGH_THRESHOLD
         self.BRIGHTNESS_LOW_THRESHOLD = BRIGHTNESS_LOW_THRESHOLD
