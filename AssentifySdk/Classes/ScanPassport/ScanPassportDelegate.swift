@@ -9,9 +9,12 @@ import Foundation
 
     func onRetry(dataModel: RemoteProcessingModel )
 
-    func onComplete(dataModel: PassportResponseModel ,doneFlag:DoneFlags)
+    func onComplete(dataModel: PassportResponseModel)
     
      func onWrongTemplate(dataModel: RemoteProcessingModel )
+    
+    @objc func onUploadingProgress(progress:Double)
+
     
     @objc optional  func onClipPreparationComplete(dataModel: RemoteProcessingModel )
 
@@ -46,6 +49,7 @@ import Foundation
     @objc optional func onEnvironmentalConditionsChange(
            brightnessEvents: BrightnessEvents,
            motion: MotionType,
-           zoom: ZoomType
+           zoom: ZoomType,
+           isCentered:Bool
        )
 }

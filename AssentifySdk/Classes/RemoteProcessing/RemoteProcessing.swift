@@ -232,6 +232,169 @@ class RemoteProcessing {
         task.resume()
     }
     
+    
+    func createMultipartBody(
+            parameters: [String: String],
+            files: [(name: String, filename: String, mimeType: String, data: Data)],
+            boundary: String
+        ) -> Data {
+            var body = Data()
+
+            for (key, value) in parameters {
+                body.append("--\(boundary)\r\n")
+                body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+                body.append("\(value)\r\n")
+            }
+
+            for file in files {
+                body.append("--\(boundary)\r\n")
+                body.append("Content-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.filename)\"\r\n")
+                body.append("Content-Type: \(file.mimeType)\r\n\r\n")
+                body.append(file.data)
+                body.append("\r\n")
+            }
+
+            body.append("--\(boundary)--\r\n")
+            return body
+        }
+    
+    
+
+       func starProcessingIDs(
+               url: String,
+               image: Data,
+               stepIdString: String,
+               appConfiguration: ConfigModel,
+               templateId: String,
+               connectionId: String,
+               clipsPath: String,
+               checkForFace: Bool,
+               processMrz: Bool,
+               performLivenessDocument: Bool,
+               saveCapturedVideo: Bool,
+               storeCapturedDocument: Bool,
+               isVideo: Bool,
+               storeImageStream: Bool,
+               isManualCapture: Bool,
+               isAutoCapture: Bool,
+               retryCount: Int,
+               tag: String,
+               processCivilExtractQrCode: Bool,
+               onProgress: ((Double) -> Void)? = nil,
+               completion: @escaping (BaseResult<RemoteProcessingModel?, Error>) -> Void
+           
+           ) {
+               let traceIdentifier = UUID().uuidString
+               let urlString = url
+                   guard let url = URL(string: urlString) else {
+                       completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+                       return
+                   }
+                   
+                   var request = URLRequest(url: url)
+                   request.httpMethod = "POST"
+                   request.timeoutInterval = 120
+                  
+               
+               
+                   request.setValue(stepIdString, forHTTPHeaderField: "x-step-id")
+                   request.setValue(appConfiguration.blockIdentifier, forHTTPHeaderField: "x-block-identifier")
+                   request.setValue(appConfiguration.flowIdentifier, forHTTPHeaderField: "x-flow-identifier")
+                   request.setValue(appConfiguration.flowInstanceId, forHTTPHeaderField: "x-flow-instance-id")
+                   request.setValue(appConfiguration.instanceHash, forHTTPHeaderField: "x-instance-hash")
+                   request.setValue(appConfiguration.instanceId, forHTTPHeaderField: "x-instance-id")
+                   request.setValue(appConfiguration.tenantIdentifier, forHTTPHeaderField: "x-tenant-identifier")
+                   
+               
+              
+
+               let boundary = "Boundary-\(UUID().uuidString)"
+                  request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+            
+               
+
+               let tryNumber = retryCount+1;
+               let formData : [String: String]  = [
+                   "tenantId": appConfiguration.tenantIdentifier,
+                   "blockId": appConfiguration.blockIdentifier,
+                   "instanceId": appConfiguration.instanceId,
+                   "templateId": templateId,
+                   "livenessCheckEnabled": String(performLivenessDocument),
+                   "processMrz": String(processMrz),
+                   "DisableDataExtraction": "false",
+                   "storeImageStream": String(storeImageStream),
+                   "isVideo":"false",
+                   "clipsPath": "clipsPath",
+                   "isMobile":"true",
+                   "checkForFace":  String(checkForFace),
+                   "callerConnectionId": connectionId,
+                   "saveCapturedVideo": String(saveCapturedVideo),
+                   "storeCapturedDocument":String(storeCapturedDocument),
+                   "TraceIdentifier":UUID().uuidString,
+                   "IsManualCapture":String(isManualCapture),
+                   "IsAutoCapture":String(isAutoCapture),
+                   "TryNumber":String(tryNumber),
+                   "Tag":tag,
+                   "ProcessCivilExtractQrCode":String(processCivilExtractQrCode),
+                   "RequireFaceExtraction":"false",
+               ] as [String : String]
+               
+             
+               
+               let body = createMultipartBody(
+                      parameters: formData,
+                      files: [
+                          ("Image", "image.jpg", "image/jpeg", image)
+                      ],
+                      boundary: boundary
+                  )
+               
+            
+               let delegate = UploadDelegate()
+                   delegate.onProgress = { progress in
+                    onProgress!(progress)
+
+               }
+               let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+
+                   let task = session.uploadTask(with: request, from: body) { data, response, error in
+                       session.finishTasksAndInvalidate()
+
+                       guard let httpResponse = response as? HTTPURLResponse else {
+                           completion(.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+                           return
+                       }
+                       
+           
+                       if(httpResponse.statusCode == 200){
+                           guard let responseData = data else {
+                                    completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+                                    return
+                                }
+                           if let responseString = String(data: responseData, encoding: .utf8) {
+                           }
+                           do {
+                                let decoder = JSONDecoder()
+                               if let dictionary = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                                   let dataResult =  parseDataToRemoteProcessingModel(data: dictionary);
+                                   completion(BaseResult.success(dataResult))
+                                 } else {
+                                 }
+                      
+                               
+                           } catch {
+                               completion(BaseResult.failure(error))
+                           }
+                       }else{
+                           completion(BaseResult.failure(NSError(domain: "Invalid Key", code: 0, userInfo: nil)))
+                       }
+                   }
+
+                   task.resume()
+           }
+    
+    
     func setDelegate(delegate: RemoteProcessingDelegate?) {
         self.delegate = delegate
     }
@@ -275,12 +438,28 @@ class RemoteProcessing {
     }
 
 
-
-
-  
-
-    
-  
-
    
+}
+
+class UploadDelegate: NSObject, URLSessionTaskDelegate {
+    var onProgress: ((Double) -> Void)?
+    
+    func urlSession(_ session: URLSession,
+                    task: URLSessionTask,
+                    didSendBodyData bytesSent: Int64,
+                    totalBytesSent: Int64,
+                    totalBytesExpectedToSend: Int64) {
+        guard totalBytesExpectedToSend > 0 else { return }
+        let progress = Double(totalBytesSent) / Double(totalBytesExpectedToSend)
+        onProgress?(progress)
+    }
+}
+
+
+extension Data {
+    mutating func append(_ string: String) {
+        if let data = string.data(using: .utf8) {
+            append(data)
+        }
+    }
 }

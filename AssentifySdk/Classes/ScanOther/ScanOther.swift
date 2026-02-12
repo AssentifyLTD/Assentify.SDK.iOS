@@ -5,8 +5,8 @@ import Accelerate
 import CoreImage
 
 public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessingDelegate , LanguageTransformationDelegate {
- 
-  
+    
+    
     
     var guide : Guide = Guide();
     var previewView: PreviewView!
@@ -22,7 +22,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     var sendingFlagsMotion: [MotionType] = []
     var sendingFlagsZoom: [ZoomType] = []
     
-
+    
     private var scanOtherDelegate: ScanOtherDelegate?
     private var configModel: ConfigModel?
     private var environmentalConditions: EnvironmentalConditions?
@@ -31,15 +31,15 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var performLivenessDocument: Bool?
     private var saveCapturedVideoID: Bool?
     private var storeCapturedDocument: Bool?
-
+    
     private var language: String
     private var stepId:Int?;
-
+    
     private var remoteProcessing: RemoteProcessing?
     private var motion:MotionType = MotionType.NO_DETECT;
     private var zoom:ZoomType = ZoomType.NO_DETECT;
     private var otherResponseModel : OtherResponseModel?;
-
+    
     private var detectIfRectFInsideTheScreen = DetectIfRectInsideTheScreen();
     private var isRectFInsideTheScreen:Bool = false;
     
@@ -64,7 +64,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.isManual = isManual;
         
         modelDataHandler?.customColor = ConstantsValues.DetectColor;
-
+        
         BugsnagObject.initialize(configModel: configModel);
         super.init(nibName: nil, bundle: nil)
     }
@@ -77,7 +77,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         self.stepId = stepId
         if self.stepId == nil {
             let steps = self.configModel?.stepDefinitions.filter { $0.stepDefinition == "IdentificationDocumentCapture" }
-
+            
             if steps?.count == 1 {
                 if let step = steps?.first {
                     self.stepId = step.stepId
@@ -108,26 +108,26 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     
     
     public override func viewDidLoad() {
-         guard modelDataHandler != nil else {
-             fatalError("Failed to load model")
-         }
-         overlayView.clearsContextBeforeDrawing = true
-          self.previewView = PreviewView();
-          self.previewView.translatesAutoresizingMaskIntoConstraints = false
-          self.previewView.contentMode = .scaleToFill
-          view.addSubview(self.previewView)
-          NSLayoutConstraint.activate([
-              self.previewView.topAnchor.constraint(equalTo: view.topAnchor),
-              self.previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-              self.previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-              self.previewView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-          ])
-     
-
-      self.cameraFeedManager = CameraFeedManager(previewView: self.previewView,isFront: false)
-      self.cameraFeedManager.checkCameraConfigurationAndStartSession()
-      self.cameraFeedManager.delegate = self
-
+        guard modelDataHandler != nil else {
+            fatalError("Failed to load model")
+        }
+        overlayView.clearsContextBeforeDrawing = true
+        self.previewView = PreviewView();
+        self.previewView.translatesAutoresizingMaskIntoConstraints = false
+        self.previewView.contentMode = .scaleToFill
+        view.addSubview(self.previewView)
+        NSLayoutConstraint.activate([
+            self.previewView.topAnchor.constraint(equalTo: view.topAnchor),
+            self.previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.previewView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        
+        self.cameraFeedManager = CameraFeedManager(previewView: self.previewView,isFront: false)
+        self.cameraFeedManager.checkCameraConfigurationAndStartSession()
+        self.cameraFeedManager.delegate = self
+        
         self.remoteProcessing = RemoteProcessing()
         if(environmentalConditions!.enableGuide){
             if(self.guide.cardSvgImageView == nil){
@@ -138,15 +138,15 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     }
     
     public  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-         return .portrait
-     }
-     public  override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-         return .portrait
-     }
-     public   override var shouldAutorotate: Bool {
-         return false
-     }
-     
+        return .portrait
+    }
+    public  override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+    public   override var shouldAutorotate: Bool {
+        return false
+    }
+    
     
     func didCaptureCVPixelBuffer(_ pixelBuffer: CVPixelBuffer) {
         if(self.isManual){
@@ -191,7 +191,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             if(inference.className == "card"){
                 motionRectF.append(inference.rect);
             }
-          
+            
             var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.overlayView.bounds.size.width / imageSize.width, y: self.overlayView.bounds.size.height / imageSize.height))
             if convertedRect.origin.x < 0 {
                 convertedRect.origin.x = self.edgeOffset
@@ -216,7 +216,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
             objectOverlays.append(objectOverlay)
         }
-            self.draw(objectOverlays: objectOverlays)
+        self.draw(objectOverlays: objectOverlays)
         
     }
     
@@ -237,17 +237,17 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
     func openCvCheck(pixelBuffer: CVPixelBuffer){
         let cropRect = CGRect(x: 0, y: 0, width: 256, height: 256)
         let imageBrightnessChecker = cropPixelBuffer(pixelBuffer, toRect: cropRect)!.brightness;
-          if motionRectF.count >= 2 {
-                        let rect1 = motionRectF[motionRectF.count - 2]
-                        let rect2 = motionRectF[motionRectF.count - 1]
-                        motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
-                        zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
-             
-      }
+        if motionRectF.count >= 2 {
+            let rect1 = motionRectF[motionRectF.count - 2]
+            let rect2 = motionRectF[motionRectF.count - 1]
+            motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
+            zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
+            
+        }
         
         if (motion == MotionType.SENDING && zoom == ZoomType.SENDING && isRectFInsideTheScreen && environmentalConditions!.checkConditions(
             brightness: imageBrightnessChecker)  == BrightnessEvents.Good) {
-              modelDataHandler?.customColor = ConstantsValues.DetectColor;
+            modelDataHandler?.customColor = ConstantsValues.DetectColor;
             sendingFlagsMotion.append(MotionType.SENDING);
             sendingFlagsZoom.append(ZoomType.SENDING);
             if(environmentalConditions!.enableGuide){
@@ -258,203 +258,182 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                     self.guide.changeCardColor(view: self.view,to:ConstantsValues.DetectColor,notTransmitting: self.start)
                 }
             }
-            } else {
-                modelDataHandler?.customColor = environmentalConditions!.HoldHandColor;
-                sendingFlagsZoom.removeAll();
-                sendingFlagsMotion.removeAll();
-                if(environmentalConditions!.enableGuide){
-                    DispatchQueue.main.async {
-                        if(self.guide.cardSvgImageView == nil){
-                            self.guide.showCardGuide(view: self.view)
-                        }
-                        self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
+        } else {
+            modelDataHandler?.customColor = environmentalConditions!.HoldHandColor;
+            sendingFlagsZoom.removeAll();
+            sendingFlagsMotion.removeAll();
+            if(environmentalConditions!.enableGuide){
+                DispatchQueue.main.async {
+                    if(self.guide.cardSvgImageView == nil){
+                        self.guide.showCardGuide(view: self.view)
                     }
+                    self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
-         }
-    
+            }
+        }
+        
         if (environmentalConditions!.checkConditions(
-                                                     brightness: imageBrightnessChecker)  == BrightnessEvents.Good
-                     && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
+            brightness: imageBrightnessChecker)  == BrightnessEvents.Good
+            && motion == MotionType.SENDING  && zoom == ZoomType.SENDING && isRectFInsideTheScreen) {
             if (start && sendingFlagsMotion.count > environmentalConditions!.MotionLimit && sendingFlagsZoom.count > ZoomLimit) {
                 if (hasFaceOrCard()) {
-                    var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                    var dataImage = convertPixelToDataImage(pixelBuffer: pixelBuffer)!
                     DispatchQueue.main.async {
                         self.scanOtherDelegate?.onSend();
                         self.audioPlayer.playAudio(fileName: ConstantsValues.AudioCardSuccess)
                     }
-                    remoteProcessing?.starProcessing(
+                    remoteProcessing?.starProcessingIDs(
                         url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.OTHER),
-                         videoClip: bsee64Image,
+                        image: dataImage,
                         stepIdString: String(self.stepId!),
-                         appConfiguration:self.configModel!,
-                         templateId: "",
-                         secondImage: "",
-                         connectionId: "ConnectionId",
-                         clipsPath: "ClipsPath",
-                         checkForFace: false,
-                         processMrz: processMrz!,
-                         performLivenessDocument: performLivenessDocument!,
-                         performLivenessFace:  true,
-                         saveCapturedVideo: saveCapturedVideoID!,
-                         storeCapturedDocument: storeCapturedDocument!,
-                         isVideo: false,
-                         storeImageStream: true,
-                         selfieImage:""
-                         ) { result in
-                        switch result {
-                        case .success(let model):
-                            self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
-                        case .failure(let error):
-                            self.start = true;
-                            self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
-                                destinationEndpoint: HubConnectionTargets.ON_ERROR,
-                                response: "",
-                                error: EventsErrorMessages.OnErrorMessage,
-                                success: false
-                             ))
-                        }
-                    }
-     
+                        appConfiguration:self.configModel!,
+                        templateId: "",
+                        connectionId: "ConnectionId",
+                        clipsPath: "ClipsPath",
+                        checkForFace: true,
+                        processMrz: processMrz!,
+                        performLivenessDocument: performLivenessDocument!,
+                        saveCapturedVideo: saveCapturedVideoID!,
+                        storeCapturedDocument: storeCapturedDocument!,
+                        isVideo: false,
+                        storeImageStream: true,
+                        isManualCapture: false,
+                        isAutoCapture: true,
+                        retryCount: retryCount,
+                        tag:getIDTag(configModel: self.configModel!, templateName: "Other"),
+                        processCivilExtractQrCode: false,
+                        onProgress: { progress in
+                            self.scanOtherDelegate?.onUploadingProgress(progress: progress);
+                        },
+                        completion: { result in
+                            switch result {
+                            case .success(let model):
+                                self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                            case .failure(let error):
+                                self.start = true;
+                                self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                    destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                    response: "",
+                                    error: "",
+                                    success: false
+                                ))
+                            }
+                        })
+                    
                     start = false;
                 }
             }
-          
+            
             
         }
         DispatchQueue.main.async {
             self.scanOtherDelegate?.onEnvironmentalConditionsChange?(
                 brightnessEvents: self.environmentalConditions!.checkConditions(
                     brightness: imageBrightnessChecker),
-                motion: self.motion,zoom:self.zoom)
+                motion: self.motion,zoom:self.zoom,isCentered: self.isRectFInsideTheScreen)
         }
-            
+        
     }
     
     
-     func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
-         DispatchQueue.main.async {
-             self.motionRectF.removeAll()
-             self.sendingFlagsZoom.removeAll()
-             self.sendingFlagsMotion.removeAll()
-             if eventName == HubConnectionTargets.ON_COMPLETE {
-                 self.start = false
-                 var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:],transformedDetails: [:]);
-                 self.otherResponseModel = OtherResponseModel(
+    func onMessageReceived(eventName: String, remoteProcessingModel : RemoteProcessingModel ) {
+        DispatchQueue.main.async {
+            self.motionRectF.removeAll()
+            self.sendingFlagsZoom.removeAll()
+            self.sendingFlagsMotion.removeAll()
+            if eventName == HubConnectionTargets.ON_COMPLETE {
+                self.start = false
+                var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:],transformedDetails: [:]);
+                self.otherResponseModel = OtherResponseModel(
                     destinationEndpoint: remoteProcessingModel.destinationEndpoint,
                     otherExtractedModel: otherExtractedModel,
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
-                 )
-                 
+                )
                 
-                 if(self.language == Language.NON){
-                     self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel!,doneFlag: DoneFlags.Success )
-                 }else{
-                     var propertiesToTranslate: [String: String] = [:];
-                     otherExtractedModel?.outputProperties?.forEach { (key, value) in
-                         propertiesToTranslate[key] =  "\(value)"
-                     }
-                     
-                     otherExtractedModel?.additionalDetails?.forEach { (key, value) in
-                         propertiesToTranslate[key] =  "\(value)"
-                     }
-                     let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
-                        transformed.languageTransformation(
-                            langauge: self.language,
-                            transformationModel: preparePropertiesToTranslate(language: self.language, properties: propertiesToTranslate)
-                        )
-                 }
-                 
-             
                 
-             } else if eventName == HubConnectionTargets.ON_RETRY{
-                 self.retryCount = self.retryCount + 1;
-                 if(self.retryCount == self.environmentalConditions?.retryCount){
-                     var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:],transformedDetails: [:]);
-                     self.otherResponseModel = OtherResponseModel(
-                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
-                        otherExtractedModel: otherExtractedModel,
-                        error: remoteProcessingModel.error,
-                        success: remoteProcessingModel.success
-                     )
-                     self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! ,doneFlag: DoneFlags.ExtractFailed)
-                     self.start = false
-                 }else{
-                     remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage;
-                     self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
-                     self.start = true
-                 }
-             }
-             else if eventName == HubConnectionTargets.ON_LIVENESS_UPDATE {
-                 self.retryCount = self.retryCount + 1;
-                 if(self.retryCount == self.environmentalConditions?.retryCount){
-                     var otherExtractedModel = OtherExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:],transformedDetails: [:]);
-                     self.otherResponseModel = OtherResponseModel(
-                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
-                        otherExtractedModel: otherExtractedModel,
-                        error: remoteProcessingModel.error,
-                        success: remoteProcessingModel.success
-                     )
-                     self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! ,doneFlag: DoneFlags.LivenessFailed)
-                     self.start = false
-                 }else{
-                     remoteProcessingModel.error = EventsErrorMessages.OnLivenessCardUpdateMessage
-                     self.scanOtherDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
-                     self.start = true
-                 }
-             } else {
-            self.start = eventName == HubConnectionTargets.ON_ERROR
-             switch eventName {
-             case HubConnectionTargets.ON_ERROR:
-                 remoteProcessingModel.error = EventsErrorMessages.OnErrorMessage
-                 self.scanOtherDelegate?.onError(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
-                 self.scanOtherDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_STATUS_UPDATE:
-                 self.scanOtherDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_UPDATE:
-                 self.scanOtherDelegate?.onUpdated?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_CARD_DETECTED:
-                 self.scanOtherDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_MRZ_EXTRACTED:
-                 self.scanOtherDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_MRZ_DETECTED:
-                 self.scanOtherDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
-                 self.scanOtherDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_FACE_DETECTED:
-                 self.scanOtherDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_NO_FACE_DETECTED:
-                 self.scanOtherDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_FACE_EXTRACTED:
-                 self.scanOtherDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
-                 self.scanOtherDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
-                 self.scanOtherDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_DOCUMENT_CROPPED:
-                 self.scanOtherDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
-             case HubConnectionTargets.ON_UPLOAD_FAILED:
-                 self.scanOtherDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
-             default:
-                 self.start = true
-                 remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
-                 self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
-                 break
-             }
-             }
-         }
+                if(self.language == Language.NON){
+                    self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel!)
+                }else{
+                    var propertiesToTranslate: [String: String] = [:];
+                    otherExtractedModel?.outputProperties?.forEach { (key, value) in
+                        propertiesToTranslate[key] =  "\(value)"
+                    }
+                    
+                    otherExtractedModel?.additionalDetails?.forEach { (key, value) in
+                        propertiesToTranslate[key] =  "\(value)"
+                    }
+                    let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
+                    transformed.languageTransformation(
+                        langauge: self.language,
+                        transformationModel: preparePropertiesToTranslate(language: self.language, properties: propertiesToTranslate)
+                    )
+                }
+                
+                
+                
+            } else if eventName == HubConnectionTargets.ON_RETRY{
+                self.retryCount = self.retryCount + 1;
+                remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage;
+                self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
+                self.start = true
+            } else {
+                self.start = eventName == HubConnectionTargets.ON_ERROR
+                switch eventName {
+                case HubConnectionTargets.ON_ERROR:
+                    remoteProcessingModel.error = EventsErrorMessages.OnErrorMessage
+                    self.scanOtherDelegate?.onError(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_CLIP_PREPARATION_COMPLETE:
+                    self.scanOtherDelegate?.onClipPreparationComplete?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_STATUS_UPDATE:
+                    self.scanOtherDelegate?.onStatusUpdated?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_UPDATE:
+                    self.scanOtherDelegate?.onUpdated?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_CARD_DETECTED:
+                    self.scanOtherDelegate?.onCardDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_MRZ_EXTRACTED:
+                    self.scanOtherDelegate?.onMrzExtracted?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_MRZ_DETECTED:
+                    self.scanOtherDelegate?.onMrzDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_NO_MRZ_EXTRACTED:
+                    self.scanOtherDelegate?.onNoMrzDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_FACE_DETECTED:
+                    self.scanOtherDelegate?.onFaceDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_NO_FACE_DETECTED:
+                    self.scanOtherDelegate?.onNoFaceDetected?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_FACE_EXTRACTED:
+                    self.scanOtherDelegate?.onFaceExtracted?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_QUALITY_CHECK_AVAILABLE:
+                    self.scanOtherDelegate?.onQualityCheckAvailable?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_DOCUMENT_CAPTURED:
+                    self.scanOtherDelegate?.onDocumentCaptured?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_DOCUMENT_CROPPED:
+                    self.scanOtherDelegate?.onDocumentCropped?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_UPLOAD_FAILED:
+                    self.scanOtherDelegate?.onUploadFailed?(dataModel:remoteProcessingModel )
+                case HubConnectionTargets.ON_LIVENESS_UPDATE:
+                    remoteProcessingModel.error = EventsErrorMessages.OnLivenessCardUpdateMessage
+                    self.scanOtherDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+                    self.start = true
+                default:
+                    self.start = true
+                    remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
+                    self.scanOtherDelegate?.onRetry(dataModel:remoteProcessingModel )
+                    break
+                }
+            }
+        }
     }
-
+    
     
     func onVideCreated(videoBase64: String) {
-    
+        
     }
     
     func hasFaceOrCard() -> Bool {
         return  hasCard()
     }
-
+    
     func hasCard() -> Bool {
         var hasCard = false
         for item in result!.inferences {
@@ -475,7 +454,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
         return hasFace
     }
-
+    
     var nameKey = "";
     var nameWordCount = 0;
     var surnameKey = "";
@@ -484,7 +463,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
         if let outputProperties = self.otherResponseModel!.otherExtractedModel?.outputProperties {
             let ignoredProperties = getIgnoredProperties(properties: outputProperties)
             var finalProperties = [String: Any]()
-
+            
             for (key, value) in outputProperties {
                 if key.contains(IdentificationDocumentCaptureKeys.name) {
                     nameKey = key
@@ -495,7 +474,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                         nameWordCount = 0
                     }
                 }
-
+                
                 if key.contains(IdentificationDocumentCaptureKeys.surname) {
                     surnameKey = key
                 }
@@ -506,12 +485,12 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                         let selectedWords = getSelectedWords(input: String(describing: value), numberOfWords: nameWordCount)
                         finalProperties[nameKey] = selectedWords
                     }
-
+                    
                     if !surnameKey.isEmpty {
                         let remainingWords = getRemainingWords(input: String(describing: value), numberOfWords: nameWordCount)
                         finalProperties[surnameKey] = remainingWords
                     }
-
+                    
                 }else{
                     finalProperties[key] = value
                 }
@@ -519,10 +498,10 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             for (key, value) in ignoredProperties {
                 finalProperties[key] = value
             }
-
+            
             self.otherResponseModel!.otherExtractedModel?.transformedProperties?.removeAll()
             self.otherResponseModel!.otherExtractedModel?.extractedData?.removeAll()
-
+            
             for (key, value) in finalProperties {
                 if(key.contains("OnBoardMe_IdentificationDocumentCapture")){
                     self.otherResponseModel!.otherExtractedModel!.transformedProperties![key] =  "\(value)"
@@ -538,18 +517,18 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
                     self.otherResponseModel!.otherExtractedModel!.transformedDetails![key] =  "\(value)"
                 }
             }
-          
+            
         }
         
-        self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel!, doneFlag:DoneFlags.Success )
+        self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel!)
     }
     
     public func onTranslatedError(properties: [String : String]?) {
-        self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel!,doneFlag: DoneFlags.Success  )
+        self.scanOtherDelegate?.onComplete(dataModel:self.otherResponseModel! )
     }
     
     public func stopScanning(){
-         audioPlayer.stopAudio();
+        audioPlayer.stopAudio();
         self.previewView.stopSession();
         self.cameraFeedManager.stopSession();
     }
@@ -560,39 +539,45 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             if(hasFaceOrCard()){
                 start = false;
                 self.scanOtherDelegate?.onSend();
-                var bsee64Image = convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!
-                remoteProcessing?.starProcessing(
+                var dataImage = convertPixelToDataImage(pixelBuffer: self.currentImage!)!
+                remoteProcessing?.starProcessingIDs(
                     url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.OTHER),
-                     videoClip: bsee64Image,
+                    image: dataImage,
                     stepIdString: String(self.stepId!),
-                     appConfiguration:self.configModel!,
-                     templateId: "",
-                     secondImage: "",
-                     connectionId: "ConnectionId",
-                     clipsPath: "ClipsPath",
-                     checkForFace: false,
-                     processMrz: processMrz!,
-                     performLivenessDocument: performLivenessDocument!,
-                     performLivenessFace:  true,
-                     saveCapturedVideo: saveCapturedVideoID!,
-                     storeCapturedDocument: storeCapturedDocument!,
-                     isVideo: false,
-                     storeImageStream: true,
-                     selfieImage:""
-                     ) { result in
-                    switch result {
-                    case .success(let model):
-                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
-                    case .failure(let error):
-                        self.start = true;
-                        self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
-                            destinationEndpoint: HubConnectionTargets.ON_ERROR,
-                            response: "",
-                            error: EventsErrorMessages.OnErrorMessage,
-                            success: false
-                         ))
-                    }
-                }
+                    appConfiguration:self.configModel!,
+                    templateId: "",
+                    connectionId: "ConnectionId",
+                    clipsPath: "ClipsPath",
+                    checkForFace: true,
+                    processMrz: processMrz!,
+                    performLivenessDocument: performLivenessDocument!,
+                    saveCapturedVideo: saveCapturedVideoID!,
+                    storeCapturedDocument: storeCapturedDocument!,
+                    isVideo: false,
+                    storeImageStream: true,
+                    isManualCapture: true,
+                    isAutoCapture: false,
+                    retryCount: retryCount,
+                    tag:getIDTag(configModel: self.configModel!, templateName: "Other"),
+                    processCivilExtractQrCode: false,
+                    onProgress: { progress in
+                        self.scanOtherDelegate?.onUploadingProgress(progress: progress);
+                    },
+                    completion:
+                        { result in
+                            switch result {
+                            case .success(let model):
+                                self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                            case .failure(let error):
+                                self.start = true;
+                                self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                    destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                    response: "",
+                                    error: "",
+                                    success: false
+                                ))
+                            }
+                        })
             }else{
                 self.scanOtherDelegate?.onRetry(dataModel:RemoteProcessingModel(
                     destinationEndpoint: HubConnectionTargets.ON_RETRY,
@@ -603,7 +588,7 @@ public class ScanOther :UIViewController, CameraSetupDelegate , RemoteProcessing
             }
             
         }
-       
+        
     }
-
+    
 }

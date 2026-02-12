@@ -70,3 +70,7 @@ public func getTimeUTC() -> String {
       let utcTime = formatter.string(from: currentDate)
       return utcTime
   }
+
+public func getIDTag(configModel: ConfigModel, templateName: String) -> String {
+    return "\(configModel.tenantIdentifier)/\(configModel.instanceId),\(templateName)"
+}

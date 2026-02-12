@@ -7,15 +7,15 @@ class HubConnectionFunctions {
     static func etHubConnectionFunction(blockType: BlockType) -> String {
         switch blockType {
         case BlockType.READ_PASSPORT:
-            return "api/IdentificationDocument/ReadPassport"
+            return "v2/api/IdentificationDocument/ReadPassport"
         case  BlockType.ID_CARD:
-            return "api/IdentificationDocument/ReadId"
+            return "v2/api/IdentificationDocument/ReadId"
         case  BlockType.OTHER:
-            return "api/IdentificationDocument/Other"
+            return "v2/api/IdentificationDocument/Other"
         case BlockType.FACE_MATCH:
-            return "api/IdentificationDocument/FaceMatchWithImage"
+            return "v2/api/IdentificationDocument/FaceMatchWithImage"
         case BlockType.QR:
-            return "api/IdentificationDocument/ReadIdQrCode"
+            return "v2/api/IdentificationDocument/ReadIdQrCode"
        }
     }
 }

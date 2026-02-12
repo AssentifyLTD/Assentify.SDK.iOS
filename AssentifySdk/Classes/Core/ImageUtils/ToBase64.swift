@@ -4,6 +4,27 @@ import MobileCoreServices
 import CoreVideo
 import Accelerate
 
+
+func convertPixelToDataImage(pixelBuffer: CVPixelBuffer) -> Data? {
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+    let context = CIContext()
+    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
+        return nil
+    }
+    let uiImage = UIImage(cgImage: cgImage)
+    
+    guard let pngData = uiImage.pngData() else {
+        return nil
+    }
+    
+    guard let imageData = uiImage.jpegData(compressionQuality: 0.6) else {
+        return nil
+    }
+    
+    return imageData
+}
+
+
 func convertPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
     let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
     let context = CIContext()
