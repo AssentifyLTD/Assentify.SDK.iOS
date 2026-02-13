@@ -5,12 +5,14 @@ import Foundation
     public  var response: String?
     public  var error: String?
     public  var success: Bool?
+    public  var classifiedTemplate: String?
     
-    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil) {
+    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil,classifiedTemplate: String? = "") {
         self.destinationEndpoint = destinationEndpoint
         self.response = response
         self.error = error
         self.success = success
+        self.classifiedTemplate = classifiedTemplate
     }
     
 }
@@ -30,7 +32,8 @@ public func parseDataToRemoteProcessingModel(data: [String: Any]) -> RemoteProce
         destinationEndpoint: data["destinationEndpoint"] as? String ,
         response:response,
         error: data["error"] as? String ,
-        success: success
+        success: success,
+        classifiedTemplate: data["classifiedTemplate"] as? String ,
     )
 }
 

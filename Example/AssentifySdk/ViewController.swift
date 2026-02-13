@@ -12,14 +12,7 @@ import UIKit
 class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelegate{
   
     
-    func onSubmitError(message: String) {
-        print("\(yellowColor)onSubmitError: ")
-    }
-    
-    func onSubmitSuccess() {
-        print("\(yellowColor)onSubmitSuccess: ")
-    }
-    
+  
   
     
  
@@ -60,8 +53,10 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
 //
  
 //
-//    func onComplete(dataModel: IDResponseModel, order: Int,doneFlag: DoneFlags) {
-//        print("\(yellowColor)onComplete: " , doneFlag.rawValue)
+//    func onComplete(dataModel: IDResponseModel ,isFrontPage:Bool,isLastPage:Bool,classifiedTemplate: String) {
+//              print("\(yellowColor) onComplete: isFrontPage " , isFrontPage)
+//              print("\(yellowColor) onComplete: isLastPage " , isLastPage)
+//              print("\(yellowColor) onComplete: classifiedTemplate " , classifiedTemplate)
 //                print("\(yellowColor)onComplete: extractedData")
 //                if let extractedData = dataModel.iDExtractedModel?.extractedData {
 //                    for (key, value) in extractedData {
@@ -88,7 +83,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
 //                }
 //
 //    }
-//
+////
 //    func onWrongTemplate(dataModel: RemoteProcessingModel) {
 //        print("\(yellowColor)onWrongTemplate:" , dataModel.error)
 //    }
@@ -186,8 +181,8 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
 
 
     }
-
-
+//
+//
         func onWrongTemplate(dataModel: RemoteProcessingModel) {
             print("\(yellowColor)onWrongTemplate:" , dataModel.error)
         }
@@ -236,8 +231,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
         activeLiveType: ActiveLiveType.ACTIONS,
         activeLivenessCheckCount: 2,
         minRam: 1,
-        minCPUCores: 1
-    )
+        minCPUCores: 1    )
     
     
     
@@ -337,14 +331,9 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
             
             /* ID */
 
-//                                               let data = [
-//                                                    KycDocumentDetails(
-//                                                    name: "", order: 0, templateProcessingKeyInformation: "75b683bb-eb81-4965-b3f0-c5e5054865e7",  templateSpecimen:"",hasQrCode: false),
-//                                                    KycDocumentDetails(
-//                                                    name: "", order: 1, templateProcessingKeyInformation: "eae46fac-1763-4d31-9acc-c38d29fe56e4",  templateSpecimen:"",hasQrCode: false),
-//                                                ]
-//
-//            self.scanID =  self.assentifySdk?.startScanID(scanIDCardDelegate: self,kycDocumentDetails: data,language: Language.English)
+                                          
+
+//            self.scanID =  self.assentifySdk?.startScanID(scanIDCardDelegate: self,templatesByCountry : self.assentifySdk!.getTemplates().first!,language: Language.English)
 //
 //                                                self.addChild(self.scanID!)
 //                                                self.view.addSubview(self.scanID!.view)
@@ -355,7 +344,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
 //                                                    self.scanID!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
 //                                                    self.scanID!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
 //                                                ])
- //                                               self.scanID!.didMove(toParent: self)
+//                                                self.scanID!.didMove(toParent: self)
             
             
             
@@ -388,12 +377,8 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
             
             /* Qr */
 
-//                                               let data = [
-//                                                    KycDocumentDetails(
-//                                                        name: "", order: 0, templateProcessingKeyInformation: "a1ec8a0d-067c-4ce1-8420-820d7789cf83",  templateSpecimen:"", hasQrCode: false),
-//                                                ]
-//
-//                                                 self.scanQr =  self.assentifySdk?.startScanQr(scanQrDelegate: self,kycDocumentDetails: data,language: Language.English)
+
+//            self.scanQr =  self.assentifySdk?.startScanQr(scanQrDelegate: self,templatesByCountry:self.assentifySdk!.getTemplates().first!,language: Language.English)
 //
 //                                                self.addChild(self.scanQr!)
 //                                                self.view.addSubview(self.scanQr!.view)
@@ -464,7 +449,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
            }
        
        @objc func buttonTapped2() {
-         scanID?.changeTemplateId(templateId: "eae46fac-1763-4d31-9acc-c38d29fe56e4");
+         scanID?.changeTemplateId();
        }
     
     func onEnvironmentalConditionsChange(brightnessEvents: BrightnessEvents, motion: MotionType, faceEvents: FaceEvents, zoom: ZoomType) {

@@ -19,8 +19,8 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
     var cameraFeedManager:CameraFeedManager!
     private let displayFont = UIFont.systemFont(ofSize: 14.0, weight: .medium)
     
-    var templateId: String?;
-    let kycDocumentDetails: [KycDocumentDetails];
+    let templatesByCountry:TemplatesByCountry;
+    var selectedTemplates:[String] = []
     
     
     private var scanQrDelegate: ScanQrDelegate?
@@ -45,7 +45,7 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
          environmentalConditions :EnvironmentalConditions,
          apiKey:String,
          scanQrDelegate:ScanQrDelegate,
-         kycDocumentDetails:[KycDocumentDetails],
+         templatesByCountry:TemplatesByCountry,
          language: String,
          isManual: Bool
     ) {
@@ -53,7 +53,7 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
         self.environmentalConditions = environmentalConditions;
         self.apiKey = apiKey;
         self.scanQrDelegate = scanQrDelegate;
-        self.kycDocumentDetails = kycDocumentDetails;
+        self.templatesByCountry = templatesByCountry;
         self.language = language;
         self.isManual = isManual;
         
@@ -101,9 +101,14 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
         
         self.remoteProcessing = RemoteProcessing()
         
-        if(!self.kycDocumentDetails.isEmpty){
-            templateId =  self.kycDocumentDetails[0].templateProcessingKeyInformation;
+        for template in templatesByCountry.templates {
+            for kycDocument in template.kycDocumentDetails {
+                selectedTemplates.append(
+                    kycDocument.templateProcessingKeyInformation
+                )
+            }
         }
+
         
         if(environmentalConditions!.enableGuide){
             if(self.guide.qrSvgImageView == nil){
@@ -151,15 +156,21 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
                                 self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                             }
                         }
-                        var bsee64Image = convertPixelBufferToBase64(pixelBuffer: pixelBuffer)!
+                        var dataImage = convertPixelToDataImage(pixelBuffer:pixelBuffer)!
+                        
                         self.remoteProcessing?.starQrProcessing(
                             url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.QR),
-                            videoClip: bsee64Image,
+                            image:dataImage,
                             appConfiguration:self.configModel!,
-                            templateId: self.templateId!,
+                            templatesByCountry : self.selectedTemplates,
                             connectionId: "ConnectionId",
                             stepIdString: String(self.stepId!),
-                            metadata: url
+                            metadata: url,
+                            isManualCapture : false,
+                            isAutoCapture:true,
+                            onProgress: { progress in
+                                self.scanQrDelegate?.onUploadingProgress(progress: progress);
+                            },
                         ) { result in
                             switch result {
                             case .success(let model):
@@ -346,15 +357,21 @@ public class ScanQr :UIViewController, CameraSetupDelegate , RemoteProcessingDel
                                  self.guide.changeQrColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                              }
                          }
-                         var bsee64Image = convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!
+                         var dataImage = convertPixelToDataImage(pixelBuffer: self.currentImage!)!
                          self.remoteProcessing?.starQrProcessing(
                              url: BaseUrls.signalRHub + HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.QR),
-                             videoClip: bsee64Image,
+                             image:dataImage,
                              appConfiguration:self.configModel!,
-                             templateId: self.templateId!,
+                             templatesByCountry : self.selectedTemplates,
                              connectionId: "ConnectionId",
                              stepIdString: String(self.stepId!),
-                             metadata: url
+                             metadata: url,
+                             isManualCapture : true,
+                             isAutoCapture:false,
+                             onProgress: { progress in
+                                 self.scanQrDelegate?.onUploadingProgress(progress: progress);
+                             },
+                             
                          ) { result in
                              switch result {
                              case .success(let model):

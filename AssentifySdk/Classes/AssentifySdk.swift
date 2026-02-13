@@ -165,14 +165,14 @@ public class AssentifySdk {
     }
     
     
-    public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON,stepId: Int? = nil)->ScanIDCard?{
+    public func startScanID(scanIDCardDelegate:ScanIDCardDelegate, templatesByCountry:TemplatesByCountry,language: String = Language.NON,stepId: Int? = nil)->ScanIDCard?{
         if(isKeyValid){
             scanID = ScanIDCard(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
                 scanIDCardDelegate :scanIDCardDelegate,
-                kycDocumentDetails:kycDocumentDetails,
+                templatesByCountry:templatesByCountry,
                 language:language,
                 isManual: self.isManual()
                 
@@ -187,14 +187,14 @@ public class AssentifySdk {
     }
     
     
-    public func startScanQr(scanQrDelegate:ScanQrDelegate, kycDocumentDetails:[KycDocumentDetails],language: String = Language.NON,stepId: Int? = nil)->ScanQr?{
+    public func startScanQr(scanQrDelegate:ScanQrDelegate, templatesByCountry:TemplatesByCountry,language: String = Language.NON,stepId: Int? = nil)->ScanQr?{
         if(isKeyValid){
             var  scanQr = ScanQr(
                 configModel:self.configModel,
                 environmentalConditions:self.environmentalConditions!,
                 apiKey:self.apiKey,
                 scanQrDelegate :scanQrDelegate,
-                kycDocumentDetails:kycDocumentDetails,
+                templatesByCountry:templatesByCountry,
                 language:language,
                 isManual: self.isManual()
                 

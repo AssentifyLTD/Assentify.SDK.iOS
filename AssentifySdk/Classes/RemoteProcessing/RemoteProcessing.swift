@@ -144,14 +144,19 @@ class RemoteProcessing {
         }
     
 
+       
+    
     func starQrProcessing(
         url: String,
-        videoClip: String,
+        image: Data,
         appConfiguration: ConfigModel,
-        templateId: String,
+        templatesByCountry : [String],
         connectionId: String,
         stepIdString: String,
         metadata: String,
+        isManualCapture: Bool,
+        isAutoCapture: Bool,
+        onProgress: ((Double) -> Void)? = nil,
         completion: @escaping (BaseResult<RemoteProcessingModel?, Error>) -> Void
     ) {
         let traceIdentifier = UUID().uuidString
@@ -183,63 +188,92 @@ class RemoteProcessing {
         
         
         
-        let formData = [
+        var formData :[String : String] = [
             "tenantId": appConfiguration.tenantIdentifier,
             "blockId": appConfiguration.blockIdentifier,
             "instanceId": appConfiguration.instanceId,
-            "templateId": templateId,
-            "isVideo": "false",
-            "clipsPath": "clipsPath",
             "isMobile": "true",
-            "videoClipB64": videoClip,
             "callerConnectionId": connectionId,
-            "connectionId": connectionId,
             "Metadata": metadata,
-        ] as [String : Any]
+            "traceIdentifier": appConfiguration.tenantIdentifier,
+            "IsManualCapture": String(isManualCapture),
+            "IsAutoCapture": String(isAutoCapture),
+        ]
+        
+      
+        
+        let body = createMultipartBody(
+               parameters: formData,
+               templateIds: templatesByCountry,
+               files: [
+                   ("Image", "image.jpg", "image/jpeg", image)
+               ],
+               boundary: boundary
+           )
         
         
-        request.httpBody = createBody(boundary: boundary, parameters: formData)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
-                return
-            }
-            
-            
-            if(httpResponse.statusCode == 200){
-                guard let responseData = data else {
-                    completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+        let delegate = UploadDelegate()
+            delegate.onProgress = { progress in
+             onProgress!(progress)
+
+        }
+        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+
+            let task = session.uploadTask(with: request, from: body) { data, response, error in
+                session.finishTasksAndInvalidate()
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
                     return
                 }
-                if let responseString = String(data: responseData, encoding: .utf8) {
-                }
-                do {
-                    let decoder = JSONDecoder()
-                    if let dictionary = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
-                        let dataResult =  parseDataToRemoteProcessingModel(data: dictionary);
-                        completion(BaseResult.success(dataResult))
-                    } else {
+                
+                if(httpResponse.statusCode == 200){
+                    guard let responseData = data else {
+                        completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+                        return
                     }
-                    
-                    
-                } catch {
-                    completion(BaseResult.failure(error))
+                    if let responseString = String(data: responseData, encoding: .utf8) {
+
+                    }
+                    do {
+                        let decoder = JSONDecoder()
+                        if let dictionary = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                            let dataResult =  parseDataToRemoteProcessingModel(data: dictionary);
+                            completion(BaseResult.success(dataResult))
+                        } else {
+                        }
+                        
+                        
+                    } catch {
+                        completion(BaseResult.failure(error))
+                    }
+                }else{
+                    completion(BaseResult.failure(NSError(domain: "Invalid Key", code: 0, userInfo: nil)))
                 }
-            }else{
-                completion(BaseResult.failure(NSError(domain: "Invalid Key", code: 0, userInfo: nil)))
             }
-        }
-        task.resume()
+        
+          task.resume()
+
+        
+        
+      
     }
     
     
     func createMultipartBody(
-            parameters: [String: String],
+            parameters: [String: Any],
+            templateIds: [String],
             files: [(name: String, filename: String, mimeType: String, data: Data)],
             boundary: String
         ) -> Data {
             var body = Data()
 
+            for id in templateIds {
+                body.append("--\(boundary)\r\n")
+                body.append("Content-Disposition: form-data; name=\"TemplateId\"\r\n\r\n")
+                body.append("\(id)\r\n")
+                }
+            
             for (key, value) in parameters {
                 body.append("--\(boundary)\r\n")
                 body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
@@ -265,7 +299,6 @@ class RemoteProcessing {
                image: Data,
                stepIdString: String,
                appConfiguration: ConfigModel,
-               templateId: String,
                connectionId: String,
                clipsPath: String,
                checkForFace: Bool,
@@ -280,6 +313,7 @@ class RemoteProcessing {
                retryCount: Int,
                tag: String,
                processCivilExtractQrCode: Bool,
+               templatesByCountry : [String] = [],
                onProgress: ((Double) -> Void)? = nil,
                completion: @escaping (BaseResult<RemoteProcessingModel?, Error>) -> Void
            
@@ -315,11 +349,10 @@ class RemoteProcessing {
                
 
                let tryNumber = retryCount+1;
-               let formData : [String: String]  = [
+               var formData : [String: Any]  = [
                    "tenantId": appConfiguration.tenantIdentifier,
                    "blockId": appConfiguration.blockIdentifier,
                    "instanceId": appConfiguration.instanceId,
-                   "templateId": templateId,
                    "livenessCheckEnabled": String(performLivenessDocument),
                    "processMrz": String(processMrz),
                    "DisableDataExtraction": "false",
@@ -338,12 +371,15 @@ class RemoteProcessing {
                    "Tag":tag,
                    "ProcessCivilExtractQrCode":String(processCivilExtractQrCode),
                    "RequireFaceExtraction":"false",
-               ] as [String : String]
+               ]
                
              
+        
+               
                
                let body = createMultipartBody(
                       parameters: formData,
+                      templateIds: templatesByCountry,
                       files: [
                           ("Image", "image.jpg", "image/jpeg", image)
                       ],

@@ -9,4 +9,5 @@ import Foundation
 
     func onCompleteQrScan(dataModel: IDResponseModel)
     
+    @objc func onUploadingProgress(progress:Double)
 }
