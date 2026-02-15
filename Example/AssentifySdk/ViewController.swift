@@ -9,205 +9,32 @@ import AssentifySdk
 
 import UIKit
 
-class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelegate{
-  
-    
-  
-  
-    
- 
-    
-//    func onStartQrScan() {
-//        print("\(yellowColor)onStartQrScan: ")
-//    }
-//
-//    func onErrorQrScan(message: String) {
-//        print("\(yellowColor)onErrorQrScan: ")
-//    }
-//
-//    func onCompleteQrScan(dataModel: IDResponseModel) {
-//                        if let extractedData = dataModel.iDExtractedModel?.extractedData {
-//                            for (key, value) in extractedData {
-//                                print("\(key): \(value)")
-//                            }
-//                        } else {
-//                            print("extractedData is nil")
-//                        }
-//                        print("\(yellowColor)onComplete: outputProperties")
-//                        if let extractedData = dataModel.iDExtractedModel?.outputProperties {
-//                            for (key, value) in extractedData {
-//                                print("\(key): \(value)")
-//                            }
-//                        } else {
-//                            print("extractedData is nil")
-//                        }
-//                        print("\(yellowColor)onComplete: transformedProperties")
-//                        if let extractedData = dataModel.iDExtractedModel?.transformedProperties {
-//                            for (key, value) in extractedData {
-//                                print("\(key): \(value)")
-//                            }
-//                        } else {
-//                            print("extractedData is nil")
-//                        }
-//    }
-//
- 
-//
-//    func onComplete(dataModel: IDResponseModel ,isFrontPage:Bool,isLastPage:Bool,classifiedTemplate: String) {
-//              print("\(yellowColor) onComplete: isFrontPage " , isFrontPage)
-//              print("\(yellowColor) onComplete: isLastPage " , isLastPage)
-//              print("\(yellowColor) onComplete: classifiedTemplate " , classifiedTemplate)
-//                print("\(yellowColor)onComplete: extractedData")
-//                if let extractedData = dataModel.iDExtractedModel?.extractedData {
-//                    for (key, value) in extractedData {
-//                        print("\(key): \(value)")
-//                    }
-//                } else {
-//                    print("extractedData is nil")
-//                }
-//                print("\(yellowColor)onComplete: outputProperties")
-//                if let extractedData = dataModel.iDExtractedModel?.outputProperties {
-//                    for (key, value) in extractedData {
-//                        print("\(key): \(value)")
-//                    }
-//                } else {
-//                    print("extractedData is nil")
-//                }
-//                print("\(yellowColor)onComplete: transformedProperties")
-//                if let extractedData = dataModel.iDExtractedModel?.transformedProperties {
-//                    for (key, value) in extractedData {
-//                        print("\(key): \(value)")
-//                    }
-//                } else {
-//                    print("extractedData is nil")
-//                }
-//
-//    }
-////
-//    func onWrongTemplate(dataModel: RemoteProcessingModel) {
-//        print("\(yellowColor)onWrongTemplate:" , dataModel.error)
-//    }
-
-//    func onComplete(dataModel: OtherResponseModel) {
-//        print("\(yellowColor)onComplete: extractedData")
-//        if let extractedData = dataModel.otherExtractedModel?.extractedData {
-//            for (key, value) in extractedData {
-//                print("\(key): \(value)")
-//            }
-//        } else {
-//            print("extractedData is nil")
-//        }
-//        print("\(yellowColor)onComplete: outputProperties")
-//        if let extractedData = dataModel.otherExtractedModel?.outputProperties {
-//            for (key, value) in extractedData {
-//                print("\(key): \(value)")
-//            }
-//        } else {
-//            print("extractedData is nil")
-//        }
-//        print("\(yellowColor)onComplete: transformedProperties")
-//        if let extractedData = dataModel.otherExtractedModel?.transformedProperties {
-//            for (key, value) in extractedData {
-//                print("\(key): \(value)")
-//            }
-//        } else {
-//            print("extractedData is nil")
-//        }
-//        print("\(yellowColor)onComplete: additionalDetails")
-//        if let extractedData = dataModel.otherExtractedModel?.additionalDetails {
-//            for (key, value) in extractedData {
-//                print("\(key): \(value)")
-//            }
-//        } else {
-//            print("extractedData is nil")
-//        }
-//        print("\(yellowColor)onComplete: transformedDetails")
-//        if let extractedData = dataModel.otherExtractedModel?.transformedDetails{
-//            for (key, value) in extractedData {
-//                print("\(key): \(value)")
-//            }
-//        } else {
-//            print("extractedData is nil")
-//        }
-//    }
-//
-//    func onComplete(dataModel: FaceResponseModel,doneFlag: DoneFlags) {
-//        print("\(yellowColor)onComplete: " , doneFlag.rawValue)
-//        let currentDate = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-//        let formattedDate = formatter.string(from: currentDate)
-//        print("\(yellowColor)onComplete: \(formattedDate)")
-//        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.baseImageFace)
-//        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.secondImageFace)
-//        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.percentageMatch)
-//    }
-//
-//
-    
-
-    
-  
-
-    func onComplete(dataModel: PassportResponseModel) {
-        self.scanPassport?.stopScanning();
-        print("\(yellowColor)onComplete: extractedData")
-        if let extractedData = dataModel.passportExtractedModel?.extractedData {
-            for (key, value) in extractedData {
-                print("\(key): \(value)")
-            }
-        } else {
-            print("extractedData is nil")
-        }
-        print("\(yellowColor)onComplete: outputProperties")
-        if let extractedData = dataModel.passportExtractedModel?.outputProperties {
-            for (key, value) in extractedData {
-                print("\(key): \(value)")
-            }
-        } else {
-            print("extractedData is nil")
-        }
-        print("\(yellowColor)onComplete: transformedProperties")
-        if let extractedData = dataModel.passportExtractedModel?.transformedProperties {
-            for (key, value) in extractedData {
-                print("\(key): \(value)")
-            }
-        } else {
-            print("extractedData is nil")
-        }
-
-
-
-
-
-    }
-//
-//
-        func onWrongTemplate(dataModel: RemoteProcessingModel) {
-            print("\(yellowColor)onWrongTemplate:" , dataModel.error)
-        }
-
-
-    
-    func onError(dataModel: RemoteProcessingModel) {
-        print("\(yellowColor)onError:" , dataModel.error)
-    }
-    
+class ViewController: UIViewController , AssentifySdkDelegate,FaceMatchDelegate{
    
     
-    func   onEnvironmentalConditionsChange(
-        brightnessEvents: BrightnessEvents,
-        motion: MotionType,
-        zoom: ZoomType,
-        isCentered:Bool
-    ){
-        //print("\(yellowColor)onEnvironmentalConditionsChange:" , isCentered)
+  
+    
+  
+
+    func onComplete(dataModel: FaceResponseModel) {
+        print("\(yellowColor)onComplete: " )
+        let currentDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        let formattedDate = formatter.string(from: currentDate)
+        print("\(yellowColor)onComplete: \(formattedDate)")
+        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.baseImageFace)
+        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.secondImageFace)
+        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.percentageMatch)
+        print("\(yellowColor)onComplete: ",dataModel.faceExtractedModel?.isLive)
+    }
+
+    func onError(dataModel: RemoteProcessingModel) {
+        print("\(yellowColor)onError:")
+
     }
     
-    
-    
     func onSend() {
-    
         print("\(yellowColor)onSend:")
         
     }
@@ -217,21 +44,16 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     }
     
     
-    
-    
-    
-    
-    
-    
     let environmentalConditions = EnvironmentalConditions(
         enableDetect: true,
         enableGuide: true,
-        CountDownNumbersColor: "#FC4D92",
+        CountDownNumbersColor: "#FFFFFF",
         HoldHandColor: "#FC4D92",
-        activeLiveType: ActiveLiveType.ACTIONS,
-        activeLivenessCheckCount: 2,
-        minRam: 1,
-        minCPUCores: 1    )
+        activeLiveType: ActiveLiveType.BLINK,
+        activeLivenessCheckCount: 1,
+        faceLivenessRetryCount: 2,
+        minRam: 10,
+        minCPUCores: 10    )
     
     
     
@@ -297,100 +119,26 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
             self.countdownLabel.translatesAutoresizingMaskIntoConstraints = false
           
             
-            /* PASSPORT */
             
-            self.scanPassport =  self.assentifySdk?.startScanPassport(scanPassportDelegate: self)
-            self.addChild(self.scanPassport!)
-            self.view.addSubview(  self.scanPassport!.view)
-            self.scanPassport!.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                            self.scanPassport!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-                            self.scanPassport!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                            self.scanPassport!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                            self.scanPassport!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            ])
-            self.scanPassport!.didMove(toParent: self)
+            /* FaceMatch   */
+            if let imageUrl = URL(string: "https://blob.assentify.com/v2/Document/9lZQIJL_DqaY6O2TXFMZ2IglH25fxNWvXV-jNdR-TFc=/original_image.jpg") {
+                if let base64String = self.imageToBase64(from: imageUrl) {
+                    self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String,showCountDown:false)
+                    self.addChild( self.faceMatch!)
+                    self.view.addSubview( self.faceMatch!.view)
+                    self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                        self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                        self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                        self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                    ])
 
+                    self.faceMatch!.didMove(toParent: self)
+                }
+                }
+            
 
-            
-//            /* OTHER */
-//
-//                                    self.scanOther =  self.assentifySdk?.startScanOthers(scanOtherDelegate: self);
-//                                    self.addChild(  self.scanOther!)
-//                                    self.view.addSubview(  self.scanOther!.view)
-//                                    self.scanOther!.view.translatesAutoresizingMaskIntoConstraints = false
-//                                    NSLayoutConstraint.activate([
-//                                        self.scanOther!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                                        self.scanOther!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                                        self.scanOther!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                                        self.scanOther!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-//                                    ])
-//                                    self.scanOther!.didMove(toParent: self)
-//
-            
-            
-            /* ID */
-
-                                          
-
-//            self.scanID =  self.assentifySdk?.startScanID(scanIDCardDelegate: self,templatesByCountry : self.assentifySdk!.getTemplates().first!,language: Language.English)
-//
-//                                                self.addChild(self.scanID!)
-//                                                self.view.addSubview(self.scanID!.view)
-//                                                self.scanID!.view.translatesAutoresizingMaskIntoConstraints = false
-//                                                NSLayoutConstraint.activate([
-//                                                    self.scanID!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                                                    self.scanID!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                                                    self.scanID!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                                                    self.scanID!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-//                                                ])
-//                                                self.scanID!.didMove(toParent: self)
-            
-            
-            
-//            /* FaceMatch   */
-//            if let imageUrl = URL(string: "https://storagetestassentify.blob.core.windows.net/userfiles/318e2ca7-fde8-4c47-bbcc-0c94b905630f/f7cd52fa-9a2b-40c1-b5b6-3fb4d3cb9e7b/fead2692dd9e48dfa6e96e98f201fe56/traceIdentifier/FaceMatchWithImage/comparedWith.jpeg") {
-//                if let base64String = self.imageToBase64(from: imageUrl) {
-//                    self.faceMatch =  self.assentifySdk?.startFaceMatch(faceMatchDelegate: self, secondImage:base64String,showCountDown:true)
-//                    self.addChild( self.faceMatch!)
-//                    self.view.addSubview( self.faceMatch!.view)
-//                    self.faceMatch!.view.translatesAutoresizingMaskIntoConstraints = false
-//                    NSLayoutConstraint.activate([
-//                        self.faceMatch!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                        self.faceMatch!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                        self.faceMatch!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                        self.faceMatch!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-//                    ])
-//
-//                    self.faceMatch!.didMove(toParent: self)
-//                }
-//                }
-            
-            
-            
-            //
-            //            let request = [
-            //                    LanguageTransformationModel(languageTransformationEnum: LanguageTransformationEnum.Translation, key: "Date", value: "١١/٢/١٩٩٩", language: Language.English, dataType: DataType.Date)
-            //                ]
-            //
-            //            self.assentifySdk?.languageTransformation(languageTransformationDelegate: self, language: Language.Arabic, languageTransformationData: request)
-            
-            /* Qr */
-
-
-//            self.scanQr =  self.assentifySdk?.startScanQr(scanQrDelegate: self,templatesByCountry:self.assentifySdk!.getTemplates().first!,language: Language.English)
-//
-//                                                self.addChild(self.scanQr!)
-//                                                self.view.addSubview(self.scanQr!.view)
-//                                                self.scanQr!.view.translatesAutoresizingMaskIntoConstraints = false
-//                                                NSLayoutConstraint.activate([
-//                                                    self.scanQr!.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                                                    self.scanQr!.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                                                    self.scanQr!.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                                                    self.scanQr!.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-//                                                ])
-//                                                self.scanQr!.didMove(toParent: self)
-            
             
             let click: UIButton = {
                                let button = UIButton(type: .system)
@@ -445,31 +193,37 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     }
     
     @objc func buttonTapped() {
-        scanPassport?.takePicture();
+        faceMatch?.takePicture();
            }
        
        @objc func buttonTapped2() {
          scanID?.changeTemplateId();
        }
     
-    func onEnvironmentalConditionsChange(brightnessEvents: BrightnessEvents, motion: MotionType, faceEvents: FaceEvents, zoom: ZoomType) {
-        DispatchQueue.main.async {
-            
-           
-            print("\(self.yellowColor)faceEvents:")
-            print(faceEvents.rawValue)
-          
-        }
+    func onEnvironmentalConditionsChange( brightnessEvents: BrightnessEvents,
+                                          motion: MotionType,
+                                          faceEvents: FaceEvents,
+                                          zoom: ZoomType,
+                                          detectedFaces:Int,
+                                          isCentered: Bool,) {
+//        DispatchQueue.main.async {
+//            
+//           
+//            print("\(self.yellowColor) isCentered:")
+//            print(isCentered)
+//          
+//        }
     }
     
     func onCurrentLiveMoveChange(activeLiveEvents: ActiveLiveEvents) {
-        print("\(yellowColor)activeLiveEvents:")
-        print(activeLiveEvents.rawValue)
+//        print("\(yellowColor)activeLiveEvents:")
+//        print(activeLiveEvents.rawValue)
     }
     
     func onLivenessUpdate(dataModel: RemoteProcessingModel) {
         print("\(yellowColor)onLivenessUpdate:" , dataModel.error)
     }
+    
     func imageToBase64(from url: URL) -> String? {
         // Download image from URL
         guard let imageData = try? Data(contentsOf: url) else {
@@ -484,7 +238,7 @@ class ViewController: UIViewController , AssentifySdkDelegate,ScanPassportDelega
     }
     
     func onUploadingProgress(progress: Double) {
-        print("Upload: \(Int(progress * 100))%")
+        print("onUploadingProgress : \(Int(progress * 100))%")
 
     }
 }

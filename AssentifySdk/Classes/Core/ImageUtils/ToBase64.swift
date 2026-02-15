@@ -24,25 +24,9 @@ func convertPixelToDataImage(pixelBuffer: CVPixelBuffer) -> Data? {
     return imageData
 }
 
-
-func convertPixelBufferToBase64(pixelBuffer: CVPixelBuffer) -> String? {
-    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-    let context = CIContext()
-    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
-        return nil
-    }
-    let uiImage = UIImage(cgImage: cgImage)
-    
-    
-    guard let imageData = uiImage.jpegData(compressionQuality: 0.6) else {
-        return nil
-    }
-    
-    return imageData.base64EncodedString()
+func base64ToData(_ base64String: String) -> Data? {
+    return Data(base64Encoded: base64String, options: .ignoreUnknownCharacters)
 }
-
-
-
 
 
 private let sharedCIContext: CIContext = {
@@ -50,23 +34,23 @@ private let sharedCIContext: CIContext = {
 }()
 
 
-func convertClipsPixelBufferToBase64(
+func convertClipsPixelBufferToData(
     _ pixelBuffer: CVPixelBuffer,
     targetSize: CGSize,
     targetAspect: CGSize,
     jpegQuality: CGFloat = 0.8
-) -> String? {
+) -> Data? {
     let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
 
     let cropped = crop(ciImage: ciImage, toAspect: targetAspect)
-
     let resized = lanczosResize(ciImage: cropped, to: targetSize)
 
-    guard let cg = sharedCIContext.createCGImage(resized, from: resized.extent) else { return nil }
+    guard let cg = sharedCIContext.createCGImage(resized, from: resized.extent) else {
+        return nil
+    }
 
     let ui = UIImage(cgImage: cg)
-    guard let data = ui.jpegData(compressionQuality: jpegQuality) else { return nil }
-    return data.base64EncodedString()
+    return ui.jpegData(compressionQuality: jpegQuality)
 }
 
 private func crop(ciImage: CIImage, toAspect aspect: CGSize) -> CIImage {

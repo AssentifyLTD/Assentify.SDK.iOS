@@ -9,7 +9,10 @@ import Foundation
 
     func onRetry(dataModel: RemoteProcessingModel )
     
-    func onComplete(dataModel: FaceResponseModel,doneFlag:DoneFlags )
+    func onComplete(dataModel: FaceResponseModel )
+    
+    @objc func onUploadingProgress(progress:Double)
+
 
     @objc optional  func onClipPreparationComplete(dataModel: RemoteProcessingModel )
 
@@ -46,7 +49,9 @@ import Foundation
            motion: MotionType,
            faceEvents: FaceEvents,
            zoom: ZoomType,
-           detectedFaces:Int
+           detectedFaces:Int,
+           isCentered: Bool,
+
     )
     
     @objc optional func onCurrentLiveMoveChange(
