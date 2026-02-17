@@ -11,6 +11,7 @@ public class EnvironmentalConditions {
     var enableDetect: Bool
     var enableGuide: Bool
 
+    
     var HoldHandColor: String
     var CountDownNumbersColor: String
 

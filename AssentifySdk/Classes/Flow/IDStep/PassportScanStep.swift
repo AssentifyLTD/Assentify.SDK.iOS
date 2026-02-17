@@ -1,0 +1,453 @@
+import SwiftUI
+import UIKit
+
+
+struct PassportScanEvents {
+    var onSend: (() -> Void)? = nil
+    var onProgress: ((Double) -> Void)? = nil
+    var onComplete: ((PassportResponseModel) -> Void)? = nil
+    var onError: ((RemoteProcessingModel) -> Void)? = nil
+    var onRetry: ((RemoteProcessingModel) -> Void)? = nil
+    var onLivenessUpdate: ((RemoteProcessingModel) -> Void)? = nil
+    var onWrongTemplate: ((RemoteProcessingModel) -> Void)? = nil
+    var onEnvironmental: ((BrightnessEvents, MotionType, ZoomType, Bool) -> Void)? = nil
+}
+
+enum PassportScreenEvent {
+    case idle
+    case sending
+    case completed
+    case error
+    case retry
+    case liveness
+    case wrongTemplate
+}
+
+final class PassportScanCommands: ObservableObject {
+    @Published var triggerRetry: Int = 0
+    @Published var triggerCapture: Int = 0
+    @Published var triggerClose: Int = 0
+}
+
+public struct PassportScanStep: View {
+    
+    @State private var start: Bool = false
+    @State private var feedbackText: String = ""
+    @State private var imageUrl: String = ""
+    @StateObject private var commands = PassportScanCommands()
+    @State private var uploadProgress: Int = 0
+    @State private var screenEvent: PassportScreenEvent = .idle
+    
+    
+    private var assentifySdk = AssentifySdkObject.shared.get()
+    private let flowController: FlowController
+    
+    public init(flowController: FlowController) {
+        self.flowController = flowController
+    }
+    
+    private func onBack() {
+        commands.triggerClose += 1
+        flowController.backClick()
+    }
+    
+    private func onNext() {
+        commands.triggerClose += 1
+    }
+    
+    
+    
+    public var body: some View {
+        
+        let events = PassportScanEvents(
+            onSend: {
+                DispatchQueue.main.async {
+                    start = true;
+                }
+                
+            },
+            onProgress: { p in
+                DispatchQueue.main.async {
+                    screenEvent = .sending
+                    uploadProgress = Int(p * 100)
+                }
+            },
+            onComplete: { model in
+                DispatchQueue.main.async {
+                    screenEvent = .completed
+                    start = false;
+                    imageUrl = model.passportExtractedModel!.imageUrl!
+                }
+                
+            },
+            onError: { model in
+                DispatchQueue.main.async {
+                    screenEvent = .error
+                    start = false;
+                    imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                }
+            },
+            onRetry: { model in
+                DispatchQueue.main.async {
+                    screenEvent = .retry
+                    start = false;
+                    imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                }
+            },
+            onLivenessUpdate:{ model in
+                DispatchQueue.main.async {
+                    screenEvent = .liveness
+                    start = false;
+                    imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                }
+            },
+            onWrongTemplate: { model in
+                DispatchQueue.main.async {
+                    screenEvent = .wrongTemplate
+                    start = false;
+                    imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                }
+            },
+            
+            onEnvironmental: { brightnessEvents, motion, zoom, isCentered in
+                DispatchQueue.main.async {
+                    
+                    if start == false {
+                        
+                        if zoom != .SENDING && zoom != .NO_DETECT {
+                            
+                            if zoom == .ZOOM_IN {
+                                feedbackText = "Move Passport Closer"
+                            } else if zoom == .ZOOM_OUT {
+                                feedbackText = "Move Passport Further"
+                            } else {
+                                feedbackText = ""
+                            }
+                            
+                        } else if motion != .SENDING && motion != .NO_DETECT {
+                            
+                            feedbackText = "Please Hold Your Hand"
+                            
+                        } else if brightnessEvents != .Good {
+                            
+                            if brightnessEvents == .TooDark {
+                                feedbackText = "Please increase the lighting"
+                            } else if brightnessEvents == .TooBright {
+                                feedbackText = "Please reduce the lighting"
+                            } else {
+                                feedbackText = ""
+                            }
+                            
+                        } else {
+                            
+                            if motion == .SENDING && zoom == .SENDING && brightnessEvents == .Good {
+                                feedbackText = "Hold Steady"
+                            }
+                            
+                            if motion == .NO_DETECT && zoom == .NO_DETECT {
+                                feedbackText = "Please present passport"
+                            } else if !isCentered {
+                                feedbackText = "Please center your card"
+                            }
+                        }
+                        
+                    } else {
+                        feedbackText = ""
+                    }
+                }
+            }
+        )
+        
+        
+        ZStack {
+            
+            PassportScanUIKitView(
+                flowController: flowController,
+                events: events,
+                commands: commands
+            )
+            .ignoresSafeArea()
+            
+            if screenEvent == .idle {
+                VStack {
+                    Spacer()
+                    
+                    if !(assentifySdk?.isManual() ?? false) {
+                        Text(feedbackText)
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .font(.system(size: 15, weight: .light))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .padding(.bottom, 40)
+                    } else {
+                        BaseClickButton(
+                            title: "Take Photo",
+                            cornerRadius: 28,
+                            verticalPadding: 15,
+                            enabled: true
+                        ) {
+                            commands.triggerCapture += 1
+                        }
+                        .padding(.horizontal, 25)
+                        .padding(.vertical, 25)
+                    }
+                }
+                .zIndex(1)
+            }
+            
+            switch screenEvent {
+                
+            case .idle:
+                EmptyView()
+                
+            case .sending:
+                OnSendScreen(progress: uploadProgress)
+                    .ignoresSafeArea()
+                    .background(Color.black.opacity(0.35).ignoresSafeArea()) // optional dim
+                    .zIndex(999)
+                    .allowsHitTesting(true) // blocks clicks behind
+                    .transition(.opacity)
+            case .completed:
+                let showResultPage = flowController.getCurrentStep()?.stepDefinition?.customization.showResultPage
+                if(FlowEnvironmentalConditionsObject.shared.get()!.enableNfc){
+                    OnNormalCompleteScreen(imageUrl:self.imageUrl
+                    ) {
+                        onNext()
+                    }
+                }else{
+                    if(showResultPage!){
+                        
+                    }else{
+                        OnNormalCompleteScreen(imageUrl:self.imageUrl
+                        ) {
+                            onNext()
+                        }
+                    }
+                }
+               
+               
+                
+            case .error:
+                OnErrorScreen(imageUrl:self.imageUrl
+                ) {
+                    DispatchQueue.main.async {
+                        screenEvent = .idle
+                        start = true;
+                        commands.triggerRetry += 1
+                    }
+                }
+                
+            case .retry:
+                OnErrorScreen(imageUrl:self.imageUrl
+                ) {
+                    DispatchQueue.main.async {
+                        screenEvent = .idle
+                        start = true;
+                        commands.triggerRetry += 1
+                    }
+                }
+            case .wrongTemplate:
+                OnErrorScreen(imageUrl:self.imageUrl
+                ) {
+                    DispatchQueue.main.async {
+                        screenEvent = .idle
+                        start = true;
+                        commands.triggerRetry += 1
+                    }
+                }
+            case .liveness:
+                OnLivenessScreen(imageUrl:self.imageUrl
+                ) {
+                    
+                    DispatchQueue.main.async {
+                        screenEvent = .idle
+                        start = true;
+                        commands.triggerRetry += 1
+                    }
+                    
+                }
+                
+            }
+            
+            
+        }
+        .animation(.easeInOut(duration: 0.2), value: start)
+        .topBarBackLogo { onBack() }
+        .modifier(InterceptSystemBack(action: onBack))
+        
+    }
+}
+
+// ✅ MUST be a struct (value type)
+struct PassportScanUIKitView: UIViewControllerRepresentable {
+    
+    typealias UIViewControllerType = HostVC
+    
+    let flowController: FlowController
+    let events: PassportScanEvents
+    @ObservedObject var commands: PassportScanCommands
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(flowController: flowController, events: events)
+    }
+    
+    func makeUIViewController(context: Context) -> HostVC {
+        let vc = HostVC()
+        vc.flowController = flowController
+        vc.delegate = context.coordinator
+        return vc
+    }
+    
+    func updateUIViewController(_ uiViewController: HostVC, context: Context) {
+        uiViewController.apply(commands: commands)
+        
+    }
+    
+    // MARK: - Coordinator (Delegate lives here)
+    final class Coordinator: NSObject, ScanPassportDelegate {
+        
+        let flowController: FlowController
+        let events: PassportScanEvents
+        
+        init(flowController: FlowController, events: PassportScanEvents) {
+            self.flowController = flowController
+            self.events = events
+        }
+        
+        /**  Events  **/
+        
+        
+        func onSend() {
+            events.onSend?()
+        }
+        
+        func onUploadingProgress(progress: Double) {
+            events.onProgress?(progress)
+        }
+        
+        func onComplete(dataModel: PassportResponseModel) {
+            events.onComplete?(dataModel)
+        }
+        
+        func onError(dataModel: RemoteProcessingModel) {
+            events.onError?(dataModel)
+        }
+        
+        func onRetry(dataModel: RemoteProcessingModel) {
+             events.onRetry?(dataModel)
+        }
+        
+        func onLivenessUpdate(dataModel: RemoteProcessingModel) {
+            events.onLivenessUpdate?(dataModel)
+        }
+        
+        func onWrongTemplate(dataModel: RemoteProcessingModel) {
+            events.onWrongTemplate?(dataModel)
+        }
+        
+        func onEnvironmentalConditionsChange(
+            brightnessEvents: BrightnessEvents,
+            motion: MotionType,
+            zoom: ZoomType,
+            isCentered: Bool
+        ) {
+            events.onEnvironmental?(brightnessEvents, motion, zoom, isCentered)
+        }
+    }
+    
+    // MARK: - UIKit Host VC
+    final class HostVC: UIViewController {
+        
+        weak var delegate: ScanPassportDelegate?
+        var flowController: FlowController?
+        
+        private var passportVC: ScanPassport?
+        private var assentifySdk = AssentifySdkObject.shared.get()
+        private var lastRetryTrigger: Int = 0
+        private var lastCaptureTrigger: Int = 0
+        private var lastCloserigger: Int = 0
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            view.backgroundColor = .clear
+            startPassportIfNeeded()
+        }
+        
+        func apply(commands: PassportScanCommands) {
+            if commands.triggerRetry != lastRetryTrigger {
+                lastRetryTrigger = commands.triggerRetry
+                retry()
+            }
+            
+            if commands.triggerCapture != lastCaptureTrigger {
+                lastCaptureTrigger = commands.triggerCapture
+                capture()
+            }
+            if commands.triggerClose != lastCloserigger {
+                lastCloserigger = commands.triggerClose
+                capture()
+            }
+        }
+        
+        private func retry() {
+            
+        }
+        
+        private func capture() {
+            passportVC?.takePicture();
+        }
+        
+        private func close() {
+            DispatchQueue.main.async {
+                self.passportVC?.stopScanning();
+                self.passportVC?.willMove(toParent: nil)
+                self.passportVC?.view.removeFromSuperview()
+                self.passportVC?.removeFromParent()
+                self.passportVC = nil
+            }
+        }
+        
+        private func startPassportIfNeeded() {
+            guard passportVC == nil else { return }
+            
+            
+            
+            guard let delegate else {
+                assertionFailure("ScanPassportDelegate is nil")
+                return
+            }
+            
+            guard
+                let stepId = flowController?
+                    .getCurrentStep()?
+                    .stepDefinition?
+                    .stepId
+            else {
+                assertionFailure("stepId is nil")
+                return
+            }
+            
+            guard let vc = assentifySdk?.startScanPassport(
+                scanPassportDelegate: delegate,
+                stepId: stepId
+            ) else {
+                assertionFailure("startScanPassport returned nil (sdk instance or config missing)")
+                return
+            }
+            
+            passportVC = vc
+            addChild(vc)
+            view.addSubview(vc.view)
+            
+            vc.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                vc.view.topAnchor.constraint(equalTo: view.topAnchor),
+                vc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                vc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                vc.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+            
+            vc.didMove(toParent: self)
+        }
+    }
+}

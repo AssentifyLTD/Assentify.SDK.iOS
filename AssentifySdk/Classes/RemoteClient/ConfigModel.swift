@@ -50,6 +50,7 @@ public struct Customization: Codable {
     public let documentLiveness: Bool?
     public let storeImageStream: Bool?
     public let saveCapturedVideo: Bool?
+    public let showResultPage: Bool?
     public let identificationDocuments: [IdentificationDocuments]?
 }
 

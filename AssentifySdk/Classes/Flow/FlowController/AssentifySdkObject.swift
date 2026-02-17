@@ -6,6 +6,28 @@
 //
 
 
+
+
+public final class AssentifySdkObject {
+
+    public static let shared = AssentifySdkObject()
+    private init() {}
+
+    private var sssentifySdk: AssentifySdk?
+
+    public func set(_ key: AssentifySdk) {
+        self.sssentifySdk = key
+    }
+
+    public func get() -> AssentifySdk? {
+        return sssentifySdk
+    }
+
+    public func clear() {
+        sssentifySdk = nil
+    }
+}
+
 public final class ApiKeyObject {
 
     public static let shared = ApiKeyObject()
@@ -89,4 +111,27 @@ public final class LocalStepsObject {
 
 
 
+
+
+
+
+public final class SelectedTemplatesObject {
+
+    public static let shared = SelectedTemplatesObject()
+    private init() {}
+
+    private var templates: Templates?
+
+    public func set(_ model: Templates) {
+        self.templates = model
+    }
+
+    public func get() -> Templates? {
+        return templates
+    }
+
+    public func clear() {
+        templates = nil
+    }
+}
 

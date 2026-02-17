@@ -48,15 +48,27 @@ public func dictionaryToString(_ dictionary: [String: Any]) -> String? {
     }
 }
 
-public func encodeBaseResponseDataModelToJson(data: RemoteProcessingModel) -> String {
-    let encoder = JSONEncoder()
-    do {
-        let jsonData = try encoder.encode(data)
-        return String(data: jsonData, encoding: .utf8) ?? ""
-    } catch {
-        return "\(error.localizedDescription)"
+func getImageUrlFromBaseResponseDataModel(jsonString: String?) -> String {
+    
+    guard
+        let jsonString = jsonString,
+        !jsonString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+        let data = jsonString.data(using: .utf8)
+    else {
+        return ""
     }
+
+    do {
+        if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            return json["ImageUrl"] as? String ?? ""
+        }
+    } catch {
+        return ""
+    }
+
+    return ""
 }
+
 
 
 

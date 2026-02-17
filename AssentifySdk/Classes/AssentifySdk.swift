@@ -378,7 +378,7 @@ public class AssentifySdk {
                     
                     
                 }
-                self.templates = self.filterToSupportedCountries(dataList: templatesByCountry)!
+                self.templates =  templatesByCountry ;
                 self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: self.configModel!);
             case .failure(_):
                 print("Get Templates Error")
@@ -410,17 +410,19 @@ public class AssentifySdk {
         return filteredList
     }
     
-    func filterToSupportedCountries(dataList: [TemplatesByCountry]?) -> [TemplatesByCountry]? {
+    func filterToSupportedCountries(dataList: [TemplatesByCountry]?,stepID: Int) -> [TemplatesByCountry]? {
         var selectedCountries: [String] = []
         var supportedIdCards: [String] = []
         
         for step in self.configModel!.stepDefinitions {
-            if step.stepDefinition == "IdentificationDocumentCapture" {
-                if let identificationDocuments = step.customization.identificationDocuments {
-                    for docStep in identificationDocuments {
-                        if docStep.key == "IdentificationDocument.IdCard" {
-                            selectedCountries = docStep.selectedCountries!
-                            supportedIdCards = docStep.supportedIdCards!
+            if (step.stepId == stepID) {
+                if step.stepDefinition == "IdentificationDocumentCapture" {
+                    if let identificationDocuments = step.customization.identificationDocuments {
+                        for docStep in identificationDocuments {
+                            if docStep.key == "IdentificationDocument.IdCard" {
+                                selectedCountries = docStep.selectedCountries!
+                                supportedIdCards = docStep.supportedIdCards!
+                            }
                         }
                     }
                 }
@@ -481,8 +483,9 @@ public class AssentifySdk {
         }
     }
     
-    public func getTemplates() -> [TemplatesByCountry] {
-        return self.templates!
+    public func getTemplates(stepID: Int) -> [TemplatesByCountry] {
+        let stepTemplates =  self.filterToSupportedCountries(dataList: self.templates,stepID:stepID)!;
+        return stepTemplates;
     }
     
     public func isManual() -> Bool {
