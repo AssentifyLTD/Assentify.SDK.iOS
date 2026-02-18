@@ -20,10 +20,10 @@ class ViewController: UIViewController , AssentifySdkDelegate , FlowDelegate{
           enableGuide: true,
           CountDownNumbersColor: "#FC4D92",
           HoldHandColor: "#FC4D92",
-          activeLiveType: ActiveLiveType.BLINK,
-          activeLivenessCheckCount: 1,
-          minRam: 10,
-          minCPUCores: 10
+          activeLiveType: ActiveLiveType.ACTIONS,
+          activeLivenessCheckCount: 3,
+          minRam: 1,
+          minCPUCores: 1
       
       )
       
@@ -62,7 +62,8 @@ class ViewController: UIViewController , AssentifySdkDelegate , FlowDelegate{
             accentColor: "#ffc400",
             backgroundColor: .solid(hex: "#ffffff"),
             clickColor: .solid(hex: "#ffc400"),
-              enableNfc: true
+              enableNfc: false,
+              enableQr: true
           
 //            language: Language.English,
 //            enableNfc: true,

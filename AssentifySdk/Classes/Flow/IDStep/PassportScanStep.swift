@@ -34,6 +34,7 @@ public struct PassportScanStep: View {
     @State private var start: Bool = false
     @State private var feedbackText: String = ""
     @State private var imageUrl: String = ""
+    @State private var dataIDModel: PassportResponseModel?
     @StateObject private var commands = PassportScanCommands()
     @State private var uploadProgress: Int = 0
     @State private var screenEvent: PassportScreenEvent = .idle
@@ -41,9 +42,15 @@ public struct PassportScanStep: View {
     
     private var assentifySdk = AssentifySdkObject.shared.get()
     private let flowController: FlowController
-    
+    private var showResultPage = false
     public init(flowController: FlowController) {
         self.flowController = flowController
+        self.showResultPage =
+        flowController.getCurrentStep()?
+            .stepDefinition?
+            .customization
+            .showResultPage ?? false
+        
     }
     
     private func onBack() {
@@ -52,7 +59,16 @@ public struct PassportScanStep: View {
     }
     
     private func onNext() {
+        DispatchQueue.main.async {
+            screenEvent = .idle
+        }
         commands.triggerClose += 1
+        if(FlowEnvironmentalConditionsObject.shared.get()!.enableNfc){
+            self.flowController.push(NfcScanScreen(flowController: self.flowController))
+        }else{
+            flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!)
+            flowController.naveToNextStep();
+        }
     }
     
     
@@ -74,38 +90,54 @@ public struct PassportScanStep: View {
             },
             onComplete: { model in
                 DispatchQueue.main.async {
-                    screenEvent = .completed
+                    OnCompleteScreenData.shared.clear();
+                    OnCompleteScreenData.shared.set(model.passportExtractedModel!.transformedProperties!)
+                    NfcPassportResponseModelObject.shared.set(model)
+                    dataIDModel = model
                     start = false;
                     imageUrl = model.passportExtractedModel!.imageUrl!
+                    if let outputProperties = model.passportExtractedModel?.outputProperties {
+                        let faceKey = flowController.getFaceMatchInputImageKey()
+                        for (key, value) in outputProperties {
+                            if key.contains(faceKey) {
+                                flowController.setImage(url: String(describing: value))
+                            }
+                        }
+                    }
+                    
+                    screenEvent = .completed
                 }
                 
             },
             onError: { model in
                 DispatchQueue.main.async {
-                    screenEvent = .error
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                    screenEvent = .error
                 }
             },
             onRetry: { model in
                 DispatchQueue.main.async {
-                    screenEvent = .retry
+                    
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                    screenEvent = .retry
                 }
             },
             onLivenessUpdate:{ model in
                 DispatchQueue.main.async {
-                    screenEvent = .liveness
+                    
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                    screenEvent = .liveness
                 }
             },
             onWrongTemplate: { model in
                 DispatchQueue.main.async {
-                    screenEvent = .wrongTemplate
+                    
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                    screenEvent = .wrongTemplate
                 }
             },
             
@@ -209,15 +241,19 @@ public struct PassportScanStep: View {
                     .allowsHitTesting(true) // blocks clicks behind
                     .transition(.opacity)
             case .completed:
-                let showResultPage = flowController.getCurrentStep()?.stepDefinition?.customization.showResultPage
+                
                 if(FlowEnvironmentalConditionsObject.shared.get()!.enableNfc){
                     OnNormalCompleteScreen(imageUrl:self.imageUrl
                     ) {
                         onNext()
                     }
                 }else{
-                    if(showResultPage!){
+                    if(self.showResultPage){
                         
+                        OnCompleteScreen(imageUrl:self.imageUrl
+                        ) {
+                            onNext()
+                        }
                     }else{
                         OnNormalCompleteScreen(imageUrl:self.imageUrl
                         ) {
@@ -225,8 +261,6 @@ public struct PassportScanStep: View {
                         }
                     }
                 }
-               
-               
                 
             case .error:
                 OnErrorScreen(imageUrl:self.imageUrl
@@ -335,7 +369,7 @@ struct PassportScanUIKitView: UIViewControllerRepresentable {
         }
         
         func onRetry(dataModel: RemoteProcessingModel) {
-             events.onRetry?(dataModel)
+            events.onRetry?(dataModel)
         }
         
         func onLivenessUpdate(dataModel: RemoteProcessingModel) {
@@ -385,7 +419,6 @@ struct PassportScanUIKitView: UIViewControllerRepresentable {
             }
             if commands.triggerClose != lastCloserigger {
                 lastCloserigger = commands.triggerClose
-                capture()
             }
         }
         
@@ -429,6 +462,7 @@ struct PassportScanUIKitView: UIViewControllerRepresentable {
             
             guard let vc = assentifySdk?.startScanPassport(
                 scanPassportDelegate: delegate,
+                language: FlowEnvironmentalConditionsObject.shared.get()!.language,
                 stepId: stepId
             ) else {
                 assertionFailure("startScanPassport returned nil (sdk instance or config missing)")

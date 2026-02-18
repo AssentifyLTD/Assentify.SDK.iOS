@@ -491,9 +491,7 @@ public class AssentifySdk {
     public func isManual() -> Bool {
         let totalRamGB = getTotalRAMInGB()
         let cores = ProcessInfo.processInfo.processorCount
-        
-        print("Total RAM: \(totalRamGB) GB")
-        print("CPU Cores: \(cores)")
+    
         
         return (totalRamGB < self.environmentalConditions!.minRam) || (cores < self.environmentalConditions!.minCPUCores)
     }

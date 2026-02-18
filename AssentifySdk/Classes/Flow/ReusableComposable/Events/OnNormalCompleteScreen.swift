@@ -3,16 +3,19 @@ import SwiftUI
 public struct OnNormalCompleteScreen: View {
 
     let imageUrl: String
+    let showStper: Bool
     let onNext: () -> Void
 
     let steps: [LocalStepModel] = LocalStepsObject.shared.get()!
 
     public init(
         imageUrl: String,
+        showStper: Bool  = true,
         onNext: @escaping () -> Void
     ) {
         self.imageUrl = imageUrl
         self.onNext = onNext
+        self.showStper = showStper
     }
 
     public var body: some View {
@@ -23,11 +26,13 @@ public struct OnNormalCompleteScreen: View {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
 
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
+                if(showStper){
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main
+                    )
+                    .padding(.top, 120)
+                }
 
                 VStack(spacing: 0) {
 
@@ -71,7 +76,7 @@ public struct OnNormalCompleteScreen: View {
                         action: onNext
                     )
                     .padding(.horizontal, 30) // similar to Android padding
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 30)
                     .padding(.top, 24)
                 }
             }

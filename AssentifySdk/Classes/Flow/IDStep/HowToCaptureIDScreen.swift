@@ -12,7 +12,7 @@ public struct HowToCaptureScreen: View {
         if(isPassport){
             self.flowController.push(PassportScanStep(flowController: self.flowController))
         }else{
-            
+            self.flowController.push(IDCardScanStep(flowController: self.flowController))
         }
     }
 

@@ -43,7 +43,7 @@ public final class FlowController {
             return
         }
         
-     switch currentStep.stepDefinition?.stepDefinition {
+        switch currentStep.stepDefinition?.stepDefinition {
             
         case StepsNames.termsConditions:
             push(TermsAndConditionsScreen(flowController: self))
@@ -99,4 +99,54 @@ public final class FlowController {
     public func backClick() {
         setRoot(animated: true)
     }
+    
+    
+    public  func getFaceMatchInputImageKey() -> String {
+        
+        let key = ConstantsValues.providedFaceImageKey
+        let currentStep = getCurrentStep()
+        let steps = LocalStepsObject.shared.get()
+        
+        // Find FaceImageAcquisition step
+        guard let faceStep = steps!.first(where: {
+            $0.stepDefinition?.stepDefinition == StepsNames.faceImageAcquisition
+        }),
+              let stepDefinition = faceStep.stepDefinition,
+              !stepDefinition.inputProperties.isEmpty,
+              let currentStepId = currentStep?.stepDefinition?.stepId
+        else {
+            return key
+        }
+        
+        let firstInput = stepDefinition.inputProperties.first!
+        
+        if firstInput.sourceStepId == currentStepId {
+            return firstInput.sourceKey
+        } else {
+            return "NON"
+        }
+    }
+    
+    public  func  setImage(url: String) {
+        IDImageObject.shared.clear();
+        IDImageObject.shared.set(url)
+    }
+    
+    public  func  getPreviousIDImage() -> String {
+        return IDImageObject.shared.get() ?? ""
+    }
+    
+    func faceIDChange() {
+        var steps = LocalStepsObject.shared.get()
+        
+        if let index = steps!.firstIndex(where: {
+            $0.stepDefinition?.stepDefinition == StepsNames.identificationDocumentCapture
+        }) {
+            steps![index].isDone = false
+        }
+        
+        LocalStepsObject.shared.set(steps!)
+    }
+
+    
 }

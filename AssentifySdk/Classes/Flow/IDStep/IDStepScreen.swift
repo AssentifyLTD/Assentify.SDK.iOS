@@ -33,7 +33,9 @@ public struct IDStepScreen: View {
         self.flowName = ConfigModelObject.shared.get()!.flowName;
         self.baseLogoUrl = BaseTheme.baseLogo
         self.countriesInput = (AssentifySdkObject.shared.get()?.getTemplates(stepID: flowController.getCurrentStep()!.stepDefinition!.stepId))!
-
+        OnCompleteScreenData.shared.clear();
+        NfcPassportResponseModelObject.shared.clear();
+        QrIDResponseModelObject.shared.clear();
     }
 
     
@@ -226,7 +228,7 @@ struct DocumentPickerCards: View {
                             Templates(
                                 id: 1,
                                 sourceCountryFlag:"",
-                                sourceCountryCode: "",
+                                sourceCountryCode:  country.sourceCountryCode,
                                 kycDocumentType: "All IDs",
                                 sourceCountry:"",
                                 kycDocumentDetails: []

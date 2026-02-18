@@ -74,7 +74,7 @@ public struct OnErrorScreen: View {
                         action: onRetry
                     )
                     .padding(.horizontal, 30) // similar to Android padding
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 30)
                     .padding(.top, 24)
                 }
             }

@@ -69,11 +69,18 @@ Pod::Spec.new do |s|
   "ic_passport.svg",
   "passport-video.mp4",
   "id-video.mp4",
+  "face-video.mp4",
   "ic_bar.svg",
   "ic_scan_id.svg",
   "ic_uploading.svg",
   "ic_error.svg",
   "ic_complete.svg",
+  "ic_nfc.svg",
+  "ic_face_id.svg",
+  "ic_uploading_face.svg",
+  "ic_wrong_template.svg",
+  "ic_flip_card.svg",
+  "qr_gif.gif",
 
 
 

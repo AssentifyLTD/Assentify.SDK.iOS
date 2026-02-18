@@ -147,7 +147,6 @@ class RemoteProcessing {
                     return
                 }
                 if let responseString = String(data: responseData, encoding: .utf8) {
-                    print(responseString)
                 }
                 do {
                     let decoder = JSONDecoder()
