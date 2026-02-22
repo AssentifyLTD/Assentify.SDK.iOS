@@ -190,14 +190,13 @@ public enum AssistedFormHelper {
                 return false
             }
         }
-        /// TODOSDK
         
-//        for f in fields {
-//            let t = InputTypes.fromString(f.inputType)
-//            if t == .emailWithOTP || t == .phoneNumberWithOTP {
-//                if f.isLocalOtpValid == false { return false }
-//            }
-//        }
+        for f in fields {
+            let t = InputTypes.fromString(f.inputType)
+            if t == .emailWithOTP || t == .phoneNumberWithOTP {
+                if f.isLocalOtpValid == false { return false }
+            }
+        }
         
         return true
     }
