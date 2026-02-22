@@ -43,7 +43,6 @@ public struct OnFlipCardScreen: View {
 
                     Spacer().frame(height: 32)
 
-                    // ✅ Big flip icon (150x150 like Android)
                     SVGAssetIcon(
                         name: "ic_flip_card",
                         size: CGSize(width: 200, height: 150),

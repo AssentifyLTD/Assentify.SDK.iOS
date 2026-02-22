@@ -96,3 +96,12 @@ public struct IDQrKeys {
 
     private init() {} // prevent initialization
 }
+
+public  func getCurrentDateTimeForTracking() -> String {
+      let formatter = ISO8601DateFormatter()
+      formatter.formatOptions = [
+          .withInternetDateTime,
+          .withFractionalSeconds
+      ]
+      return formatter.string(from: Date())
+  }

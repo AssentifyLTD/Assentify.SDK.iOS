@@ -67,7 +67,6 @@ public struct OnNormalCompleteScreen: View {
 
                    
 
-                    // Bottom button (like Android)
                     BaseClickButton(
                         title: "Next",
                         cornerRadius: 28,
@@ -75,7 +74,7 @@ public struct OnNormalCompleteScreen: View {
                         enabled: true,
                         action: onNext
                     )
-                    .padding(.horizontal, 30) // similar to Android padding
+                    .padding(.horizontal, 30)
                     .padding(.bottom, 30)
                     .padding(.top, 24)
                 }

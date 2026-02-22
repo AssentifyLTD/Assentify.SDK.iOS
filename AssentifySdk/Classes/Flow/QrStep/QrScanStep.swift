@@ -7,7 +7,7 @@ struct QrScanEvents {
     var onStart: (() -> Void)? = nil
     var onProgress: ((Double) -> Void)? = nil
     var onComplete: ((IDResponseModel) -> Void)? = nil
-    var onError: ((String) -> Void)? = nil
+    var onError: ((RemoteProcessingModel) -> Void)? = nil
 }
 
 enum QrScreenEvent {
@@ -40,7 +40,7 @@ public struct QrScanStep: View {
     private let flowController: FlowController
     @State private var dataIDModel: IDResponseModel?
 
-
+    private let timeStarted :String = getCurrentDateTimeForTracking();
     private var showResultPage: Bool = false
     private let selectedTemplate: Templates?
 
@@ -73,7 +73,7 @@ public struct QrScanStep: View {
         DispatchQueue.main.async { screenEvent = .idle }
         commands.triggerClose += 1
 
-        flowController.makeCurrentStepDone(extractedInformation: dataIDModel!.iDExtractedModel!.transformedProperties!)
+        flowController.makeCurrentStepDone(extractedInformation: dataIDModel!.iDExtractedModel!.transformedProperties!,timeStarted: self.timeStarted)
         flowController.naveToNextStep()
     }
 
@@ -137,15 +137,44 @@ public struct QrScanStep: View {
                     start = false
                     uploadProgress = 0
                     screenEvent = .completed
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                   
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: finalMap,
+                        response: "Completed",
+                        status: "Completed"
+                    )
+                    /***/
                 })
             },
 
-            onError: { message in
+            onError: { model in
                 DispatchQueue.main.async {
                     start = false
                     uploadProgress = 0
-                    errorMessage = message
+                    errorMessage = ""
                     screenEvent = .error
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "Error"
+                        : "Error - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
+                    
                 }
             }
         )
@@ -253,8 +282,8 @@ struct QrScanUIKitView: UIViewControllerRepresentable {
             events.onComplete?(dataModel)
         }
 
-        func onErrorQrScan(message: String) {
-            events.onError?(message)
+        func onErrorQrScan(message: String,dataModel: RemoteProcessingModel) {
+            events.onError?(dataModel)
         }
     }
 

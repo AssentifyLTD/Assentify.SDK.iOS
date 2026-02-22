@@ -65,7 +65,6 @@ public struct OnFaceLivenessScreen: View {
 
                     Spacer(minLength: 0)
 
-                    // Bottom button (like Android)
                     BaseClickButton(
                         title: "Retry",
                         cornerRadius: 28,
@@ -73,7 +72,7 @@ public struct OnFaceLivenessScreen: View {
                         enabled: true,
                         action: onRetry
                     )
-                    .padding(.horizontal, 30) // similar to Android padding
+                    .padding(.horizontal, 30) 
                     .padding(.bottom, 30)
                     .padding(.top, 24)
                 }

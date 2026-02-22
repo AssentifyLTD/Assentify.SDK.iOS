@@ -31,7 +31,7 @@ public struct NfcScanScreen: View {
     @State private var dataIDModel: PassportResponseModel?
     @StateObject private var commands = NfcScanCommands()
     @State private var screenEvent: NfcScreenEvent = .idle
-    
+    private let timeStarted :String = getCurrentDateTimeForTracking();
     private var assentifySdk = AssentifySdkObject.shared.get()
     private let flowController: FlowController
     private var showResultPage = false
@@ -56,7 +56,7 @@ public struct NfcScanScreen: View {
     
     private func onNext() {
         DispatchQueue.main.async { screenEvent = .idle }
-        flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!)
+        flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!,timeStarted: self.timeStarted)
         flowController.naveToNextStep();
     }
     

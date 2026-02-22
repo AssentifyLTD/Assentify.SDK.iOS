@@ -6,56 +6,56 @@ import UIKit
 
 
 public struct BaseTheme {
-
+    
     private static var env: FlowEnvironmentalConditions {
         guard let value = FlowEnvironmentalConditionsObject.shared.get() else {
             fatalError("FlowEnvironmentalConditions not initialized")
         }
         return value
     }
-
+    
     public static var baseTextColor: UIColor {
         UIColor.fromHex(env.textColor)
     }
-
+    
     public static var baseSecondaryTextColor: UIColor {
         UIColor.fromHex(env.secondaryTextColor)
     }
-
+    
     public static var fieldColor: UIColor {
         UIColor.fromHex(env.backgroundCardColor)
     }
-
+    
     public static var baseAccentColor: UIColor {
         UIColor.fromHex(env.accentColor)
     }
-
+    
     public static var baseGreenColor: UIColor {
         UIColor.fromHex(ConstantsValues.DetectColor)
     }
-
+    
     public static var baseRedColor: UIColor {
         .red
     }
-
-
+    
+    
     public static var backgroundColor: BackgroundStyle? {
         env.backgroundColor
     }
-
+    
     public static var baseClickColor: BackgroundStyle? {
         env.clickColor
     }
-
+    
     public static var baseBackgroundType: BackgroundType {
         env.backgroundType
     }
-
+    
     public static var baseBackgroundUrl: String {
         env.svgBackgroundImageUrl
     }
-
-
+    
+    
     public static var baseLogo: String {
         env.logoUrl
     }
@@ -65,7 +65,7 @@ public struct BaseTheme {
 
 struct BlockLoaderScreen: View {
     
-    let steps = buildStepsFromConfig();
+    var steps:[LocalStepModel]  = [];
     
     func onBack ()  {
         flowController.dismiss()
@@ -73,14 +73,15 @@ struct BlockLoaderScreen: View {
     func onNext ()  {
         flowController.naveToNextStep()
     }
-
+    
     private let flowController: FlowController
     
-   
+    
     
     public init(flowController: FlowController) {
         
         self.flowController = flowController
+        steps = buildStepsFromConfig(flowController: flowController);
         
     }
     
@@ -88,41 +89,41 @@ struct BlockLoaderScreen: View {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
                 
-                    // Header
-                    Text("Complete Your\nOnboarding in \(steps.count) Steps")
-                        .font(.system(size: 25, weight: .bold))
-                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                        .multilineTextAlignment(.leading)
-                        .lineSpacing(6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 25)
-                        .padding(.leading, 25)
-                        .padding(.trailing, 20)
-                    
-                    Text("It will include capturing your ID and your face — it's fast, easy, and secure.")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                        .multilineTextAlignment(.leading)
-                        .lineSpacing(6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 5)
-                        .padding(.horizontal, 25)
-                        .padding(.bottom, 10)
-                    
-                    // Steps list
-                    ScrollView {
-                        LazyVStack(spacing: 6) {
-                            ForEach(Array(steps.enumerated()), id: \.offset) {index, step in
-                                StepCard(
-                                    step: step,
-                                    selectedColor: Color(BaseTheme.baseAccentColor),
-                                    unselectedColor: Color(BaseTheme.fieldColor),
-                                    onClick: { }
-                                ).padding(.top, index == 0 ? 8 : 6)
-                            }
+                // Header
+                Text("Complete Your\nOnboarding in \(steps.count) Steps")
+                    .font(.system(size: 25, weight: .bold))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                    .multilineTextAlignment(.leading)
+                    .lineSpacing(6)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 25)
+                    .padding(.leading, 25)
+                    .padding(.trailing, 20)
+                
+                Text("It will include capturing your ID and your face — it's fast, easy, and secure.")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                    .multilineTextAlignment(.leading)
+                    .lineSpacing(6)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 5)
+                    .padding(.horizontal, 25)
+                    .padding(.bottom, 10)
+                
+                // Steps list
+                ScrollView {
+                    LazyVStack(spacing: 6) {
+                        ForEach(Array(steps.enumerated()), id: \.offset) {index, step in
+                            StepCard(
+                                step: step,
+                                selectedColor: Color(BaseTheme.baseAccentColor),
+                                unselectedColor: Color(BaseTheme.fieldColor),
+                                onClick: { }
+                            ).padding(.top, index == 0 ? 8 : 6)
                         }
-                        .padding(.top, 4)
                     }
+                    .padding(.top, 4)
+                }
                 
                 .frame(maxHeight: .infinity)
                 
@@ -134,65 +135,65 @@ struct BlockLoaderScreen: View {
             } .topBarBackLogo {
                 onBack()
             }
-
+            
         }
     }
 }
 
 
 
-private func buildStepsFromConfig() -> [LocalStepModel] {
-
+private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepModel] {
+    
     var tempList = LocalStepsObject.shared.get()
-
+    
     if  tempList!.isEmpty {
-
+        
         /** BlockLoader **/
-        let flowEnvironmentalConditions = FlowEnvironmentalConditionsObject.shared.get() 
+        let flowEnvironmentalConditions = FlowEnvironmentalConditionsObject.shared.get()
         let configModel = ConfigModelObject.shared.get()
-
+        
         var values: [String: String] = [:]
-
+        
         let initSteps = ConfigModelObject.shared.get()!.stepDefinitions
-
+        
         for item in initSteps {
             if item.stepDefinition == StepsNames.blockLoader {
-
+                
                 for property in item.outputProperties {
-
+                    
                     let key = property.key
-
+                    
                     if key.contains(BlockLoaderKeys.timeStarted) {
                         values[key] =  getTimeUTC()
                     }
-
+                    
                     if key.contains(BlockLoaderKeys.deviceName) {
                         let deviceName = "\(UIDevice.current.model) \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
                         values[key] = deviceName
                     }
-
+                    
                     if key.contains(BlockLoaderKeys.application) {
                         values[key] = configModel?.applicationId ?? ""
                     }
-
+                    
                     if key.contains(BlockLoaderKeys.flowName) {
                         values[key] = configModel?.flowName ?? ""
                     }
-
+                    
                     if key.contains(BlockLoaderKeys.instanceHash) {
                         values[key] = configModel?.instanceHash ?? ""
                     }
-
+                    
                     if key.contains(BlockLoaderKeys.userAgent) {
                         let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
                         values[key] = userAgent
                     }
-
+                    
                     if key.contains(BlockLoaderKeys.interactionID) {
                         values[key] = configModel?.instanceId ?? ""
                     }
                 }
-
+                
                 // Override / extend with customProperties
                 for property in item.outputProperties {
                     let propKey = property.key
@@ -204,10 +205,10 @@ private func buildStepsFromConfig() -> [LocalStepModel] {
                 }
             }
         }
-
+        
         // Find BlockLoader stepDefinition
         let blockLoaderDef = configModel?.stepDefinitions.first { $0.stepDefinition == StepsNames.blockLoader }
-
+        
         if let blockLoaderDef = blockLoaderDef {
             tempList!.append(
                 LocalStepModel(
@@ -225,24 +226,24 @@ private func buildStepsFromConfig() -> [LocalStepModel] {
                 )
             )
         }
-
+        
         var displayCounter = 1
-
+        
         for step in configModel!.stepMap {
             let def = step.stepDefinition
-
+            
             if def == StepsNames.termsConditions ||
-               def == StepsNames.identificationDocumentCapture ||
-               def == StepsNames.faceImageAcquisition ||
-               def == StepsNames.assistedDataEntry ||
-               def == StepsNames.contextAwareSigning {
-
+                def == StepsNames.identificationDocumentCapture ||
+                def == StepsNames.faceImageAcquisition ||
+                def == StepsNames.assistedDataEntry ||
+                def == StepsNames.contextAwareSigning {
+                
                 guard let meta = getStepMeta(def) else { continue }
-
+                
                 guard let stepDef = configModel!.stepDefinitions.first(where: { $0.stepId == step.id }) else {
                     continue
                 }
-
+                
                 tempList!.append(
                     LocalStepModel(
                         name: "Step \(displayCounter): \(meta.name)",
@@ -258,24 +259,42 @@ private func buildStepsFromConfig() -> [LocalStepModel] {
                         )
                     )
                 )
-
+                
                 displayCounter += 1
             }
         }
-
+        
         LocalStepsObject.shared.set(tempList!)
-
+        
         let steps = LocalStepsObject.shared.get()
         let currentStep = steps!.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
-        /// TODOSDK trackProgress
+        
+        /** Track Progress **/
 
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : currentStep!.submitRequestModel!.extractedInformation,
+            response : nil,
+            status : "Completed"
+        )
+        /***/
+
+        
     } else {
-
+        
         let steps = LocalStepsObject.shared.get()
         let currentStep = steps!.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
-        /// TODOSDK trackProgress
-    }
+        /** Track Progress **/
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : currentStep!.submitRequestModel!.extractedInformation,
+            response : nil,
+            status : "Completed"
+        )
+        /***/
 
+    }
+    
     return tempList!.filter { $0.show }
 }
 
@@ -287,44 +306,44 @@ public struct StepMeta {
 }
 
 public func getStepMeta(_ stepDefinition: String) -> StepMeta? {
-
+    
     switch stepDefinition {
-
+        
     case StepsNames.termsConditions:
         return StepMeta(
             name: "Terms & Conditions",
             description: "Read and accept the Terms & Conditions.",
             icon: "ic_terms_step.svg"
         )
-
+        
     case StepsNames.identificationDocumentCapture:
         return StepMeta(
             name: "Scan Your ID",
             description: "Take a photo of your national ID or passport to verify your identity.",
             icon: "ic_id_step.svg"
         )
-
+        
     case StepsNames.faceImageAcquisition:
         return StepMeta(
             name: "Take Selfie",
             description: "Use your camera to securely confirm your identity with a quick selfie scan.",
             icon: "ic_face_step.svg"
         )
-
+        
     case StepsNames.assistedDataEntry:
         return StepMeta(
             name: "Information Capture",
             description: "Provide basic personal details like name, address, and employment info.",
             icon: "ic_data_entry_step.svg"
         )
-
+        
     case StepsNames.contextAwareSigning:
         return StepMeta(
             name: "eKYC Signing",
             description: "Provide a digital signature to complete onboarding.",
             icon: "ic_signing_step.svg"
         )
-
+        
     default:
         return nil
     }

@@ -43,10 +43,12 @@ public struct FaceMatchStep: View {
     @State private var uploadProgress: Int = 0
     @State private var screenEvent: FaceMatchScreenEvent = .idle
     @State private var currentActiveLiveEvents: ActiveLiveEvents = .GOOD
-
+    private let timeStarted :String = getCurrentDateTimeForTracking();
+    
     private var assentifySdk = AssentifySdkObject.shared.get()
     private let flowController: FlowController
 
+    
     /// required by your SDK signature
     private let secondImage: String
 
@@ -88,7 +90,7 @@ public struct FaceMatchStep: View {
                    outputProps[skippedKey] = "true"
                }
            }
-           flowController.makeCurrentStepDone(extractedInformation: outputProps)
+           flowController.makeCurrentStepDone(extractedInformation: outputProps,timeStarted: self.timeStarted)
            flowController.naveToNextStep()
     }
 
@@ -110,6 +112,18 @@ public struct FaceMatchStep: View {
                     start = false
                     imageUrl = model.faceExtractedModel?.secondImageFace ?? ""
                     screenEvent = .completed
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                   
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: model.faceExtractedModel?.outputProperties,
+                        response: "Completed",
+                        status: "Completed"
+                    )
+                    /***/
                 }
             },
             onError: { model in
@@ -117,6 +131,23 @@ public struct FaceMatchStep: View {
                     start = false
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .error
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "Error"
+                        : "Error - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onRetry: { model in
@@ -124,6 +155,23 @@ public struct FaceMatchStep: View {
                     start = false
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .retry
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onRetry"
+                        : "onRetry - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onLiveness: { model in
@@ -131,6 +179,23 @@ public struct FaceMatchStep: View {
                     start = false
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .liveness
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onLivenessUpdate"
+                        : "onLivenessUpdate - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onEnvironmental: { brightness, motion, faceEvents, zoom, detectedFaces, isCentered in

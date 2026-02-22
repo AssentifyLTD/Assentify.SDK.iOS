@@ -105,7 +105,6 @@ public struct IDStepScreen: View {
             }
         }.modifier(InterceptSystemBack(action: onBack))
         .onAppear {
-            // add "Rest of the world" like Android
             var list = countriesInput
             list.append(
                 TemplatesByCountry(
@@ -134,7 +133,6 @@ public struct IDStepScreen: View {
     }
 
     private func sheetHeight(for count: Int) -> CGFloat {
-        // similar to Android logic: header + padding + rowHeight * count, capped to ~75% screen
         let header: CGFloat = 56
         let padding: CGFloat = 32
         let row: CGFloat = 88

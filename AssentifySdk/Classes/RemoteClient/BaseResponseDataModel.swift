@@ -6,13 +6,15 @@ import Foundation
     public  var error: String?
     public  var success: Bool?
     public  var classifiedTemplate: String?
+    public var responseJsonObject: [String: AnyCodable]?
     
-    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil,classifiedTemplate: String? = "") {
+    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil,classifiedTemplate: String? = "", responseJsonObject: [String: AnyCodable]? = nil) {
         self.destinationEndpoint = destinationEndpoint
         self.response = response
         self.error = error
         self.success = success
         self.classifiedTemplate = classifiedTemplate
+        self.responseJsonObject = responseJsonObject
     }
     
 }

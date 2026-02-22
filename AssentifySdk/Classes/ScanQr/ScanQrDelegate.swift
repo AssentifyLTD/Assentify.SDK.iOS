@@ -5,7 +5,7 @@ import Foundation
     
     func onStartQrScan()
 
-    func onErrorQrScan(message: String)
+    func onErrorQrScan(message: String,dataModel: RemoteProcessingModel)
 
     func onCompleteQrScan(dataModel: IDResponseModel)
     

@@ -19,7 +19,7 @@ public struct TermsAndConditionsScreen: View {
     @State private var showShare = false
     @State private var shareItems: [Any] = []
     @State private var sharePayload: SharePayload?
-    
+    private let timeStarted :String = getCurrentDateTimeForTracking();
     public init(flowController: FlowController) {
         self.flowController = flowController
     }
@@ -39,7 +39,16 @@ public struct TermsAndConditionsScreen: View {
             let extractedInformation: [String: String] = [
                 confirmationKey: String(describing: value)
             ]
-            flowController.makeCurrentStepDone(extractedInformation:extractedInformation)
+            /** Track Progress **/
+            flowController.trackProgress(
+                currentStep : step,
+                inputData : extractedInformation,
+                response : nil,
+                status : "Completed"
+            )
+            /***/
+
+            flowController.makeCurrentStepDone(extractedInformation:extractedInformation,timeStarted: self.timeStarted)
             flowController.naveToNextStep()
         }
         

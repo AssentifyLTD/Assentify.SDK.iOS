@@ -5,12 +5,12 @@ import Foundation
 public class ContextAwareSigning{
     
     private var contextAwareDelegate: ContextAwareDelegate?;
+    private var contextAwareSigningModel: ContextAwareSigningModel?;
     private var tenantIdentifier: String;
     private var interaction: String?;
     private var stepID: Int?;
     private var configModel: ConfigModel?;
     private var apiKey: String;
-    private var templateId = -1;
 
 
     init(configModel: ConfigModel!,
@@ -45,21 +45,26 @@ public class ContextAwareSigning{
             ){ result in
             switch result {
             case .success(let contextAwareSigningModel):
-                self.templateId =  contextAwareSigningModel.data.selectedTemplates[0]
-                self.getTokens(templateId: self.templateId)
+                self.contextAwareSigningModel = contextAwareSigningModel
+                contextAwareSigningModel.data.selectedTemplates.forEach({ it in
+                    self.getTokensMappings(templateId: it)
+                })
              case .failure(let error):
                 self.contextAwareDelegate?.onError(message: error.localizedDescription);
             }
         }
     }
     
-    private func  getTokens(templateId:Int){
-        remoteGetTokens(
+    private func  getTokensMappings(templateId:Int){
+        tokensMappings(
+            tenantIdentifier: configModel!.tenantIdentifier,
+            blockIdentifier: configModel!.blockIdentifier,
+            stepId: stepID!,
             templateId: templateId
             ){ result in
             switch result {
             case .success(let documentTokensModel):
-                self.contextAwareDelegate?.onHasTokens(documentTokens: documentTokensModel)
+                self.contextAwareDelegate?.onHasTokens(templateId: templateId,documentTokens: documentTokensModel,contextAwareSigningModel:self.contextAwareSigningModel! );
              case .failure(let error):
                 self.contextAwareDelegate?.onError(message: error.localizedDescription);
             }
@@ -68,7 +73,7 @@ public class ContextAwareSigning{
     
 
     
-   public func createUserDocumentInstance(data: [String: String]){
+   public func createUserDocumentInstance(templateId:Int,data: [String: String]){
        let createUserDocumentRequestModel =
                  CreateUserDocumentRequestModel(
                     userId : "UserId",

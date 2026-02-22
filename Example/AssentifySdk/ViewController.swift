@@ -10,7 +10,7 @@ import AssentifySdk
 import UIKit
 
 class ViewController: UIViewController , AssentifySdkDelegate , FlowDelegate{
-  
+   
     
    
     let yellowColor = "🔥 -> ";
@@ -51,7 +51,7 @@ class ViewController: UIViewController , AssentifySdkDelegate , FlowDelegate{
     func onAssentifySdkInitSuccess(configModel: ConfigModel) {
         print("\(yellowColor)onAssentifySdkInitSuccess:" )
         AssentifySdkObject.shared.set(assentifySdk!)
-        let  blockLoaderCustomProperties: [String: Any] = [:] ;
+        let  blockLoaderCustomProperties: [String: Any] = ["phoneNumber":"1111"] ;
         let flowEnvironmentalConditions = FlowEnvironmentalConditions(
               backgroundType: .color,
               logoUrl: "https://image2url.com/r2/default/images/1769694393603-0afa5733-d9a5-4b0d-9134-868d3a750069.png",
@@ -63,8 +63,9 @@ class ViewController: UIViewController , AssentifySdkDelegate , FlowDelegate{
             backgroundColor: .solid(hex: "#ffffff"),
             clickColor: .solid(hex: "#ffc400"),
               enableNfc: false,
-              enableQr: true
-          
+              enableQr: false,
+              blockLoaderCustomProperties:blockLoaderCustomProperties,
+
 //            language: Language.English,
 //            enableNfc: true,
 //            enableQr: true,
@@ -82,8 +83,8 @@ class ViewController: UIViewController , AssentifySdkDelegate , FlowDelegate{
         )
 
         DispatchQueue.main.async {
-            self.assentifySdk!.startFlow(from:self,flowDelegate: self,flowEnvironmentalConditions: flowEnvironmentalConditions)
-
+          self.assentifySdk!.startFlow(from:self,flowDelegate: self,flowEnvironmentalConditions: flowEnvironmentalConditions)
+            
         }
     }
     

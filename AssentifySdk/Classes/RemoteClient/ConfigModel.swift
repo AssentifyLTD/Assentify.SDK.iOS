@@ -38,10 +38,11 @@ public struct StepMap: Codable {
 public struct OutputProperties: Codable {
     public let id: Int
     public let key: String
+    public let keyIdentifier: String?
     public  let displayName: String
-    public  let isRequired: Bool
-    public let isExcluded: Bool
-    public  let type: Int
+    public  let isRequired: Bool?
+    public let isExcluded: Bool?
+    public  let type: Int?
 }
 
 public struct Customization: Codable {
@@ -52,8 +53,27 @@ public struct Customization: Codable {
     public let storeImageStream: Bool?
     public let saveCapturedVideo: Bool?
     public let showResultPage: Bool?
-    public let identificationDocuments: [IdentificationDocuments]?
+    public  let outputProperties: [OutputProperties]
+    public let  identificationDocuments: [IdentificationDocuments]?
+    public  let branches: [Branch]?
 }
+
+public struct Branch: Codable {
+    public  let branchIndex: Int
+    public let conditions: [Condition]
+}
+
+public struct Condition: Codable {
+
+    public let label: String?
+    public let inputPropertyKey: String
+    public let conditionOperator: Int?   // 1 AND, 2 OR
+    public let `operator`: Int           // backticks because "operator" is reserved in Swift
+    public let useAge: Bool?
+    public let value: String?
+
+}
+
 
 public struct InputProperty: Codable {
     

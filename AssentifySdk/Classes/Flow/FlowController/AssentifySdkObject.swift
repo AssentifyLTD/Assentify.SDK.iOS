@@ -217,5 +217,26 @@ public final class QrIDResponseModelObject {
     }
 }
 
+public final class AssistedDataEntryPagesObject {
+    
+    public static let shared = AssistedDataEntryPagesObject()
+    private init() {}
+    
+    private var assistedDataEntryModel:AssistedDataEntryModel?
+    
+    public func set(_ assistedDataEntryModel: AssistedDataEntryModel) {
+        self.assistedDataEntryModel = assistedDataEntryModel
+    }
+    
+    public func get() -> AssistedDataEntryModel? {
+        return assistedDataEntryModel
+    }
+    
+    public func clear() {
+        assistedDataEntryModel =  nil
+    }
+}
+
+
 
 

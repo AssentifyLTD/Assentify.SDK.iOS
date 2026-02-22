@@ -81,6 +81,7 @@ Pod::Spec.new do |s|
   "ic_wrong_template.svg",
   "ic_flip_card.svg",
   "qr_gif.gif",
+  "ic_phone.svg",
 
 
 

@@ -91,7 +91,6 @@ public struct OnWrongTemplateScreen: View {
 
                     Spacer(minLength: 0)
 
-                    // BOTTOM BUTTON (match Android padding style)
                     BaseClickButton(
                         title: "Retry",
                         cornerRadius: 28,

@@ -14,7 +14,6 @@ public class AssentifySdk {
     private var isKeyValid: Bool = false
     private var configModel: ConfigModel?
     private var tenantThemeModel: TenantThemeModel?
-    private var stepID: Int = -1;
     private var scanID: ScanIDCard?;
     private var templates: [TemplatesByCountry]?;
     private var timeStarted: String;
@@ -70,11 +69,6 @@ public class AssentifySdk {
             case .success(let configModel):
                 self.isKeyValid  = true;
                 self.configModel = configModel;
-                configModel.stepDefinitions.forEach { item in
-                    if item.stepDefinition == "ContextAwareSigning" {
-                        self.stepID = item.stepId
-                    }
-                }
                 self.getTenantTheme();
                 
             case .failure(let error):
@@ -232,16 +226,31 @@ public class AssentifySdk {
     }
     
     
-    public func startContextAwareSigning(contextAwareDelegate:ContextAwareDelegate) -> ContextAwareSigning?{
+    public func startContextAwareSigning(contextAwareDelegate:ContextAwareDelegate,stepId: Int? ,) -> ContextAwareSigning?{
         if(isKeyValid){
             return ContextAwareSigning(
                 configModel:configModel,
                 apiKey:apiKey,
-                stepID:stepID,
+                stepID:stepId!,
                 tenantIdentifier:tenantIdentifier,
                 interaction:interaction,
                 contextAwareDelegate:contextAwareDelegate
             );
+        }else{
+            NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
+        }
+        return nil;
+    }
+    
+    public func startAssistedDataEntry(assistedDataEntryDelegate:AssistedDataEntryDelegate,stepId: Int? = nil) -> AssistedDataEntry?{
+        if(isKeyValid){
+            let assistedDataEntry =  AssistedDataEntry(
+                apiKey:apiKey,
+                configModel:configModel!,
+                delegate: assistedDataEntryDelegate,
+            );
+            assistedDataEntry.setStepId(stepId != nil ? String(stepId!) : nil)
+            return assistedDataEntry;
         }else{
             NSException(name: NSExceptionName(rawValue: "Exception"), reason: "Invalid Keys", userInfo: nil).raise()
         }

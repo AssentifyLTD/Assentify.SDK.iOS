@@ -53,7 +53,7 @@ public struct IDCardScanStep: View {
     @State private var extractedInformation: [String:String] = [:]
     
     @StateObject private var commands = IDScanCommands()
-    
+    private let timeStarted :String = getCurrentDateTimeForTracking();
     private var assentifySdk = AssentifySdkObject.shared.get()
     private let flowController: FlowController
     
@@ -105,7 +105,7 @@ public struct IDCardScanStep: View {
             .first(where: { $0.templateProcessingKeyInformation == classifiedTemplate })!.hasQrCode) {
             self.flowController.push(HowToCaptureQrScreen(flowController: self.flowController))
         } else {
-            flowController.makeCurrentStepDone(extractedInformation: extractedInformation)
+            flowController.makeCurrentStepDone(extractedInformation: extractedInformation,timeStarted: self.timeStarted)
             flowController.naveToNextStep();
         }
         
@@ -161,6 +161,18 @@ public struct IDCardScanStep: View {
                         feedbackText = ""
                         uploadProgress = 0
                         screenEvent = .completed
+                        /** Track Progress **/
+                        let currentStep = flowController.getCurrentStep()
+                       
+
+                        flowController.trackProgress(
+                            currentStep: currentStep!,
+                            inputData: extractedInformation,
+                            response: "Completed",
+                            status: "Completed"
+                        )
+                        /***/
+                        
                     }else{
                         start = false
                         feedbackText = ""
@@ -182,6 +194,8 @@ public struct IDCardScanStep: View {
                         }
                     }
                     
+                    
+                    
                 }
             },
             onError: { model in
@@ -197,6 +211,23 @@ public struct IDCardScanStep: View {
                         imageUrl = ""
                     }
                     screenEvent = .error
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "Error"
+                        : "Error - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onRetry: { model in
@@ -212,6 +243,23 @@ public struct IDCardScanStep: View {
                         imageUrl = ""
                     }
                     screenEvent = .retry
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onRetry"
+                        : "onRetry - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onWrongTemplate: { model in
@@ -227,6 +275,22 @@ public struct IDCardScanStep: View {
                         imageUrl = ""
                     }
                     screenEvent = .wrongTemplate
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onWrongTemplate"
+                        : "onWrongTemplate - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onLivenessUpdate: { model in
@@ -242,6 +306,22 @@ public struct IDCardScanStep: View {
                         imageUrl = ""
                     }
                     screenEvent = .liveness
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onLivenessUpdate"
+                        : "onLivenessUpdate - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onEnvironmental: { brightnessEvents, motion, zoom, isCentered in

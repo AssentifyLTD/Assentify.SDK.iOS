@@ -38,7 +38,7 @@ public struct PassportScanStep: View {
     @StateObject private var commands = PassportScanCommands()
     @State private var uploadProgress: Int = 0
     @State private var screenEvent: PassportScreenEvent = .idle
-    
+    private let timeStarted :String = getCurrentDateTimeForTracking();
     
     private var assentifySdk = AssentifySdkObject.shared.get()
     private let flowController: FlowController
@@ -66,7 +66,7 @@ public struct PassportScanStep: View {
         if(FlowEnvironmentalConditionsObject.shared.get()!.enableNfc){
             self.flowController.push(NfcScanScreen(flowController: self.flowController))
         }else{
-            flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!)
+            flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!,timeStarted: self.timeStarted)
             flowController.naveToNextStep();
         }
     }
@@ -106,6 +106,18 @@ public struct PassportScanStep: View {
                     }
                     
                     screenEvent = .completed
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                   
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: model.passportExtractedModel?.transformedProperties,
+                        response: "Completed",
+                        status: "Completed"
+                    )
+                    /***/
                 }
                 
             },
@@ -114,6 +126,22 @@ public struct PassportScanStep: View {
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .error
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "Error"
+                        : "Error - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onRetry: { model in
@@ -122,6 +150,23 @@ public struct PassportScanStep: View {
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .retry
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "Retry"
+                        : "Retry - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onLivenessUpdate:{ model in
@@ -130,6 +175,23 @@ public struct PassportScanStep: View {
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .liveness
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onLivenessUpdate"
+                        : "onLivenessUpdate - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             onWrongTemplate: { model in
@@ -138,6 +200,23 @@ public struct PassportScanStep: View {
                     start = false;
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .wrongTemplate
+                    
+                    /** Track Progress **/
+                    let currentStep = flowController.getCurrentStep()
+                    let errorString = model.responseJsonObject?["error"] as? String
+                    let extracted = flowController.extractAfterDash(errorString)
+
+                    let finalResponse = extracted.isEmpty
+                        ? "onWrongTemplate"
+                        : "onWrongTemplate - \(extracted)"
+
+                    flowController.trackProgress(
+                        currentStep: currentStep!,
+                        inputData: flowController.decodeToJsonObject(model.response),
+                        response: finalResponse,
+                        status: "InProgress"
+                    )
+                    /***/
                 }
             },
             

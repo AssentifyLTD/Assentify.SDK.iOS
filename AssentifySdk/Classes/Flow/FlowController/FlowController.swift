@@ -6,6 +6,8 @@ public final class FlowController {
     private weak var navigationController: UINavigationController?
     private var flowDelegate:FlowDelegate?
     
+    private let timeStarted :String = getCurrentDateTimeForTracking();
+    
     public init(navigationController: UINavigationController,flowDelegate:FlowDelegate) {
         self.navigationController = navigationController
         self.flowDelegate = flowDelegate
@@ -70,7 +72,7 @@ public final class FlowController {
         return steps!.first { $0.isDone == false }
     }
     
-    public func makeCurrentStepDone(extractedInformation: [String: String]) {
+    public func makeCurrentStepDone(extractedInformation: [String: String],  timeStarted :String,) {
         
         var steps = LocalStepsObject.shared.get()
         
@@ -83,8 +85,8 @@ public final class FlowController {
             return nextIndex < steps!.count ? steps![nextIndex] : nil
         }()
         
-        /// TODOSDK  Track Next
-        // trackNext(currentStep: currentStep, nextStep: nextStep)
+       
+        trackNext(currentStep:currentStep , nextStep: nextStep,timeStarted: timeStarted)
         
         var submitRequestModel = currentStep.submitRequestModel
         submitRequestModel?.extractedInformation = extractedInformation
@@ -136,7 +138,7 @@ public final class FlowController {
         return IDImageObject.shared.get() ?? ""
     }
     
-    func faceIDChange() {
+    public func faceIDChange() {
         var steps = LocalStepsObject.shared.get()
         
         if let index = steps!.firstIndex(where: {
@@ -148,5 +150,394 @@ public final class FlowController {
         LocalStepsObject.shared.set(steps!)
     }
 
+    public func getAllDoneSteps() -> [LocalStepModel] {
+        let steps = LocalStepsObject.shared.get() ?? []
+        return steps.filter { $0.isDone }
+    }
+
+    public func getSubmitList() -> [SubmitRequestModel] {
+
+        let steps = LocalStepsObject.shared.get()
+        var submitList: [SubmitRequestModel] = []
+
+        // 1) Collect submitRequestModel from local steps
+        for step in steps! {
+            if let submitModel = step.submitRequestModel {
+                submitList.append(submitModel)
+            }
+        }
+
+        // 2) Build WrapUp SubmitRequestModel (TimeEnded)
+        var wrapUp: SubmitRequestModel? = nil
+        let initSteps = ConfigModelObject.shared.get()!.stepDefinitions
+
+        for item in initSteps {
+            if item.stepDefinition == StepsNames.wrapUp {
+
+                var values: [String: String] = [:]
+
+                for property in item.outputProperties {
+                    if property.key.contains(WrapUpKeys.timeEnded) {
+                        values[property.key] = getTimeUTC()
+                    }
+                }
+
+                wrapUp = SubmitRequestModel(
+                    stepId: item.stepId,
+                    stepDefinition: StepsNames.wrapUp,
+                    extractedInformation: values
+                )
+
+                break
+            }
+        }
+
+        if let wrapUp {
+            submitList.append(wrapUp)
+        }
+
+        return submitList
+    }
     
+  
+    
+    
+    public  func trackNext(
+          currentStep: LocalStepModel,
+          nextStep: LocalStepModel?,
+          timeStarted :String,
+      ) {
+          let configModel = ConfigModelObject.shared.get()!
+          let apiKey = ApiKeyObject.shared.get()
+          let flowEnvironmentalConditions = FlowEnvironmentalConditionsObject.shared.get()
+          
+          
+          let components = URLComponents(string: BaseUrls.baseURLGateway + "api/FlowTracker/track-next")
+         
+
+          guard let url = components?.url else {
+              return
+          }
+
+          var request = URLRequest(url: url)
+          request.httpMethod = "POST"
+
+        
+          request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+          request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
+          request.setValue("iOS SDK", forHTTPHeaderField: "X-Source-Agent")
+          request.setValue(configModel.flowInstanceId, forHTTPHeaderField: "X-Flow-Instance-Id")
+          request.setValue(configModel.tenantIdentifier, forHTTPHeaderField: "X-Tenant-Identifier")
+          request.setValue(configModel.blockIdentifier, forHTTPHeaderField: "X-Block-Identifier")
+          request.setValue(configModel.instanceId, forHTTPHeaderField: "X-Instance-Id")
+          request.setValue(configModel.flowIdentifier, forHTTPHeaderField: "X-Flow-Identifier")
+          request.setValue(configModel.instanceHash, forHTTPHeaderField: "X-Instance-Hash")
+
+        
+          
+          let wrapUpStep = configModel.stepMap.first {
+              $0.stepDefinition == StepsNames.wrapUp
+          }
+
+          let currentStepType = configModel.stepMap.first {
+              $0.id == currentStep.stepDefinition!.stepId
+          }?.stepType ?? 0
+
+          let nextStepType: Int
+          let nextStepId: Int
+          let nextStepDefinition: String
+
+          if let next = nextStep {
+              nextStepDefinition = next.stepDefinition!.stepDefinition
+              nextStepId = next.stepDefinition!.stepId
+              nextStepType = configModel.stepMap.first {
+                  $0.id == next.stepDefinition!.stepId
+              }?.stepType ?? 0
+          } else {
+              nextStepDefinition = StepsNames.wrapUp
+              nextStepId = wrapUpStep?.id ?? 0
+              nextStepType = wrapUpStep?.stepType ?? 0
+          }
+          
+          let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
+          let deviceName = "\(UIDevice.current.model) \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+          
+          let body = TrackNextRequest(
+              applicationId: configModel.applicationId,
+              blockIdentifier: configModel.blockIdentifier,
+              blockType: "Engagement",
+              deviceName: deviceName,
+              flowIdentifier: configModel.flowIdentifier,
+              flowInstanceId: configModel.flowInstanceId,
+              flowName: configModel.flowName,
+              instanceHash: configModel.instanceHash,
+              isSuccessful: true,
+              language: flowEnvironmentalConditions!.language,
+              nextStepDefinition: nextStepDefinition,
+              nextStepId: nextStepId,
+              nextStepTypeId: nextStepType,
+              phoneNumber: nil,
+              statusCode: 200,
+              stepDefinition: currentStep.stepDefinition!.stepDefinition,
+              stepId: currentStep.stepDefinition!.stepId,
+              stepTypeId: currentStepType,
+              tenantIdentifier: configModel.tenantIdentifier,
+              timeStarted: timeStarted,
+              timeEnded: getCurrentDateTimeForTracking(),
+              userAgent: userAgent
+          )
+          
+          do {
+              let encoder = JSONEncoder()
+              request.httpBody = try encoder.encode(body)
+          } catch {
+              return
+          }
+
+          let task = URLSession.shared.dataTask(with: request) { data, response, error in
+
+             
+              guard let httpResponse = response as? HTTPURLResponse else {
+                  return
+              }
+              if(httpResponse.statusCode == 200){
+                  guard let responseData = data else {
+                      return
+                  }
+                  if let responseString = String(data: responseData, encoding: .utf8) {}
+             }
+
+            
+          }
+
+          task.resume()
+      }
+    
+    
+    public  func trackProgress(
+          currentStep: LocalStepModel,
+          inputData: Any?,
+          response: Any?,
+          status:String,
+      ) {
+          let configModel = ConfigModelObject.shared.get()!
+          let apiKey = ApiKeyObject.shared.get()
+          let flowEnvironmentalConditions = FlowEnvironmentalConditionsObject.shared.get()
+          
+          
+          let components = URLComponents(string: BaseUrls.baseURLGateway + "api/FlowTracker/track-progress")
+         
+
+          guard let url = components?.url else {
+              return
+          }
+
+          var request = URLRequest(url: url)
+          request.httpMethod = "POST"
+
+        
+          request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+          request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
+          request.setValue("iOS SDK", forHTTPHeaderField: "X-Source-Agent")
+          request.setValue(configModel.flowInstanceId, forHTTPHeaderField: "X-Flow-Instance-Id")
+          request.setValue(configModel.tenantIdentifier, forHTTPHeaderField: "X-Tenant-Identifier")
+          request.setValue(configModel.blockIdentifier, forHTTPHeaderField: "X-Block-Identifier")
+          request.setValue(configModel.instanceId, forHTTPHeaderField: "X-Instance-Id")
+          request.setValue(configModel.flowIdentifier, forHTTPHeaderField: "X-Flow-Identifier")
+          request.setValue(configModel.instanceHash, forHTTPHeaderField: "X-Instance-Hash")
+
+        
+          
+       
+          let currentStepType = configModel.stepMap.first {
+              $0.id == currentStep.stepDefinition!.stepId
+          }?.stepType ?? 0
+
+        
+          
+          let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
+          let deviceName = "\(UIDevice.current.model) \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+          
+          let body = TrackProgressRequest(
+              tenantIdentifier: configModel.tenantIdentifier,
+              flowIdentifier: configModel.flowIdentifier,
+              flowInstanceId: configModel.flowInstanceId,
+              applicationId: configModel.applicationId,
+              blockIdentifier: configModel.blockIdentifier,
+              instanceHash: configModel.instanceHash,
+              flowName: configModel.flowName,
+              stepDefinition: currentStep.stepDefinition!.stepDefinition,
+              stepId: currentStep.stepDefinition!.stepId,
+              stepTypeId: currentStepType,
+              status: status,
+              deviceName: deviceName,
+              userAgent: userAgent,
+              timestamp: getCurrentDateTimeForTracking(),
+              language: flowEnvironmentalConditions!.language,
+              inputData: prepareTrackProgressInputData(currentStep:currentStep, inputData:inputData),
+              response: response,
+              customProperties: []
+          )
+          
+    
+
+          do {
+              let encoder = JSONEncoder()
+              request.httpBody = try encoder.encode(body)
+          } catch {
+              return
+          }
+
+          let task = URLSession.shared.dataTask(with: request) { data, response, error in
+
+              
+              
+              guard let httpResponse = response as? HTTPURLResponse else {
+                  return
+              }
+            
+          }
+
+          task.resume()
+      }
+    
+
+   private  func prepareTrackProgressInputData(
+        currentStep: LocalStepModel,
+        inputData: Any?
+    ) -> [String: Any] {
+
+        var stepsData: [String: Any] = [:]
+        let steps = LocalStepsObject.shared.get()
+
+        // ✅ Add all done steps
+        for step in steps! where step.isDone {
+
+            guard
+                let stepDef = step.stepDefinition,
+                let submitModel = step.submitRequestModel
+            else { continue }
+
+            var extractedInformation: [String: Any] = [:]
+            extractedInformation["stepId"] = stepDef.stepId
+
+            for (k, v) in submitModel.extractedInformation {
+                extractedInformation[k] = v
+            }
+
+            let key = prepareStepName(stepDefinition:stepDef.stepDefinition,stepId: stepDef.stepId)
+            stepsData[key] = extractedInformation
+        }
+
+        guard let currentDef = currentStep.stepDefinition else { return stepsData }
+
+        var currentExtracted: [String: Any] = [:]
+        currentExtracted["stepId"] = currentDef.stepId
+
+        if let rawInput = inputData,
+           let map = toMap(rawInput) {
+            for (k, v) in map {
+                if let v { currentExtracted[k] = v }
+            }
+        }
+
+        let currentKey = prepareStepName(stepDefinition:currentDef.stepDefinition, stepId:currentDef.stepId)
+        stepsData[currentKey] = currentExtracted
+
+        return stepsData
+    }
+    
+  private   func prepareStepName(
+        stepDefinition: String,
+        stepId: Int
+    ) -> String {
+
+        let steps = LocalStepsObject.shared.get()
+
+        let duplicatesCount = steps!.filter {
+            $0.stepDefinition?.stepDefinition == stepDefinition
+        }.count
+
+        if duplicatesCount > 1 {
+            return "\(stepDefinition)_\(stepId)"
+        } else {
+            return stepDefinition
+        }
+    }
+    
+    private  func toMap(_ input: Any?) -> [String: Any?]? {
+        guard let input else { return nil }
+
+        // Case 1: Already [String: Any]
+        if let dict = input as? [String: Any] {
+            return dict.mapValues { Optional($0) }
+        }
+
+        // Case 2: Dictionary with mixed keys → keep only String keys
+        if let dict = input as? [AnyHashable: Any] {
+            var result: [String: Any?] = [:]
+            for (key, value) in dict {
+                if let keyString = key as? String {
+                    result[keyString] = value
+                }
+            }
+            return result
+        }
+
+        // Case 3: JSON Data
+        if let data = input as? Data {
+            return parseJSONData(data)
+        }
+
+        // Case 4: JSON String
+        if let jsonString = input as? String,
+           let data = jsonString.data(using: .utf8) {
+            return parseJSONData(data)
+        }
+
+        return nil
+    }
+
+    private  func parseJSONData(_ data: Data) -> [String: Any?]? {
+        do {
+            let object = try JSONSerialization.jsonObject(with: data)
+            if let dict = object as? [String: Any] {
+                return dict.mapValues { Optional($0) }
+            }
+        } catch {
+            print("JSON parse error:", error)
+        }
+        return nil
+    }
+    
+    
+    
+   public func extractAfterDash(_ error: String?) -> String {
+        guard let error, !error.isEmpty else {
+            return ""
+        }
+
+        if let range = error.range(of: "-") {
+            let substring = error[range.upperBound...]
+            return substring.trimmingCharacters(in: .whitespacesAndNewlines)
+        } else {
+            return ""
+        }
+    }
+    
+    public  func decodeToJsonObject(_ originalString: String?) -> [String: Any]? {
+        guard let originalString,
+              !originalString.isEmpty,
+              let data = originalString.data(using: .utf8) else {
+            return nil
+        }
+
+        do {
+            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            return json as? [String: Any]
+        } catch {
+            return nil
+        }
+    }
+
 }
