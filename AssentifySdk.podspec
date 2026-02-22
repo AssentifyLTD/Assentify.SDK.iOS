@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AssentifySdk'
-  s.version          = '0.0.79'
+  s.version          = '1.0.0-alpha.1'
   s.summary          = 'This iOS Pod provides integration with Assentify services.'
 
   # This description is used to generate tags and improve search results.
@@ -58,7 +58,34 @@ Pod::Spec.new do |s|
   "blink.gif",
   "error_layout.svg",
   "success_layout.svg",
-  "qr_background.svg"
+  "qr_background.svg",
+  
+  "ic_data_entry_step.svg",
+  "ic_face_step.svg",
+  "ic_id_step.svg",
+  "ic_signing_step.svg",
+  "ic_terms_step.svg",
+  "id_card.svg",
+  "ic_passport.svg",
+  "passport-video.mp4",
+  "id-video.mp4",
+  "face-video.mp4",
+  "ic_bar.svg",
+  "ic_scan_id.svg",
+  "ic_uploading.svg",
+  "ic_error.svg",
+  "ic_complete.svg",
+  "ic_nfc.svg",
+  "ic_face_id.svg",
+  "ic_uploading_face.svg",
+  "ic_wrong_template.svg",
+  "ic_flip_card.svg",
+  "qr_gif.gif",
+  "ic_phone.svg",
+
+
+
+  
   ]
   
   s.frameworks = 'UIKit'

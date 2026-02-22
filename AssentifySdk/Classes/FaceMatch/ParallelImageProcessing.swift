@@ -2,7 +2,7 @@ import Foundation
 import CoreVideo
 
 class ParallelImageProcessing {
-    private var clips: [String] = []
+    private var clips: [Data] = []
     private var pixelBufferLiveImage: [CVPixelBuffer] = []
     private let queue = DispatchQueue.global(qos: .userInitiated)
     private let dispatchGroup = DispatchGroup()
@@ -19,7 +19,7 @@ class ParallelImageProcessing {
         for i in 0..<pixelBufferLiveImage.count {
             dispatchGroup.enter()
             queue.async {
-                if let base64String = convertClipsPixelBufferToBase64(self.pixelBufferLiveImage[i],
+                if let base64String = convertClipsPixelBufferToData(self.pixelBufferLiveImage[i],
                            targetSize: CGSize(width: 360, height: 640),
                            targetAspect: CGSize(width: 9, height: 16),
                             jpegQuality: 0.8
@@ -39,7 +39,7 @@ class ParallelImageProcessing {
         }
     }
     
-    func getClips() -> [String] {
+    func getClips() -> [Data] {
         return clips
     }
     

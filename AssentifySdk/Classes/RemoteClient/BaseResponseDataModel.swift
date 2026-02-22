@@ -5,12 +5,16 @@ import Foundation
     public  var response: String?
     public  var error: String?
     public  var success: Bool?
+    public  var classifiedTemplate: String?
+    public var responseJsonObject: [String: AnyCodable]?
     
-    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil) {
+    init(destinationEndpoint: String? = nil, response: String? = nil, error: String? = nil, success: Bool? = nil,classifiedTemplate: String? = "", responseJsonObject: [String: AnyCodable]? = nil) {
         self.destinationEndpoint = destinationEndpoint
         self.response = response
         self.error = error
         self.success = success
+        self.classifiedTemplate = classifiedTemplate
+        self.responseJsonObject = responseJsonObject
     }
     
 }
@@ -30,7 +34,8 @@ public func parseDataToRemoteProcessingModel(data: [String: Any]) -> RemoteProce
         destinationEndpoint: data["destinationEndpoint"] as? String ,
         response:response,
         error: data["error"] as? String ,
-        success: success
+        success: success,
+        classifiedTemplate: data["classifiedTemplate"] as? String ,
     )
 }
 
@@ -45,15 +50,27 @@ public func dictionaryToString(_ dictionary: [String: Any]) -> String? {
     }
 }
 
-public func encodeBaseResponseDataModelToJson(data: RemoteProcessingModel) -> String {
-    let encoder = JSONEncoder()
-    do {
-        let jsonData = try encoder.encode(data)
-        return String(data: jsonData, encoding: .utf8) ?? ""
-    } catch {
-        return "\(error.localizedDescription)"
+func getImageUrlFromBaseResponseDataModel(jsonString: String?) -> String {
+    
+    guard
+        let jsonString = jsonString,
+        !jsonString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+        let data = jsonString.data(using: .utf8)
+    else {
+        return ""
     }
+
+    do {
+        if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            return json["ImageUrl"] as? String ?? ""
+        }
+    } catch {
+        return ""
+    }
+
+    return ""
 }
+
 
 
 

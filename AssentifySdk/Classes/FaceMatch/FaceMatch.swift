@@ -62,7 +62,6 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var  processEveryNFrames = 2;
     private var  currentImage : CVPixelBuffer?;
     private var  livnessRetryCount = 0;
-    private var  retryCount = 0;
     
     var livenessCheckArray: [CVPixelBuffer] = [] {
            didSet {
@@ -248,7 +247,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                 self.faceMatchDelegate?.onEnvironmentalConditionsChange?(
                     brightnessEvents:self.environmentalConditions!.checkConditions(
                         brightness: imageBrightnessChecker),
-                    motion: self.motion,faceEvents:!self.start && self.areAllEventsDone() ? FaceEvents.GOOD : self.faceEvent,zoom: self.zoom,detectedFaces: self.faces())
+                    motion: self.motion,faceEvents:!self.start && self.areAllEventsDone() ? FaceEvents.GOOD : self.faceEvent,zoom: self.zoom,detectedFaces: self.faces(),isCentered: self.isRectFInsideTheScreen)
             }
         }
        
@@ -433,7 +432,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             if(self.isCountDownStarted){
                                 self.isCountDownStarted = false;
                                 DispatchQueue.main.async {
-                                    (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.CountdownMumbersColor) {
+                                    (self.countdownLabel, self.countdownTimer) = self.guide.showFaceTimer(view: self.view, initialTextColorHex:self.environmentalConditions!.CountDownNumbersColor) {
                                         self.isCountDownStarted = true;
                                         self.start = false;
                                         self.faceMatchDelegate?.onSend();
@@ -443,33 +442,30 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                                         converter.convertBuffers {
                                         ///
                                         let clips = converter.getClips()
-                                        let selfieImage: String
+                                        let selfieImage: Data
                                         if !clips.isEmpty {
                                                 let middleIndex = clips.count / 2
                                                 selfieImage = clips[middleIndex]
                                          } else {
-                                                selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer) ?? ""
+                                                selfieImage = convertPixelToDataImage(pixelBuffer: pixelBuffer)!
                                         }
+                                        var secondDataImage = base64ToData(self.secondImage!)!
                                         ///
-                                        self.remoteProcessing?.starProcessing(
+                                        self.remoteProcessing?.starProcessingFace(
                                             url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                                            videoClip: "",
-                                            stepIdString: String(self.stepId!),
                                             appConfiguration:self.configModel!,
-                                            templateId: "",
-                                            secondImage: self.secondImage!,
-                                            connectionId: "ConnectionId",
-                                            clipsPath: "ClipsPath",
-                                            checkForFace: true,
-                                            processMrz:true,
-                                            performLivenessDocument:true,
-                                            performLivenessFace: self.performPassiveLivenessFace!,
-                                            saveCapturedVideo: self.saveCapturedVideoFace!,
-                                            storeCapturedDocument:true,
-                                            isVideo: true,
-                                            storeImageStream: self.storeImageStream!,
+                                            stepIdString: String(self.stepId!),
                                             selfieImage: selfieImage,
-                                            clips: clips
+                                            livenessFrames :clips,
+                                            secondImage:secondDataImage,
+                                            isLivenessEnabled: self.performPassiveLivenessFace!,
+                                            retryCount:self.livnessRetryCount,
+                                            isManualCapture:false,
+                                            isAutoCapture: true,
+                                            connectionId: "ConnectionId",
+                                            onProgress: { progress in
+                                                self.faceMatchDelegate?.onUploadingProgress(progress: progress);
+                                            },
                                         ) { result in
                                             switch result {
                                             case .success(let model):
@@ -498,33 +494,30 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                             converter.convertBuffers {
                             ///
                              let clips = converter.getClips()
-                             let selfieImage: String
+                             let selfieImage: Data
                               if !clips.isEmpty {
                                         let middleIndex = clips.count / 2
                                         selfieImage = clips[middleIndex]
                                  } else {
-                                        selfieImage = convertPixelBufferToBase64(pixelBuffer: pixelBuffer) ?? ""
+                                        selfieImage = convertPixelToDataImage(pixelBuffer: pixelBuffer)!
                                 }
+                            var secondDataImage = base64ToData(self.secondImage!)!
                             ///
-                            self.remoteProcessing?.starProcessing(
+                            self.remoteProcessing?.starProcessingFace(
                                 url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                                videoClip: "",
-                                stepIdString: String(self.stepId!),
                                 appConfiguration:self.configModel!,
-                                templateId: "",
-                                secondImage: self.secondImage!,
-                                connectionId: "ConnectionId",
-                                clipsPath: "ClipsPath",
-                                checkForFace: true,
-                                processMrz: true,
-                                performLivenessDocument:true,
-                                performLivenessFace: self.performPassiveLivenessFace!,
-                                saveCapturedVideo: self.saveCapturedVideoFace!,
-                                storeCapturedDocument:true,
-                                isVideo: true,
-                                storeImageStream: self.storeImageStream!,
+                                stepIdString: String(self.stepId!),
                                 selfieImage: selfieImage,
-                                clips: clips
+                                livenessFrames :clips,
+                                secondImage:secondDataImage,
+                                isLivenessEnabled: self.performPassiveLivenessFace!,
+                                retryCount:self.livnessRetryCount,
+                                isManualCapture:false,
+                                isAutoCapture: true,
+                                connectionId: "ConnectionId",
+                                onProgress: { progress in
+                                    self.faceMatchDelegate?.onUploadingProgress(progress: progress);
+                                },
                             ) { result in
                                 switch result {
                                 case .success(let model):
@@ -573,42 +566,33 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
                 )
-                self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.Success)
+                self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel )
                 self.start = false
             } else if eventName == HubConnectionTargets.ON_RETRY {
-                self.retryCount = self.retryCount + 1;
-                if(self.retryCount == self.environmentalConditions?.retryCount){
-                    var faceExtractedModel = FaceExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
-                    var faceResponseModel = FaceResponseModel(
-                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
-                        faceExtractedModel: faceExtractedModel,
-                        error: remoteProcessingModel.error,
-                        success: remoteProcessingModel.success
-                    )
-                    self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.MatchFailed)
-                    self.start = false
-                }else{
-                    remoteProcessingModel.error = EventsErrorMessages.OnRetryFaceMessage
-                    self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
-                    self.start = true
-                }
+                self.start = true
+                remoteProcessingModel.error = EventsErrorMessages.OnRetryFaceMessage
+                self.faceMatchDelegate?.onRetry(dataModel:remoteProcessingModel )
             } else if eventName == HubConnectionTargets.ON_LIVENESS_UPDATE {
+                
                 self.livnessRetryCount = self.livnessRetryCount + 1;
-                if(self.livnessRetryCount == self.environmentalConditions?.faceLivenessRetryCount){
-                    var faceExtractedModel = FaceExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!);
-                    var faceResponseModel = FaceResponseModel(
-                        destinationEndpoint: remoteProcessingModel.destinationEndpoint,
-                        faceExtractedModel: faceExtractedModel,
-                        error: remoteProcessingModel.error,
-                        success: remoteProcessingModel.success
-                    )
-                    self.faceMatchDelegate?.onComplete(dataModel:faceResponseModel ,doneFlag: DoneFlags.LivenessFailed)
-                    self.start = false
-                }else{
-                    remoteProcessingModel.error = EventsErrorMessages.OnLivenessFaceUpdateMessage
-                    self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
-                    self.start = true
+                self.start = true
+                remoteProcessingModel.error = EventsErrorMessages.OnLivenessFaceUpdateMessage
+                self.faceMatchDelegate?.onLivenessUpdate?(dataModel:remoteProcessingModel )
+
+                if(!self.isManual){
+                    if(self.livnessRetryCount == self.environmentalConditions?.faceLivenessRetryCount){
+                        self.livnessRetryCount = 0;
+                        if(self.environmentalConditions?.activeLiveType == ActiveLiveType.NONE || self.environmentalConditions?.activeLivenessCheckCount == 0){
+                            self.environmentalConditions?.activeLivenessCheckCount = 3;
+                            self.environmentalConditions?.activeLiveType = ActiveLiveType.ACTIONS
+                        }
+                        self.performLivenessFace = true;
+                        self.fillCompletionMap();
+                        self.resetActiveLive();
+
+                    }
                 }
+                
             } else{
                 self.start = true
                 switch eventName {
@@ -877,25 +861,28 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             if(hasFace()){
                 self.start = false;
                 self.faceMatchDelegate?.onSend();
-                self.remoteProcessing?.starProcessing(
+                
+                
+                
+                var selfieImage = convertPixelToDataImage(pixelBuffer: self.currentImage!)!
+                var secondDataImage = base64ToData(self.secondImage!)!
+                
+                self.remoteProcessing?.starProcessingFace(
                     url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                    videoClip: "",
-                    stepIdString: String(self.stepId!),
                     appConfiguration:self.configModel!,
-                    templateId: "",
-                    secondImage: self.secondImage!,
+                    stepIdString: String(self.stepId!),
+                    selfieImage: selfieImage,
+                    livenessFrames : [],
+                    secondImage:secondDataImage,
+                    isLivenessEnabled: self.performPassiveLivenessFace!,
+                    retryCount:self.livnessRetryCount,
+                    isManualCapture:true,
+                    isAutoCapture: false,
                     connectionId: "ConnectionId",
-                    clipsPath: "ClipsPath",
-                    checkForFace: true,
-                    processMrz:true,
-                    performLivenessDocument:true,
-                    performLivenessFace: self.performPassiveLivenessFace!,
-                    saveCapturedVideo: self.saveCapturedVideoFace!,
-                    storeCapturedDocument: true,
-                    isVideo: true,
-                    storeImageStream: self.storeImageStream!,
-                    selfieImage: convertPixelBufferToBase64(pixelBuffer: self.currentImage!)!,
-                    clips:[]
+                    onProgress: { progress in
+                        self.faceMatchDelegate?.onUploadingProgress(progress: progress);
+                    },
+                    
                 ) { result in
                     switch result {
                     case .success(let model):

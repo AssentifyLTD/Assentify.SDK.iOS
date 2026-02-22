@@ -11,23 +11,23 @@ public class EnvironmentalConditions {
     var enableDetect: Bool
     var enableGuide: Bool
 
-    var CountdownMumbersColor: String
+    
     var HoldHandColor: String
+    var CountDownNumbersColor: String
 
 
-    var BRIGHTNESS_HIGH_THRESHOLD: Double
-    var BRIGHTNESS_LOW_THRESHOLD: Double
-    
-    
     var MotionLimit : Int
     var MotionLimitFace : Int
     
+    
+    var BRIGHTNESS_HIGH_THRESHOLD: Double
+    var BRIGHTNESS_LOW_THRESHOLD: Double
+    
+
     var activeLiveType: ActiveLiveType
     
     var activeLivenessCheckCount:Int
     
-    
-    var retryCount : Int = 3
     var faceLivenessRetryCount : Int = 2
 
     var minRam : Int = 2
@@ -36,7 +36,7 @@ public class EnvironmentalConditions {
     public  init(
         enableDetect: Bool = true,
         enableGuide:Bool = true,
-        CountdownMumbersColor: String = "#00FFFFFF",
+        CountDownNumbersColor: String = "#00FFFFFF",
         HoldHandColor: String,
         BRIGHTNESS_HIGH_THRESHOLD :Double  = 255.0,
         BRIGHTNESS_LOW_THRESHOLD:Double = 50.0,
@@ -44,14 +44,13 @@ public class EnvironmentalConditions {
         MotionLimitFace:Int = 5,
         activeLiveType:ActiveLiveType = ActiveLiveType.NONE,
         activeLivenessCheckCount:Int = 0,
-        retryCount:Int = 3,
         faceLivenessRetryCount:Int = 2,
         minRam:Int = 8,
         minCPUCores:Int = 6
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = enableGuide
-        self.CountdownMumbersColor = CountdownMumbersColor
+        self.CountDownNumbersColor = CountDownNumbersColor
         self.HoldHandColor = HoldHandColor
         self.BRIGHTNESS_HIGH_THRESHOLD = BRIGHTNESS_HIGH_THRESHOLD
         self.BRIGHTNESS_LOW_THRESHOLD = BRIGHTNESS_LOW_THRESHOLD
@@ -59,7 +58,6 @@ public class EnvironmentalConditions {
         self.MotionLimitFace = MotionLimitFace
         self.activeLiveType = activeLiveType
         self.activeLivenessCheckCount = activeLivenessCheckCount
-        self.retryCount = retryCount
         self.faceLivenessRetryCount = faceLivenessRetryCount
         self.minRam = minRam
         self.minCPUCores = minCPUCores

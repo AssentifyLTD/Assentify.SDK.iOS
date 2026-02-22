@@ -20,6 +20,7 @@ struct ConstantsValues {
     static let AudioWrong = "audio_wrong.mp3";
     static let ClarityProjectId = "spm0s4tjn6";
     static let BugsnagApiKey = "c43ad13958ab6db91b5a46670021a2f4";
+    static let providedFaceImageKey = "OnBoardMe_IdentificationDocumentCapture_Image";
 }
 
 
@@ -69,4 +70,38 @@ public func getTimeUTC() -> String {
       formatter.locale = Locale(identifier: "en_US_POSIX")
       let utcTime = formatter.string(from: currentDate)
       return utcTime
+  }
+
+public func getIDTag(configModel: ConfigModel, templateName: String) -> String {
+    return "\(configModel.tenantIdentifier)/\(configModel.instanceId),\(templateName)"
+}
+
+
+public struct IDQrKeys {
+
+    public static let faceCapture =
+        "OnBoardMe_IdentificationDocumentCapture_FaceCapture"
+
+    public static let capturedVideoFront =
+        "OnBoardMe_IdentificationDocumentCapture_CapturedVideoFront"
+
+    public static let image =
+        "OnBoardMe_IdentificationDocumentCapture_Image"
+
+    public static let originalFrontImage =
+        "OnBoardMe_IdentificationDocumentCapture_OriginalFrontImage"
+
+    public static let ghostImage =
+        "OnBoardMe_IdentificationDocumentCapture_GhostImage"
+
+    private init() {} // prevent initialization
+}
+
+public  func getCurrentDateTimeForTracking() -> String {
+      let formatter = ISO8601DateFormatter()
+      formatter.formatOptions = [
+          .withInternetDateTime,
+          .withFractionalSeconds
+      ]
+      return formatter.string(from: Date())
   }
