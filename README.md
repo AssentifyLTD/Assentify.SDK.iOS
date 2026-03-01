@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-alpha.2**
+ 1. *Full Flows integration*
+
 **1.0.0-alpha.1**
  1. *Full Flows integration*
 

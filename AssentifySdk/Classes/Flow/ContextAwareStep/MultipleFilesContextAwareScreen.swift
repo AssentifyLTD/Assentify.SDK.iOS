@@ -94,7 +94,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                 currentStep: currentStep!,
                 inputData:extractedInformation,
                 response: "Completed",
-                status: "Completed"
+                status: "InProgress"
             )
             /***/
 
@@ -139,6 +139,16 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
     
     public init(flowController: FlowController) {
         self.flowController = flowController
+        
+        /** Track Progress **/
+        let currentStep = flowController.getCurrentStep()
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : flowController.outputPropertiesToMap(currentStep!.stepDefinition!.outputProperties),
+            response : nil,
+            status : "InProgress"
+        )
+        /***/
     }
 
     // MARK: Start (like AssistedDataEntryScreen)

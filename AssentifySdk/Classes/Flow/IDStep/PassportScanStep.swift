@@ -51,6 +51,15 @@ public struct PassportScanStep: View {
             .customization
             .showResultPage ?? false
         
+        /** Track Progress **/
+        let currentStep = flowController.getCurrentStep()
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : flowController.outputPropertiesToMap(currentStep!.stepDefinition!.outputProperties),
+            response : nil,
+            status : "InProgress"
+        )
+        /***/
     }
     
     private func onBack() {
@@ -115,7 +124,7 @@ public struct PassportScanStep: View {
                         currentStep: currentStep!,
                         inputData: model.passportExtractedModel?.transformedProperties,
                         response: "Completed",
-                        status: "Completed"
+                        status: "InProgress"
                     )
                     /***/
                 }

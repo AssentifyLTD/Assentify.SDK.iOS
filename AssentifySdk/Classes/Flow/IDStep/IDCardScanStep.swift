@@ -68,6 +68,16 @@ public struct IDCardScanStep: View {
             .stepDefinition?
             .customization
             .showResultPage ?? false
+        
+        /** Track Progress **/
+        let currentStep = flowController.getCurrentStep()
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : flowController.outputPropertiesToMap(currentStep!.stepDefinition!.outputProperties),
+            response : nil,
+            status : "InProgress"
+        )
+        /***/
     }
     
     private func loadTemplates() {
@@ -169,7 +179,7 @@ public struct IDCardScanStep: View {
                             currentStep: currentStep!,
                             inputData: extractedInformation,
                             response: "Completed",
-                            status: "Completed"
+                            status: "InProgress"
                         )
                         /***/
                         

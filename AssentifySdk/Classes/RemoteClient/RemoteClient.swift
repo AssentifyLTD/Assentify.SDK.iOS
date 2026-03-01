@@ -352,7 +352,6 @@ func remoteSubmitData(apiKey: String,
     let urlString = BaseUrls.baseURLGateway + "v1/Manager/Submit"
     guard let url = URL(string: urlString) else {
         let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-        print("Request URL is invalid: \(urlString)")
         completion(BaseResult.failure(error))
         return
     }
@@ -378,20 +377,16 @@ func remoteSubmitData(apiKey: String,
         
         // Log request details
         if let jsonString = String(data: jsonData, encoding: .utf8) {
-            print("Request Submit Headers: \(request.allHTTPHeaderFields ?? [:])")
-            print("Request Submit : \(jsonString)")
             BugsnagObject.logInfo(message: "Data submission started. \(jsonString)", configModel:configModel)
             
         }
     } catch {
-        print("Failed to encode request body: \(error)")
         completion(BaseResult.failure(error))
         return
     }
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            print("Request failed with error: \(error)")
             BugsnagObject.logInfo(message: "Data submission failed: \(error)", configModel:configModel)
             completion(BaseResult.failure(error))
             return
@@ -399,21 +394,17 @@ func remoteSubmitData(apiKey: String,
         
         guard let httpResponse = response as? HTTPURLResponse else {
             let error = NSError(domain: "Invalid response", code: 0, userInfo: nil)
-            print("Invalid response received")
             BugsnagObject.logInfo(message: "Data submission failed: \(error)", configModel:configModel)
             completion(BaseResult.failure(error))
             return
         }
         
         // Log response details
-        print("Response Status Code: \(httpResponse.statusCode)")
         if let responseData = data, let responseString = String(data: responseData, encoding: .utf8) {
             if(!responseString.isEmpty){
-                print("Response Data: \(responseString)")
                 BugsnagObject.logInfo(message: "Data submission Response Data: \(responseString)", configModel:configModel)
             }
         } else {
-            print("No response data received")
         }
         
         if httpResponse.statusCode == 200 || httpResponse.statusCode == 204 {

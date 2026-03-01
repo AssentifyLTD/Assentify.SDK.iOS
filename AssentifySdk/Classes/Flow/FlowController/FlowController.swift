@@ -85,7 +85,15 @@ public final class FlowController {
             return nextIndex < steps!.count ? steps![nextIndex] : nil
         }()
         
-       
+        /** Track Progress **/
+        trackProgress(
+            currentStep : currentStep,
+            inputData : extractedInformation,
+            response : nil,
+            status : "Completed"
+        )
+        
+        /** Track Next **/
         trackNext(currentStep:currentStep , nextStep: nextStep,timeStarted: timeStarted)
         
         var submitRequestModel = currentStep.submitRequestModel
@@ -384,6 +392,18 @@ public final class FlowController {
           do {
               let encoder = JSONEncoder()
               request.httpBody = try encoder.encode(body)
+              
+              
+              ////
+            
+//              let data = try encoder.encode(body)
+//              if let jsonString = String(data: data, encoding: .utf8) {
+//                  print("📦 TrackProgressRequest:\n\(jsonString)")
+//              }
+//              
+              
+              ///
+              
           } catch {
               return
           }
@@ -402,6 +422,16 @@ public final class FlowController {
       }
     
 
+    func outputPropertiesToMap(_ outputProperties: [OutputProperties]) -> [String: String] {
+        var data: [String: String] = [:]
+
+        for property in outputProperties {
+            data[property.key] = ""
+        }
+
+        return data
+    }
+    
    private  func prepareTrackProgressInputData(
         currentStep: LocalStepModel,
         inputData: Any?
