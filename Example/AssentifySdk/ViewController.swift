@@ -113,9 +113,9 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         tenantIdField.placeholder = "Tenant Identifier"
 
         // default values (your demo)
-        apiKeyField.text = "QwWzzKOYLkDzCLJ9lENlgvRQ1kmkKDv76KbJ9sPfr9Joxwj2DUuzC7htaZP89RqzgB9i9lHc4IpYOA7g"
-        interactionHashField.text = "E4BDD59C3B69A3F89AE8C756FCD67EBC72A45F405B256B3C3BDD643BE282B195"
-        tenantIdField.text = "2937c91f-c905-434b-d13d-08dcc04755ec"
+        // apiKeyField.text = "QwWzzKOYLkDzCLJ9lENlgvRQ1kmkKDv76KbJ9sPfr9Joxwj2DUuzC7htaZP89RqzgB9i9lHc4IpYOA7g"
+        //  interactionHashField.text = "E4BDD59C3B69A3F89AE8C756FCD67EBC72A45F405B256B3C3BDD643BE282B195"
+        //  tenantIdField.text = "2937c91f-c905-434b-d13d-08dcc04755ec"
 
         // Labels black
         languageLabel.text = "Language"
