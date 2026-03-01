@@ -12,8 +12,9 @@ import Foundation
     func onComplete(dataModel: FaceResponseModel )
     
     @objc func onUploadingProgress(progress:Double)
+    @objc func onCollectingManualImages()
 
-
+    
     @objc optional  func onClipPreparationComplete(dataModel: RemoteProcessingModel )
 
     @objc optional func onStatusUpdated(dataModel: RemoteProcessingModel )

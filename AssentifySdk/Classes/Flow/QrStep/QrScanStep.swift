@@ -138,17 +138,7 @@ public struct QrScanStep: View {
                     uploadProgress = 0
                     screenEvent = .completed
                     
-                    /** Track Progress **/
-                    let currentStep = flowController.getCurrentStep()
-                   
-
-                    flowController.trackProgress(
-                        currentStep: currentStep!,
-                        inputData: finalMap,
-                        response: "Completed",
-                        status: "Completed"
-                    )
-                    /***/
+                  
                 })
             },
 
@@ -158,22 +148,7 @@ public struct QrScanStep: View {
                     uploadProgress = 0
                     errorMessage = ""
                     screenEvent = .error
-                    /** Track Progress **/
-                    let currentStep = flowController.getCurrentStep()
-                    let errorString = model.responseJsonObject?["error"] as? String
-                    let extracted = flowController.extractAfterDash(errorString)
-
-                    let finalResponse = extracted.isEmpty
-                        ? "Error"
-                        : "Error - \(extracted)"
-
-                    flowController.trackProgress(
-                        currentStep: currentStep!,
-                        inputData: flowController.decodeToJsonObject(model.response),
-                        response: finalResponse,
-                        status: "InProgress"
-                    )
-                    /***/
+                  
                     
                 }
             }

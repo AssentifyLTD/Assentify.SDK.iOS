@@ -35,6 +35,17 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
     
     public init(flowController: FlowController) {
         self.flowController = flowController
+        
+        /** Track Progress **/
+        let currentStep = flowController.getCurrentStep()
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : flowController.outputPropertiesToMap(currentStep!.stepDefinition!.outputProperties),
+            response : nil,
+            status : "InProgress"
+        )
+        /***/
+        
     }
 
     private func startIfNeeded() {
@@ -103,17 +114,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
             }
         }
         
-        /** Track Progress **/
-        let currentStep = flowController.getCurrentStep()
-       
-
-        flowController.trackProgress(
-            currentStep: currentStep!,
-            inputData: extractedInformation,
-            response: status,
-            status: status
-        )
-        /***/
+        
         
         flowController.makeCurrentStepDone(extractedInformation: extractedInformation,timeStarted: self.timeStarted)
         flowController.naveToNextStep();

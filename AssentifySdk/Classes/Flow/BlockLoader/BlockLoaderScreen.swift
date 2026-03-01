@@ -65,12 +65,28 @@ public struct BaseTheme {
 
 struct BlockLoaderScreen: View {
     
+    var firstInit = LocalStepsObject.shared.get()?.isEmpty
+
+    
     var steps:[LocalStepModel]  = [];
     
     func onBack ()  {
         flowController.dismiss()
     }
     func onNext ()  {
+        /** Track Progress **/
+        if(firstInit!){
+            let steps = LocalStepsObject.shared.get()
+            let currentStep = steps!.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
+            flowController.trackProgress(
+                currentStep : currentStep!,
+                inputData : currentStep!.submitRequestModel!.extractedInformation,
+                response : nil,
+                status : "Completed"
+            )
+        }
+       
+        /***/
         flowController.naveToNextStep()
     }
     
@@ -275,24 +291,11 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
             currentStep : currentStep!,
             inputData : currentStep!.submitRequestModel!.extractedInformation,
             response : nil,
-            status : "Completed"
+            status : "InProgress"
         )
         /***/
 
         
-    } else {
-        
-        let steps = LocalStepsObject.shared.get()
-        let currentStep = steps!.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
-        /** Track Progress **/
-        flowController.trackProgress(
-            currentStep : currentStep!,
-            inputData : currentStep!.submitRequestModel!.extractedInformation,
-            response : nil,
-            status : "Completed"
-        )
-        /***/
-
     }
     
     return tempList!.filter { $0.show }

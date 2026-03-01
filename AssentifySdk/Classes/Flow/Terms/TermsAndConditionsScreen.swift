@@ -22,6 +22,17 @@ public struct TermsAndConditionsScreen: View {
     private let timeStarted :String = getCurrentDateTimeForTracking();
     public init(flowController: FlowController) {
         self.flowController = flowController
+        
+        /** Track Progress **/
+        let currentStep = flowController.getCurrentStep()
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : flowController.outputPropertiesToMap(currentStep!.stepDefinition!.outputProperties),
+            response : nil,
+            status : "InProgress"
+        )
+        /***/
+        
     }
     
     private func onBack() {
@@ -39,15 +50,6 @@ public struct TermsAndConditionsScreen: View {
             let extractedInformation: [String: String] = [
                 confirmationKey: String(describing: value)
             ]
-            /** Track Progress **/
-            flowController.trackProgress(
-                currentStep : step,
-                inputData : extractedInformation,
-                response : nil,
-                status : "Completed"
-            )
-            /***/
-
             flowController.makeCurrentStepDone(extractedInformation:extractedInformation,timeStarted: self.timeStarted)
             flowController.naveToNextStep()
         }

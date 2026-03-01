@@ -47,6 +47,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
     private var  start = true;
     private var  canCheckLive = true;
     private var  isManual = false;
+    private var  startCollectingClips = false;
     
     
     private var faceQualityCheck = FaceQualityCheck()
@@ -216,6 +217,75 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
                     self.guide.changeFaceColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
             }
+            if(self.startCollectingClips){
+                if(self.performPassiveLivenessFace!){
+                       if(livenessCheckArray.count < self.localLivenessLimit){
+                           self.faceMatchDelegate?.onCollectingManualImages()
+                           frameCounterLivness += 1
+                             if frameCounterLivness % processEveryNFrames == 0 {
+                                 DispatchQueue.global(qos: .background).async { [weak self] in
+                                             guard let self = self else { return }
+                                             if let copiedBuffer = copyPixelBuffer(pixelBuffer) {
+                                                 DispatchQueue.main.async {
+                                                     self.livenessCheckArray.append(copiedBuffer)
+                                                 }
+                                             }
+                                         }
+                                     }
+                                   
+                       }
+                    if(livenessCheckArray.count == self.localLivenessLimit){
+                        self.start = false;
+                        self.startCollectingClips = false
+                        self.faceMatchDelegate?.onSend();
+                        
+                        let converter = ParallelImageProcessing()
+                        converter.setPixelBuffers(self.livenessCheckArray)
+                        converter.convertBuffers {
+                        ///
+                        let clips = converter.getClips()
+                        let selfieImage: Data
+                        if !clips.isEmpty {
+                                let middleIndex = clips.count / 2
+                                selfieImage = clips[middleIndex]
+                         } else {
+                                selfieImage = convertPixelToDataImage(pixelBuffer: pixelBuffer)!
+                        }
+                        var secondDataImage = base64ToData(self.secondImage!)!
+                        ///
+                        self.remoteProcessing?.starProcessingFace(
+                            url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
+                            appConfiguration:self.configModel!,
+                            stepIdString: String(self.stepId!),
+                            selfieImage: selfieImage,
+                            livenessFrames :clips,
+                            secondImage:secondDataImage,
+                            isLivenessEnabled: self.performPassiveLivenessFace!,
+                            retryCount:self.livnessRetryCount,
+                            isManualCapture:false,
+                            isAutoCapture: true,
+                            connectionId: "ConnectionId",
+                            onProgress: { progress in
+                                self.faceMatchDelegate?.onUploadingProgress(progress: progress);
+                            },
+                        ) { result in
+                            switch result {
+                            case .success(let model):
+                                self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                            case .failure(let error):
+                                self.start = true;
+                                self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                    destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                    response: "",
+                                    error: EventsErrorMessages.OnErrorMessage,
+                                    success: false
+                                ))
+                            }
+                        }}
+                        
+                    }
+                   }
+            }
         }else{
             if (self.areAllEventsDone()) {
                 self.faceMatchDelegate?.onCurrentLiveMoveChange!(activeLiveEvents: ActiveLiveEvents.GOOD);
@@ -367,6 +437,8 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             }
         }
         
+        
+      
         
         if (motion == MotionType.SENDING && zoom == ZoomType.SENDING  && isRectFInsideTheScreen && environmentalConditions!.checkConditions(
             brightness: cropPixelBuffer.brightness) == BrightnessEvents.Good && self.faceEvent == FaceEvents.GOOD) {
@@ -859,44 +931,52 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         if(start){
             result = self.modelDataHandler?.runModel(onFrame: self.currentImage!)
             if(hasFace()){
-                self.start = false;
-                self.faceMatchDelegate?.onSend();
-                
-                
-                
-                var selfieImage = convertPixelToDataImage(pixelBuffer: self.currentImage!)!
-                var secondDataImage = base64ToData(self.secondImage!)!
-                
-                self.remoteProcessing?.starProcessingFace(
-                    url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
-                    appConfiguration:self.configModel!,
-                    stepIdString: String(self.stepId!),
-                    selfieImage: selfieImage,
-                    livenessFrames : [],
-                    secondImage:secondDataImage,
-                    isLivenessEnabled: self.performPassiveLivenessFace!,
-                    retryCount:self.livnessRetryCount,
-                    isManualCapture:true,
-                    isAutoCapture: false,
-                    connectionId: "ConnectionId",
-                    onProgress: { progress in
-                        self.faceMatchDelegate?.onUploadingProgress(progress: progress);
-                    },
-                    
-                ) { result in
-                    switch result {
-                    case .success(let model):
-                        self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
-                    case .failure(let error):
-                        self.start = true;
-                        self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
-                            destinationEndpoint: HubConnectionTargets.ON_ERROR,
-                            response: "",
-                            error: EventsErrorMessages.OnErrorMessage,
-                            success: false
-                        ))
+                if (self.performPassiveLivenessFace!) {
+                    DispatchQueue.main.async {
+                        self.startCollectingClips = true;
                     }
+                } else {
+                    self.start = false;
+                    self.faceMatchDelegate?.onSend();
+                    
+                    
+                        
+                        var selfieImage = convertPixelToDataImage(pixelBuffer:self.currentImage!)!
+                        var secondDataImage = base64ToData(self.secondImage!)!
+                        
+                        self.remoteProcessing?.starProcessingFace(
+                            url: BaseUrls.signalRHub +  HubConnectionFunctions.etHubConnectionFunction(blockType:BlockType.FACE_MATCH),
+                            appConfiguration:self.configModel!,
+                            stepIdString: String(self.stepId!),
+                            selfieImage: selfieImage,
+                            livenessFrames : [],
+                            secondImage:secondDataImage,
+                            isLivenessEnabled: self.performPassiveLivenessFace!,
+                            retryCount:self.livnessRetryCount,
+                            isManualCapture:true,
+                            isAutoCapture: false,
+                            connectionId: "ConnectionId",
+                            onProgress: { progress in
+                                self.faceMatchDelegate?.onUploadingProgress(progress: progress);
+                            },
+                            
+                        ) { result in
+                            switch result {
+                            case .success(let model):
+                                self.onMessageReceived(eventName: model?.destinationEndpoint ?? "",remoteProcessingModel: model!)
+                            case .failure(let error):
+                                self.start = true;
+                                self.onMessageReceived(eventName: HubConnectionTargets.ON_ERROR ,remoteProcessingModel: RemoteProcessingModel(
+                                    destinationEndpoint: HubConnectionTargets.ON_ERROR,
+                                    response: "",
+                                    error: EventsErrorMessages.OnErrorMessage,
+                                    success: false
+                                ))
+                            }
+                        }
+                    
                 }
+            
             }else{
                 self.faceMatchDelegate?.onRetry(dataModel:RemoteProcessingModel(
                     destinationEndpoint: HubConnectionTargets.ON_RETRY,

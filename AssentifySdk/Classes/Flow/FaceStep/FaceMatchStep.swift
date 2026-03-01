@@ -13,6 +13,8 @@ struct FaceMatchEvents {
 
     var onEnvironmental: ((BrightnessEvents, MotionType, FaceEvents, ZoomType, Int, Bool) -> Void)? = nil
     var onCurrentLiveMove: ((ActiveLiveEvents) -> Void)? = nil
+    var onCollectingManualImages: (() -> Void)? = nil
+
 }
 
 enum FaceMatchScreenEvent {
@@ -58,6 +60,16 @@ public struct FaceMatchStep: View {
     ) {
         self.flowController = flowController
         self.secondImage = secondImage
+        /** Track Progress **/
+        let currentStep = flowController.getCurrentStep()
+        flowController.trackProgress(
+            currentStep : currentStep!,
+            inputData : flowController.outputPropertiesToMap(currentStep!.stepDefinition!.outputProperties),
+            response : nil,
+            status : "InProgress"
+        )
+        /***/
+        
     }
 
     private func onBack() {
@@ -108,6 +120,7 @@ public struct FaceMatchStep: View {
             },
             onComplete: { model in
                 DispatchQueue.main.async {
+                    feedbackText = ""
                     dataModel = model
                     start = false
                     imageUrl = model.faceExtractedModel?.secondImageFace ?? ""
@@ -121,13 +134,14 @@ public struct FaceMatchStep: View {
                         currentStep: currentStep!,
                         inputData: model.faceExtractedModel?.outputProperties,
                         response: "Completed",
-                        status: "Completed"
+                        status: "InProgress"
                     )
                     /***/
                 }
             },
             onError: { model in
                 DispatchQueue.main.async {
+                    feedbackText = ""
                     start = false
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .error
@@ -152,6 +166,7 @@ public struct FaceMatchStep: View {
             },
             onRetry: { model in
                 DispatchQueue.main.async {
+                    feedbackText = ""
                     start = false
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .retry
@@ -176,6 +191,7 @@ public struct FaceMatchStep: View {
             },
             onLiveness: { model in
                 DispatchQueue.main.async {
+                    feedbackText = ""
                     start = false
                     imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
                     screenEvent = .liveness
@@ -275,6 +291,11 @@ public struct FaceMatchStep: View {
                         }
                     }
                 }
+            },
+            onCollectingManualImages: {
+                DispatchQueue.main.async {
+                    feedbackText = "Hold Steady"
+                }
             }
         )
 
@@ -300,6 +321,17 @@ public struct FaceMatchStep: View {
                             .padding(.vertical, 12)
                             .padding(.bottom, 40)
                     } else {
+                        if(!feedbackText.isEmpty){
+                            Text(feedbackText)
+                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                .font(.system(size: 15, weight: .light))
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 12)
+                                .padding(.bottom, 40)
+                        }
+                       
+                        
                         BaseClickButton(
                             title: "Take Photo",
                             cornerRadius: 28,
@@ -434,6 +466,10 @@ struct FaceMatchUIKitView: UIViewControllerRepresentable {
         // Optional delegate
         func onCurrentLiveMoveChange(activeLiveEvents: ActiveLiveEvents) {
             events.onCurrentLiveMove?(activeLiveEvents)
+        }
+        
+        func onCollectingManualImages() {
+            events.onCollectingManualImages?();
         }
     }
 
