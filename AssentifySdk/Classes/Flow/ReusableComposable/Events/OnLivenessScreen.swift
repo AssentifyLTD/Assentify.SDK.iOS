@@ -5,7 +5,7 @@ public struct OnLivenessScreen: View {
     let imageUrl: String
     let onRetry: () -> Void
 
-    let steps: [LocalStepModel] = LocalStepsObject.shared.get()!
+    let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         imageUrl: String,

@@ -83,6 +83,7 @@ public struct DataEntryPageElement: Codable {
     public let inputPropertyIdentifierList: [String]?
     public let isLocked: Bool?
     public let readOnly: Bool?
+    public let isHidden: Bool?
     public let maxLength: Int?
     public let minLength: Int?
     public let otp: Bool?
@@ -99,7 +100,7 @@ public struct DataEntryPageElement: Codable {
         case mandatory, allowAssistedEntry, sourceKStep, dataKeys, linkedControls, applyRegex, languageTransformation
         case targetOutputLanguage, regexDescriptor, regexErrorMessage, showBasedOnParent, dataSourceType, enableDatePicker
         case from, enableConstraints, constraintType, to, dataSourceContent, linkedChildren, sendEmailVerificationLink
-        case hasRelatedDataTypes, inputPropertyIdentifier, inputPropertyIdentifierList, isLocked, readOnly
+        case hasRelatedDataTypes, inputPropertyIdentifier, inputPropertyIdentifierList, isLocked, readOnly,isHidden
         case maxLength, minLength, otp, otpSize, otpType, otpExpiryTime, additionalFeatures, children, defaultCountryCode
     }
 
@@ -143,6 +144,7 @@ public struct DataEntryPageElement: Codable {
         inputPropertyIdentifierList = try c.decodeIfPresent([String].self, forKey: .inputPropertyIdentifierList)
         isLocked = try c.decodeIfPresent(Bool.self, forKey: .isLocked)
         readOnly = try c.decodeIfPresent(Bool.self, forKey: .readOnly)
+        isHidden = try c.decodeIfPresent(Bool.self, forKey: .isHidden)
         maxLength = try c.decodeIfPresent(Int.self, forKey: .maxLength)
         minLength = try c.decodeIfPresent(Int.self, forKey: .minLength)
         otp = try c.decodeIfPresent(Bool.self, forKey: .otp)

@@ -4,7 +4,7 @@ import SwiftUI
 struct OnFaceSendScreen: View {
     
     let progress: Int
-    let steps: [LocalStepModel] = LocalStepsObject.shared.get()!;
+    let steps: [LocalStepModel] = LocalStepsObject.shared.get();
     
     
     var body: some View {

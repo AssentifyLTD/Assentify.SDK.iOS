@@ -38,100 +38,106 @@ public struct SecureDropdownWithDataSource: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
+        if (self.field.isHidden == true){
+            loadDataSourceAndSelectDefault()
+        }
     }
     
     public var body: some View {
-        ZStack(alignment: .topLeading) {
-            
-            // tap outside to dismiss menu
-            if expanded {
-                Color.black.opacity(0.001)
-                    .ignoresSafeArea()
-                    .onTapGesture { expanded = false }
-            }
-            
-            VStack(alignment: .leading, spacing: 6) {
+        if (self.field.isHidden == false){
+            ZStack(alignment: .topLeading) {
                 
-                Text(title)
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                // tap outside to dismiss menu
+                if expanded {
+                    Color.black.opacity(0.001)
+                        .ignoresSafeArea()
+                        .onTapGesture { expanded = false }
+                }
                 
-                if isLoading && dataSourceData == nil {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
-                        .scaleEffect(1.0)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color(BaseTheme.fieldColor))
-                        )
-                } else {
-                    VStack(spacing: 0) {
-                        
-                        // Field pill
-                        HStack(spacing: 10) {
-                            Text(displayValueForSelected())
-                                .font(.system(size: 16))
-                                .foregroundColor(Color(BaseTheme.baseTextColor))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
+                VStack(alignment: .leading, spacing: 6) {
+                    
+                    Text(title)
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                    
+                    if isLoading && dataSourceData == nil {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
+                            .scaleEffect(1.0)
+                            .frame(height: 55)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color(BaseTheme.fieldColor))
+                            )
+                    } else {
+                        VStack(spacing: 0) {
                             
-                            Spacer(minLength: 8)
+                            // Field pill
+                            HStack(spacing: 10) {
+                                Text(displayValueForSelected())
+                                    .font(.system(size: 16))
+                                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
+                                
+                                Spacer(minLength: 8)
+                                
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
+                                    .rotationEffect(.degrees(expanded ? 180 : 0))
+                                    .animation(.easeInOut(duration: 0.15), value: expanded)
+                            }
+                            .padding(.horizontal, 14)
+                            .frame(height: 55)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color(BaseTheme.fieldColor))
+                            )
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                focusedFieldId = fieldId
+                                guard !isReadOnly else { return }
+                                guard dataSourceData != nil else { return }
+                                withAnimation(.easeInOut(duration: 0.15)) {
+                                    expanded.toggle()
+                                }
+                            }
                             
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
-                                .rotationEffect(.degrees(expanded ? 180 : 0))
-                                .animation(.easeInOut(duration: 0.15), value: expanded)
-                        }
-                        .padding(.horizontal, 14)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color(BaseTheme.fieldColor))
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            focusedFieldId = fieldId
-                            guard !isReadOnly else { return }
-                            guard dataSourceData != nil else { return }
-                            withAnimation(.easeInOut(duration: 0.15)) {
-                                expanded.toggle()
+                            // Dropdown list
+                            if expanded && !isReadOnly, let ds = dataSourceData {
+                                dropdownList(items: ds.items)
+                                    .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
-                        
-                        // Dropdown list
-                        if expanded && !isReadOnly, let ds = dataSourceData {
-                            dropdownList(items: ds.items)
-                                .transition(.opacity.combined(with: .move(edge: .top)))
-                        }
+                    }
+                    
+                    if !err.isEmpty {
+                        Text(err)
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundColor(Color(BaseTheme.baseRedColor))
                     }
                 }
                 
-                if !err.isEmpty {
-                    Text(err)
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundColor(Color(BaseTheme.baseRedColor))
-                }
             }
-        }
-        .onAppear {
-            validate()
-            loadDataSourceAndSelectDefault()
-        }
-        .onChange(of: field.inputKey) { _ in
-            loadDataSourceAndSelectDefault(force: true)
-        }
-        .onChange(of: field.languageTransformation) { _ in
-            loadDataSourceAndSelectDefault(force: true)
-        }
-        .onChange(of: focusedFieldId) { newValue in
-            if newValue != fieldId { expanded = false }
-        }
-        .onChange(of: selectedDisplayValue()) { _ in
-            validate()
+            .onAppear {
+                validate()
+                loadDataSourceAndSelectDefault()
+            }
+            .onChange(of: field.inputKey) { _ in
+                loadDataSourceAndSelectDefault(force: true)
+            }
+            .onChange(of: field.languageTransformation) { _ in
+                loadDataSourceAndSelectDefault(force: true)
+            }
+            .onChange(of: focusedFieldId) { newValue in
+                if newValue != fieldId { expanded = false }
+            }
+            .onChange(of: selectedDisplayValue()) { _ in
+                validate()
+            }
         }
     }
     

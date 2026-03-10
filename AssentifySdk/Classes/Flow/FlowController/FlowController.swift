@@ -32,8 +32,8 @@ public final class FlowController {
         navigationController?.setViewControllers([vc], animated: animated)
     }
     
-    public func endFlow(animated: Bool = false,submitRequestModel: [SubmitRequestModel]) {
-        self.flowDelegate?.onFlowCompleted(submitRequestModel:submitRequestModel)
+    public func endFlow(animated: Bool = false,flowData: [FlowCompletedModel]) {
+        self.flowDelegate?.onFlowCompleted(flowData:flowData)
         self.dismiss(animated: animated)
     }
     
@@ -69,20 +69,20 @@ public final class FlowController {
     
     public func getCurrentStep() -> LocalStepModel? {
         let steps = LocalStepsObject.shared.get()
-        return steps!.first { $0.isDone == false }
+        return steps.first { $0.isDone == false }
     }
     
     public func makeCurrentStepDone(extractedInformation: [String: String],  timeStarted :String,) {
         
         var steps = LocalStepsObject.shared.get()
         
-        guard let currentIndex = steps!.firstIndex(where: { $0.isDone == false }) else { return }
+        guard let currentIndex = steps.firstIndex(where: { $0.isDone == false }) else { return }
         
-        var currentStep = steps![currentIndex]
+        var currentStep = steps[currentIndex]
         
         let nextStep: LocalStepModel? = {
             let nextIndex = currentIndex + 1
-            return nextIndex < steps!.count ? steps![nextIndex] : nil
+            return nextIndex < steps.count ? steps[nextIndex] : nil
         }()
         
         /** Track Progress **/
@@ -102,8 +102,8 @@ public final class FlowController {
         currentStep.isDone = true
         currentStep.submitRequestModel = submitRequestModel
         
-        steps![currentIndex] = currentStep
-        LocalStepsObject.shared.set(steps!)
+        steps[currentIndex] = currentStep
+        LocalStepsObject.shared.set(steps)
     }
     
     public func backClick() {
@@ -118,7 +118,7 @@ public final class FlowController {
         let steps = LocalStepsObject.shared.get()
         
         // Find FaceImageAcquisition step
-        guard let faceStep = steps!.first(where: {
+        guard let faceStep = steps.first(where: {
             $0.stepDefinition?.stepDefinition == StepsNames.faceImageAcquisition
         }),
               let stepDefinition = faceStep.stepDefinition,
@@ -139,29 +139,108 @@ public final class FlowController {
     
     public  func  setImage(url: String) {
         IDImageObject.shared.clear();
-        IDImageObject.shared.set(url)
+        IDImageObject.shared.setImage(url)
     }
     
     public  func  getPreviousIDImage() -> String {
-        return IDImageObject.shared.get() ?? ""
+        return IDImageObject.shared.getImage() ?? ""
     }
     
     public func faceIDChange() {
         var steps = LocalStepsObject.shared.get()
         
-        if let index = steps!.firstIndex(where: {
+        if let index = steps.firstIndex(where: {
             $0.stepDefinition?.stepDefinition == StepsNames.identificationDocumentCapture
         }) {
-            steps![index].isDone = false
+            steps[index].isDone = false
         }
         
-        LocalStepsObject.shared.set(steps!)
+        LocalStepsObject.shared.set(steps)
     }
 
     public func getAllDoneSteps() -> [LocalStepModel] {
         let steps = LocalStepsObject.shared.get() ?? []
         return steps.filter { $0.isDone }
     }
+    
+    
+    public func getFlowCompletedList() -> [FlowCompletedModel] {
+        
+        let steps = LocalStepsObject.shared.get() ?? []
+        var flowCompletedList: [FlowCompletedModel] = []
+        
+        // 1) Collect FlowCompletedModel from local steps
+        for step in steps {
+            if let submitModel = step.submitRequestModel {
+                
+                var stepData: [String: String] = [:]
+                
+                for (key, value) in submitModel.extractedInformation {
+                    if !key.contains("IsDirty") {
+                       
+                        let keys = key.split(separator: "_").map { String($0) }
+                        let newKey = key.components(separatedBy: "\(submitModel.stepDefinition)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                        
+                        stepData[newKey] = value
+                    }
+                }
+                
+                flowCompletedList.append(
+                    FlowCompletedModel(
+                        stepData: stepData,
+                        submitRequestModel: submitModel
+                    )
+                )
+            }
+        }
+        
+        // 2) Build WrapUp SubmitRequestModel (TimeEnded)
+        var wrapUp: SubmitRequestModel? = nil
+        let initSteps = ConfigModelObject.shared.get()!.stepDefinitions
+        
+        for item in initSteps {
+            if item.stepDefinition == StepsNames.wrapUp {
+                
+                var values: [String: String] = [:]
+                
+                for property in item.outputProperties {
+                    if property.key.contains(WrapUpKeys.timeEnded) {
+                        values[property.key] = getTimeUTC()
+                    }
+                }
+                
+                wrapUp = SubmitRequestModel(
+                    stepId: item.stepId,
+                    stepDefinition: StepsNames.wrapUp,
+                    extractedInformation: values
+                )
+                
+                break
+            }
+        }
+        
+        // 3) Convert WrapUp extractedInformation to stepData and append
+        if let wrapUp = wrapUp {
+            var stepData: [String: String] = [:]
+            
+            for (key, value) in wrapUp.extractedInformation {
+                let keys = key.split(separator: "_").map { String($0) }
+                let newKey = key.components(separatedBy: "\(StepsNames.wrapUp)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                
+                stepData[newKey] = value
+            }
+            
+            flowCompletedList.append(
+                FlowCompletedModel(
+                    stepData: stepData,
+                    submitRequestModel: wrapUp
+                )
+            )
+        }
+        
+        return flowCompletedList
+    }
+    
 
     public func getSubmitList() -> [SubmitRequestModel] {
 
@@ -169,7 +248,7 @@ public final class FlowController {
         var submitList: [SubmitRequestModel] = []
 
         // 1) Collect submitRequestModel from local steps
-        for step in steps! {
+        for step in steps {
             if let submitModel = step.submitRequestModel {
                 submitList.append(submitModel)
             }
@@ -441,7 +520,7 @@ public final class FlowController {
         let steps = LocalStepsObject.shared.get()
 
         // ✅ Add all done steps
-        for step in steps! where step.isDone {
+        for step in steps where step.isDone {
 
             guard
                 let stepDef = step.stepDefinition,
@@ -484,7 +563,7 @@ public final class FlowController {
 
         let steps = LocalStepsObject.shared.get()
 
-        let duplicatesCount = steps!.filter {
+        let duplicatesCount = steps.filter {
             $0.stepDefinition?.stepDefinition == stepDefinition
         }.count
 

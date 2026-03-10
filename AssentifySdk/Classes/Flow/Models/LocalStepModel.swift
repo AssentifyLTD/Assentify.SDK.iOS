@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct LocalStepModel {
+
+public struct LocalStepModel: Codable {
 
     public let name: String
     public let show: Bool

@@ -32,70 +32,76 @@ public struct SecureTextArea: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
+        if (self.field.isHidden == true){
+            loadDefaultIfNeeded()
+        }
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-
-            Text(title)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(Color(BaseTheme.baseTextColor))
-
-            ZStack(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(BaseTheme.fieldColor))
-
-                UIKitTextView(
-                    text: Binding(
-                        get: { value },
-                        set: { newValue in
-                            // ✅ SAME LOGIC AS YOU HAD
-                            value = newValue
-                            field.value = newValue
-
-                            if let key = field.inputKey {
-                                AssistedFormHelper.changeValue(key, newValue, page)
+        if (self.field.isHidden == false){
+            
+            VStack(alignment: .leading, spacing: 6) {
+                Text(title)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                
+                ZStack(alignment: .topLeading) {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(BaseTheme.fieldColor))
+                    
+                    UIKitTextView(
+                        text: Binding(
+                            get: { value },
+                            set: { newValue in
+                                // ✅ SAME LOGIC AS YOU HAD
+                                value = newValue
+                                field.value = newValue
+                                
+                                if let key = field.inputKey {
+                                    AssistedFormHelper.changeValue(key, newValue, page)
+                                }
+                                
+                                onValueChange(newValue)
+                                validate()
                             }
-
-                            onValueChange(newValue)
-                            validate()
-                        }
-                    ),
-                    isFirstResponder: Binding(
-                        get: { focusedFieldId == fieldId },
-                        set: { newValue in
-                            if newValue { focusedFieldId = fieldId }
-                            else if focusedFieldId == fieldId { focusedFieldId = nil }
-                        }
-                    ),
-                    isEnabled: !((field.readOnly ?? false) || ( getIsLocked())),
-                    textColor: UIColor(Color(BaseTheme.baseTextColor))
-                )
-                .padding(.horizontal, 10)
-                .padding(.vertical, 10)
+                        ),
+                        isFirstResponder: Binding(
+                            get: { focusedFieldId == fieldId },
+                            set: { newValue in
+                                if newValue { focusedFieldId = fieldId }
+                                else if focusedFieldId == fieldId { focusedFieldId = nil }
+                            }
+                        ),
+                        isEnabled: !((field.readOnly ?? false) || ( getIsLocked())),
+                        textColor: UIColor(Color(BaseTheme.baseTextColor))
+                    )
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 10)
+                }
+                .frame(height: textAreaHeight)
+                .contentShape(Rectangle())
+                .onTapGesture { focusedFieldId = fieldId }
+                
+                if !err.isEmpty {
+                    Text(err)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                }
+                
             }
-            .frame(height: textAreaHeight)
-            .contentShape(Rectangle())
-            .onTapGesture { focusedFieldId = fieldId }
-
-            if !err.isEmpty {
-                Text(err)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(BaseTheme.baseRedColor))
+            .onAppear {
+                if let existing = field.value, !existing.isEmpty {
+                    value = existing
+                }
+                loadDefaultIfNeeded()
             }
-        }
-        .onAppear {
-            if let existing = field.value, !existing.isEmpty {
-                value = existing
+            .onChange(of: field.value) { newValue in
+                let v = newValue ?? ""
+                if v != value { value = v }
             }
-            loadDefaultIfNeeded()
+            .onChange(of: field.inputKey) { _ in loadDefaultIfNeeded(force: true) }
+            .onChange(of: field.languageTransformation) { _ in loadDefaultIfNeeded(force: true) }
         }
-        .onChange(of: field.value) { newValue in
-            let v = newValue ?? ""
-            if v != value { value = v }
-        }
-        .onChange(of: field.inputKey) { _ in loadDefaultIfNeeded(force: true) }
-        .onChange(of: field.languageTransformation) { _ in loadDefaultIfNeeded(force: true) }
     }
 
     

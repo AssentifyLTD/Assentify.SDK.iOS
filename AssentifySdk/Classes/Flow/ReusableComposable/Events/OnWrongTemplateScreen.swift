@@ -7,7 +7,7 @@ public struct OnWrongTemplateScreen: View {
     let onRetry: () -> Void
 
     // same as your base screen
-    let steps: [LocalStepModel] = LocalStepsObject.shared.get()!
+    let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         imageUrl: String,

@@ -45,45 +45,50 @@ public struct SecureEmailWithOtpField: View {
         self.fieldId = fieldId
         self.onValueChange = onValueChange
         self.onValid = onValid
+        if (self.field.isHidden == true){
+            syncInitialEmail()
+        }
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            
-            Text(headerTitle)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(Color(BaseTheme.baseTextColor))
-            
-            if !isOtpStep {
-                emailField()
-            } else {
-                otpField()
-                otpFooter()
+        if (self.field.isHidden == false){
+            VStack(alignment: .leading, spacing: 6) {
+                
+                Text(headerTitle)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                
+                if !isOtpStep {
+                    emailField()
+                } else {
+                    otpField()
+                    otpFooter()
+                }
+                
+                if verifying {
+                    Text("Otp verifying ...")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(BaseTheme.baseAccentColor))
+                        .padding(.top, 4)
+                }
+                
+                if !errToShow.isEmpty {
+                    Text(errToShow)
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                        .padding(.top, 4)
+                }
             }
             
-            if verifying {
-                Text("Otp verifying ...")
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(BaseTheme.baseAccentColor))
-                    .padding(.top, 4)
+            .onAppear {
+                syncInitialEmail()
+                recomputeEmailError()
             }
-            
-            if !errToShow.isEmpty {
-                Text(errToShow)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(BaseTheme.baseRedColor))
-                    .padding(.top, 4)
+            .onChange(of: email) { _ in
+                onValueChange(email)
+                recomputeEmailError()
             }
-        }
-        .onAppear {
-            syncInitialEmail()
-            recomputeEmailError()
-        }
-        .onChange(of: email) { _ in
-            onValueChange(email)
-            recomputeEmailError()
-        }
-    }
+        }}
     
     // MARK: - Derived
     

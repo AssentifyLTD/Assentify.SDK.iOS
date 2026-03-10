@@ -170,7 +170,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     // MARK: - Actions
     private func onBack() {
         if submitDataTypes == SubmitDataTypes.onComplete {
-            flowController.endFlow(submitRequestModel:flowController.getSubmitList())
+            flowController.endFlow(flowData:flowController.getFlowCompletedList())
         } else {
             flowController.backClick()
         }
@@ -178,7 +178,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
 
     private func onSubmit() {
         if submitDataTypes == SubmitDataTypes.onComplete {
-            flowController.endFlow(submitRequestModel:flowController.getSubmitList())
+            flowController.endFlow(flowData:flowController.getFlowCompletedList())
         } else {
             startSubmit()
             submitDataTypes = SubmitDataTypes.onSend

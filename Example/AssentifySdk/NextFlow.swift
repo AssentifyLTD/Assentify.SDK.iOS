@@ -2,10 +2,9 @@ import UIKit
 import AVFoundation
 
 
-
-class ViewController: UIViewController {
- 
-
+final class ViewController2: UIViewController {
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
        

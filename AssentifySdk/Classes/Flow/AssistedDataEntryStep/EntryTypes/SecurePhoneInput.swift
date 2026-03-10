@@ -39,66 +39,73 @@ public struct SecurePhoneInput: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
+        if (self.field.isHidden == true){
+            setupDefaultsIfNeeded()
+        }
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        if (self.field.isHidden == false){
 
-            Text(title)
-                .font(.system(size: 16))
-                .foregroundColor(Color(BaseTheme.baseTextColor))
-
-            HStack(alignment: .top, spacing: 8) {
-
-                // MARK: - LEFT (Code + Dropdown)
-                VStack(alignment: .leading, spacing: 6) {
-
-                    codeButton()
-
-                    if expanded && !isReadOnly {
-                        codeDropdownList()
-                            .frame(width: 140)
-                            .transition(.opacity.combined(with: .move(edge: .top)))
-                            .zIndex(10)
-                    }
-                }
-                .frame(width: 140)
-
-                // MARK: - RIGHT (Phone Number)
-                UIKitPhoneTextField(
-                    text: $localNumber,
-                    isFirstResponder: Binding(
-                        get: { focusedFieldId == fieldId },
-                        set: { newValue in
-                            if newValue { focusedFieldId = fieldId }
-                            else if focusedFieldId == fieldId { focusedFieldId = nil }
+            VStack(alignment: .leading, spacing: 6) {
+                
+                Text(title)
+                    .font(.system(size: 16))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                
+                HStack(alignment: .top, spacing: 8) {
+                    
+                    // MARK: - LEFT (Code + Dropdown)
+                    VStack(alignment: .leading, spacing: 6) {
+                        
+                        codeButton()
+                        
+                        if expanded && !isReadOnly {
+                            codeDropdownList()
+                                .frame(width: 140)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                                .zIndex(10)
                         }
-                    ),
-                    isEnabled: !isReadOnly
-                ) { newValue in
-                    localNumber = newValue.filter { $0.isNumber || $0 == " " || $0 == "-" }
-                    handleValueChange()
+                    }
+                    .frame(width: 140)
+                    
+                    // MARK: - RIGHT (Phone Number)
+                    UIKitPhoneTextField(
+                        text: $localNumber,
+                        isFirstResponder: Binding(
+                            get: { focusedFieldId == fieldId },
+                            set: { newValue in
+                                if newValue { focusedFieldId = fieldId }
+                                else if focusedFieldId == fieldId { focusedFieldId = nil }
+                            }
+                        ),
+                        isEnabled: !isReadOnly
+                    ) { newValue in
+                        localNumber = newValue.filter { $0.isNumber || $0 == " " || $0 == "-" }
+                        handleValueChange()
+                    }
+                    .frame(height: 55)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(BaseTheme.fieldColor))
+                    )
                 }
-                .frame(height: 55)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color(BaseTheme.fieldColor))
-                )
-            }
-
-            if !err.isEmpty {
-                Text(err)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(BaseTheme.baseRedColor))
-            }
+                
+                if !err.isEmpty {
+                    Text(err)
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                }
+            
         }
-        .animation(.easeInOut(duration: 0.15), value: expanded)
-        .onAppear {
-            setupDefaultsIfNeeded()
-            handleValueChange()
-        }
-        .onChange(of: selectedIso2) { _ in syncCountryChange() }
-        .onChange(of: localNumber) { _ in handleValueChange() }
+            .animation(.easeInOut(duration: 0.15), value: expanded)
+            .onAppear {
+                setupDefaultsIfNeeded()
+                handleValueChange()
+            }
+            .onChange(of: selectedIso2) { _ in syncCountryChange() }
+            .onChange(of: localNumber) { _ in handleValueChange() }
+    }
     }
 
     // MARK: - Code Button

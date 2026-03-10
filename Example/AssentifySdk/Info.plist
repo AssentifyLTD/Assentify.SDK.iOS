@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -35,27 +35,24 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 	</array>
-    <key>NSMicrophoneUsageDescription</key>
-     <string>Need microphone access for uploading audio</string>
-     <key>NSCameraUsageDescription</key>
-     <string>Need camera access for open camera</string>
-     
-     <key>NFCReaderUsageDescription</key>
-      <string>This app uses NFC to scan passports and identity documents.</string>
-      <key>com.apple.developer.nfc.readersession.felica.systemcodes</key>
-         <array>
-             <string>12FC</string>
-             <string>0000</string>
-         </array>
-         <key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
-         <array>
-             <string>A0000002471001</string>
-             <string>D2760000850100</string>
-             <string>D2760000850101</string>
-             <string>D2760001180101</string>
-             <string>00000000000000</string>
-         </array>
-         
-         
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need microphone access for uploading audio</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need camera access for open camera</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>This app uses NFC to scan passports and identity documents.</string>
+	<key>com.apple.developer.nfc.readersession.felica.systemcodes</key>
+	<array>
+		<string>12FC</string>
+		<string>0000</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>A0000002471001</string>
+		<string>D2760000850100</string>
+		<string>D2760000850101</string>
+		<string>D2760001180101</string>
+		<string>00000000000000</string>
+	</array>
 </dict>
 </plist>

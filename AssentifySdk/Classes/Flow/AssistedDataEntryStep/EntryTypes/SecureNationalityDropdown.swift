@@ -40,85 +40,91 @@ public struct SecureNationalityDropdown: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
+        if (self.field.isHidden == true){
+            loadDefaultRawIfNeeded()
+        }
     }
 
     public var body: some View {
-        ZStack(alignment: .topLeading) {
-
-            if expanded {
-                Color.black.opacity(0.001)
-                    .ignoresSafeArea()
-                    .onTapGesture { expanded = false }
-            }
-
-            VStack(alignment: .leading, spacing: 6) {
-
-                Text(title)
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(Color(BaseTheme.baseTextColor))
-
-                VStack(spacing: 0) {
-
-                    // pill
-                    HStack(spacing: 10) {
-                        Text(displayText.isEmpty ? " " : displayText)
-                            .font(.system(size: 16))
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
-
-                        Spacer(minLength: 8)
-
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
-                            .rotationEffect(.degrees(expanded ? 180 : 0))
-                            .animation(.easeInOut(duration: 0.15), value: expanded)
-                    }
-                    .padding(.horizontal, 14)
-                    .frame(height: 55)
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color(BaseTheme.fieldColor))
-                    )
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        focusedFieldId = fieldId
-                        guard !isReadOnly else { return }
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            expanded.toggle()
+        if (self.field.isHidden == false){
+            ZStack(alignment: .topLeading) {
+                
+                if expanded {
+                    Color.black.opacity(0.001)
+                        .ignoresSafeArea()
+                        .onTapGesture { expanded = false }
+                }
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    
+                    Text(title)
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                    
+                    VStack(spacing: 0) {
+                        
+                        // pill
+                        HStack(spacing: 10) {
+                            Text(displayText.isEmpty ? " " : displayText)
+                                .font(.system(size: 16))
+                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                            
+                            Spacer(minLength: 8)
+                            
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
+                                .rotationEffect(.degrees(expanded ? 180 : 0))
+                                .animation(.easeInOut(duration: 0.15), value: expanded)
+                        }
+                        .padding(.horizontal, 14)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(BaseTheme.fieldColor))
+                        )
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            focusedFieldId = fieldId
+                            guard !isReadOnly else { return }
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                expanded.toggle()
+                            }
+                        }
+                        
+                        if expanded && !isReadOnly {
+                            dropdownList()
+                                .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
-
-                    if expanded && !isReadOnly {
-                        dropdownList()
-                            .transition(.opacity.combined(with: .move(edge: .top)))
+                    
+                    if !err.isEmpty {
+                        Text(err)
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundColor(Color(BaseTheme.baseRedColor))
                     }
                 }
-
-                if !err.isEmpty {
-                    Text(err)
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundColor(Color(BaseTheme.baseRedColor))
-                }
+                
             }
-        }
-        .onAppear {
-            loadDefaultRawIfNeeded()
-            validate()
-        }
-        .onChange(of: field.inputKey) { _ in
-            loadDefaultRawIfNeeded(force: true)
-        }
-        .onChange(of: field.languageTransformation) { _ in
-            loadDefaultRawIfNeeded(force: true)
-        }
-        .onChange(of: selectedCode) { _ in
-            validate()
-        }
-        .onChange(of: focusedFieldId) { newValue in
-            if newValue != fieldId { expanded = false }
+            .onAppear {
+                loadDefaultRawIfNeeded()
+                validate()
+            }
+            .onChange(of: field.inputKey) { _ in
+                loadDefaultRawIfNeeded(force: true)
+            }
+            .onChange(of: field.languageTransformation) { _ in
+                loadDefaultRawIfNeeded(force: true)
+            }
+            .onChange(of: selectedCode) { _ in
+                validate()
+            }
+            .onChange(of: focusedFieldId) { newValue in
+                if newValue != fieldId { expanded = false }
+            }
         }
     }
 

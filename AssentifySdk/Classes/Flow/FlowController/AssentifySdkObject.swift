@@ -8,6 +8,29 @@
 
 
 
+
+
+public final class InteractionObject {
+    
+    public static let shared = InteractionObject()
+    private init() {}
+    
+    private var interactio: String?
+    
+    public func set(_ key: String) {
+        self.interactio = key
+    }
+    
+    public func get() -> String? {
+        return interactio
+    }
+    
+    public func clear() {
+        interactio = nil
+    }
+}
+
+
 public final class AssentifySdkObject {
     
     public static let shared = AssentifySdkObject()
@@ -70,42 +93,88 @@ public final class FlowEnvironmentalConditionsObject {
 }
 
 public final class ConfigModelObject {
-    
+
     public static let shared = ConfigModelObject()
     private init() {}
-    
-    private var config: ConfigModel?
-    
-    public func set(_ model: ConfigModel) {
-        self.config = model
+
+    private let PREF_NAME = "assentify_sdk_prefs"
+
+    private func key() -> String {
+        return "ConfigModelObject_\(String(describing: InteractionObject.shared.get()))"
     }
-    
+
+    public func set(_ model: ConfigModel?) {
+
+        guard let model else {
+            UserDefaults.standard.removeObject(forKey: key())
+            return
+        }
+
+        do {
+            let data = try JSONEncoder().encode(model)
+            UserDefaults.standard.set(data, forKey: key())
+        } catch {
+            print("ConfigModelObject encode error:", error)
+        }
+    }
+
     public func get() -> ConfigModel? {
-        return config
+
+        guard let data = UserDefaults.standard.data(forKey: key()) else {
+            return nil
+        }
+
+        do {
+            return try JSONDecoder().decode(ConfigModel.self, from: data)
+        } catch {
+            print("ConfigModelObject decode error:", error)
+            return nil
+        }
     }
-    
+
     public func clear() {
-        config = nil
+        UserDefaults.standard.removeObject(forKey: key())
     }
 }
 
+
 public final class LocalStepsObject {
-    
+
     public static let shared = LocalStepsObject()
     private init() {}
-    
-    private var steps: [LocalStepModel]? = []
-    
-    public func set(_ model: [LocalStepModel]) {
-        self.steps = model
+
+    private let PREF_NAME = "assentify_sdk_prefs"
+
+    private func key() -> String {
+        return "LocalStepsObject_\(String(describing: InteractionObject.shared.get()))"
     }
-    
-    public func get() -> [LocalStepModel]? {
-        return steps
+
+    public func set(_ steps: [LocalStepModel]) {
+
+        do {
+            let data = try JSONEncoder().encode(steps)
+            UserDefaults.standard.set(data, forKey: key())
+        } catch {
+            print("LocalStepsObject encode error:", error)
+        }
     }
-    
+
+    public func get() -> [LocalStepModel] {
+
+        guard let data = UserDefaults.standard.data(forKey: key()) else {
+            return []
+        }
+
+        do {
+            return try JSONDecoder().decode([LocalStepModel].self, from: data)
+        } catch {
+            print("LocalStepsObject decode error:", error)
+            return []
+        }
+    }
+
     public func clear() {
-        steps = nil
+        UserDefaults.standard.removeObject(forKey: key())
     }
 }
 
@@ -136,22 +205,24 @@ public final class SelectedTemplatesObject {
 }
 
 public final class IDImageObject {
-    
+
     public static let shared = IDImageObject()
     private init() {}
-    
-    private var image: String?
-    
-    public func set(_ image: String) {
-        self.image = image
+
+    private func key() -> String {
+        return "IDImageObject_\(String(describing: InteractionObject.shared.get()))"
     }
-    
-    public func get() -> String? {
-        return image
+
+    public func setImage(_ value: String?) {
+        UserDefaults.standard.set(value, forKey: key())
     }
-    
+
+    public func getImage() -> String? {
+        return UserDefaults.standard.string(forKey: key())
+    }
+
     public func clear() {
-        image = nil
+        UserDefaults.standard.removeObject(forKey: key())
     }
 }
 

@@ -41,81 +41,87 @@ public struct SecureDateField: View {
         self.fieldId = fieldId
         self.dateFormat = dateFormat
         self.onDateChange = onDateChange
+        if (self.field.isHidden == true){
+            loadDefaultIfNeeded()
+        }
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-
-            Text(title)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(Color(BaseTheme.baseTextColor))
-
-            ZStack {
-                // read-only display (same look as text field container)
-                HStack(spacing: 10) {
-                    Text(value.isEmpty ? " " : value)
-                        .font(.system(size: 16))
-                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-
-                    Spacer(minLength: 8)
-
-                    Button {
-                        openPickerIfAllowed()
-                    } label: {
-                        Image(systemName: "calendar")
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color(BaseTheme.baseAccentColor))
+        if (self.field.isHidden == false){
+            VStack(alignment: .leading, spacing: 6) {
+                
+                Text(title)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                
+                ZStack {
+                    // read-only display (same look as text field container)
+                    HStack(spacing: 10) {
+                        Text(value.isEmpty ? " " : value)
+                            .font(.system(size: 16))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        
+                        Spacer(minLength: 8)
+                        
+                        Button {
+                            openPickerIfAllowed()
+                        } label: {
+                            Image(systemName: "calendar")
+                                .font(.system(size: 18, weight: .regular))
+                                .foregroundColor(Color(BaseTheme.baseAccentColor))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(!canPick)
                     }
-                    .buttonStyle(.plain)
-                    .disabled(!canPick)
+                    .padding(.horizontal, 14)
                 }
-                .padding(.horizontal, 14)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(BaseTheme.fieldColor))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.clear, lineWidth: 0)
+                )
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    focusedFieldId = fieldId
+                    openPickerIfAllowed()
+                }
+                
+                if !err.isEmpty {
+                    Text(err)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                }
+                
             }
-            .frame(height: 55)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(BaseTheme.fieldColor))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.clear, lineWidth: 0)
-            )
-            .contentShape(Rectangle())
-            .onTapGesture {
-                focusedFieldId = fieldId
-                openPickerIfAllowed()
-            }
-
-            if !err.isEmpty {
-                Text(err)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(BaseTheme.baseRedColor))
-            }
-        }
-        .onAppear {
-            // ✅ sync from field.value
-            if let existing = field.value, !existing.isEmpty {
-                value = existing
-            }
-            loadDefaultIfNeeded()
-            validate()
-
-        }
-        .onChange(of: field.value) { newValue in
-            let v = newValue ?? ""
-            if v != value {
-                value = v
+            .onAppear {
+                // ✅ sync from field.value
+                if let existing = field.value, !existing.isEmpty {
+                    value = existing
+                }
+                loadDefaultIfNeeded()
                 validate()
+                
             }
-        }
-        .onChange(of: field.inputKey) { _ in
-            loadDefaultIfNeeded(force: true)
-        }
-        .sheet(isPresented: $showPicker) {
-            datePickerSheet()
+            .onChange(of: field.value) { newValue in
+                let v = newValue ?? ""
+                if v != value {
+                    value = v
+                    validate()
+                }
+            }
+            .onChange(of: field.inputKey) { _ in
+                loadDefaultIfNeeded(force: true)
+            }
+            .sheet(isPresented: $showPicker) {
+                datePickerSheet()
+            }
         }
     }
 
