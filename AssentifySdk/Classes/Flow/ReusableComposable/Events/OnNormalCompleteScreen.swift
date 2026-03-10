@@ -6,7 +6,7 @@ public struct OnNormalCompleteScreen: View {
     let showStper: Bool
     let onNext: () -> Void
 
-    let steps: [LocalStepModel] = LocalStepsObject.shared.get()!
+    let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         imageUrl: String,

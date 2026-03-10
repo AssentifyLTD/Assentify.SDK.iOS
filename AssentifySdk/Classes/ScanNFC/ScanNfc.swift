@@ -146,7 +146,7 @@ public class ScanNfc :LanguageTransformationDelegate{
             return
         }
 
-        let baseUrl = "https://qa.blob.assentify.com/v2/Document/UploadFile/userfiles/\(encodedPath)?skipValidator=true"
+        let baseUrl = "https://blob.assentify.com/v2/Document/UploadFile/userfiles/\(encodedPath)?skipValidator=true"
         guard let url = URL(string: baseUrl) else {
             self.replaceDataWithNfcData(nFCPassportModel: nFCPassportModel)
             return

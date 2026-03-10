@@ -2,18 +2,9 @@ import UIKit
 import AVFoundation
 import AssentifySdk
 
-struct StartConfig {
-    let apiKey: String
-    let interactionHash: String
-    let tenantIdentifier: String
-    let language: String
-    let enableDetect: Bool
-    let enableGuide: Bool
-    let enableNfc: Bool
-    let enableQr: Bool
-}
 
-final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate {
+
+final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegate {
 
     // MARK: - SDK
     private var assentifySdk: AssentifySdk?
@@ -36,9 +27,8 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
     private let qrSwitch = UISwitch()
 
     private let startButton = UIButton(type: .system)
-    private let nextButton = UIButton(type: .system)
     private let clearButton = UIButton(type: .system)
-
+    private let backButton = UIButton(type: .system)
     private let loader = UIActivityIndicatorView(style: .large)
 
     // MARK: - Data
@@ -117,14 +107,10 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
         // default values (your demo)
          apiKeyField.text = "QwWzzKOYLkDzCLJ9lENlgvRQ1kmkKDv76KbJ9sPfr9Joxwj2DUuzC7htaZP89RqzgB9i9lHc4IpYOA7g"
-          interactionHashField.text = "E4BDD59C3B69A3F89AE8C756FCD67EBC72A45F405B256B3C3BDD643BE282B195"
+          interactionHashField.text = "6A0001F3C7B0F99B14F5BB17B0694BE751F189ADB62A3811591E27558FC30503"
           tenantIdField.text = "2937c91f-c905-434b-d13d-08dcc04755ec"
         
-        // apiKeyField.text = "ZoJMpa5daRvh4iBMFNPlThNucFGrZ5EHii4ZME6f6lto5LUTfpFfj9WXY3nYYmw52eXMoZ8iUqaPoeZSSeQ"
-       //  interactionHashField.text = "E6161B5C8D85382101B19AD0D86692F121622D108CECBF0E4E23E2709ACC9EB4"
-        // tenantIdField.text = "6ae86d79-6b88-4964-a649-08de330c7f4f"
         
-       
         
         // Labels black
         languageLabel.text = "Language"
@@ -179,14 +165,17 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         clearButton.addTarget(self, action: #selector(onClearTapped), for: .touchUpInside)
         
         
+        
+        backButton.setTitle("Back", for: .normal)
+        backButton.setTitleColor(.black, for: .normal)
+        backButton.backgroundColor = UIColor(hex: "#FFDE00")
+        backButton.layer.cornerRadius = 10
+        backButton.contentEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
+        backButton.addTarget(self, action: #selector(onBackTapped), for: .touchUpInside)
 
-        // Next button
-        nextButton.setTitle("Next Flow", for: .normal)
-        nextButton.setTitleColor(.black, for: .normal)
-        nextButton.backgroundColor = UIColor(hex: "#FFDE00")
-        nextButton.layer.cornerRadius = 10
-        nextButton.contentEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
-        nextButton.addTarget(self, action: #selector(onNextTapped), for: .touchUpInside)
+        
+        
+
         // Loader
         loader.hidesWhenStopped = true
         loader.stopAnimating()
@@ -226,8 +215,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         content.addArrangedSubview(spacer(height: 8))
         content.addArrangedSubview(startButton)
         content.addArrangedSubview(clearButton)
-        content.addArrangedSubview(nextButton)
-
+        content.addArrangedSubview(backButton)
 
         // loader centered under button
         let loaderWrap = UIView()
@@ -282,19 +270,10 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         view.endEditing(true)
     }
     
-    
-    
-    @objc private func  onClearTapped() {
-        self.assentifySdk?.clearFlow()
+    @objc private func onClearTapped(){
+        self.assentifySdk?.clearFlow();
     }
-    
-    @objc private func onNextTapped(){
-        let vc = ViewController2()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
-    }
-    
-    
+   
 
     // MARK: - Start Flow
     @objc private func onStartTapped() {
@@ -351,17 +330,22 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
     // MARK: - Loader
     private func showLoader() {
         startButton.isEnabled = false
-        nextButton.isEnabled = false
+        backButton.isEnabled = false
         clearButton.isEnabled = false
         loader.startAnimating()
     }
 
     private func hideLoader() {
         startButton.isEnabled = true
-        nextButton.isEnabled = true
+        backButton.isEnabled = true
         clearButton.isEnabled = true
         loader.stopAnimating()
     }
+    
+    @objc private func  onBackTapped() {
+        dismiss(animated: true)
+    }
+    
 
     // MARK: - AssentifySdkDelegate
     func onAssentifySdkInitError(message: String) {
@@ -382,16 +366,16 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
             let flowEnvironmentalConditions = FlowEnvironmentalConditions(
                 backgroundType: .color,
-                logoUrl: "https://image2url.com/r2/default/images/1769694393603-0afa5733-d9a5-4b0d-9134-868d3a750069.png",
-                textColor: self.textHex,
-                secondaryTextColor: self.secondaryTextHex,
-                backgroundCardColor: self.cardHex,
-                accentColor: self.accentHex,
-                backgroundColor: .solid(hex: self.bgHex),
-                clickColor: .solid(hex: self.accentHex),
-                language: cfg.language,
-                enableNfc: cfg.enableNfc,
-                enableQr: cfg.enableQr,
+//                logoUrl: "https://image2url.com/r2/default/images/1769694393603-0afa5733-d9a5-4b0d-9134-868d3a750069.png",
+//                textColor: self.textHex,
+//                secondaryTextColor: self.secondaryTextHex,
+//                backgroundCardColor: self.cardHex,
+//                accentColor: self.accentHex,
+//                backgroundColor: .solid(hex: self.bgHex),
+//                clickColor: .solid(hex: self.accentHex),
+//                language: cfg.language,
+//                enableNfc: cfg.enableNfc,
+//                enableQr: cfg.enableQr,
                 blockLoaderCustomProperties: customProperties
             )
 
@@ -418,7 +402,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 }
 
 // MARK: - UIPickerView
-extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+extension ViewController2: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         languages.count

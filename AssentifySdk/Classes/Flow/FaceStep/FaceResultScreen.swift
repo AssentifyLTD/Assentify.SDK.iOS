@@ -7,7 +7,7 @@ public struct FaceResultScreen: View {
     public let onRetry: () -> Void
     public let onIDChange: () -> Void
 
-    let steps: [LocalStepModel] = LocalStepsObject.shared.get()!;
+    let steps: [LocalStepModel] = LocalStepsObject.shared.get();
 
     public init(
         faceModel: FaceResponseModel,

@@ -500,7 +500,7 @@ public class AssentifySdk {
     public func isManual() -> Bool {
         let totalRamGB = getTotalRAMInGB()
         let cores = ProcessInfo.processInfo.processorCount
-    
+        
         
         return (totalRamGB < self.environmentalConditions!.minRam) || (cores < self.environmentalConditions!.minCPUCores)
     }
@@ -512,59 +512,84 @@ public class AssentifySdk {
     
     // Flow
     public func startFlow(from presenter: UIViewController,flowDelegate:FlowDelegate,flowEnvironmentalConditions:FlowEnvironmentalConditions) {
-        if (flowEnvironmentalConditions.logoUrl.isEmpty) {
-            flowEnvironmentalConditions.logoUrl = tenantThemeModel!.logoIcon!;
-        }
-        if (flowEnvironmentalConditions.svgBackgroundImageUrl.isEmpty) {
-            flowEnvironmentalConditions.svgBackgroundImageUrl =
-            "tenantThemeModel!!.svgBackgroundImageUrl!!";
-        }
-        if (flowEnvironmentalConditions.textColor.isEmpty) {
-            flowEnvironmentalConditions.textColor = tenantThemeModel!.textColor;
-        }
-        if (flowEnvironmentalConditions.secondaryTextColor.isEmpty) {
-            flowEnvironmentalConditions.secondaryTextColor = tenantThemeModel!.secondaryTextColor;
-        }
-        if (flowEnvironmentalConditions.backgroundCardColor.isEmpty) {
-            flowEnvironmentalConditions.backgroundCardColor =
-            tenantThemeModel!.backgroundCardColor;
-        }
-        if (flowEnvironmentalConditions.accentColor.isEmpty) {
-            flowEnvironmentalConditions.accentColor = tenantThemeModel!.accentColor;
-        }
-        if (flowEnvironmentalConditions.backgroundColor == nil) {
-            if (flowEnvironmentalConditions.backgroundType == BackgroundType.color) {
-                flowEnvironmentalConditions.backgroundColor =
-                BackgroundStyle.solid(hex:tenantThemeModel!.backgroundBodyColor)
-            } else {
-                flowEnvironmentalConditions.backgroundColor =
-                BackgroundStyle.solid(hex:tenantThemeModel!.backgroundCardColor)
+        if (isKeyValid) {
+            if (flowEnvironmentalConditions.logoUrl.isEmpty) {
+                flowEnvironmentalConditions.logoUrl = tenantThemeModel!.logoIcon!;
             }
+            if (flowEnvironmentalConditions.svgBackgroundImageUrl.isEmpty) {
+                flowEnvironmentalConditions.svgBackgroundImageUrl =
+                "tenantThemeModel!!.svgBackgroundImageUrl!!";
+            }
+            if (flowEnvironmentalConditions.textColor.isEmpty) {
+                flowEnvironmentalConditions.textColor = tenantThemeModel!.textColor;
+            }
+            if (flowEnvironmentalConditions.secondaryTextColor.isEmpty) {
+                flowEnvironmentalConditions.secondaryTextColor = tenantThemeModel!.secondaryTextColor;
+            }
+            if (flowEnvironmentalConditions.backgroundCardColor.isEmpty) {
+                flowEnvironmentalConditions.backgroundCardColor =
+                tenantThemeModel!.backgroundCardColor;
+            }
+            if (flowEnvironmentalConditions.accentColor.isEmpty) {
+                flowEnvironmentalConditions.accentColor = tenantThemeModel!.accentColor;
+            }
+            if (flowEnvironmentalConditions.backgroundColor == nil) {
+                if (flowEnvironmentalConditions.backgroundType == BackgroundType.color) {
+                    flowEnvironmentalConditions.backgroundColor =
+                    BackgroundStyle.solid(hex:tenantThemeModel!.backgroundBodyColor)
+                } else {
+                    flowEnvironmentalConditions.backgroundColor =
+                    BackgroundStyle.solid(hex:tenantThemeModel!.backgroundCardColor)
+                }
+            }
+            if (flowEnvironmentalConditions.clickColor == nil) {
+                flowEnvironmentalConditions.clickColor =
+                BackgroundStyle.solid(hex:tenantThemeModel!.accentColor)
+            }
+            
+            ApiKeyObject.shared.set(self.apiKey)
+            FlowEnvironmentalConditionsObject.shared.set(flowEnvironmentalConditions)
+            InteractionObject.shared.set(interaction);
+            
+          
+            if (ConfigModelObject.shared.get() != nil) {
+                configModel = ConfigModelObject.shared.get();
+                BugsnagObject.initialize(configModel: configModel!);
+                AssentifySdkObject.shared.set(self)
+            } else {
+                ConfigModelObject.shared.set(
+                    configModel!
+                )
+                BugsnagObject.initialize(configModel: configModel!);
+                AssentifySdkObject.shared.set(self)
+            }
+            
+            
+            let nav = UINavigationController()
+            nav.modalPresentationStyle = .fullScreen
+            
+            let controller = FlowController(navigationController: nav,flowDelegate: flowDelegate)
+            self.flowController = controller
+            
+            let blockLoader = BlockLoaderScreen(
+                flowController: controller
+            )
+            
+            let rootVC = UIHostingController(rootView: blockLoader)
+            nav.setViewControllers([rootVC], animated: false)
+            
+            presenter.present(nav, animated: true)
         }
-        if (flowEnvironmentalConditions.clickColor == nil) {
-            flowEnvironmentalConditions.clickColor =
-            BackgroundStyle.solid(hex:tenantThemeModel!.accentColor)
-        }
         
-        ApiKeyObject.shared.set(self.apiKey)
-        FlowEnvironmentalConditionsObject.shared.set(flowEnvironmentalConditions)
-        ConfigModelObject.shared.set(self.configModel!)
-
         
-        let nav = UINavigationController()
-        nav.modalPresentationStyle = .fullScreen
-        
-        let controller = FlowController(navigationController: nav,flowDelegate: flowDelegate)
-        self.flowController = controller
-        
-        let blockLoader = BlockLoaderScreen(
-            flowController: controller
-        )
-        
-        let rootVC = UIHostingController(rootView: blockLoader)
-        nav.setViewControllers([rootVC], animated: false)
-        
-        presenter.present(nav, animated: true)
     }
+    
+    public func clearFlow() {
+        InteractionObject.shared.set(interaction);
+        ConfigModelObject.shared.set(nil)
+        LocalStepsObject.shared.set(
+              []
+           )
+       }
     
 }

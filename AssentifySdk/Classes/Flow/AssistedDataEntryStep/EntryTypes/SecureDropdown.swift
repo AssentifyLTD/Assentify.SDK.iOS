@@ -37,26 +37,30 @@ public struct SecureDropdown: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
+        if (self.field.isHidden == true){
+            loadDefaultIfNeeded()
+        }
     }
 
     public var body: some View {
+        if (self.field.isHidden == false){
         ZStack(alignment: .topLeading) {
-
+       
             // tap outside to dismiss
             if expanded {
                 Color.black.opacity(0.001)
                     .ignoresSafeArea()
                     .onTapGesture { expanded = false }
             }
-
+            
             VStack(alignment: .leading, spacing: 6) {
-
+                
                 Text(title)
                     .font(.system(size: 16, weight: .regular))
                     .foregroundColor(Color(BaseTheme.baseTextColor))
-
+                
                 VStack(spacing: 0) {
-
+                    
                     // Field (same pill style)
                     HStack(spacing: 10) {
                         Text(selected.isEmpty ? " " : selected)
@@ -64,9 +68,9 @@ public struct SecureDropdown: View {
                             .foregroundColor(Color(BaseTheme.baseTextColor))
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
-
+                        
                         Spacer(minLength: 8)
-
+                        
                         Image(systemName: "chevron.down")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
@@ -88,14 +92,14 @@ public struct SecureDropdown: View {
                             expanded.toggle()
                         }
                     }
-
+                    
                     // Dropdown list (opens DOWN)
                     if expanded && !isReadOnly {
                         dropdownList()
                             .transition(.opacity.combined(with: .move(edge: .top)))
                     }
                 }
-
+                
                 if !err.isEmpty {
                     Text(err)
                         .font(.system(size: 12, weight: .regular))
@@ -129,6 +133,7 @@ public struct SecureDropdown: View {
             if newValue != fieldId {
                 expanded = false
             }
+        }
         }
     }
 

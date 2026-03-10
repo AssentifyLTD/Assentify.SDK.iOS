@@ -48,50 +48,56 @@ public struct SecurePhoneWithOtpField: View {
         self.fieldId = fieldId
         self.onValueChange = onValueChange
         self.onValid = onValid
+        if (self.field.isHidden == true){
+            syncInitialPhone()
+        }
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        if (self.field.isHidden == false){
 
-            Text(headerTitle)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(Color(BaseTheme.baseTextColor))
-
-            if !isOtpStep {
-                phoneRow()
-            } else {
-                otpField()
-                otpFooter()
-            }
-
-            if verifying {
-                Text("Otp verifying ...")
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(BaseTheme.baseAccentColor))
-                    .padding(.top, 4)
-            }
-
-            if !errToShow.isEmpty {
-                Text(errToShow)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(BaseTheme.baseRedColor))
-                    .padding(.top, 4)
-            }
+            VStack(alignment: .leading, spacing: 6) {
+                Text(headerTitle)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                
+                if !isOtpStep {
+                    phoneRow()
+                } else {
+                    otpField()
+                    otpFooter()
+                }
+                
+                if verifying {
+                    Text("Otp verifying ...")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(BaseTheme.baseAccentColor))
+                        .padding(.top, 4)
+                }
+                
+                if !errToShow.isEmpty {
+                    Text(errToShow)
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                        .padding(.top, 4)
+                }
+            
         }
-        .onAppear {
-            syncInitialPhone()
-            recomputePhoneError()
-        }
-        .onChange(of: localNumber) { _ in
-            // 1) update full token
-            let full = buildLebanonE164(localNumber, countryDial: countryDial)
-            onValueChange(full)
-            // 2) (optional) store in model like your other fields
-            if let key = field.inputKey {
-                AssistedFormHelper.changeValue(key, full, page)
+            .onAppear {
+                syncInitialPhone()
+                recomputePhoneError()
             }
-            recomputePhoneError()
-        }
+            .onChange(of: localNumber) { _ in
+                // 1) update full token
+                let full = buildLebanonE164(localNumber, countryDial: countryDial)
+                onValueChange(full)
+                // 2) (optional) store in model like your other fields
+                if let key = field.inputKey {
+                    AssistedFormHelper.changeValue(key, full, page)
+                }
+                recomputePhoneError()
+            }
+    }
     }
 
     // MARK: - Derived

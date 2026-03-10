@@ -65,7 +65,7 @@ public struct BaseTheme {
 
 struct BlockLoaderScreen: View {
     
-    var firstInit = LocalStepsObject.shared.get()?.isEmpty
+    var firstInit = LocalStepsObject.shared.get().isEmpty
 
     
     var steps:[LocalStepModel]  = [];
@@ -75,9 +75,9 @@ struct BlockLoaderScreen: View {
     }
     func onNext ()  {
         /** Track Progress **/
-        if(firstInit!){
+        if(firstInit){
             let steps = LocalStepsObject.shared.get()
-            let currentStep = steps!.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
+            let currentStep = steps.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
             flowController.trackProgress(
                 currentStep : currentStep!,
                 inputData : currentStep!.submitRequestModel!.extractedInformation,
@@ -162,7 +162,7 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
     
     var tempList = LocalStepsObject.shared.get()
     
-    if  tempList!.isEmpty {
+    if  tempList.isEmpty {
         
         /** BlockLoader **/
         let flowEnvironmentalConditions = FlowEnvironmentalConditionsObject.shared.get()
@@ -226,7 +226,7 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
         let blockLoaderDef = configModel?.stepDefinitions.first { $0.stepDefinition == StepsNames.blockLoader }
         
         if let blockLoaderDef = blockLoaderDef {
-            tempList!.append(
+            tempList.append(
                 LocalStepModel(
                     name: StepsNames.blockLoader,
                     show: false,
@@ -260,7 +260,7 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
                     continue
                 }
                 
-                tempList!.append(
+                tempList.append(
                     LocalStepModel(
                         name: "Step \(displayCounter): \(meta.name)",
                         show: true,
@@ -280,10 +280,10 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
             }
         }
         
-        LocalStepsObject.shared.set(tempList!)
+        LocalStepsObject.shared.set(tempList)
         
         let steps = LocalStepsObject.shared.get()
-        let currentStep = steps!.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
+        let currentStep = steps.first { $0.stepDefinition?.stepDefinition == StepsNames.blockLoader }
         
         /** Track Progress **/
 
@@ -298,7 +298,7 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
         
     }
     
-    return tempList!.filter { $0.show }
+    return tempList.filter { $0.show }
 }
 
 

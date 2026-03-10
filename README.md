@@ -9,7 +9,7 @@
 [To run the example project](https://github.com/AssentifyLTD/Assentify.IOS.Demo)
 
 ## Documentation 
-[Assentify Sdk Documentation](https://drive.google.com/file/d/17xAbfnnWM07JL3RBntw4NeTR3-YyJEdu/view?usp=drive_link)
+[Assentify Sdk Documentation](https://drive.google.com/file/d/1nd_KjBy-9NXs0-ub2YCb4YTlJW650Po3/view?usp=sharing)
 
 ## Installation
 
@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-alpha.3**
+ 1. *Support multiple flows*
+ 
 **1.0.0-alpha.2**
  1. *Full Flows integration*
 

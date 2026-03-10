@@ -352,7 +352,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             self.sendingFlagsMotion.removeAll()
             self.sendingFlagsZoom.removeAll()
             if eventName == HubConnectionTargets.ON_COMPLETE {
-                self.start = false
+               
                 var passportExtractedModel = PassportExtractedModel.fromJsonString(responseString:remoteProcessingModel.response!,transformedProperties: [:]);
                 self.passportResponseModel = PassportResponseModel(
                     destinationEndpoint: remoteProcessingModel.destinationEndpoint,
@@ -360,16 +360,32 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                     error: remoteProcessingModel.error,
                     success: remoteProcessingModel.success
                 )
-                if(self.language == Language.NON){
-                    self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
-                }else{
-                    let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
-                    transformed.languageTransformation(
-                        langauge: self.language,
-                        transformationModel: preparePropertiesToTranslate(language: self.language, properties: passportExtractedModel?.outputProperties)
-                    )
-                }
                 
+                let expired: Bool = (self.passportResponseModel?
+                    .passportExtractedModel?
+                    .identificationDocumentCapture?
+                    .IsExpired as? Bool) ?? false
+                
+                
+                if(expired){
+                    self.retryCount = self.retryCount + 1;
+                    remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
+                    self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
+                    self.start = true
+                }else{
+                    self.start = false
+                    if(self.language == Language.NON){
+                        self.scanPassportDelegate?.onComplete(dataModel:self.passportResponseModel! )
+                    }else{
+                        let transformed = LanguageTransformation(apiKey: self.apiKey,languageTransformationDelegate: self)
+                        transformed.languageTransformation(
+                            langauge: self.language,
+                            transformationModel: preparePropertiesToTranslate(language: self.language, properties: passportExtractedModel?.outputProperties)
+                        )
+                    }
+                    
+                }
+               
             } else if eventName == HubConnectionTargets.ON_RETRY{
                 self.retryCount = self.retryCount + 1;
                 remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage

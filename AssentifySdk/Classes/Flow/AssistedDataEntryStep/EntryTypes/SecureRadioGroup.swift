@@ -36,81 +36,88 @@ public struct SecureRadioGroup: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
+        if (self.field.isHidden == true){
+            loadDefaultIfNeeded()
+        }
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-
-            Text(title)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(Color(BaseTheme.baseTextColor))
-
-            VStack(spacing: 0) {
-
-                ForEach(options.indices, id: \.self) { idx in
-                    let option = options[idx]
-                    let isSelected = (selected == option)
-
-                    Button {
-                        guard !isReadOnly else { return }
-                        focusedFieldId = fieldId
-                        select(option)
-                    } label: {
-                        HStack(spacing: 10) {
-
-                            RadioIndicator(isSelected: isSelected)
-
-                            Text(option)
-                                .font(.system(size: 15, weight: .regular))
-                                .foregroundColor(
-                                    isReadOnly
-                                    ? Color(BaseTheme.baseTextColor).opacity(0.6)
-                                    : Color(BaseTheme.baseTextColor)
-                                )
-                                .lineLimit(2)
-
-                            Spacer(minLength: 0)
+        if (self.field.isHidden == false){
+            
+            VStack(alignment: .leading, spacing: 6) {
+                Text(title)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                
+                VStack(spacing: 0) {
+                    
+                    ForEach(options.indices, id: \.self) { idx in
+                        let option = options[idx]
+                        let isSelected = (selected == option)
+                        
+                        Button {
+                            guard !isReadOnly else { return }
+                            focusedFieldId = fieldId
+                            select(option)
+                        } label: {
+                            HStack(spacing: 10) {
+                                
+                                RadioIndicator(isSelected: isSelected)
+                                
+                                Text(option)
+                                    .font(.system(size: 15, weight: .regular))
+                                    .foregroundColor(
+                                        isReadOnly
+                                        ? Color(BaseTheme.baseTextColor).opacity(0.6)
+                                        : Color(BaseTheme.baseTextColor)
+                                    )
+                                    .lineLimit(2)
+                                
+                                Spacer(minLength: 0)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color(BaseTheme.fieldColor))
                         }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(BaseTheme.fieldColor))
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(isReadOnly)
-
-                    if idx < options.count - 1 {
-                        Divider()
-                            .background(Color(BaseTheme.baseTextColor).opacity(0.10))
-                            .padding(.leading, 44) 
+                        .buttonStyle(.plain)
+                        .disabled(isReadOnly)
+                        
+                        if idx < options.count - 1 {
+                            Divider()
+                                .background(Color(BaseTheme.baseTextColor).opacity(0.10))
+                                .padding(.leading, 44)
+                        }
                     }
                 }
+                .background(Color(BaseTheme.fieldColor))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color(BaseTheme.baseTextColor).opacity(0.06), lineWidth: 1)
+                )
+                
+                if !err.isEmpty {
+                    Text(err)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                }
+                
             }
-            .background(Color(BaseTheme.fieldColor))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color(BaseTheme.baseTextColor).opacity(0.06), lineWidth: 1)
-            )
-
-            if !err.isEmpty {
-                Text(err)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(BaseTheme.baseRedColor))
+            .onAppear {
+                syncFromField()
+                loadDefaultIfNeeded()
+                validate()
+            }
+            .onChange(of: field.value) { _ in
+                syncFromField()
+                validate()
+            }
+            .onChange(of: field.inputKey) { _ in
+                loadDefaultIfNeeded(force: true)
             }
         }
-        .onAppear {
-            syncFromField()
-            loadDefaultIfNeeded()
-            validate()
-        }
-        .onChange(of: field.value) { _ in
-            syncFromField()
-            validate()
-        }
-        .onChange(of: field.inputKey) { _ in
-            loadDefaultIfNeeded(force: true)
-        }
+        
     }
 
     // MARK: - Derived

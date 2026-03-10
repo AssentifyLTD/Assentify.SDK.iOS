@@ -6,7 +6,7 @@ public struct OnFlipCardScreen: View {
     let onNext: () -> Void
 
     // same base as your other screens
-    let steps: [LocalStepModel] = LocalStepsObject.shared.get()!
+    let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         expectedImageUrl: String,

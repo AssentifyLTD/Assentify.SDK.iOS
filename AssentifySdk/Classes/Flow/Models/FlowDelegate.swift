@@ -1,5 +1,5 @@
 import Foundation
 
 public protocol FlowDelegate  {
-    func onFlowCompleted(submitRequestModel:[SubmitRequestModel])
+    func onFlowCompleted(flowData:[FlowCompletedModel])
 }
