@@ -128,13 +128,17 @@ public final class FlowController {
             return key
         }
         
-        let firstInput = stepDefinition.inputProperties.first!
-        
-        if firstInput.sourceStepId == currentStepId {
-            return firstInput.sourceKey
-        } else {
-            return "NON"
+        guard !stepDefinition.inputProperties.isEmpty else {
+            return key
         }
+
+        for input in stepDefinition.inputProperties {
+            if input.sourceStepId == currentStepId {
+                return input.sourceKey
+            }
+        }
+
+        return ConstantsValues.providedFaceImageKey
     }
     
     public  func  setImage(url: String) {
