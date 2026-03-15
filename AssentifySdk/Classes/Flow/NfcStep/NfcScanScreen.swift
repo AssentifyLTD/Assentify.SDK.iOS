@@ -29,6 +29,7 @@ public struct NfcScanScreen: View {
     
     @State private var imageUrl: String = ""
     @State private var dataIDModel: PassportResponseModel?
+    @State private var isComplete = false
     @StateObject private var commands = NfcScanCommands()
     @State private var screenEvent: NfcScreenEvent = .idle
     private let timeStarted :String = getCurrentDateTimeForTracking();
@@ -55,10 +56,22 @@ public struct NfcScanScreen: View {
     }
     
     private func onNext() {
-        DispatchQueue.main.async { screenEvent = .idle }
-        flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!,timeStarted: self.timeStarted)
-        flowController.naveToNextStep();
+        if(isComplete){
+            DispatchQueue.main.async { screenEvent = .idle }
+            flowController.makeCurrentStepDone(extractedInformation: (dataIDModel?.passportExtractedModel!.transformedProperties)!,timeStarted: self.timeStarted)
+            flowController.naveToNextStep();
+        }else{
+            DispatchQueue.main.async { screenEvent = .idle }
+            flowController.makeCurrentStepDone(extractedInformation: (passportResponseModel?.passportExtractedModel!.transformedProperties)!,timeStarted: self.timeStarted)
+            flowController.naveToNextStep();
+        }
+     
     }
+    
+    private func onSkip() {
+        DispatchQueue.main.async { screenEvent = .completed }
+    }
+    
     
     public var body: some View {
         
@@ -72,7 +85,7 @@ public struct NfcScanScreen: View {
             onComplete: { model in
                 DispatchQueue.main.async {
                     dataIDModel = model;
-                    
+                    isComplete = true
                     OnCompleteScreenData.shared.clear();
                     OnCompleteScreenData.shared.set(model.passportExtractedModel!.transformedProperties!)
                     imageUrl = model.passportExtractedModel!.imageUrl!
@@ -117,6 +130,7 @@ public struct NfcScanScreen: View {
                             "Position the passport on the bottom of the phone where the NFC chip reader is and ensure that you have the passport close enough for detection and reading."
                         }
                     },
+                    onSkip: { onSkip() },
                     onBack:{onBack()}
                 )
                 
@@ -136,6 +150,7 @@ private struct NfcScanScreenUI: View {
     let showResultPage: Bool
     let onNext: () -> Void
     let onRetry: () -> Void
+    let onSkip: () -> Void
     let onBack: () -> Void
     
     private let steps = LocalStepsObject.shared.get()
@@ -227,11 +242,25 @@ private struct NfcScanScreenUI: View {
                     Color(BaseTheme.baseRedColor)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 28))
-                .padding(.horizontal, 25).padding(.bottom,30)
+                .padding(.horizontal, 25).padding(.bottom,10)
                 
             } else {
                 Spacer().frame(height: 20)
             }
+            
+            BaseClickButton(
+                title: "Skip",
+                cornerRadius: 28,
+                verticalPadding: 14,
+                enabled: true,
+                action: onSkip
+            )
+            .padding(.horizontal, 25)
+            .padding(.bottom, 16)
+            
+                
+            
+            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -357,8 +386,11 @@ struct NfcScanUIKitView: UIViewControllerRepresentable {
         }
         
         private func retry() {
+            scanNfc = nil
             startNfcIfNeeded()
         }
+        
+        
         
         private func close() {
             DispatchQueue.main.async { [weak self] in

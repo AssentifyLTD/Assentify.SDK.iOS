@@ -314,7 +314,7 @@ public struct FaceMatchStep: View {
                     Spacer()
                     if !(assentifySdk?.isManual() ?? false) {
                         Text(feedbackText)
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .foregroundColor(Color(BaseTheme.baseAccentColor))
                             .font(.system(size: 15, weight: .light))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 24)
@@ -323,7 +323,7 @@ public struct FaceMatchStep: View {
                     } else {
                         if(!feedbackText.isEmpty){
                             Text(feedbackText)
-                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                .foregroundColor(Color(BaseTheme.baseAccentColor))
                                 .font(.system(size: 15, weight: .light))
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 24)

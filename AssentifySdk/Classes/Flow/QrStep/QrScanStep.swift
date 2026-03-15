@@ -20,6 +20,7 @@ enum QrScreenEvent {
 final class QrScanCommands: ObservableObject {
     @Published var triggerRetry: Int = 0
     @Published var triggerClose: Int = 0
+    @Published var triggerCapture: Int = 0
 }
 
 // MARK: - SwiftUI Step
@@ -173,6 +174,19 @@ public struct QrScanStep: View {
             case .idle:
                 VStack {
                     Spacer()
+
+                    if (assentifySdk!.isManual()) {
+                        BaseClickButton(
+                            title: "Take Photo",
+                            cornerRadius: 28,
+                            verticalPadding: 15,
+                            enabled: true
+                        ) {
+                            commands.triggerCapture += 1
+                        }
+                        .padding(.horizontal, 25)
+                        .padding(.vertical, 25)
+                    }
                 }
                 .zIndex(1)
 
@@ -269,11 +283,13 @@ struct QrScanUIKitView: UIViewControllerRepresentable {
         var flowController: FlowController?
         var templatesByCountry: TemplatesByCountry?
 
-        private var qrVC: UIViewController?
+        private var qrVC: ScanQr?
         private var assentifySdk = AssentifySdkObject.shared.get()
 
         private var lastRetryTrigger: Int = 0
         private var lastCloseTrigger: Int = 0
+        private var lastCaptureTrigger: Int = 0
+
 
         override func viewDidLoad() {
             super.viewDidLoad()
@@ -291,10 +307,18 @@ struct QrScanUIKitView: UIViewControllerRepresentable {
                 lastCloseTrigger = commands.triggerClose
                 close()
             }
+            if commands.triggerCapture != lastCaptureTrigger {
+                lastCaptureTrigger = commands.triggerCapture
+                capture()
+            }
         }
 
         private func retry() {
        
+        }
+        
+        private func capture() {
+            self.qrVC?.takePicture()
         }
 
         private func close() {

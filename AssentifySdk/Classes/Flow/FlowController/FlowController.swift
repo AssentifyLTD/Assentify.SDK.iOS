@@ -182,10 +182,19 @@ public final class FlowController {
                 for (key, value) in submitModel.extractedInformation {
                     if !key.contains("IsDirty") {
                        
-                        let keys = key.split(separator: "_").map { String($0) }
-                        let newKey = key.components(separatedBy: "\(submitModel.stepDefinition)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                        if(key.contains("OnBoardMe_Property")){
+                            let keys = key.split(separator: "_").map { String($0) }
+                            let newKey = key.components(separatedBy: "OnBoardMe_Property_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                            
+                            stepData[newKey] = value
+                        }else{
+                            let keys = key.split(separator: "_").map { String($0) }
+                            let newKey = key.components(separatedBy: "\(submitModel.stepDefinition)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                            
+                            stepData[newKey] = value
+                        }
                         
-                        stepData[newKey] = value
+                     
                     }
                 }
                 

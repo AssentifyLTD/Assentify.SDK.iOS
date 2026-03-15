@@ -286,13 +286,13 @@ public struct SwipeToSubmit: View {
                     Spacer()
                     Image(systemName: "chevron.right.2")
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                        .foregroundColor(Color(UIColor.fromHex("#f3f4f6")))
                         .padding(.trailing, 18)
                 }
 
                 // Knob
                 RoundedRectangle(cornerRadius: corner)
-                    .fill(Color(BaseTheme.baseAccentColor))
+                    .fill(Color(UIColor.fromHex("#f3f4f6")))
                     .shadow(radius: 4)
                     .frame(width: knobWidth, height: height - 14)
                     .overlay(

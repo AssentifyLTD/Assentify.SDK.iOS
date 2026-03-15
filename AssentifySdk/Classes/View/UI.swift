@@ -16,8 +16,8 @@ class Guide{
    private var topFaceShadow = UIView()
    private var bottomFaceShadow = UIView()
     
-    func showCardGuide(view:UIView){
-           guard let modelPath = Bundle.main.path(forResource: "card_background", ofType: "svg") else {
+    func showCardGuide(view:UIView,forResource :String =  "card_background"){
+           guard let modelPath = Bundle.main.path(forResource: forResource, ofType: "svg") else {
                   print("SVG file not found.")
                   return
             }
@@ -58,7 +58,11 @@ class Guide{
         }
         cardSvgImageView!.removeFromSuperview()
         if(notTransmitting){
-            let layerIDsToChange = ["Layer_1-1", "Layer_1-2", "Layer_1-3", "Layer_1-4"]
+            let layerIDsToChange = ["corner_1", "corner_2", "corner_3", "corner_4","scanArea"
+                                    ,"outer_corner_1", "outer_corner_2", "outer_corner_3", "outer_corner_4",
+                                    "passport_top_box", "passport_info_box", "passport_photo_frame",
+                                    "passport_face_head", "passport_face_body",
+                                    "passport_mrz_box", "passport_mrz_row_1", "passport_mrz_row_2"]
             self.changeLayerColor(svgImage: self.cardBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
             cardSvgImageView = SVGKFastImageView(svgkImage: self.cardBackground)
         }else{
@@ -226,7 +230,7 @@ class Guide{
         }
         qrSvgImageView!.removeFromSuperview()
         if(notTransmitting){
-            let layerIDsToChange = ["Layer_1-1", "Layer_1-2", "Layer_1-3", "Layer_1-4"]
+            let layerIDsToChange = ["corner_1", "corner_2", "corner_3", "corner_4","scanArea"]
             self.changeLayerColor(svgImage: self.cardBackground!, layerIDs: layerIDsToChange ,newColor: UIColor(hexString: color) )
             qrSvgImageView = SVGKFastImageView(svgkImage: self.cardBackground)
         }else{
@@ -405,12 +409,48 @@ class Guide{
  
     /// Color
     func changeLayerColor(svgImage: SVGKImage, layerIDs: [String], newColor: UIColor) {
+
+        let filledLayers: Set<String> = [
+            "scanArea",
+            "Layer_1-1",
+            "passport_top_box",
+            "passport_info_box",
+            "passport_mrz_box",
+            "passport_mrz_row_1",
+            "passport_mrz_row_2"
+        ]
+
         for layerID in layerIDs {
-            if let layer = svgImage.layer(withIdentifier: layerID) as? CAShapeLayer {
-                layer.fillColor = newColor.cgColor
+
+            guard let shapeLayer = svgImage.layer(withIdentifier: layerID) as? CAShapeLayer else {
+                continue
+            }
+
+            if filledLayers.contains(layerID) {
+
+                if(layerID != "Layer_1-1"){
+                    shapeLayer.fillColor = newColor.withAlphaComponent(0.30).cgColor
+                }else{
+                    shapeLayer.fillColor = newColor.cgColor
+
+                }
+
+                if layerID == "scanArea" || layerID == "passport_mrz_row_1" || layerID == "passport_mrz_row_2" {
+                    shapeLayer.strokeColor = UIColor.clear.cgColor
+                } else {
+                    shapeLayer.strokeColor = newColor.cgColor
+                }
+
+            } else {
+                shapeLayer.strokeColor = newColor.cgColor
+                shapeLayer.fillColor = UIColor.clear.cgColor
             }
         }
     }
+    
+    
+    
+  
     
     func showFaceTimer(view: UIView, initialTextColorHex: String,countdownFinished: @escaping () -> Void) -> (countdownView: UIView, countdownTimer: Timer)  {
         

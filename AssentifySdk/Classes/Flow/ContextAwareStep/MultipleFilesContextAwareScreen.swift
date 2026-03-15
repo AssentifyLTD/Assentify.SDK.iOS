@@ -12,6 +12,9 @@ public enum ContextAwareStepEventType: String {
 // MARK: - Multiple Files Context Aware Screen
 public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
 
+    @State private var shareFile: ShareFile? = nil
+
+    
     // MARK: Delegate callbacks
     public func onHasTokens(
         templateId: Int,
@@ -72,6 +75,11 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                     signatureResponseModel: signatureResponseModel
                 )
             )
+            if(self.contextAwareSigningObject!.data.autoDownload){
+                downloadAndShare(signatureResponseModel.signedDocumentUri)
+           }
+            
+            
             if !self.approvedDocuments.isEmpty { self.approvedDocuments.removeFirst() }
             if self.contextAwareSigningObject?.data.selectedTemplates.count == self.documentWithTokensAndSigned.count {
                 self.eventType = .onSignature
@@ -101,6 +109,26 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
         }
     }
 
+    private func downloadAndShare(_ urlString: String) {
+        guard let u = URL(string: urlString) else { return }
+
+        Task {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: u)
+                let fileURL = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("SignedDocument_\(UUID().uuidString).pdf")
+
+                try data.write(to: fileURL, options: [.atomic])
+
+                // ✅ Present ONLY after file exists
+                shareFile = ShareFile(url: fileURL)
+
+            } catch {
+                // optional: show toast / error state
+            }
+        }
+    }
+    
     public func onError(message: String) {
         DispatchQueue.main.async {
             self.eventType = .onError
@@ -513,6 +541,8 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                 }
             }
             .topBarBackLogo { onBack() }
+        } .sheet(item: $shareFile) { file in
+            ShareSheet(items: [file.url])
         }
         .modifier(InterceptSystemBack(action: onBack))
         .task { startIfNeeded() }

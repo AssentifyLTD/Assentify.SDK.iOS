@@ -398,7 +398,7 @@ public struct IDCardScanStep: View {
                     
                     if !(assentifySdk?.isManual() ?? false) {
                         Text(feedbackText)
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .foregroundColor(Color(BaseTheme.baseAccentColor))
                             .font(.system(size: 15, weight: .light))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 24)
