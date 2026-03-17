@@ -34,7 +34,6 @@ final class IDScanCommands: ObservableObject {
     @Published var triggerClose: Int = 0
 }
 
-// MARK: - SwiftUI Step (same structure as PassportScanStep)
 
 public struct IDCardScanStep: View {
     
@@ -337,43 +336,47 @@ public struct IDCardScanStep: View {
             onEnvironmental: { brightnessEvents, motion, zoom, isCentered in
                 DispatchQueue.main.async {
                     
-                    guard start == false else {
-                        feedbackText = ""
-                        return
-                    }
-                    
-                    if zoom != .SENDING && zoom != .NO_DETECT {
-                        if zoom == .ZOOM_IN {
-                            feedbackText = "Move ID Closer"
-                        } else if zoom == .ZOOM_OUT {
-                            feedbackText = "Move ID Further"
+                        
+                        if zoom != .SENDING && zoom != .NO_DETECT {
+                            
+                            if zoom == .ZOOM_IN {
+                                feedbackText = "Move ID Closer"
+                            } else if zoom == .ZOOM_OUT {
+                                feedbackText = "Move ID Further"
+                            } else {
+                                feedbackText = ""
+                            }
+                            
+                        } else if motion != .SENDING && motion != .NO_DETECT {
+                            
+                            feedbackText = "Please Hold Your Hand"
+                            
+                        } else if brightnessEvents != .Good {
+                            
+                            if brightnessEvents == .TooDark {
+                                feedbackText = "Please increase the lighting"
+                            } else if brightnessEvents == .TooBright {
+                                feedbackText = "Please reduce the lighting"
+                            } else {
+                                feedbackText = ""
+                            }
+                            
                         } else {
-                            feedbackText = ""
-                        }
-                    } else if motion != .SENDING && motion != .NO_DETECT {
-                        feedbackText = "Please Hold Your Hand"
-                    } else if brightnessEvents != .Good {
-                        if brightnessEvents == .TooDark {
-                            feedbackText = "Please increase the lighting"
-                        } else if brightnessEvents == .TooBright {
-                            feedbackText = "Please reduce the lighting"
-                        } else {
-                            feedbackText = ""
-                        }
-                    } else {
-                        if motion == .SENDING && zoom == .SENDING && brightnessEvents == .Good {
-                            feedbackText = "Hold Steady"
+                            
+                            if motion == .SENDING && zoom == .SENDING && brightnessEvents == .Good {
+                                feedbackText = "Hold Steady"
+                            }
+                            
+                            if motion == .NO_DETECT && zoom == .NO_DETECT {
+                                feedbackText = "Please present ID"
+                            } else if !isCentered {
+                                feedbackText = "Please center your ID"
+                            }
                         }
                         
-                        if motion == .NO_DETECT && zoom == .NO_DETECT {
-                            feedbackText = "Please present ID"
-                        } else if !isCentered {
-                            feedbackText = "Please center your card"
-                        } else {
-                            feedbackText = ""
-                        }
-                    }
+                    
                 }
+                  
             }
         )
         
@@ -398,7 +401,7 @@ public struct IDCardScanStep: View {
                     
                     if !(assentifySdk?.isManual() ?? false) {
                         Text(feedbackText)
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .foregroundColor(Color(BaseTheme.baseAccentColor))
                             .font(.system(size: 15, weight: .light))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 24)

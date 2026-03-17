@@ -278,6 +278,29 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
                 
                 displayCounter += 1
             }
+            
+            let isSplit = def == StepsNames.split
+            if(isSplit){
+                guard let stepDef = configModel!.stepDefinitions.first(where: { $0.stepId == step.id }) else {
+                    continue
+                }
+                tempList.append(
+                    LocalStepModel(
+                        name: "",
+                        show: false,
+                        description: "",
+                        iconAssetPath: "",
+                        isDone: false,
+                        stepDefinition: stepDef,
+                        submitRequestModel: SubmitRequestModel(
+                            stepId: stepDef.stepId,
+                            stepDefinition: stepDef.stepDefinition,
+                            extractedInformation: [:]
+                        )
+                    )
+                )
+            }
+
         }
         
         LocalStepsObject.shared.set(tempList)

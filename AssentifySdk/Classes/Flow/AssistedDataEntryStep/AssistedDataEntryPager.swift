@@ -93,16 +93,17 @@ fileprivate struct AssistedDataEntryFieldsList: View {
         // important: use indices -> avoids searching firstIndex(where:) per item
         let elements = model.assistedDataEntryPages[pageIndex].dataEntryPageElements
         
-        ForEach(elements.indices, id: \.self) { i in
-            AssistedDataEntryFieldRow(
-                pageIndex: pageIndex,
-                element: elements[i],
-                elementBinding: $model.assistedDataEntryPages[pageIndex].dataEntryPageElements[i],
-                flowController: flowController,
-                focusedFieldId: $focusedFieldId,
-                onFieldChanged: onFieldChanged
-            )
-            .padding(.top, 20)
+        VStack(spacing: 20) {
+            ForEach(elements.indices, id: \.self) { i in
+                AssistedDataEntryFieldRow(
+                    pageIndex: pageIndex,
+                    element: elements[i],
+                    elementBinding: $model.assistedDataEntryPages[pageIndex].dataEntryPageElements[i],
+                    flowController: flowController,
+                    focusedFieldId: $focusedFieldId,
+                    onFieldChanged: onFieldChanged
+                ).padding(.top , 7)
+            }
         }
     }
 }

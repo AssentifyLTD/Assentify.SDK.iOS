@@ -232,7 +232,6 @@ public struct PassportScanStep: View {
             onEnvironmental: { brightnessEvents, motion, zoom, isCentered in
                 DispatchQueue.main.async {
                     
-                    if start == false {
                         
                         if zoom != .SENDING && zoom != .NO_DETECT {
                             
@@ -271,9 +270,7 @@ public struct PassportScanStep: View {
                             }
                         }
                         
-                    } else {
-                        feedbackText = ""
-                    }
+                    
                 }
             }
         )
@@ -294,7 +291,7 @@ public struct PassportScanStep: View {
                     
                     if !(assentifySdk?.isManual() ?? false) {
                         Text(feedbackText)
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .foregroundColor(Color(BaseTheme.baseAccentColor))
                             .font(.system(size: 15, weight: .light))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 24)

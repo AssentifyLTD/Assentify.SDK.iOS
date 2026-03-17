@@ -137,7 +137,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         
         if(environmentalConditions!.enableGuide){
             if(self.guide.cardSvgImageView == nil){
-                self.guide.showCardGuide(view: self.view)
+                self.guide.showCardGuide(view: self.view,forResource: "passport_background")
             }
             self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
         }
@@ -160,7 +160,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             DispatchQueue.main.async {
                 if(self.environmentalConditions!.enableGuide){
                     if(self.guide.cardSvgImageView == nil){
-                        self.guide.showCardGuide(view: self.view)
+                        self.guide.showCardGuide(view: self.view,forResource: "passport_background")
                     }
                     self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }
@@ -262,7 +262,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
                     if(self.guide.cardSvgImageView == nil){
-                        self.guide.showCardGuide(view: self.view)
+                        self.guide.showCardGuide(view: self.view,forResource: "passport_background")
                     }
                     self.guide.changeCardColor(view: self.view,to:ConstantsValues.DetectColor,notTransmitting: self.start)
                 }
@@ -274,7 +274,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
             if(environmentalConditions!.enableGuide){
                 DispatchQueue.main.async {
                     if(self.guide.cardSvgImageView == nil){
-                        self.guide.showCardGuide(view: self.view)
+                        self.guide.showCardGuide(view: self.view,forResource: "passport_background")
                     }
                     self.guide.changeCardColor(view: self.view,to:self.environmentalConditions!.HoldHandColor,notTransmitting: self.start)
                 }

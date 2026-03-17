@@ -32,6 +32,7 @@ public struct StepsNames {
     public   static let faceImageAcquisition = "FaceImageAcquisition"
     public   static let identificationDocumentCapture = "IdentificationDocumentCapture"
     public   static let contextAwareSigning = "ContextAwareSigning"
+    public   static let split = "Split"
 }
 
 public struct WrapUpKeys {

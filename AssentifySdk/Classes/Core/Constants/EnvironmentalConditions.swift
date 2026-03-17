@@ -35,7 +35,6 @@ public class EnvironmentalConditions {
 
     public  init(
         enableDetect: Bool = true,
-        enableGuide:Bool = true,
         CountDownNumbersColor: String = "#00FFFFFF",
         HoldHandColor: String,
         BRIGHTNESS_HIGH_THRESHOLD :Double  = 255.0,
@@ -49,7 +48,7 @@ public class EnvironmentalConditions {
         minCPUCores:Int = 6
     ) {
         self.enableDetect = enableDetect
-        self.enableGuide = enableGuide
+        self.enableGuide = true
         self.CountDownNumbersColor = CountDownNumbersColor
         self.HoldHandColor = HoldHandColor
         self.BRIGHTNESS_HIGH_THRESHOLD = BRIGHTNESS_HIGH_THRESHOLD

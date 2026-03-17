@@ -38,6 +38,95 @@ public final class FlowController {
     }
     
     public func naveToNextStep() {
+        chekSplitStepAndMoveNext();
+    }
+    
+    public  func chekSplitStepAndMoveNext() {
+        let timeStarted = getCurrentDateTimeForTracking()
+        
+        guard let currentStep = getCurrentStep(),
+              currentStep.stepDefinition?.stepDefinition == StepsNames.split else {
+            moveNext()
+            return
+        }
+        
+        let branches = currentStep.stepDefinition?.customization.branches ?? []
+        
+        let matchedBranch =
+            branches
+            .filter { !($0.conditions.isEmpty) }
+                .first(where: { ConditionEvaluator.evaluateBranch(branch: $0, flowController: self) })
+        ?? branches.first(where: { $0.conditions.isEmpty })
+        
+        
+        guard let branch = matchedBranch,
+              let configModelObject = ConfigModelObject.shared.get(),
+              let splitStep = configModelObject.stepMap.first(where: { $0.id == currentStep.stepDefinition?.stepId }),
+              branch.branchIndex < splitStep.branches!.count else {
+            moveNext()
+            return
+        }
+
+        let splitBranches = splitStep.branches
+        
+        makeCurrentStepDone(extractedInformation: [:], timeStarted: timeStarted)
+        
+        var steps = LocalStepsObject.shared.get()
+        var newItems: [LocalStepModel] = []
+        
+        let selectedBranchSteps = splitBranches![branch.branchIndex]
+        let hasWrapUp = selectedBranchSteps.first(where: { $0.stepDefinition == StepsNames.wrapUp })
+        
+        if hasWrapUp != nil {
+            steps.removeAll(where: { !$0.isDone })
+        }
+        
+        let insertIndex = steps.firstIndex(where: { !$0.isDone }) ?? steps.count
+        var displayCounter = steps.filter { $0.show && $0.isDone }.count + 1
+        
+        for splitBranch in selectedBranchSteps {
+            guard splitBranch.stepDefinition != StepsNames.wrapUp else { continue }
+            let def = splitBranch.stepDefinition
+
+            guard let meta = getStepMeta(def),
+                  let matchedStepDefinition = configModelObject.stepDefinitions.first(where: { $0.stepId == splitBranch.id }) else {
+                continue
+            }
+            
+            newItems.append(
+                LocalStepModel(
+                    name: "Step \(displayCounter): \(meta.name)",
+                    description: meta.description,
+                    iconAssetPath: meta.icon,
+                    isDone: false,
+                    stepDefinition: matchedStepDefinition,
+                    submitRequestModel: SubmitRequestModel(
+                        stepId: matchedStepDefinition.stepId,
+                        stepDefinition: matchedStepDefinition.stepDefinition,
+                        extractedInformation: [:]
+                    )
+                )
+            )
+            displayCounter += 1
+        }
+        
+        steps.insert(contentsOf: newItems, at: insertIndex)
+        
+        var newCounter = 1
+        for i in steps.indices {
+            if steps[i].show,
+               let stepDef = steps[i].stepDefinition?.stepDefinition,
+               let meta = getStepMeta(stepDef) {
+                steps[i].name = "Step \(newCounter): \(meta.name)"
+                newCounter += 1
+            }
+        }
+        
+        LocalStepsObject.shared.set(steps)
+        moveNext()
+    }
+    
+    public func moveNext(){
         let currentStep = getCurrentStep()
         
         guard let currentStep else {
@@ -66,6 +155,9 @@ public final class FlowController {
             push(SubmitStepScreen(flowController: self))
         }
     }
+    
+    
+    
     
     public func getCurrentStep() -> LocalStepModel? {
         let steps = LocalStepsObject.shared.get()
@@ -175,35 +267,48 @@ public final class FlowController {
         
         // 1) Collect FlowCompletedModel from local steps
         for step in steps {
-            if let submitModel = step.submitRequestModel {
-                
-                var stepData: [String: String] = [:]
-                
-                for (key, value) in submitModel.extractedInformation {
-                    if !key.contains("IsDirty") {
-                       
-                        let keys = key.split(separator: "_").map { String($0) }
-                        let newKey = key.components(separatedBy: "\(submitModel.stepDefinition)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
-                        
-                        stepData[newKey] = value
+            if(step.stepDefinition!.stepDefinition != StepsNames.split){
+                if let submitModel = step.submitRequestModel {
+                    
+                    var stepData: [String: String] = [:]
+                    
+                    for (key, value) in submitModel.extractedInformation {
+                        if !key.contains("IsDirty") {
+                            
+                            if(key.contains("OnBoardMe_Property")){
+                                let keys = key.split(separator: "_").map { String($0) }
+                                let newKey = key.components(separatedBy: "OnBoardMe_Property_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                                
+                                stepData[newKey] = value
+                            }else{
+                                let keys = key.split(separator: "_").map { String($0) }
+                                let newKey = key.components(separatedBy: "\(submitModel.stepDefinition)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                                
+                                stepData[newKey] = value
+                            }
+                            
+                            
+                        }
                     }
-                }
-                
-                flowCompletedList.append(
-                    FlowCompletedModel(
-                        stepData: stepData,
-                        submitRequestModel: submitModel
+                    
+                    flowCompletedList.append(
+                        FlowCompletedModel(
+                            stepData: stepData,
+                            submitRequestModel: submitModel
+                        )
                     )
-                )
+                }
             }
         }
         
         // 2) Build WrapUp SubmitRequestModel (TimeEnded)
         var wrapUp: SubmitRequestModel? = nil
         let initSteps = ConfigModelObject.shared.get()!.stepDefinitions
-        
+        let initStepsMap = ConfigModelObject.shared.get()?.stepMap.first {
+            $0.stepDefinition == StepsNames.wrapUp
+        }
         for item in initSteps {
-            if item.stepDefinition == StepsNames.wrapUp {
+            if item.stepId == initStepsMap?.id {
                 
                 var values: [String: String] = [:]
                 
@@ -261,9 +366,11 @@ public final class FlowController {
         // 2) Build WrapUp SubmitRequestModel (TimeEnded)
         var wrapUp: SubmitRequestModel? = nil
         let initSteps = ConfigModelObject.shared.get()!.stepDefinitions
-
+        let initStepsMap = ConfigModelObject.shared.get()?.stepMap.first {
+            $0.stepDefinition == StepsNames.wrapUp
+        }
         for item in initSteps {
-            if item.stepDefinition == StepsNames.wrapUp {
+            if item.stepId == initStepsMap?.id {
 
                 var values: [String: String] = [:]
 
@@ -329,10 +436,15 @@ public final class FlowController {
           let wrapUpStep = configModel.stepMap.first {
               $0.stepDefinition == StepsNames.wrapUp
           }
+          
+          let wrapUpStepType = configModel.stepDefinitions.first {
+              $0.stepDefinition == StepsNames.wrapUp
+          }
 
-          let currentStepType = configModel.stepMap.first {
-              $0.id == currentStep.stepDefinition!.stepId
-          }?.stepType ?? 0
+
+          let currentStepType = configModel.stepDefinitions.first {
+              $0.stepId == currentStep.stepDefinition!.stepId
+          }?.customization.stepTypeDto.id ?? 0
 
           let nextStepType: Int
           let nextStepId: Int
@@ -341,13 +453,13 @@ public final class FlowController {
           if let next = nextStep {
               nextStepDefinition = next.stepDefinition!.stepDefinition
               nextStepId = next.stepDefinition!.stepId
-              nextStepType = configModel.stepMap.first {
-                  $0.id == next.stepDefinition!.stepId
-              }?.stepType ?? 0
+              nextStepType = configModel.stepDefinitions.first {
+                  $0.stepId == next.stepDefinition!.stepId
+              }?.customization.stepTypeDto.id ?? 0
           } else {
               nextStepDefinition = StepsNames.wrapUp
               nextStepId = wrapUpStep?.id ?? 0
-              nextStepType = wrapUpStep?.stepType ?? 0
+              nextStepType = wrapUpStepType?.customization.stepTypeDto.id ?? 0
           }
           
           let userAgent = "iOS \(UIDevice.current.systemVersion); \(UIDevice.current.model)"
@@ -440,9 +552,9 @@ public final class FlowController {
         
           
        
-          let currentStepType = configModel.stepMap.first {
-              $0.id == currentStep.stepDefinition!.stepId
-          }?.stepType ?? 0
+          let currentStepType = configModel.stepDefinitions.first {
+              $0.stepId == currentStep.stepDefinition!.stepId
+          }?.customization.stepTypeDto.id ?? 0
 
         
           
