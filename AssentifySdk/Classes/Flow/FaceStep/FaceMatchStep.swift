@@ -101,7 +101,21 @@ public struct FaceMatchStep: View {
                }) {
                    outputProps[skippedKey] = "true"
                }
+               
            }
+        
+          if let key = outputProps.keys.first(where: {
+            $0.contains("OnBoardMe_FaceImageAcquisition_FaceAuthenticity")
+          }) {
+            if let value = outputProps[key] {
+                if value == "0" {
+                    outputProps[key] = "false"
+                } else if value == "1" {
+                    outputProps[key] = "true"
+                }
+            }
+           }
+        
            flowController.makeCurrentStepDone(extractedInformation: outputProps,timeStarted: self.timeStarted)
            flowController.naveToNextStep()
     }
@@ -218,7 +232,7 @@ public struct FaceMatchStep: View {
                 DispatchQueue.main.async {
                     // same condition as Kotlin:
                     // if (start == false && currentActiveLiveEvents == Good) { ... } else { ... }
-                    if start == false && currentActiveLiveEvents == .GOOD {
+                    if  currentActiveLiveEvents == .GOOD {
                         if detectedFaces > 1 {
                             feedbackText = "We detected more than one face.Please keep just your face in view."
                         } else if zoom != .SENDING && zoom != .NO_DETECT {

@@ -31,6 +31,7 @@ public struct StepMap: Codable {
     public let parentStepId: Int?
     public let numberOfBranches: Int?
     public let isVirtual: Bool
+    public let  branches: [[StepMap]]?
 }
 
 
@@ -45,6 +46,11 @@ public struct OutputProperties: Codable {
     public  let type: Int?
 }
 
+
+public struct StepTypeDto: Codable {
+    var id: Int
+}
+
 public struct Customization: Codable {
     public  let processMrz: Bool?
     public let storeCapturedDocument: Bool?
@@ -56,6 +62,7 @@ public struct Customization: Codable {
     public  let outputProperties: [OutputProperties]
     public let  identificationDocuments: [IdentificationDocuments]?
     public  let branches: [Branch]?
+    public  let stepTypeDto: StepTypeDto
 }
 
 public struct Branch: Codable {

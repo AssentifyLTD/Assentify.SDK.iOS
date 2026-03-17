@@ -10,7 +10,7 @@ import Foundation
 
 public struct LocalStepModel: Codable {
 
-    public let name: String
+    public var name: String
     public let show: Bool
     public let description: String
     public let iconAssetPath: String
