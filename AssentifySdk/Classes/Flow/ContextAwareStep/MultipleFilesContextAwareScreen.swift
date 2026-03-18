@@ -62,6 +62,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                 )
             )
             self.eventType = .onTokensComplete
+            clickLoading = false
         }
     }
 
@@ -83,6 +84,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
             if !self.approvedDocuments.isEmpty { self.approvedDocuments.removeFirst() }
             if self.contextAwareSigningObject?.data.selectedTemplates.count == self.documentWithTokensAndSigned.count {
                 self.eventType = .onSignature
+                clickLoading = false
             } else {
                 self.signNextApprovedIfPossible()
             }
@@ -140,6 +142,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
     private let flowController: FlowController
     private let steps = LocalStepsObject.shared.get()
 
+    @State private var clickLoading: Bool = false
     @State private var didStart: Bool = false
     @State private var eventType: ContextAwareStepEventType = .onSend
     @State private var contextAwareSigningObject: ContextAwareSigningModel? = nil
@@ -164,7 +167,9 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
     @State private var contextAwareSigning: ContextAwareSigning? = nil
 
     private let timeStarted :String = getCurrentDateTimeForTracking();
-    
+    private var defaultTitle: String = "";
+    private let configModel = ConfigModelObject.shared.get()
+
     public init(flowController: FlowController) {
         self.flowController = flowController
         
@@ -177,6 +182,10 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
             status : "InProgress"
         )
         /***/
+        defaultTitle = configModel!
+           .stepDefinitions
+           .first(where: { $0.stepId == currentStep!.stepDefinition!.stepId })!
+           .customization.header ?? ""
     }
 
     // MARK: Start (like AssistedDataEntryScreen)
@@ -223,8 +232,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
     }
 
     private func onCreateUserDocumentResponseModel(_ template: SelectedTemplatesTokens) {
-        eventType = .onSend
-
+        clickLoading = true
         var tokenValues: [String: String] = [:]
         for token in template.documentTokens {
             tokenValues[String(token.tokenId)] = getValueByKey(token.sourceKey)
@@ -238,7 +246,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
         guard !signatureB64.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         signatureToReuse = signatureB64
         guard let first = approvedDocuments.first else { return }
-        eventType = .onSend
+        clickLoading = true
         contextAwareSigning?.signature(
             documentId: first.createUserDocumentResponseModel.documentId,
             documentInstanceId: first.createUserDocumentResponseModel.templateInstanceId,
@@ -317,14 +325,28 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
 
                         // Loading / Sending
                         if eventType == .onSend {
-                            ZStack {
+                            VStack {
+                                
+                                // Title at top
+                                Text(contextAwareSigningObject?.data.header ?? defaultTitle)
+                                    .font(.system(size: 23, weight: .bold))
+                                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, 25)
+                                    .padding(.top, 10)
+
+                                Spacer()
+                                    .frame(height: UIScreen.main.bounds.height * 0.25)
+
+                                // Loader in the middle
                                 ProgressView()
                                     .progressViewStyle(.circular)
                                     .tint(Color(BaseTheme.baseTextColor))
                                     .scaleEffect(1.2)
+
+                                Spacer()
                             }
-                            .frame(minHeight: UIScreen.main.bounds.height * 0.6)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
 
                         // Error
@@ -519,8 +541,15 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                     }
                     .padding(.top, 20)
                 }
+                
+                if(clickLoading){
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(Color(BaseTheme.baseTextColor))
+                        .scaleEffect(1.2)
+                }
 
-                if selectedTemplate == nil && eventType == .onTokensComplete {
+                if selectedTemplate == nil && eventType == .onTokensComplete && !clickLoading{
                     BaseClickButton(
                         title: "Accept Terms & Sign",
                         verticalPadding: 18,

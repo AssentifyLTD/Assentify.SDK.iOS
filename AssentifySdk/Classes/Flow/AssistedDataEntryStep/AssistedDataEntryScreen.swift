@@ -18,7 +18,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
             self.assistedDataEntryModel = assistedDataEntryModel
         }
     }
-
+    private var defaultTitle: String = "";
     private let flowController: FlowController
     private let steps = LocalStepsObject.shared.get()
     private let timeStarted :String = getCurrentDateTimeForTracking();
@@ -30,7 +30,8 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
     @State private var currentPage: Int = 0
     @State private var refreshTick: Int = 0
     @State private var status: String = "InProgress"
-    
+    private let configModel = ConfigModelObject.shared.get()
+
     private let timer = Timer.publish(every: 15, on: .main, in: .common).autoconnect()
     
     public init(flowController: FlowController) {
@@ -45,6 +46,11 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
             status : "InProgress"
         )
         /***/
+         defaultTitle = configModel!
+            .stepDefinitions
+            .first(where: { $0.stepId == currentStep!.stepDefinition!.stepId })!
+            .customization.header ?? ""
+        
         
     }
 
@@ -130,6 +136,12 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
 
                 if isLoading {
                     VStack {
+                        Text(defaultTitle)
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .frame(maxWidth: .infinity, alignment: .leading)  .padding(.horizontal, 25)
+                            .padding(.top, 10)
+                            .padding(.bottom, 12)
                         Spacer()
                         ProgressView()
                             .progressViewStyle(.circular)

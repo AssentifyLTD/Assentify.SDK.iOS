@@ -1,7 +1,6 @@
 import SwiftUI
 import UIKit
-
-
+import Foundation
 
 public struct SecureNationalityDropdown: View {
 
@@ -13,7 +12,6 @@ public struct SecureNationalityDropdown: View {
     @Binding public var field: DataEntryPageElement
     public let onValueChange: (String) -> Void
 
-    // focus support (same pattern)
     @Binding public var focusedFieldId: String?
     public let fieldId: String
 
@@ -21,6 +19,11 @@ public struct SecureNationalityDropdown: View {
     @State private var selectedCode: String = ""
     @State private var err: String = ""
     @State private var expanded: Bool = false
+    @State private var searchText: String = ""
+    @State private var userStartedTyping: Bool = false
+
+    private let rowHeight: CGFloat = 52
+    private let listMaxHeight: CGFloat = 320
 
     public init(
         title: String,
@@ -40,74 +43,56 @@ public struct SecureNationalityDropdown: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
-        if (self.field.isHidden == true){
+
+        if self.field.isHidden == true {
             loadDefaultRawIfNeeded()
         }
     }
 
     public var body: some View {
-        if (self.field.isHidden == false){
-            ZStack(alignment: .topLeading) {
-                
-                if expanded {
-                    Color.black.opacity(0.001)
-                        .ignoresSafeArea()
-                        .onTapGesture { expanded = false }
-                }
-                
-                VStack(alignment: .leading, spacing: 6) {
-                    
-                    Text(title)
-                        .font(.system(size: 16, weight: .regular))
+        if self.field.isHidden == false {
+            VStack(alignment: .leading, spacing: 6) {
+
+                Text(title)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+
+                HStack(spacing: 10) {
+                    Text(displayText.isEmpty ? " " : displayText)
+                        .font(.system(size: 16))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
-                    
-                    VStack(spacing: 0) {
-                        
-                        // pill
-                        HStack(spacing: 10) {
-                            Text(displayText.isEmpty ? " " : displayText)
-                                .font(.system(size: 16))
-                                .foregroundColor(Color(BaseTheme.baseTextColor))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                            
-                            Spacer(minLength: 8)
-                            
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
-                                .rotationEffect(.degrees(expanded ? 180 : 0))
-                                .animation(.easeInOut(duration: 0.15), value: expanded)
-                        }
-                        .padding(.horizontal, 14)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color(BaseTheme.fieldColor))
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            focusedFieldId = fieldId
-                            guard !isReadOnly else { return }
-                            withAnimation(.easeInOut(duration: 0.15)) {
-                                expanded.toggle()
-                            }
-                        }
-                        
-                        if expanded && !isReadOnly {
-                            dropdownList()
-                                .transition(.opacity.combined(with: .move(edge: .top)))
-                        }
-                    }
-                    
-                    if !err.isEmpty {
-                        Text(err)
-                            .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(Color(BaseTheme.baseRedColor))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+
+                    Spacer(minLength: 8)
+
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
+                }
+                .padding(.horizontal, 14)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(BaseTheme.fieldColor))
+                )
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    focusedFieldId = fieldId
+                    guard !isReadOnly else { return }
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        expanded = true
+                        searchText = ""
+                        userStartedTyping = false
                     }
                 }
-                
+
+                if !err.isEmpty {
+                    Text(err)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                }
             }
             .onAppear {
                 loadDefaultRawIfNeeded()
@@ -123,21 +108,28 @@ public struct SecureNationalityDropdown: View {
                 validate()
             }
             .onChange(of: focusedFieldId) { newValue in
-                if newValue != fieldId { expanded = false }
+                if newValue != fieldId {
+                    expanded = false
+                    searchText = ""
+                    userStartedTyping = false
+                }
+            }
+            .fullScreenCover(isPresented: $expanded) {
+                dialogView()
+                    .presentationBackgroundClearIfAvailable()
             }
         }
     }
 
-    // MARK: - Derived
     private var isReadOnly: Bool {
         (field.readOnly ?? false) || getIsLocked()
     }
 
-    private func getIsLocked()->Bool{
+    private func getIsLocked() -> Bool {
         let identifiers = field.inputPropertyIdentifierList ?? []
-        return field.isLocked! && !identifiers.isEmpty
+        return (field.isLocked ?? false) && !identifiers.isEmpty
     }
-    
+
     private var selectedCountry: CountryOption? {
         options.first(where: { $0.code3.caseInsensitiveCompare(selectedCode) == .orderedSame })
     }
@@ -145,6 +137,30 @@ public struct SecureNationalityDropdown: View {
     private var displayText: String {
         guard let c = selectedCountry else { return "" }
         return "\(flagEmoji(c.code2))  \(c.name)"
+    }
+
+    private var filteredOptions: [CountryOption] {
+        if !userStartedTyping {
+            return options
+        }
+
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            return options
+        }
+
+        return options.filter { option in
+            option.name.localizedCaseInsensitiveContains(trimmed) ||
+            option.code2.localizedCaseInsensitiveContains(trimmed) ||
+            option.code3.localizedCaseInsensitiveContains(trimmed) ||
+            option.dialCode.localizedCaseInsensitiveContains(trimmed)
+        }
+    }
+
+    private var dialogListHeight: CGFloat {
+        let itemCount = max(filteredOptions.count, 1)
+        let contentHeight = CGFloat(itemCount) * rowHeight
+        return min(contentHeight, listMaxHeight)
     }
 
     private func computeDefaultCode(from rawValue: String) -> String {
@@ -166,7 +182,6 @@ public struct SecureNationalityDropdown: View {
         return ""
     }
 
-    // MARK: - Default + Transformation (same Kotlin logic)
     private func loadDefaultRawIfNeeded(force: Bool = false) {
         guard let key = field.inputKey else { return }
 
@@ -179,13 +194,11 @@ public struct SecureNationalityDropdown: View {
             let code = computeDefaultCode(from: defaultRaw)
             if !code.isEmpty {
                 selectedCode = code.uppercased()
-                // return ISO3 code
                 onValueChange(selectedCode)
             }
             return
         }
 
-        // transform only once (or force)
         guard let targetLang = field.targetOutputLanguage, !targetLang.isEmpty else {
             defaultRaw = AssistedFormHelper.getDefaultValueValue(key, page, flowController: flowController) ?? ""
             let code = computeDefaultCode(from: defaultRaw)
@@ -231,73 +244,179 @@ public struct SecureNationalityDropdown: View {
         }
     }
 
-    // MARK: - Dropdown list (rounded like your SecureDropdown)
     @ViewBuilder
-    private func dropdownList() -> some View {
-        let radius: CGFloat = 16
-        let maxHeight: CGFloat = 260
+    private func dialogView() -> some View {
+        ZStack {
+            Color.black.opacity(0.35)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    closeDialog()
+                }
 
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(options.indices, id: \.self) { idx in
-                    let option = options[idx]
-                    let optionText = "\(flagEmoji(option.code2))  \(option.name)"
-                    let isSelected = option.code3.caseInsensitiveCompare(selectedCode) == .orderedSame
+            VStack(spacing: 0) {
+                HStack {
+                    Text(title)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+
+                    Spacer()
 
                     Button {
-                        withAnimation(.easeInOut(duration: 0.12)) {
-                            expanded = false
-                        }
-                        selectedCode = option.code3.uppercased()
-                        onValueChange(selectedCode) // ✅ return ISO3 code
+                        closeDialog()
                     } label: {
-                        HStack {
-                            Text(optionText)
-                                .font(.system(size: 15))
-                                .foregroundColor(Color(BaseTheme.baseTextColor))
-                                .lineLimit(1)
-
-                            Spacer()
-
-                            if isSelected {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(Color(BaseTheme.baseAccentColor))
-                            }
-                        }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(BaseTheme.fieldColor))
+                        Image(systemName: "xmark")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .frame(width: 32, height: 32)
+                            .background(
+                                Circle()
+                                    .fill(Color(BaseTheme.fieldColor))
+                            )
                     }
                     .buttonStyle(.plain)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 12)
 
-                    if idx < options.count - 1 {
-                        Divider()
-                            .background(Color(BaseTheme.baseTextColor).opacity(0.10))
-                            .padding(.leading, 14)
+                HStack(spacing: 10) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
+
+                    TextField(
+                        "",
+                        text: Binding(
+                            get: { searchText },
+                            set: {
+                                searchText = $0
+                                userStartedTyping = true
+                            }
+                        ),
+                        prompt: Text("Search...")
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.45))
+                    )
+                    .textFieldStyle(.plain)
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                    .accentColor(Color(BaseTheme.baseAccentColor))
+                }
+                .padding(.horizontal, 14)
+                .frame(height: 48)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color(BaseTheme.fieldColor))
+                )
+                .padding(.horizontal, 16)
+
+                dialogList()
+
+                Button {
+                    closeDialog()
+                } label: {
+                    Text("Close")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14)
+                                .fill(Color(BaseTheme.fieldColor))
+                        )
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+                .padding(.bottom, 16)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 22)
+                    .fill(Color(BaseTheme.fieldColor))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(Color(BaseTheme.baseTextColor).opacity(0.08), lineWidth: 1)
+            )
+            .padding(.horizontal, 20)
+        }
+    }
+
+    @ViewBuilder
+    private func dialogList() -> some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                if filteredOptions.isEmpty {
+                    HStack {
+                        Text("No results found")
+                            .font(.system(size: 15))
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
+                        Spacer()
+                    }
+                    .padding(.horizontal, 14)
+                    .frame(height: rowHeight)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    ForEach(filteredOptions.indices, id: \.self) { idx in
+                        let option = filteredOptions[idx]
+                        let optionText = "\(flagEmoji(option.code2))  \(option.name)"
+                        let isSelected = option.code3.caseInsensitiveCompare(selectedCode) == .orderedSame
+
+                        Button {
+                            selectedCode = option.code3.uppercased()
+                            onValueChange(selectedCode)
+                            closeDialog()
+                        } label: {
+                            HStack {
+                                Text(optionText)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                                    .lineLimit(1)
+
+                                Spacer()
+
+                                if isSelected {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(Color(BaseTheme.baseAccentColor))
+                                }
+                            }
+                            .padding(.horizontal, 14)
+                            .frame(height: rowHeight)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.clear)
+                        }
+                        .buttonStyle(.plain)
+
+                        if idx < filteredOptions.count - 1 {
+                            Divider()
+                                .background(Color(BaseTheme.baseTextColor).opacity(0.10))
+                                .padding(.leading, 14)
+                        }
                     }
                 }
             }
+            .padding(.top, 8)
         }
         .frame(maxWidth: .infinity)
-        .frame(maxHeight: maxHeight)
-        .background(Color(BaseTheme.fieldColor))
-        .clipShape(RoundedRectangle(cornerRadius: radius))
-        .overlay(
-            RoundedRectangle(cornerRadius: radius)
-                .stroke(Color(BaseTheme.baseTextColor).opacity(0.08), lineWidth: 1)
-        )
-        .padding(.top, 6)
+        .frame(height: dialogListHeight)
+        .padding(.horizontal, 16)
     }
 
-    // MARK: - Validation
+    private func closeDialog() {
+        withAnimation(.easeInOut(duration: 0.15)) {
+            expanded = false
+            searchText = ""
+            userStartedTyping = false
+        }
+    }
+
     private func validate() {
         guard let key = field.inputKey else { return }
         err = AssistedFormHelper.validateField(key, page) ?? ""
     }
 }
 
-import Foundation
+
+
+
+
 
 public func flagEmoji(_ iso2: String) -> String {
     let code = iso2.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -503,3 +622,5 @@ public let allCountries: [CountryOption] = [
     CountryOption("TJK", "TJ", "Tajikistan", "+992", "^[9]\\d{8}$"),
     CountryOption("TKM", "TM", "Turkmenistan", "+993", "^[6-8]\\d{7}$")
 ]
+
+
