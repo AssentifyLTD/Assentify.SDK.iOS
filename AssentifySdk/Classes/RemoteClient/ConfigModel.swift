@@ -52,6 +52,7 @@ public struct StepTypeDto: Codable {
 }
 
 public struct Customization: Codable {
+    public  let header: String?
     public  let processMrz: Bool?
     public let storeCapturedDocument: Bool?
     public let performLivenessDetection: Bool?

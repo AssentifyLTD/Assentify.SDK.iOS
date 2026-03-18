@@ -7,6 +7,7 @@ public struct TermsAndConditionsScreen: View {
     @Environment(\.dismiss) private var dismiss
     
     private let flowController: FlowController
+    private var defaultTitle: String = "";
     
     private let steps = LocalStepsObject.shared.get()
     private let apiKey = ApiKeyObject.shared.get()
@@ -32,6 +33,11 @@ public struct TermsAndConditionsScreen: View {
             status : "InProgress"
         )
         /***/
+         defaultTitle = configModel!
+            .stepDefinitions
+            .first(where: { $0.stepId == currentStep!.stepDefinition!.stepId })!
+            .customization.header ?? ""
+        
         
     }
     
@@ -65,6 +71,19 @@ public struct TermsAndConditionsScreen: View {
                 
                 if isLoading {
                     VStack {
+                        Text(termsModel?.data.header ?? defaultTitle)
+                            .font(.system(size: 34, weight: .bold))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 18)
+                            .padding(.horizontal, 20)
+                        // Divider line
+                        Rectangle()
+                            .fill(Color(BaseTheme.baseTextColor).opacity(0.2))
+                            .frame(height: 1)
+                            .padding(.top, 10)
+                            .padding(.horizontal, 20)
+                        
                         Spacer()
                         ProgressView()
                             .progressViewStyle(.circular)

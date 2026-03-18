@@ -11,7 +11,6 @@ public struct SecureDropdownWithDataSource: View {
     
     public let onValueChange: ([DataSourceAttribute], [String: String]) -> Void
     
-    // ✅ focus support from pager
     @Binding public var focusedFieldId: String?
     public let fieldId: String
     
@@ -21,6 +20,11 @@ public struct SecureDropdownWithDataSource: View {
     @State private var selected: [DataSourceAttribute] = []
     @State private var err: String = ""
     @State private var expanded: Bool = false
+    @State private var searchText: String = ""
+    @State private var userStartedTyping: Bool = false
+    
+    private let rowHeight: CGFloat = 52
+    private let listMaxHeight: CGFloat = 320
     
     public init(
         title: String,
@@ -38,89 +42,69 @@ public struct SecureDropdownWithDataSource: View {
         self._focusedFieldId = focusedFieldId
         self.fieldId = fieldId
         self.onValueChange = onValueChange
-        if (self.field.isHidden == true){
+        
+        if self.field.isHidden == true {
             loadDataSourceAndSelectDefault()
         }
     }
     
     public var body: some View {
-        if (self.field.isHidden == false){
-            ZStack(alignment: .topLeading) {
+        if self.field.isHidden == false {
+            VStack(alignment: .leading, spacing: 6) {
                 
-                // tap outside to dismiss menu
-                if expanded {
-                    Color.black.opacity(0.001)
-                        .ignoresSafeArea()
-                        .onTapGesture { expanded = false }
-                }
+                Text(title)
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(Color(BaseTheme.baseTextColor))
                 
-                VStack(alignment: .leading, spacing: 6) {
-                    
-                    Text(title)
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                    
-                    if isLoading && dataSourceData == nil {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
-                            .scaleEffect(1.0)
-                            .frame(height: 55)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color(BaseTheme.fieldColor))
-                            )
-                    } else {
-                        VStack(spacing: 0) {
-                            
-                            // Field pill
-                            HStack(spacing: 10) {
-                                Text(displayValueForSelected())
-                                    .font(.system(size: 16))
-                                    .foregroundColor(Color(BaseTheme.baseTextColor))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.8)
-                                
-                                Spacer(minLength: 8)
-                                
-                                Image(systemName: "chevron.down")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
-                                    .rotationEffect(.degrees(expanded ? 180 : 0))
-                                    .animation(.easeInOut(duration: 0.15), value: expanded)
-                            }
-                            .padding(.horizontal, 14)
-                            .frame(height: 55)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color(BaseTheme.fieldColor))
-                            )
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                focusedFieldId = fieldId
-                                guard !isReadOnly else { return }
-                                guard dataSourceData != nil else { return }
-                                withAnimation(.easeInOut(duration: 0.15)) {
-                                    expanded.toggle()
-                                }
-                            }
-                            
-                            // Dropdown list
-                            if expanded && !isReadOnly, let ds = dataSourceData {
-                                dropdownList(items: ds.items)
-                                    .transition(.opacity.combined(with: .move(edge: .top)))
-                            }
+                if isLoading && dataSourceData == nil {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
+                        .scaleEffect(1.0)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(BaseTheme.fieldColor))
+                        )
+                } else {
+                    HStack(spacing: 10) {
+                        Text(displayValueForSelected())
+                            .font(.system(size: 16))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        
+                        Spacer(minLength: 8)
+                        
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
+                    }
+                    .padding(.horizontal, 14)
+                    .frame(height: 55)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(BaseTheme.fieldColor))
+                    )
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        focusedFieldId = fieldId
+                        guard !isReadOnly else { return }
+                        guard dataSourceData != nil else { return }
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            expanded = true
+                            searchText = ""
+                            userStartedTyping = false
                         }
                     }
-                    
-                    if !err.isEmpty {
-                        Text(err)
-                            .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(Color(BaseTheme.baseRedColor))
-                    }
                 }
                 
+                if !err.isEmpty {
+                    Text(err)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseRedColor))
+                }
             }
             .onAppear {
                 validate()
@@ -133,26 +117,31 @@ public struct SecureDropdownWithDataSource: View {
                 loadDataSourceAndSelectDefault(force: true)
             }
             .onChange(of: focusedFieldId) { newValue in
-                if newValue != fieldId { expanded = false }
+                if newValue != fieldId {
+                    expanded = false
+                    searchText = ""
+                    userStartedTyping = false
+                }
             }
             .onChange(of: selectedDisplayValue()) { _ in
                 validate()
             }
+            .fullScreenCover(isPresented: $expanded) {
+                dialogView()
+                    .presentationBackgroundClearIfAvailable()
+            }
         }
     }
     
-    // MARK: - Derived
     private var isReadOnly: Bool {
         (field.readOnly ?? false) || getIsLocked()
     }
     
-    
-    private func getIsLocked()->Bool{
+    private func getIsLocked() -> Bool {
         let identifiers = field.inputPropertyIdentifierList ?? []
-        return field.isLocked! && !identifiers.isEmpty
+        return (field.isLocked ?? false) && !identifiers.isEmpty
     }
     
-    // MARK: - UI helpers
     private func displayValueForSelected() -> String {
         let v = selectedDisplayValue()
         return v.isEmpty ? " " : v
@@ -162,70 +151,215 @@ public struct SecureDropdownWithDataSource: View {
         selected.first(where: { $0.mappedKey == "Display Value" })?.value ?? ""
     }
     
-    // MARK: - Dropdown list
-    @ViewBuilder
-    private func dropdownList(items: [DataSourceItem]) -> some View {
-        let radius: CGFloat = 16
-        let maxHeight: CGFloat = 220
+    private func itemDisplayValue(_ item: DataSourceItem) -> String {
+        item.dataSourceAttributes.first(where: { $0.mappedKey == "Display Value" })?.value ?? ""
+    }
+    
+    private var filteredItems: [DataSourceItem] {
+        guard let items = dataSourceData?.items else { return [] }
         
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(items.indices, id: \.self) { idx in
-                    let item = items[idx]
-                    let optionText = item.dataSourceAttributes.first(where: { $0.mappedKey == "Display Value" })?.value ?? ""
+        if !userStartedTyping {
+            return items
+        }
+        
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            return items
+        }
+        
+        return items.filter { item in
+            itemDisplayValue(item).localizedCaseInsensitiveContains(trimmed)
+        }
+    }
+    
+    private var dialogListHeight: CGFloat {
+        let itemCount = max(filteredItems.count, 1)
+        let contentHeight = CGFloat(itemCount) * rowHeight
+        return min(contentHeight, listMaxHeight)
+    }
+    
+    @ViewBuilder
+    private func dialogView() -> some View {
+        ZStack {
+            Color.black.opacity(0.35)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    closeDialog()
+                }
+            
+            VStack(spacing: 0) {
+                HStack {
+                    Text(title)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                    
+                    Spacer()
                     
                     Button {
-                        withAnimation(.easeInOut(duration: 0.12)) {
-                            expanded = false
-                        }
-                        selectItem(item)
+                        closeDialog()
                     } label: {
-                        HStack {
-                            Text(optionText)
-                                .font(.system(size: 15))
-                                .foregroundColor(Color(BaseTheme.baseTextColor))
-                            
-                            Spacer()
-                            
-                            if optionText == selectedDisplayValue() {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(Color(BaseTheme.baseAccentColor))
-                            }
-                        }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(BaseTheme.fieldColor))
+                        Image(systemName: "xmark")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .frame(width: 32, height: 32)
+                            .background(
+                                Circle()
+                                    .fill(Color(BaseTheme.fieldColor))
+                            )
                     }
                     .buttonStyle(.plain)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 12)
+                
+                if isLoading && dataSourceData == nil {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 160)
+                } else if dataSourceData != nil {
+                    HStack(spacing: 10) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
+                        
+                        TextField(
+                            "",
+                            text: Binding(
+                                get: { searchText },
+                                set: {
+                                    searchText = $0
+                                    userStartedTyping = true
+                                }
+                            ),
+                            prompt: Text("Search...")
+                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.45))
+                        )
+                        .textFieldStyle(.plain)
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .accentColor(Color(BaseTheme.baseAccentColor))
+                    }
+                    .padding(.horizontal, 14)
+                    .frame(height: 48)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(Color(BaseTheme.fieldColor))
+                    )
+                    .padding(.horizontal, 16)
                     
-                    if idx < items.count - 1 {
-                        Divider()
-                            .background(Color(BaseTheme.baseTextColor).opacity(0.10))
-                            .padding(.leading, 14)
+                    dialogList(items: filteredItems)
+                } else {
+                    Text("No data available")
+                        .font(.system(size: 15))
+                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: rowHeight)
+                        .padding(.horizontal, 16)
+                }
+                
+                Button {
+                    closeDialog()
+                } label: {
+                    Text("Close")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14)
+                                .fill(Color(BaseTheme.fieldColor))
+                        )
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+                .padding(.bottom, 16)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 22)
+                    .fill(Color(BaseTheme.fieldColor))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(Color(BaseTheme.baseTextColor).opacity(0.08), lineWidth: 1)
+            )
+            .padding(.horizontal, 20)
+        }
+    }
+    
+    @ViewBuilder
+    private func dialogList(items: [DataSourceItem]) -> some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                if items.isEmpty {
+                    HStack {
+                        Text("No results found")
+                            .font(.system(size: 15))
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
+                        Spacer()
+                    }
+                    .padding(.horizontal, 14)
+                    .frame(height: rowHeight)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    ForEach(items.indices, id: \.self) { idx in
+                        let item = items[idx]
+                        let optionText = itemDisplayValue(item)
+                        
+                        Button {
+                            selectItem(item)
+                            closeDialog()
+                        } label: {
+                            HStack {
+                                Text(optionText)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(Color(BaseTheme.baseTextColor))
+                                
+                                Spacer()
+                                
+                                if optionText == selectedDisplayValue() {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(Color(BaseTheme.baseAccentColor))
+                                }
+                            }
+                            .padding(.horizontal, 14)
+                            .frame(height: rowHeight)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.clear)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        if idx < items.count - 1 {
+                            Divider()
+                                .background(Color(BaseTheme.baseTextColor).opacity(0.10))
+                                .padding(.leading, 14)
+                        }
                     }
                 }
             }
+            .padding(.top, 8)
         }
         .frame(maxWidth: .infinity)
-        .frame(maxHeight: maxHeight)
-        .background(Color(BaseTheme.fieldColor))
-        .clipShape(RoundedRectangle(cornerRadius: radius))
-        .overlay(
-            RoundedRectangle(cornerRadius: radius)
-                .stroke(Color(BaseTheme.baseTextColor).opacity(0.08), lineWidth: 1)
-        )
-        .padding(.top, 6)
+        .frame(height: dialogListHeight)
+        .padding(.horizontal, 16)
     }
     
-    // MARK: - Selection + persist (Kotlin equivalent)
+    private func closeDialog() {
+        withAnimation(.easeInOut(duration: 0.15)) {
+            expanded = false
+            searchText = ""
+            userStartedTyping = false
+        }
+    }
+    
     private func selectItem(_ item: DataSourceItem) {
         guard let ds = dataSourceData else { return }
+        guard let key = field.inputKey else { return }
+        
         selected = item.dataSourceAttributes
         
-        // ✅ Persist like Kotlin when user picks
         AssistedFormHelper.changeValueSecureDropdownWithDataSource(
-            key: field.inputKey!,
+            key: key,
             dataSourceAttribute: selected,
             outputKeys: ds.outputKeys,
             page: page
@@ -235,7 +369,6 @@ public struct SecureDropdownWithDataSource: View {
         validate()
     }
     
-    // MARK: - Load datasource + apply default selection (Kotlin logic)
     private func loadDataSourceAndSelectDefault(force: Bool = false) {
         guard let key = field.inputKey, !key.isEmpty else { return }
         guard let endpointId = field.endpointId else { return }
@@ -244,11 +377,8 @@ public struct SecureDropdownWithDataSource: View {
         
         isLoading = true
         
-        let config = ConfigModelObject.shared.get()// adjust if your singleton differs
+        let config = ConfigModelObject.shared.get()
         let stepId = flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0
-        
-        
-        
         
         AssistedFormHelper.getDataSourceValues(
             apiKey: ApiKeyObject.shared.get()!,
@@ -262,10 +392,10 @@ public struct SecureDropdownWithDataSource: View {
             case .success(let response):
                 DispatchQueue.main.async {
                     self.isLoading = false
-                 
+                    
                     if let data = response.data {
-                          self.dataSourceData = data
-                      }
+                        self.dataSourceData = data
+                    }
                     
                     guard let ds = self.dataSourceData else { return }
                     
@@ -277,7 +407,6 @@ public struct SecureDropdownWithDataSource: View {
                     
                     let langEnum = self.field.languageTransformation ?? 0
                     if langEnum == 0 {
-                        // pick by defaultRaw
                         if let matched = self.findItemByDisplayValue(ds: ds, display: defaultRaw) {
                             self.selected = matched.dataSourceAttributes
                             if !self.selected.isEmpty {
@@ -288,7 +417,6 @@ public struct SecureDropdownWithDataSource: View {
                         return
                     }
                     
-                    // transform default then pick
                     guard
                         let targetLang = self.field.targetOutputLanguage,
                         !targetLang.isEmpty
@@ -303,7 +431,6 @@ public struct SecureDropdownWithDataSource: View {
                         return
                     }
                     
-                    // only if nothing selected yet (or force)
                     if self.selected.isEmpty || force {
                         let dataList = [
                             LanguageTransformationModel(
@@ -328,9 +455,9 @@ public struct SecureDropdownWithDataSource: View {
                                     self.selected = fallback.dataSourceAttributes
                                 }
                                 
-                                if !self.selected.isEmpty {
+                                if !self.selected.isEmpty, let inputKey = self.field.inputKey {
                                     AssistedFormHelper.changeValueSecureDropdownWithDataSource(
-                                        key: self.field.inputKey!,
+                                        key: inputKey,
                                         dataSourceAttribute: self.selected,
                                         outputKeys: ds.outputKeys,
                                         page: self.page
@@ -345,20 +472,22 @@ public struct SecureDropdownWithDataSource: View {
                         self.validate()
                     }
                 }
+                
             case .failure(let err):
-                print(err)
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    print(err)
+                }
             }
-            
         }
     }
     
     private func findItemByDisplayValue(ds: DataSourceData, display: String) -> DataSourceItem? {
         ds.items.first { item in
-            item.dataSourceAttributes.first(where: { $0.mappedKey == "Display Value" })?.value == display
+            itemDisplayValue(item).caseInsensitiveCompare(display) == .orderedSame
         }
     }
     
-    // MARK: - Validation
     private func validate() {
         guard let key = field.inputKey else { return }
         err = AssistedFormHelper.validateField(key, page) ?? ""

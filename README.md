@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.2**
+ 1. *Support split step*
+
 **1.0.0-Beta.1**
  1. *Support split step*
 
