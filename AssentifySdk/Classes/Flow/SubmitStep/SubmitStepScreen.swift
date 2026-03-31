@@ -297,7 +297,7 @@ public struct SwipeToSubmit: View {
                     .frame(width: knobWidth, height: height - 14)
                     .overlay(
                         Text(text)
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .foregroundColor(Color(BaseTheme.baseAccentColor))
                             .font(.system(size: 15, weight: .bold))
                             .lineLimit(1)
                             .fixedSize(horizontal: true, vertical: false)

@@ -196,6 +196,41 @@ public final class FlowController {
         
         steps[currentIndex] = currentStep
         LocalStepsObject.shared.set(steps)
+        
+        
+        if(currentStep.stepDefinition!.stepDefinition != StepsNames.split){
+            if let submitModel = currentStep.submitRequestModel {
+                
+                var stepData: [String: String] = [:]
+                
+                for (key, value) in submitModel.extractedInformation {
+                    if !key.contains("IsDirty") {
+                        
+                        if(key.contains("OnBoardMe_Property")){
+                            let keys = key.split(separator: "_").map { String($0) }
+                            let newKey = key.components(separatedBy: "OnBoardMe_Property_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                            
+                            stepData[newKey] = value
+                        }else{
+                            let keys = key.split(separator: "_").map { String($0) }
+                            let newKey = key.components(separatedBy: "\(submitModel.stepDefinition)_").last?.components(separatedBy: "_").joined(separator: " ") ?? ""
+                            
+                            stepData[newKey] = value
+                        }
+                        
+                        
+                    }
+                }
+                
+                flowDelegate?.onStepCompleted(stepModel:
+                    FlowCompletedModel(
+                        stepData: stepData,
+                        submitRequestModel: submitModel
+                    )
+                )
+            }
+        }
+        
     }
     
     public func backClick() {
