@@ -40,7 +40,7 @@ public struct HowToCaptureFaceScreen: View {
     
     
     private var titleText = "Face Match"
-    private var subTitleText = "Watch how easy it is\nto Take Selfie"
+    private var subTitleText = "Watch How Easy It Is\nTo Take A Selfie"
     private var assetVideoFileName = "face-video"
 
     // ✅ New states (logic only)
@@ -127,7 +127,7 @@ public struct HowToCaptureFaceScreen: View {
 
                     Spacer().frame(height: 20)
 
-                    Text("The selfie includes liveness capture to ensure your real follow the on screen instructions.")
+                    Text("The selfie includes liveness capture to ensure you're real, follow the on screen instructions.")
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .font(.system(size: 12, weight: .thin))
                         .multilineTextAlignment(.center)

@@ -19,28 +19,26 @@ public struct OnCompleteScreen: View {
     }
 
     // ✅ allowed keys (contains) like Kotlin
-    private let allowedKeyParts: [String] = [
-        "OnBoardMe_IdentificationDocumentCapture_Document_Number",
-        "OnBoardMe_IdentificationDocumentCapture_Birth_Date",
-        "OnBoardMe_IdentificationDocumentCapture_name",
-        "OnBoardMe_IdentificationDocumentCapture_surname",
-        "OnBoardMe_IdentificationDocumentCapture_ID_FathersName",
-        "OnBoardMe_IdentificationDocumentCapture_ID_MothersName",
-        "OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfBirth",
-        "OnBoardMe_IdentificationDocumentCapture_Document_Type",
-        "OnBoardMe_IdentificationDocumentCapture_IDType",
-        "OnBoardMe_IdentificationDocumentCapture_Country",
-        "OnBoardMe_IdentificationDocumentCapture_Nationality",
-        "OnBoardMe_IdentificationDocumentCapture_Image",
-        "OnBoardMe_IdentificationDocumentCapture_ID_CivilRegisterNumber",
-        "OnBoardMe_IdentificationDocumentCapture_ID_DateOfIssuance",
-        "OnBoardMe_IdentificationDocumentCapture_Sex",
-        "OnBoardMe_IdentificationDocumentCapture_ID_MaritalStatus",
-        "OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfResidence",
-        "OnBoardMe_IdentificationDocumentCapture_ID_Province",
-        "OnBoardMe_IdentificationDocumentCapture_ID_Governorate",
-        "OnBoardMe_IdentificationDocumentCapture_FaceCapture",
-        "OnBoardMe_IdentificationDocumentCapture_ID_BackImage",
+    private let allowedKeyParts: [(part: String, label: String)] = [
+        ("OnBoardMe_IdentificationDocumentCapture_name", "First Name"),
+        ("OnBoardMe_IdentificationDocumentCapture_surname", "Last Name"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_FathersName", "Father Name"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_MothersName", "Mother Name"),
+        ("OnBoardMe_IdentificationDocumentCapture_Birth_Date", "Birth Date"),
+        ("OnBoardMe_IdentificationDocumentCapture_Expiry_Date", "Expiry Date"),
+        ("OnBoardMe_IdentificationDocumentCapture_Country", "Country"),
+        ("OnBoardMe_IdentificationDocumentCapture_Nationality", "Nationality"),
+        ("OnBoardMe_IdentificationDocumentCapture_Document_Number", "Document Number"),
+        ("OnBoardMe_IdentificationDocumentCapture_IDType", "ID Type"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfBirth", "Place of Birth"),
+        ("OnBoardMe_IdentificationDocumentCapture_Document_Type", "Document Type"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_CivilRegisterNumber", "Civil Register Number"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_DateOfIssuance", "Date of Issuance"),
+        ("OnBoardMe_IdentificationDocumentCapture_Sex", "Gender"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_MaritalStatus", "Marital Status"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfResidence", "Place of Residence"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_Province", "Province"),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_Governorate", "Governorate")
     ]
 
     // MARK: - Helpers
@@ -54,20 +52,25 @@ public struct OnCompleteScreen: View {
     }
 
     private func isAllowedKey(_ key: String) -> Bool {
-        allowedKeyParts.contains { key.range(of: $0, options: [.caseInsensitive]) != nil }
+        allowedKeyParts.contains {
+            key.range(of: $0.part, options: [.caseInsensitive]) != nil
+        }
+    }
+    
+    private func keyLabel(_ key: String) -> String {
+        allowedKeyParts.first {
+            key.range(of: $0.part, options: [.caseInsensitive]) != nil
+        }?.label ?? key
     }
 
-    private func formatLabel(_ raw: String) -> String {
-        // Similar to Kotlin formatLabel
-        let withSpaces = raw
-            .replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "([a-z])([A-Z])",
-                                  with: "$1 $2",
-                                  options: .regularExpression)
-
-        let lower = withSpaces.lowercased()
-        return lower.prefix(1).uppercased() + lower.dropFirst()
+    private func keyOrder(_ key: String) -> Int {
+        allowedKeyParts.firstIndex {
+            key.range(of: $0.part, options: [.caseInsensitive]) != nil
+        } ?? Int.max
     }
+    
+
+   
 
     // MARK: - Data
 
@@ -80,19 +83,19 @@ public struct OnCompleteScreen: View {
 
         return extractedMap
             .filter { isAllowedKey($0.key) }
-            .compactMap { (k, v) -> (String, String)? in
-                // ignore image keys from list rows
+            .compactMap { (k, v) -> (key: String, label: String, value: String)? in
+                
+                // ❌ ignore images
                 if k.range(of: "OnBoardMe_IdentificationDocumentCapture_Image", options: [.caseInsensitive]) != nil { return nil }
                 if k.range(of: "OnBoardMe_IdentificationDocumentCapture_FaceCapture", options: [.caseInsensitive]) != nil { return nil }
                 if k.range(of: "OnBoardMe_IdentificationDocumentCapture_ID_BackImage", options: [.caseInsensitive]) != nil { return nil }
 
                 guard let value = asCleanString(v) else { return nil }
 
-                // label is "last part" and formatted
-                let last = k.components(separatedBy: "_").last ?? k
-                return (formatLabel(last), value)
+                return (key: k, label: keyLabel(k), value: value)
             }
-            .sorted { $0.0.lowercased() < $1.0.lowercased() }
+            .sorted { keyOrder($0.key) < keyOrder($1.key) } // 🔥 your custom order
+            .map { (label: $0.label, value: $0.value) }
     }
 
     private var imageUrls: [String] {

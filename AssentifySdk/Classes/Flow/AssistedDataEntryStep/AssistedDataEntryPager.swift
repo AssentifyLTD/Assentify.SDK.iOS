@@ -201,6 +201,7 @@ fileprivate struct AssistedDataEntryFieldRow: View {
                             )
                             
                             onFieldChanged()
+                            FilterManager.shared.updateFilter();
                         }
                     )
                 }else{

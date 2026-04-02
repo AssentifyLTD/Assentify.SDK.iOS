@@ -24,7 +24,7 @@ public struct HowToCaptureQrScreen: View {
     
     
     private var titleText = "Capture QR Code"
-    private var subTitleText = "Watch how easy it is to capture your ID Qr Code"
+    private var subTitleText = "Watch How Easy It Is\nTo Capture Your ID Qr Code"
     private var assetGifFileName = "qr_gif"
     
     

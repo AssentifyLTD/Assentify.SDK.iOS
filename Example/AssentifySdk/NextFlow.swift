@@ -1,6 +1,6 @@
 import UIKit
 import AVFoundation
 
-
-
-final class ViewController2: UIViewController{}
+final class ViewController2: UIViewController{
+    
+}

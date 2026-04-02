@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 import UIKit
 
 public struct SecureDropdownWithDataSource: View {
@@ -22,7 +23,9 @@ public struct SecureDropdownWithDataSource: View {
     @State private var expanded: Bool = false
     @State private var searchText: String = ""
     @State private var userStartedTyping: Bool = false
-    
+    @State private var cancellable: AnyCancellable?
+    @State private var filterKeyValues: [String:String] = [:]
+
     private let rowHeight: CGFloat = 52
     private let listMaxHeight: CGFloat = 320
     
@@ -109,6 +112,17 @@ public struct SecureDropdownWithDataSource: View {
             .onAppear {
                 validate()
                 loadDataSourceAndSelectDefault()
+                cancellable = FilterManager.shared.trigger
+                       .sink {
+                           let newfilterKeyValues = AssistedFormHelper.getFilterValue(dataSourceData: dataSourceData)
+                           if(newfilterKeyValues != filterKeyValues){
+                               self.filterKeyValues = newfilterKeyValues;
+                               self.dataSourceData = nil
+                               self.selected = []
+                               loadDataSourceAndSelectDefault()
+                           }
+                }
+                
             }
             .onChange(of: field.inputKey) { _ in
                 loadDataSourceAndSelectDefault(force: true)
@@ -385,7 +399,8 @@ public struct SecureDropdownWithDataSource: View {
             config: config!,
             elementIdentifier: field.elementIdentifier,
             stepId: stepId,
-            endpointId: endpointId
+            endpointId: endpointId,
+            filterKeyValues : filterKeyValues
         ) { result in
             
             switch result {

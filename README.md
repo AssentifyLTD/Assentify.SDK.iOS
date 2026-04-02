@@ -22,6 +22,11 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.3**
+ 1. *Support filters for Assisted Data Entry*
+ 2. *Support events on step completion*
+
+ 
 **1.0.0-Beta.2**
  1. *Support split step*
 
