@@ -33,8 +33,8 @@ public struct HowToCaptureScreen: View {
     }
 
     private var subTitleText: String {
-        isPassport ? "Watch how easy it is to capture your Passport"
-                  : "Watch how easy it is to capture your ID"
+        isPassport ? "Watch How Easy It Is To Capture Your Passport"
+                  : "Watch How Easy It Is To Capture Your ID"
     }
 
     private var assetVideoFileName: String {

@@ -106,7 +106,7 @@ struct BlockLoaderScreen: View {
             VStack(spacing: 0) {
                 
                 // Header
-                Text("Complete Your\nOnboarding in \(steps.count) Steps")
+                Text("Complete Your\nOnboarding in \(steps.count) " + (steps.count == 1 ? "Step" : "Steps"))
                     .font(.system(size: 25, weight: .bold))
                     .foregroundColor(Color(BaseTheme.baseTextColor))
                     .multilineTextAlignment(.leading)

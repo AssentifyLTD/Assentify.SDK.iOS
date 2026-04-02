@@ -318,6 +318,7 @@ public enum AssistedFormHelper {
           elementIdentifier: String,
           stepId: Int,
           endpointId: Int,
+          filterKeyValues :[String: String] = [:],
           completion: @escaping (BaseResult<DataSourceResponse, Error>) -> Void
       ) {
 
@@ -350,7 +351,7 @@ public enum AssistedFormHelper {
           request.setValue(config.instanceHash, forHTTPHeaderField: "X-Instance-Hash")
 
           let body = DataSourceRequestBody(
-              filterKeyValues: [:],
+              filterKeyValues: filterKeyValues,
               inputKeyValues: [:]
           )
 
@@ -396,5 +397,34 @@ public enum AssistedFormHelper {
 
           task.resume()
       }
+    
+    static func getFilterValue(dataSourceData: DataSourceData?) -> [String: String] {
+        var resultMap: [String: String] = [:]
+
+        guard let dataSourceData = dataSourceData else {
+            return resultMap
+        }
+
+        guard let model = AssistedDataEntryPagesObject.shared.get() else {
+            return resultMap
+        }
+
+        let pages = model.assistedDataEntryPages
+
+        for page in pages {
+            for item in page.dataEntryPageElements {
+                if let dataSourceValues = item.dataSourceValues {
+                    for filterKey in dataSourceData.filterKeys {
+                        if dataSourceValues.keys.contains(filterKey),
+                           let value = dataSourceValues[filterKey] {
+                            resultMap[filterKey] = value
+                        }
+                    }
+                }
+            }
+        }
+
+        return resultMap
+    }
 
 }
