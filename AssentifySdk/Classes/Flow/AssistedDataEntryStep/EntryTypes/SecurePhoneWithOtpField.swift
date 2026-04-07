@@ -107,7 +107,7 @@ public struct SecurePhoneWithOtpField: View {
     }
 
     private var otpSize: Int {
-        Int(field.otpSize ?? 6)
+        Int(field.otpSize ?? 8)
     }
 
     private var otpType: Int {
@@ -373,12 +373,18 @@ public struct SecurePhoneWithOtpField: View {
 }
 
 // MARK: - Lebanon helpers (same as Kotlin)
+private func phoneLooksValidLB(_ local: String) -> Bool {
+    let digits = local.filter(\.isNumber)
 
-fileprivate func phoneLooksValidLB(_ local: String) -> Bool {
-    let digits = local.filter { $0.isNumber }
-    let normalized = digits.hasPrefix("0") ? String(digits.dropFirst(1)) : digits
-    return (7...8).contains(normalized.count)
+    // keep leading 0 because your regex expects it (03, 70...)
+    let pattern = "^(03|70|71|76|78|79|81)\\d{6}$"
+
+    let regex = try! NSRegularExpression(pattern: pattern)
+    let range = NSRange(location: 0, length: digits.utf16.count)
+
+    return regex.firstMatch(in: digits, options: [], range: range) != nil
 }
+
 
 fileprivate func buildLebanonE164(_ local: String, countryDial: String = "+961") -> String {
     let digits = local.filter { $0.isNumber }

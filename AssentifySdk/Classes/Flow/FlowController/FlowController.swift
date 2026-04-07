@@ -624,15 +624,15 @@ public final class FlowController {
               request.httpBody = try encoder.encode(body)
               
               
-              ////
+              //
             
-//              let data = try encoder.encode(body)
-//              if let jsonString = String(data: data, encoding: .utf8) {
-//                  print("📦 TrackProgressRequest:\n\(jsonString)")
-//              }
-//              
+              let data = try encoder.encode(body)
+              if let jsonString = String(data: data, encoding: .utf8) {
+                  print("📦 TrackProgressRequest:\n\(jsonString)")
+              }
               
-              ///
+              
+              
               
           } catch {
               return
