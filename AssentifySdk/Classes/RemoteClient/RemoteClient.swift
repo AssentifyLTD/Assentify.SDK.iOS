@@ -8,248 +8,79 @@ public enum BaseResult<Success, Failure: Error> {
 
 
 
-public func remoteValidateKey(apiKey: String, tenantIdentifier: String, agentSource: String, completion: @escaping (BaseResult<ValidateKeyModel, Error>) -> Void) {
-    let urlString = BaseUrls.baseURLAuthentication +  "ValidateKey"
+
+func initializeCheck(
+    pathContentHash: String,
+    queryContentHash: String,
+    tenantIdentifier: String,
+    blockIdentifier: String,
+    instanceId: String,
+    sourceAgent: String,
+    apiKey: String,
+    completion: @escaping (BaseResult<String, Error>) -> Void
+) {
+    let urlString = BaseUrls.baseURLGateway + "v1/Manager/Initialize/\(pathContentHash)/check?contentHash=\(queryContentHash)"
+    
     guard let url = URL(string: urlString) else {
-        completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+        completion(.failure(NSError(domain: "Invalid URL", code: 0)))
         return
     }
     
     var request = URLRequest(url: url)
-    request.httpMethod = "POST"
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.setValue(tenantIdentifier, forHTTPHeaderField: "x-tenant-identifier")
-    request.setValue(agentSource, forHTTPHeaderField: "X-Source-Agent")
+    request.setValue(blockIdentifier,  forHTTPHeaderField: "x-block-identifier")
+    request.setValue(instanceId,       forHTTPHeaderField: "x-instance-id")
+    request.setValue(sourceAgent,      forHTTPHeaderField: "x-source-agent")
+    request.setValue(apiKey,           forHTTPHeaderField: "X-Api-Key")
     
-    let body = "apiKey=\(apiKey)"
-    request.httpBody = body.data(using: .utf8)
     
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//    print("🌐 URL: \(request.url?.absoluteString ?? "nil")")
+//    print("📋 Headers:")
+    request.allHTTPHeaderFields?.forEach { key, value in
+        print("   \(key): \(value)")
+    }
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
         
+//        if let data = data, let responseString = String(data: data, encoding: .utf8) {
+//            print("📦 Response Body:\n\(responseString)")
+//        }
         
-        guard let httpResponse = response as? HTTPURLResponse else {
-            
-            completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+        if let error = error {
+            completion(.failure(error))
             return
         }
         
-        if(httpResponse.statusCode == 200){
-            guard let responseData = data else {
-                completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            if let responseString = String(data: responseData, encoding: .utf8) {
-            }
-            do {
-                let decoder = JSONDecoder()
-                let validateKeyModel = try decoder.decode(ValidateKeyModel.self, from: responseData)
-                completion(BaseResult.success(validateKeyModel))
-            } catch {
-                completion(BaseResult.failure(error))
-            }
-        }else{
-            completion(BaseResult.failure(NSError(domain: "Invalid Key", code: 0, userInfo: nil)))
-        }
-        
-        
-    }
-    task.resume()
-}
-
-
-func  remoteGetStart(interActionId: String, completion: @escaping (BaseResult<ConfigModel, Error>) -> Void) {
-    let urlString = BaseUrls.baseURLAPI + "v1/Manager/Start/\(interActionId)"
-    guard let url = URL(string: urlString) else {
-        completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-        return
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "GET"
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    
-    
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        
         guard let httpResponse = response as? HTTPURLResponse else {
-            
-            completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+            completion(.failure(NSError(domain: "Invalid response", code: 0)))
             return
         }
         
-        if(httpResponse.statusCode == 200){
-            guard let responseData = data else {
-                completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            if let responseString = String(data: responseData, encoding: .utf8) {
-            }
-            do {
-                let decoder = JSONDecoder()
-                let configModel = try decoder.decode(ConfigModel.self, from: responseData)
-                completion(BaseResult.success(configModel))
-            } catch {
-                completion(BaseResult.failure(error))
-            }
-        }
-        
-        
-    }
-    task.resume()
-}
-
-func  remoteGetTemplates( completion: @escaping (BaseResult<[Templates], Error>) -> Void) {
-    let urlString = BaseUrls.baseURLIDPower + "GetTemplates"
-    guard let url = URL(string: urlString) else {
-        completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-        return
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "GET"
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    
-    
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            
-            completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+        guard httpResponse.statusCode == 200, let data = data else {
+            completion(.failure(NSError(domain: "HTTP Error", code: httpResponse.statusCode)))
             return
         }
         
-        if(httpResponse.statusCode == 200){
-            guard let responseData = data else {
-                completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            if let responseString = String(data: responseData, encoding: .utf8) {
-            }
-            do {
-                let decoder = JSONDecoder()
-                let templates = try decoder.decode([Templates].self, from: responseData)
-                completion(BaseResult.success(templates))
-            } catch {
-                completion(BaseResult.failure(error))
-            }
-        }
-        
-        
-    }
-    task.resume()
-    
-}
-
-func  remoteGetStep( apiKey: String,
-                     userAgent: String,
-                     flowInstanceId: String,
-                     tenantIdentifier: String,
-                     blockIdentifier: String,
-                     instanceId: String,
-                     flowIdentifier: String,
-                     instanceHash: String,
-                     ID: Int,completion: @escaping (BaseResult<ContextAwareSigningModel, Error>) -> Void) {
-    let urlString = BaseUrls.baseURLGateway + "v1/ContextAwareSigning/GetStep/\(ID)"
-    guard let url = URL(string: urlString) else {
-        completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-        return
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "GET"
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
-    request.setValue(userAgent, forHTTPHeaderField: "X-Source-Agent")
-    request.setValue(flowInstanceId, forHTTPHeaderField: "X-Flow-Instance-Id")
-    request.setValue(tenantIdentifier, forHTTPHeaderField: "X-Tenant-Identifier")
-    request.setValue(blockIdentifier, forHTTPHeaderField: "X-Block-Identifier")
-    request.setValue(instanceId, forHTTPHeaderField: "X-Instance-Id")
-    request.setValue(flowIdentifier, forHTTPHeaderField: "X-Flow-Identifier")
-    request.setValue(instanceHash, forHTTPHeaderField: "X-Instance-Hash")
-    
-    
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            
-            completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
+        guard let bodyString = String(data: data, encoding: .utf8) else {
+            completion(.failure(NSError(domain: "No data", code: 0)))
             return
         }
         
-        if(httpResponse.statusCode == 200){
-            guard let responseData = data else {
-                completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            if let responseString = String(data: responseData, encoding: .utf8) {
-            }
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(ContextAwareSigningModel.self, from: responseData)
-                completion(BaseResult.success(result))
-            } catch {
-                completion(BaseResult.failure(error))
-            }
-        }
-        
-        
-    }
-    task.resume()
-    
+        completion(.success(bodyString))
+    }.resume()
 }
 
 
 
-func  tokensMappings(
-    
-    tenantIdentifier:String,
-    blockIdentifier:String,
-    stepId: Int,
-    templateId: Int,
-    completion: @escaping (BaseResult<[TokensMappings], Error>) -> Void) {
-        let urlString = BaseUrls.baseURLSigning + "Mappings/\(blockIdentifier)/\(stepId)/\(templateId)"
-        guard let url = URL(string: urlString) else {
-            completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-            return
-        }
-    
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(tenantIdentifier, forHTTPHeaderField: "x-tenant-identifier")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                
-                completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
-                return
-            }
-            
-            if(httpResponse.statusCode == 200){
-                guard let responseData = data else {
-                    completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                    return
-                }
-                if let responseString = String(data: responseData, encoding: .utf8) {
-                }
-                do {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode([TokensMappings].self, from: responseData)
-                    completion(BaseResult.success(result))
-                } catch {
-                    completion(BaseResult.failure(error))
-                }
-            }
-            
-            
-        }
-        task.resume()
-        
-    }
+
+
+
 
 
 func  remoteCreateUserDocumentInstance(
+    tenantIdentifier:String,
     requestBody: CreateUserDocumentRequestModel,completion: @escaping (BaseResult<CreateUserDocumentResponseModel, Error>) -> Void) {
         let urlString = BaseUrls.baseURLSigning + "Document/v2/CreateUserDocumentInstance"
         guard let url = URL(string: urlString) else {
@@ -264,6 +95,7 @@ func  remoteCreateUserDocumentInstance(
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(tenantIdentifier, forHTTPHeaderField: "x-tenant-identifier")
         request.httpBody = jsonData
         
         
@@ -298,6 +130,7 @@ func  remoteCreateUserDocumentInstance(
     }
 
 func  remoteSignature(
+    tenantIdentifier:String,
     requestBody: SignatureRequestModel,completion: @escaping (BaseResult<SignatureResponseModel, Error>) -> Void) {
         let urlString = BaseUrls.baseURLSigning + "Signature"
         guard let url = URL(string: urlString) else {
@@ -312,6 +145,7 @@ func  remoteSignature(
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(tenantIdentifier, forHTTPHeaderField: "x-tenant-identifier")
         request.httpBody = jsonData
         
         
@@ -469,63 +303,7 @@ func transformData(apiKey: String, language: String, request: TransformationMode
 }
 
 
-func  remotegGetTenantTheme( apiKey: String,
-                             userAgent: String,
-                             flowInstanceId: String,
-                             tenantIdentifier: String,
-                             blockIdentifier: String,
-                             instanceId: String,
-                             flowIdentifier: String,
-                             instanceHash: String,
-                             completion: @escaping (BaseResult<TenantThemeModel, Error>) -> Void) {
-    let urlString = BaseUrls.baseURLGateway + "v1/TenantTheme/GetTenantTheme/\(tenantIdentifier)"
-    guard let url = URL(string: urlString) else {
-        completion(BaseResult.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-        return
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "GET"
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
-    request.setValue(userAgent, forHTTPHeaderField: "X-User-Agent")
-    request.setValue(flowInstanceId, forHTTPHeaderField: "X-Flow-Instance-Id")
-    request.setValue(tenantIdentifier, forHTTPHeaderField: "X-Tenant-Identifier")
-    request.setValue(blockIdentifier, forHTTPHeaderField: "X-Block-Identifier")
-    request.setValue(instanceId, forHTTPHeaderField: "X-Instance-Id")
-    request.setValue(flowIdentifier, forHTTPHeaderField: "X-Flow-Identifier")
-    request.setValue(instanceHash, forHTTPHeaderField: "X-Instance-Hash")
-    
-    
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            
-            completion(BaseResult.failure(NSError(domain: "Invalid response", code: 0, userInfo: nil)))
-            return
-        }
-        
-        if(httpResponse.statusCode == 200){
-            guard let responseData = data else {
-                completion(BaseResult.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            if let responseString = String(data: responseData, encoding: .utf8) {
-            }
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(TenantThemeModel.self, from: responseData)
-                completion(BaseResult.success(result))
-            } catch {
-                completion(BaseResult.failure(error))
-            }
-        }
-        
-        
-    }
-    task.resume()
-    
-}
+
 
 
 

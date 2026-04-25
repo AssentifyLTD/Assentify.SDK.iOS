@@ -12,8 +12,6 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
 
     // MARK: - UI
     private let apiKeyField = UITextField()
-    private let interactionHashField = UITextField()
-    private let tenantIdField = UITextField()
 
     private let languageLabel = UILabel()
 
@@ -27,7 +25,6 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
     private let qrSwitch = UISwitch()
 
     private let startButton = UIButton(type: .system)
-    private let clearButton = UIButton(type: .system)
     private let backButton = UIButton(type: .system)
     private let loader = UIActivityIndicatorView(style: .large)
 
@@ -90,7 +87,7 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
     private func setupUI() {
 
         // Textfields style + black text
-        [apiKeyField, interactionHashField, tenantIdField].forEach {
+        [apiKeyField].forEach {
             $0.borderStyle = .roundedRect
             $0.autocapitalizationType = .none
             $0.autocorrectionType = .no
@@ -102,13 +99,9 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
         }
 
         apiKeyField.placeholder = "API key"
-        interactionHashField.placeholder = "Interaction hash"
-        tenantIdField.placeholder = "Tenant Identifier"
 
         // default values (your demo)
          apiKeyField.text = "QwWzzKOYLkDzCLJ9lENlgvRQ1kmkKDv76KbJ9sPfr9Joxwj2DUuzC7htaZP89RqzgB9i9lHc4IpYOA7g"
-          interactionHashField.text = "6A0001F3C7B0F99B14F5BB17B0694BE751F189ADB62A3811591E27558FC30503"
-          tenantIdField.text = "2937c91f-c905-434b-d13d-08dcc04755ec"
         
         
         
@@ -157,12 +150,7 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
         startButton.contentEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
         startButton.addTarget(self, action: #selector(onStartTapped), for: .touchUpInside)
         
-        clearButton.setTitle("Clear", for: .normal)
-        clearButton.setTitleColor(.black, for: .normal)
-        clearButton.backgroundColor = UIColor(hex: "#FFDE00")
-        clearButton.layer.cornerRadius = 10
-        clearButton.contentEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
-        clearButton.addTarget(self, action: #selector(onClearTapped), for: .touchUpInside)
+   
         
         
         
@@ -198,8 +186,7 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
 
         content.addArrangedSubview(spacer(height: 48))
         content.addArrangedSubview(apiKeyField)
-        content.addArrangedSubview(interactionHashField)
-        content.addArrangedSubview(tenantIdField)
+
 
         content.addArrangedSubview(spacer(height: 8))
         content.addArrangedSubview(languageLabel)
@@ -212,7 +199,6 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
 
         content.addArrangedSubview(spacer(height: 8))
         content.addArrangedSubview(startButton)
-        content.addArrangedSubview(clearButton)
         content.addArrangedSubview(backButton)
 
         // loader centered under button
@@ -268,10 +254,7 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
         view.endEditing(true)
     }
     
-    @objc private func onClearTapped(){
-        self.assentifySdk?.clearFlow();
-    }
-   
+ 
 
     // MARK: - Start Flow
     @objc private func onStartTapped() {
@@ -280,13 +263,9 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
         dismissKeyboard()
 
         let apiKey = (apiKeyField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let interactionHash = (interactionHashField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let tenantIdentifier = (tenantIdField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 
         let cfg = StartConfig(
             apiKey: apiKey,
-            interactionHash: interactionHash,
-            tenantIdentifier: tenantIdentifier,
             language: selectedLanguage,
             enableDetect: detectSwitch.isOn,
             enableNfc: nfcSwitch.isOn,
@@ -294,7 +273,7 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
         )
         self.config = cfg
 
-        guard !cfg.apiKey.isEmpty, !cfg.tenantIdentifier.isEmpty, !cfg.interactionHash.isEmpty else {
+        guard !cfg.apiKey.isEmpty else {
             showAlert(title: "Validation", message: "API key , Tenant Identifier , Interaction Hash are required.")
             return
         }
@@ -315,8 +294,7 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
 
         assentifySdk = AssentifySdk(
             apiKey: cfg.apiKey,
-            tenantIdentifier: cfg.tenantIdentifier,
-            interaction: cfg.interactionHash,
+            configFileName: "configFile2",
             environmentalConditions: environmentalConditions,
             assentifySdkDelegate: self,
             performActiveLivenessFace: false
@@ -327,14 +305,12 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
     private func showLoader() {
         startButton.isEnabled = false
         backButton.isEnabled = false
-        clearButton.isEnabled = false
         loader.startAnimating()
     }
 
     private func hideLoader() {
         startButton.isEnabled = true
         backButton.isEnabled = true
-        clearButton.isEnabled = true
         loader.stopAnimating()
     }
     
@@ -358,20 +334,22 @@ final class ViewController2: UIViewController, AssentifySdkDelegate, FlowDelegat
             guard let sdk = self.assentifySdk, let cfg = self.config else { return }
             AssentifySdkObject.shared.set(sdk)
 
-            let customProperties: [String: Any] = [:]
+            var customProperties: [String: Any] = [:]
+            customProperties["phoneNumber"] = "key1"
+
 
             let flowEnvironmentalConditions = FlowEnvironmentalConditions(
                 backgroundType: .color,
-//                logoUrl: "https://image2url.com/r2/default/images/1769694393603-0afa5733-d9a5-4b0d-9134-868d3a750069.png",
-//                textColor: self.textHex,
-//                secondaryTextColor: self.secondaryTextHex,
-//                backgroundCardColor: self.cardHex,
-//                accentColor: self.accentHex,
-//                backgroundColor: .solid(hex: self.bgHex),
-//                clickColor: .solid(hex: self.accentHex),
-//                language: cfg.language,
-//                enableNfc: cfg.enableNfc,
-//                enableQr: cfg.enableQr,
+                logoUrl: "https://image2url.com/r2/default/images/1769694393603-0afa5733-d9a5-4b0d-9134-868d3a750069.png",
+                textColor: self.textHex,
+                secondaryTextColor: self.secondaryTextHex,
+                backgroundCardColor: self.cardHex,
+                accentColor: self.accentHex,
+                backgroundColor: .solid(hex: self.bgHex),
+                clickColor: .solid(hex: self.accentHex),
+                language: cfg.language,
+                enableNfc: cfg.enableNfc,
+                enableQr: cfg.enableQr,
                 blockLoaderCustomProperties: customProperties
             )
 

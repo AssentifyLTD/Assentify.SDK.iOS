@@ -4,8 +4,6 @@ import AssentifySdk
 
 struct StartConfig {
     let apiKey: String
-    let interactionHash: String
-    let tenantIdentifier: String
     let language: String
     let enableDetect: Bool
     let enableNfc: Bool
@@ -20,8 +18,6 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
     // MARK: - UI
     private let apiKeyField = UITextField()
-    private let interactionHashField = UITextField()
-    private let tenantIdField = UITextField()
 
     private let languageLabel = UILabel()
 
@@ -35,7 +31,6 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
     private let startButton = UIButton(type: .system)
     private let nextButton = UIButton(type: .system)
-    private let clearButton = UIButton(type: .system)
 
     private let loader = UIActivityIndicatorView(style: .large)
 
@@ -98,7 +93,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
     private func setupUI() {
 
         // Textfields style + black text
-        [apiKeyField, interactionHashField, tenantIdField].forEach {
+        [apiKeyField].forEach {
             $0.borderStyle = .roundedRect
             $0.autocapitalizationType = .none
             $0.autocorrectionType = .no
@@ -110,22 +105,14 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         }
 
         apiKeyField.placeholder = "API key"
-        interactionHashField.placeholder = "Interaction hash"
-        tenantIdField.placeholder = "Tenant Identifier"
 
         // default values (your demo)
         //   apiKeyField.text = "3vFjQRfBVJL7PQ8APGeSfvNLlHGg7uG6O0GmCtN2e9iid2R51oVYsqJMpynavsALs51Lv3gb2HKknAu9Tgw"
-        //    interactionHashField.text = "658C2E5F32E472A8DF890C12F81603E3A7016AE822C77ADBE8F1047AC42719C1"
-        //   tenantIdField.text = "588277d8-db12-44ea-b510-08dd6ac0001b"
-        
-        
         
         
         
         
         apiKeyField.text = "QwWzzKOYLkDzCLJ9lENlgvRQ1kmkKDv76KbJ9sPfr9Joxwj2DUuzC7htaZP89RqzgB9i9lHc4IpYOA7g"
-        interactionHashField.text = "E4BDD59C3B69A3F89AE8C756FCD67EBC72A45F405B256B3C3BDD643BE282B195"
-       tenantIdField.text = "2937c91f-c905-434b-d13d-08dcc04755ec"
         
        
         
@@ -172,13 +159,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         startButton.layer.cornerRadius = 10
         startButton.contentEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
         startButton.addTarget(self, action: #selector(onStartTapped), for: .touchUpInside)
-        
-        clearButton.setTitle("Clear", for: .normal)
-        clearButton.setTitleColor(.black, for: .normal)
-        clearButton.backgroundColor = UIColor(hex: "#FFDE00")
-        clearButton.layer.cornerRadius = 10
-        clearButton.contentEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
-        clearButton.addTarget(self, action: #selector(onClearTapped), for: .touchUpInside)
+ 
         
         
 
@@ -211,8 +192,6 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
         content.addArrangedSubview(spacer(height: 48))
         content.addArrangedSubview(apiKeyField)
-        content.addArrangedSubview(interactionHashField)
-        content.addArrangedSubview(tenantIdField)
 
         content.addArrangedSubview(spacer(height: 8))
         content.addArrangedSubview(languageLabel)
@@ -225,7 +204,6 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
         content.addArrangedSubview(spacer(height: 8))
         content.addArrangedSubview(startButton)
-        content.addArrangedSubview(clearButton)
         content.addArrangedSubview(nextButton)
 
 
@@ -283,10 +261,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
     }
     
     
-    
-    @objc private func  onClearTapped() {
-        self.assentifySdk?.clearFlow()
-    }
+  
     
     @objc private func onNextTapped(){
         let vc = ViewController2()
@@ -303,13 +278,9 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         dismissKeyboard()
 
         let apiKey = (apiKeyField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let interactionHash = (interactionHashField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let tenantIdentifier = (tenantIdField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 
         let cfg = StartConfig(
             apiKey: apiKey,
-            interactionHash: interactionHash,
-            tenantIdentifier: tenantIdentifier,
             language: selectedLanguage,
             enableDetect: detectSwitch.isOn,
             enableNfc: nfcSwitch.isOn,
@@ -317,7 +288,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         )
         self.config = cfg
 
-        guard !cfg.apiKey.isEmpty, !cfg.tenantIdentifier.isEmpty, !cfg.interactionHash.isEmpty else {
+        guard !cfg.apiKey.isEmpty else {
             showAlert(title: "Validation", message: "API key , Tenant Identifier , Interaction Hash are required.")
             return
         }
@@ -338,8 +309,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
         assentifySdk = AssentifySdk(
             apiKey: cfg.apiKey,
-            tenantIdentifier: cfg.tenantIdentifier,
-            interaction: cfg.interactionHash,
+            configFileName: "configFile1",
             environmentalConditions: environmentalConditions,
             assentifySdkDelegate: self,
             performActiveLivenessFace: false
@@ -350,14 +320,12 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
     private func showLoader() {
         startButton.isEnabled = false
         nextButton.isEnabled = false
-        clearButton.isEnabled = false
         loader.startAnimating()
     }
 
     private func hideLoader() {
         startButton.isEnabled = true
         nextButton.isEnabled = true
-        clearButton.isEnabled = true
         loader.stopAnimating()
     }
 

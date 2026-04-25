@@ -28,11 +28,21 @@ public struct IDStepScreen: View {
     private let flowController: FlowController
 
 
+    private var hasPassport = false
+    private var hasID = false
+    
     public init(flowController: FlowController) {
         self.flowController = flowController
         self.flowName = ConfigModelObject.shared.get()!.flowName;
         self.baseLogoUrl = BaseTheme.baseLogo
-        self.countriesInput = (AssentifySdkObject.shared.get()?.getTemplates(stepID: flowController.getCurrentStep()!.stepDefinition!.stepId))!
+        hasPassport = flowController.identificationDocumentStepHasPassport(stepID: flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0)
+        hasID = flowController.identificationDocumentStepHasIDCard(stepID: flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0)
+        
+        if(hasID){
+            self.countriesInput = (AssentifySdkObject.shared.get()?.getTemplates(stepID: flowController.getCurrentStep()!.stepDefinition!.stepId))!
+        }else{
+            self.countriesInput = []
+        }
         OnCompleteScreenData.shared.clear();
         NfcPassportResponseModelObject.shared.clear();
         QrIDResponseModelObject.shared.clear();
@@ -79,8 +89,9 @@ public struct IDStepScreen: View {
                                 },
                                 onViewMore: {
                                     showIdsSheet = true
-                                }
-                            )
+                                },
+                                hasPassport : hasPassport,
+                                hasID :  hasID,                            )
                         }
                     }
                     .padding(16)
@@ -106,15 +117,17 @@ public struct IDStepScreen: View {
         }.modifier(InterceptSystemBack(action: onBack))
         .onAppear {
             var list = countriesInput
-            list.append(
-                TemplatesByCountry(
-                    id: -1,
-                    name: "Rest of the world",
-                    sourceCountryCode: "",
-                    flag: " ",
-                    templates: []
+            if(hasPassport){
+                list.append(
+                    TemplatesByCountry(
+                        id: -1,
+                        name: "Rest of the world",
+                        sourceCountryCode: "",
+                        flag: " ",
+                        templates: []
+                    )
                 )
-            )
+            }
             self.countries = list
             self.selectedCountry = list.first
         }
@@ -186,56 +199,62 @@ struct DocumentPickerCards: View {
     let selectedTemplate: Templates?
     let onSelect: (Templates) -> Void
     let onViewMore: () -> Void
-
+    let hasPassport: Bool
+    let hasID: Bool
+  
     private func isSelectedPassport() -> Bool { selectedTemplate?.id == -1 }
     private func isSelectedIDs() -> Bool { selectedTemplate != nil && selectedTemplate?.id != -1 }
 
     var body: some View {
         VStack(spacing: 10) {
 
-            // Passport
-            SelectCard(
-                title: "Passport",
-                subtitle: nil,
-                selected: isSelectedPassport(),
-                icon: "ic_passport.svg", // or Image(systemName:"passport") if you prefer
-                onTap: {
-                    onSelect(
-                        
-                        Templates(
-                            id: -1,
-                            sourceCountryFlag:"",
-                            sourceCountryCode: "",
-                            kycDocumentType: "Passport",
-                            sourceCountry:"",
-                            kycDocumentDetails: []
-                        )
-                    )
-                }
-            )
-
-            // Supported IDs (only if templates exist)
-            if !country.templates.isEmpty {
+            if(hasPassport){
                 SelectCard(
-                    title: "Supported IDs",
-                    subtitle: "View more",
-                    selected: isSelectedIDs(),
-                    icon: "id_card.svg", // or SF Symbol
+                    title: "Passport",
+                    subtitle: nil,
+                    selected: isSelectedPassport(),
+                    icon: "ic_passport.svg", // or Image(systemName:"passport") if you prefer
                     onTap: {
                         onSelect(
+                            
                             Templates(
-                                id: 1,
+                                id: -1,
                                 sourceCountryFlag:"",
-                                sourceCountryCode:  country.sourceCountryCode,
-                                kycDocumentType: "All IDs",
+                                sourceCountryCode: "",
+                                kycDocumentType: "Passport",
                                 sourceCountry:"",
                                 kycDocumentDetails: []
                             )
                         )
-                    },
-                    onSubtitleTap: onViewMore
-                ).padding(.top,10)
+                    }
+                )
             }
+          
+
+            if(hasID){
+                if !country.templates.isEmpty {
+                    SelectCard(
+                        title: "Supported IDs",
+                        subtitle: "View more",
+                        selected: isSelectedIDs(),
+                        icon: "id_card.svg", // or SF Symbol
+                        onTap: {
+                            onSelect(
+                                Templates(
+                                    id: 1,
+                                    sourceCountryFlag:"",
+                                    sourceCountryCode:  country.sourceCountryCode,
+                                    kycDocumentType: "All IDs",
+                                    sourceCountry:"",
+                                    kycDocumentDetails: []
+                                )
+                            )
+                        },
+                        onSubtitleTap: onViewMore
+                    ).padding(.top,10)
+                }
+            }
+        
         }
     }
 }

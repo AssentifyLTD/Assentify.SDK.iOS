@@ -5,9 +5,9 @@ public struct ConfigModel: Codable {
     public let stepId: Int
     public let tenantIdentifier: String
     public let blockIdentifier: String
-    public let instanceId: String
+    public var instanceId: String
     public let applicationId: String
-    public let flowInstanceId: String
+    public var flowInstanceId: String
     public let flowIdentifier: String
     public let instanceHash: String
     public let flowName: String
@@ -19,6 +19,7 @@ public struct StepDefinitions: Codable {
     public  let stepId: Int
     public  let stepDefinition: String
     public  let customization: Customization
+    public  let mappings: [TokensMappings]?
     public  let outputProperties: [OutputProperties]
     public  let inputProperties: [InputProperty]
 }
@@ -52,18 +53,35 @@ public struct StepTypeDto: Codable {
 }
 
 public struct Customization: Codable {
-    public  let header: String?
-    public  let processMrz: Bool?
+    public let header: String?
+    public let subHeader: String?
+    public let file: String?
+    public let nextButtonTitle: String?
+    public let processMrz: Bool?
+    public let confirmationRequired: Bool?
+    public let showResultPage: Bool?
+    public let documentLiveness: Bool?
     public let storeCapturedDocument: Bool?
     public let performLivenessDetection: Bool?
-    public let documentLiveness: Bool?
+    public let stepTypeDto: StepTypeDto
     public let storeImageStream: Bool?
     public let saveCapturedVideo: Bool?
-    public let showResultPage: Bool?
-    public  let outputProperties: [OutputProperties]
-    public let  identificationDocuments: [IdentificationDocuments]?
-    public  let branches: [Branch]?
-    public  let stepTypeDto: StepTypeDto
+    public let outputProperties: [OutputProperties]
+    public let identificationDocuments: [IdentificationDocuments]?
+    public let branches: [Branch]?
+    public let allowAssistedDataEntry: Bool?
+    public let assistedDataEntryPages: [AssistedDataEntryPage]?
+    public let inputProperties: [InputProperty]?
+    public let selectedTemplates: [Int]?
+    public let confirmationMessage: String?
+    public let autoDownload: Bool?
+    public let enableDigitalSignature: Bool?
+    public let hideSignatureBoard: Bool?
+    public let otpInputType: String?
+    public let enableOtp: Bool?
+    public let otpSize: Int?
+    public let otpType: Int?
+    public let otpExpiryTime: Double?
 }
 
 public struct Branch: Codable {
@@ -119,11 +137,33 @@ public struct InputProperty: Codable {
 
 
 
-public struct IdentificationDocuments : Codable{
-    public  let key: String?
+public struct IdentificationDocuments: Codable {
+    public let key: String?
+    public let enabled: Bool?
+    public let documentType: Int?
     public let selectedCountries: [String]?
     public let supportedIdCards: [String]?
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        key = try container.decodeIfPresent(String.self, forKey: .key)
+        enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled)
+        documentType = try container.decodeIfPresent(Int.self, forKey: .documentType)
+        supportedIdCards = try container.decodeIfPresent([String].self, forKey: .supportedIdCards)
+
+        if let rawCountries = try? container.decodeIfPresent([String?].self, forKey: .selectedCountries) {
+            selectedCountries = rawCountries.compactMap { $0 }
+        } else {
+            selectedCountries = nil
+        }
+    }
 }
+
+public enum IdentificationDocumentsDocumentType {
+    public static let Passport = 1
+    public static let ID = 2
+}
+
 
 public func encodeStepDefinitionsToJson(data: [StepDefinitions]) -> String {
     let encoder = JSONEncoder()

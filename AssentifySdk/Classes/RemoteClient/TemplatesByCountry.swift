@@ -18,13 +18,22 @@ public struct TemplatesByCountry :Codable{
 }
 
 public struct KycDocumentDetails : Codable {
-    public   let name: String
-    public   let order:Int
-    public   let templateProcessingKeyInformation: String
-    public   let templateSpecimen: String
-    public   let hasQrCode:Bool
-    
-    public init(name: String,order:Int,templateProcessingKeyInformation:String,templateSpecimen:String,hasQrCode:Bool)  {
+    public let name: String
+    public let order: Int
+    public let templateProcessingKeyInformation: String
+    public let templateSpecimen: String
+    public let hasQrCode: Bool
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        order = try container.decode(Int.self, forKey: .order)
+        templateProcessingKeyInformation = try container.decode(String.self, forKey: .templateProcessingKeyInformation)
+        templateSpecimen = try container.decode(String.self, forKey: .templateSpecimen)
+        hasQrCode = try container.decodeIfPresent(Bool.self, forKey: .hasQrCode) ?? false
+    }
+
+    public init(name: String, order: Int, templateProcessingKeyInformation: String, templateSpecimen: String, hasQrCode: Bool) {
         self.name = name
         self.order = order
         self.templateSpecimen = templateSpecimen

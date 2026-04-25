@@ -202,15 +202,8 @@ public struct TermsAndConditionsScreen: View {
         
         let stepId = flowController.getCurrentStep()?.stepDefinition?.stepId
         
-        getTermsConditionsStep(
-            apiKey: apiKey,
-            userAgent: "SDK",
-            flowInstanceId: configModel.flowInstanceId,
-            tenantIdentifier: configModel.tenantIdentifier, // keep your existing value
-            blockIdentifier: configModel.blockIdentifier,
-            instanceId: configModel.instanceId,
-            flowIdentifier: configModel.flowIdentifier,
-            instanceHash: configModel.instanceHash,
+        getTermsConditionsStepFromConfigFile(
+            configModel: configModel,
             ID: stepId!
         ) { result in
             DispatchQueue.main.async {

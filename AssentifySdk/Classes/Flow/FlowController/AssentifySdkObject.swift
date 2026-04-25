@@ -178,6 +178,27 @@ public final class LocalStepsObject {
     }
 }
 
+public final class ContentHashObject {
+
+    public static let shared = ContentHashObject()
+    private init() {}
+
+    private func key(interaction: String) -> String {
+        return "ContentHashObject_\(interaction)"
+    }
+
+    public func set(_ value: String?, instanceHash: String) {
+        UserDefaults.standard.set(value, forKey: key(interaction: instanceHash))
+    }
+
+    public func get(instanceHash: String) -> String? {
+        return UserDefaults.standard.string(forKey: key(interaction: instanceHash))
+    }
+
+    public func clear(instanceHash: String) {
+        UserDefaults.standard.removeObject(forKey: key(interaction: instanceHash))
+    }
+}
 
 
 
