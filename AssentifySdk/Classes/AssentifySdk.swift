@@ -6,8 +6,6 @@ import SwiftUI
 
 public class AssentifySdk {
     private let apiKey: String
-    private let tenantIdentifier: String
-    private let interaction: String
     private let environmentalConditions: EnvironmentalConditions?
     private let assentifySdkDelegate : AssentifySdkDelegate?
     private var performActiveLivenessFace: Bool?
@@ -18,26 +16,21 @@ public class AssentifySdk {
     private var templates: [TemplatesByCountry]?;
     private var timeStarted: String;
     private var flowController:FlowController?;
+    private var configFileName:String?;
+    private var initContentHash:String?;
+    private var configFileManager: ConfigFileManager?;
     
     
     
-    
-    public init(apiKey: String, tenantIdentifier: String, interaction: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?,  performActiveLivenessFace: Bool? = nil) {
+    public init(apiKey: String, configFileName: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?,  performActiveLivenessFace: Bool? = nil) {
         self.apiKey = apiKey
-        self.tenantIdentifier = tenantIdentifier
-        self.interaction = interaction
         self.environmentalConditions = environmentalConditions
         self.assentifySdkDelegate = assentifySdkDelegate
         self.performActiveLivenessFace = performActiveLivenessFace
+        self.configFileName = configFileName
         self.timeStarted = getTimeUTC()
         if apiKey.isEmpty {
             print("AssentifySdk Init Error: ApiKey must not be blank or nil")
-        }
-        if interaction.isEmpty {
-            print("AssentifySdk Init Error: Interaction must not be blank or nil")
-        }
-        if tenantIdentifier.isEmpty {
-            print("AssentifySdk Init Error: TenantIdentifier must not be blank or nil")
         }
         if environmentalConditions == nil {
             print("AssentifySdk Init Error: EnvironmentalConditions must not be nil")
@@ -45,60 +38,116 @@ public class AssentifySdk {
         if assentifySdkDelegate == nil {
             print("AssentifySdk Init Error: assentifySdkDelegate must not be nil")
         }
-        if !apiKey.isEmpty && !interaction.isEmpty && !tenantIdentifier.isEmpty {
-            validateKey()
+        if !apiKey.isEmpty{
+            loadLocalFile()
         }
         
     }
     
     
-    private func validateKey() {
-        remoteValidateKey(apiKey: apiKey, tenantIdentifier: tenantIdentifier, agentSource: "SDK") { result in
-            switch result {
-            case .success(let validateKeyModel):
-                self.getStart()
-            case .failure(let error):
-                self.assentifySdkDelegate?.onAssentifySdkInitError(message: "Invalid Keys");
-            }
+    private func loadLocalFile() {
+        configFileManager = ConfigFileManager(fileName: configFileName!)
+        configFileManager?.initFromBundleIfNeeded();
+        self.configModel = configFileManager?.readEngagement();
+        self.tenantThemeModel = configFileManager?.readTheme();
+        self.initContentHash = configFileManager?.readContentHash();
+        if let templates = self.configFileManager?.readTemplates() {
+            self.getTemplatesByCountry(templates: templates)
         }
+        
+        startInitializeCheck();
+        
     }
     
-    private func getStart() {
-        remoteGetStart(interActionId: interaction) { result in
+ 
+    func startInitializeCheck() {
+
+        let currentContentHash = ContentHashObject.shared.get(
+            instanceHash: configModel!.instanceHash
+        ) ?? initContentHash ?? ""
+
+        initializeCheck(
+            pathContentHash: configModel!.instanceHash,
+            queryContentHash: currentContentHash,
+            tenantIdentifier: configModel!.tenantIdentifier,
+            blockIdentifier: configModel!.blockIdentifier,
+            instanceId: configModel!.instanceId,
+            sourceAgent: "SDK",
+            apiKey: apiKey
+        ) { [weak self] result in
+            guard let self = self else { return }
+            
+            // capture before async
+            let instanceHash = self.configModel?.instanceHash ?? ""
+
             switch result {
-            case .success(let configModel):
-                self.isKeyValid  = true;
-                self.configModel = configModel;
-                self.getTenantTheme();
-                
             case .failure(let error):
-                self.assentifySdkDelegate?.onAssentifySdkInitError(message:error.localizedDescription);
+                self.isKeyValid = false
+                self.assentifySdkDelegate?.onAssentifySdkInitError(message: error.localizedDescription)
+
+            case .success(let bodyString):
+                do {
+                    self.isKeyValid = true
+                    self.newInstance()
+
+                    guard let data = bodyString.data(using: .utf8),
+                          let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                        throw NSError(domain: "Parse error", code: 0)
+                    }
+
+                    // Has Changes check
+                    if let hasChanges = json["hasChanges"] as? Bool {
+                        let flowInstanceId = json["flowInstanceId"] as? String ?? ""
+                        let instanceId     = json["instanceId"]     as? String ?? ""
+                        let contentHash    = json["contentHash"]    as? String ?? ""
+
+                       
+
+                        self.configModel?.flowInstanceId = flowInstanceId
+                        self.configModel?.instanceId     = instanceId
+
+                        ContentHashObject.shared.clear(instanceHash: instanceHash)
+                        ContentHashObject.shared.set(contentHash, instanceHash: instanceHash)
+
+                        if !hasChanges {
+                           
+                            guard let config = self.configModel else { return }
+                            self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: config)
+                            return
+                        }
+                    }
+
+                    // Has new file — update everything
+                    ContentHashObject.shared.clear(instanceHash: instanceHash)
+                    self.clearFlow()
+                    self.configFileManager?.clear()
+                    self.configFileManager?.write(bodyString)
+
+                    self.configModel      = self.configFileManager?.readEngagement()
+                    self.tenantThemeModel = self.configFileManager?.readTheme()
+
+                    if let templates = self.configFileManager?.readTemplates() {
+                        self.getTemplatesByCountry(templates: templates)
+                    }
+
+                    ContentHashObject.shared.set(
+                        self.configFileManager?.readContentHash(),
+                        instanceHash: instanceHash
+                    )
+
+                    guard let updatedConfig = self.configModel else {
+                        throw NSError(domain: "Config missing after write", code: 0)
+                    }
+                    self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: updatedConfig)
+
+                } catch {
+                    self.isKeyValid = false
+                    self.assentifySdkDelegate?.onAssentifySdkInitError(message: error.localizedDescription)
+                }
             }
         }
     }
-    
-    private func getTenantTheme(){
-        remotegGetTenantTheme(apiKey: apiKey,
-                              userAgent: "SDK",
-                              flowInstanceId: configModel!.flowInstanceId,
-                              tenantIdentifier: self.tenantIdentifier,
-                              blockIdentifier: configModel!.blockIdentifier,
-                              instanceId: configModel!.instanceId,
-                              flowIdentifier: configModel!.flowIdentifier,
-                              instanceHash: configModel!.instanceHash,
-        )
-        { result in
-            switch result {
-            case .success(let tenantThemeModel):
-                self.isKeyValid  = true;
-                self.tenantThemeModel = tenantThemeModel;
-                self.getTemplatesByCountry();
-                
-            case .failure(let error):
-                self.assentifySdkDelegate?.onAssentifySdkInitError(message:error.localizedDescription);
-            }
-        }
-    }
+ 
     
     public func startScanPassport(scanPassportDelegate:ScanPassportDelegate,language: String = Language.NON,stepId: Int? = nil)->ScanPassport?{
         if(isKeyValid){
@@ -232,8 +281,8 @@ public class AssentifySdk {
                 configModel:configModel,
                 apiKey:apiKey,
                 stepID:stepId!,
-                tenantIdentifier:tenantIdentifier,
-                interaction:interaction,
+                tenantIdentifier:configModel!.tenantIdentifier,
+                interaction:self.configModel!.instanceHash,
                 contextAwareDelegate:contextAwareDelegate
             );
         }else{
@@ -366,34 +415,24 @@ public class AssentifySdk {
         return nil;
     }
     
-    func getTemplatesByCountry() {
-        remoteGetTemplates() { result in
-            switch result {
-            case .success(let templates):
-                var filteredList = self.filterBySourceCountryCode(dataList:templates )
-                var templatesByCountry = [TemplatesByCountry]()
-                
-                for data in filteredList {
-                    
-                    let item = TemplatesByCountry(
-                        id: data.id,
-                        name: data.sourceCountry,
-                        sourceCountryCode: data.sourceCountryCode,
-                        flag: data.sourceCountryFlag,
-                        templates: self.filterTemplatesCountryCode(dataList: templates, countryCode: data.sourceCountryCode)
-                    )
-                    
-                    templatesByCountry.append(item)
-                    
-                    
-                }
-                self.templates =  templatesByCountry ;
-                self.assentifySdkDelegate?.onAssentifySdkInitSuccess(configModel: self.configModel!);
-            case .failure(_):
-                print("Get Templates Error")
-            }
+    func getTemplatesByCountry(templates : [Templates]?) {
+        var filteredList = self.filterBySourceCountryCode(dataList:templates! )
+        var templatesByCountry = [TemplatesByCountry]()
+        
+        for data in filteredList {
+            
+            let item = TemplatesByCountry(
+                id: data.id,
+                name: data.sourceCountry,
+                sourceCountryCode: data.sourceCountryCode,
+                flag: data.sourceCountryFlag,
+                templates: self.filterTemplatesCountryCode(dataList: templates!, countryCode: data.sourceCountryCode)
+            )
+            templatesByCountry.append(item)
         }
+        self.templates =  templatesByCountry ;
     }
+    
     
     func filterBySourceCountryCode(dataList: [Templates]) -> [Templates] {
         var filteredList = [Templates]()
@@ -549,7 +588,7 @@ public class AssentifySdk {
             
             ApiKeyObject.shared.set(self.apiKey)
             FlowEnvironmentalConditionsObject.shared.set(flowEnvironmentalConditions)
-            InteractionObject.shared.set(interaction);
+            InteractionObject.shared.set(configModel!.instanceHash);
             
           
             if (ConfigModelObject.shared.get() != nil) {
@@ -584,12 +623,17 @@ public class AssentifySdk {
         
     }
     
-    public func clearFlow() {
-        InteractionObject.shared.set(interaction);
+    private func clearFlow() {
+        InteractionObject.shared.set(self.configModel!.instanceHash);
         ConfigModelObject.shared.set(nil)
         LocalStepsObject.shared.set(
               []
            )
-       }
+     }
+    
+    private func newInstance(){
+        InteractionObject.shared.set(self.configModel!.instanceHash);
+        ConfigModelObject.shared.set(nil)
+    }
     
 }

@@ -624,15 +624,16 @@ public final class FlowController {
               request.httpBody = try encoder.encode(body)
               
               
-              ////
-            
+
+//            
 //              let data = try encoder.encode(body)
 //              if let jsonString = String(data: data, encoding: .utf8) {
+//                  print("📦 TrackProgressRequest:\n\(configModel.instanceId)")
 //                  print("📦 TrackProgressRequest:\n\(jsonString)")
 //              }
 //              
-              
-              ///
+//              
+//              ////
               
           } catch {
               return
@@ -797,6 +798,28 @@ public final class FlowController {
             return json as? [String: Any]
         } catch {
             return nil
+        }
+    }
+    
+    public  func identificationDocumentStepHasPassport(stepID: Int) -> Bool {
+        guard let configModel = ConfigModelObject.shared.get() else { return false }
+
+        return configModel.stepDefinitions.contains { step in
+            step.stepId == stepID &&
+                step.customization.identificationDocuments?.contains { doc in
+                    doc.documentType == IdentificationDocumentsDocumentType.Passport && doc.enabled == true
+                } == true
+        }
+    }
+
+    public  func identificationDocumentStepHasIDCard(stepID: Int) -> Bool {
+        guard let configModel = ConfigModelObject.shared.get() else { return false }
+
+        return configModel.stepDefinitions.contains { step in
+            step.stepId == stepID &&
+                step.customization.identificationDocuments?.contains { doc in
+                    doc.documentType == IdentificationDocumentsDocumentType.ID && doc.enabled == true
+                } == true
         }
     }
 

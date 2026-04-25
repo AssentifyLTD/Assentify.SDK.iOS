@@ -27,48 +27,32 @@ public class ContextAwareSigning{
         self.interaction = interaction;
         self.contextAwareDelegate = contextAwareDelegate;
 
-        getStep()
+        getContextAwareSigningStepFromConfigFile()
     }
     
     
-  private func  getStep(){
-        remoteGetStep(
-            apiKey: apiKey,
-            userAgent: "SDK",
-            flowInstanceId: configModel!.flowInstanceId,
-            tenantIdentifier: configModel!.tenantIdentifier,
-            blockIdentifier: configModel!.blockIdentifier,
-            instanceId: configModel!.instanceId,
-            flowIdentifier: configModel!.flowIdentifier,
-            instanceHash: configModel!.instanceHash,
-            ID: stepID!
-            ){ result in
-            switch result {
-            case .success(let contextAwareSigningModel):
-                self.contextAwareSigningModel = contextAwareSigningModel
-                contextAwareSigningModel.data.selectedTemplates.forEach({ it in
-                    self.getTokensMappings(templateId: it)
-                })
-             case .failure(let error):
-                self.contextAwareDelegate?.onError(message: error.localizedDescription);
-            }
-        }
+  private func  getContextAwareSigningStepFromConfigFile(){
+      
+      let stepDefinitions = self.configModel!.stepDefinitions
+      stepDefinitions.forEach { step in
+          if step.stepId == self.stepID  {
+              let contextAwareSigningModel = step.customization.toContextAwareSigningModel()
+              self.contextAwareSigningModel = contextAwareSigningModel
+              contextAwareSigningModel.data.selectedTemplates.forEach({ it in
+                  self.getTokensMappings(templateId: it)
+              })
+          }
+      }
     }
     
     private func  getTokensMappings(templateId:Int){
-        tokensMappings(
-            tenantIdentifier: configModel!.tenantIdentifier,
-            blockIdentifier: configModel!.blockIdentifier,
-            stepId: stepID!,
-            templateId: templateId
-            ){ result in
-            switch result {
-            case .success(let documentTokensModel):
-                self.contextAwareDelegate?.onHasTokens(templateId: templateId,documentTokens: documentTokensModel,contextAwareSigningModel:self.contextAwareSigningModel! );
-             case .failure(let error):
-                self.contextAwareDelegate?.onError(message: error.localizedDescription);
+        let stepDefinitions = self.configModel!.stepDefinitions
+        stepDefinitions.forEach { step in
+            if step.stepId == self.stepID  {
+                self.contextAwareDelegate?.onHasTokens(templateId: templateId,documentTokens: step.mappings!,contextAwareSigningModel:self.contextAwareSigningModel! );
             }
         }
+       
     }
     
 
@@ -81,7 +65,7 @@ public class ContextAwareSigning{
                     data:  data,
                     outputType:1
                  );
-        remoteCreateUserDocumentInstance(requestBody: createUserDocumentRequestModel){
+       remoteCreateUserDocumentInstance(tenantIdentifier: self.configModel!.tenantIdentifier,requestBody: createUserDocumentRequestModel){
             result in
             switch result {
             case .success(let createUserDocumentResponseModel):
@@ -106,7 +90,7 @@ public class ContextAwareSigning{
                      signature : signature
                   );
     
-        remoteSignature(requestBody: signatureRequestModel){
+        remoteSignature(tenantIdentifier: self.configModel!.tenantIdentifier,requestBody: signatureRequestModel){
              result in
              switch result {
              case .success(let signatureResponseModel):
@@ -118,4 +102,26 @@ public class ContextAwareSigning{
      }
     
     
+}
+
+extension Customization {
+    func toContextAwareSigningModel() -> ContextAwareSigningModel {
+        return ContextAwareSigningModel(
+            statusCode: 200,
+            data: DataModel(
+                selectedTemplates: self.selectedTemplates ?? [],
+                header: self.header,
+                subHeader: self.subHeader,
+                confirmationMessage: self.confirmationMessage,
+                autoDownload: self.autoDownload ?? false,
+                enableDigitalSignature: !(self.hideSignatureBoard ?? false),
+                hideSignatureBoard: self.hideSignatureBoard ?? false,
+                otpInputType: self.otpInputType ?? "TEXT",
+                enableOtp: self.enableOtp ?? false,
+                otpSize: self.otpSize,
+                otpType: self.otpType,
+                otpExpiryTime: self.otpExpiryTime
+            )
+        )
+    }
 }

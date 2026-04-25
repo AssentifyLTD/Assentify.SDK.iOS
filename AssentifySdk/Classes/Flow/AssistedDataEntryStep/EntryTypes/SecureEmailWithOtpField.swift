@@ -97,7 +97,7 @@ public struct SecureEmailWithOtpField: View {
     }
     
     private var otpSize: Int {
-        Int(field.otpSize ?? 6)
+        Int(field.otpSize ?? 8)
     }
     
     private var otpType: Int {
