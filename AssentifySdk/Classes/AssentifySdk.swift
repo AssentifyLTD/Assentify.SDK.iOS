@@ -623,7 +623,7 @@ public class AssentifySdk {
         
     }
     
-    private func clearFlow() {
+    public func clearFlow() {
         InteractionObject.shared.set(self.configModel!.instanceHash);
         ConfigModelObject.shared.set(nil)
         LocalStepsObject.shared.set(
@@ -631,7 +631,7 @@ public class AssentifySdk {
            )
      }
     
-    public func newInstance(){
+    private func newInstance(){
         InteractionObject.shared.set(self.configModel!.instanceHash);
         ConfigModelObject.shared.set(nil)
     }

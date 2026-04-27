@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.6**
+1. *Support Clean Flow And Start Again*
+
 **1.0.0-Beta.5**
 1. *Support Clean Flow And Start Again*
 
