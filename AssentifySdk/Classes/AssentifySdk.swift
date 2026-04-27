@@ -631,7 +631,7 @@ public class AssentifySdk {
            )
      }
     
-    private func newInstance(){
+    public func newInstance(){
         InteractionObject.shared.set(self.configModel!.instanceHash);
         ConfigModelObject.shared.set(nil)
     }
