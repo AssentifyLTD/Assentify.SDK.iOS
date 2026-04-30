@@ -309,7 +309,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
             if motionRectF.count >= 2 {
                 let rect1 = motionRectF[motionRectF.count - 2]
                 let rect2 = motionRectF[motionRectF.count - 1]
-                motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
+                motion = calculateFaceMotion(rect1: rect1, rect2: rect2)
                 zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
             }
             
@@ -401,7 +401,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         if motionRectF.count >= 2 {
             let rect1 = motionRectF[motionRectF.count - 2]
             let rect2 = motionRectF[motionRectF.count - 1]
-            motion = calculatePercentageChange(rect1: rect1, rect2: rect2)
+            motion = calculateFaceMotion(rect1: rect1, rect2: rect2)
             zoom = calculatePercentageChangeWidth(rect: rect2,pixelBuffer: pixelBuffer)
         }
         

@@ -339,7 +339,7 @@ public struct SecureDropdownWithDataSource: View {
                             .padding(.horizontal, 14)
                             .frame(height: rowHeight)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.clear)
+                            .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                         

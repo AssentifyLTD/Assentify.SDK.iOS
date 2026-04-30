@@ -19,6 +19,7 @@ enum PassportScreenEvent {
     case completed
     case error
     case retry
+    case expired
     case liveness
     case wrongTemplate
 }
@@ -59,7 +60,7 @@ public struct PassportScanStep: View {
             response : nil,
             status : "InProgress"
         )
-        /***/
+        /**/
     }
     
     private func onBack() {
@@ -126,7 +127,7 @@ public struct PassportScanStep: View {
                         response: "Completed",
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
                 
             },
@@ -150,32 +151,58 @@ public struct PassportScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onRetry: { model in
                 DispatchQueue.main.async {
-                    
-                    start = false;
-                    imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
-                    screenEvent = .retry
-                    
-                    /** Track Progress **/
-                    let currentStep = flowController.getCurrentStep()
-                    let errorString = model.responseJsonObject?["error"] as? String
-                    let extracted = flowController.extractAfterDash(errorString)
+                    print("errorString")
+                    print(model.error)
+                    if(model.error == "Expired Passport Detected"){
+                        start = false;
+                        imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                        screenEvent = .expired
+                        
+                        /** Track Progress **/
+                        let currentStep = flowController.getCurrentStep()
+                        let errorString = model.responseJsonObject?["error"] as? String
+                        let extracted = flowController.extractAfterDash(errorString)
 
-                    let finalResponse = extracted.isEmpty
-                        ? "Retry"
-                        : "Retry - \(extracted)"
+                        let finalResponse = extracted.isEmpty
+                            ? "Expired"
+                            : "Expired  - \(extracted)"
 
-                    flowController.trackProgress(
-                        currentStep: currentStep!,
-                        inputData: flowController.decodeToJsonObject(model.response),
-                        response: finalResponse,
-                        status: "InProgress"
-                    )
-                    /***/
+                        flowController.trackProgress(
+                            currentStep: currentStep!,
+                            inputData: flowController.decodeToJsonObject(model.response),
+                            response: finalResponse,
+                            status: "InProgress"
+                        )
+                        /**/
+                    }else{
+                        start = false;
+                        imageUrl = getImageUrlFromBaseResponseDataModel(jsonString: model.response)
+                        screenEvent = .retry
+                        
+                        /** Track Progress **/
+                        let currentStep = flowController.getCurrentStep()
+                        let errorString = model.responseJsonObject?["error"] as? String
+                        let extracted = flowController.extractAfterDash(errorString)
+
+                        let finalResponse = extracted.isEmpty
+                            ? "Retry"
+                            : "Retry - \(extracted)"
+
+                        flowController.trackProgress(
+                            currentStep: currentStep!,
+                            inputData: flowController.decodeToJsonObject(model.response),
+                            response: finalResponse,
+                            status: "InProgress"
+                        )
+                        /**/
+                    }
+                    
+                  
                 }
             },
             onLivenessUpdate:{ model in
@@ -200,7 +227,7 @@ public struct PassportScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onWrongTemplate: { model in
@@ -225,7 +252,7 @@ public struct PassportScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             
@@ -359,6 +386,15 @@ public struct PassportScanStep: View {
                 
             case .retry:
                 OnErrorScreen(imageUrl:self.imageUrl
+                ) {
+                    DispatchQueue.main.async {
+                        screenEvent = .idle
+                        start = true;
+                        commands.triggerRetry += 1
+                    }
+                }
+            case .expired:
+                OnPassportExpired(imageUrl:self.imageUrl
                 ) {
                     DispatchQueue.main.async {
                         screenEvent = .idle

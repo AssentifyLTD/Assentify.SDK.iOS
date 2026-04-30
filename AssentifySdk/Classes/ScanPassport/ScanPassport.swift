@@ -369,7 +369,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
                 
                 if(expired){
                     self.retryCount = self.retryCount + 1;
-                    remoteProcessingModel.error = EventsErrorMessages.OnRetryCardMessage
+                    remoteProcessingModel.error = EventsErrorMessages.OnExpiredPassportMessage
                     self.scanPassportDelegate?.onRetry(dataModel:remoteProcessingModel )
                     self.start = true
                 }else{

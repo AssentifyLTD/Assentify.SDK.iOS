@@ -32,7 +32,7 @@ public struct TermsAndConditionsScreen: View {
             response : nil,
             status : "InProgress"
         )
-        /***/
+        /**/
          defaultTitle = configModel!
             .stepDefinitions
             .first(where: { $0.stepId == currentStep!.stepDefinition!.stepId })!

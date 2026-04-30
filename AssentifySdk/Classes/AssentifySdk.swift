@@ -626,6 +626,8 @@ public class AssentifySdk {
     public func clearFlow() {
         InteractionObject.shared.set(self.configModel!.instanceHash);
         ConfigModelObject.shared.set(nil)
+        CreateUserDocumentObject.shared.clear()
+        SignatureResponseObject.shared.clear()
         LocalStepsObject.shared.set(
               []
            )

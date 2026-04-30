@@ -332,3 +332,93 @@ public final class AssistedDataEntryPagesObject {
 
 
 
+public final class CreateUserDocumentObject {
+
+    public static let shared = CreateUserDocumentObject()
+    private init() {}
+
+    private func key(stepId: Int) -> String {
+        return "CreateUserDocumentObject_\(InteractionObject.shared.get())_\(stepId)"
+    }
+
+    public func set(_ model: CreateUserDocumentResponseModel?, stepId: Int) {
+        guard let model else {
+            UserDefaults.standard.removeObject(forKey: key(stepId: stepId))
+            return
+        }
+
+        do {
+            let data = try JSONEncoder().encode(model)
+            UserDefaults.standard.set(data, forKey: key(stepId: stepId))
+        } catch {
+            print("CreateUserDocumentObject encode error:", error)
+        }
+    }
+
+    public func get(stepId: Int) -> CreateUserDocumentResponseModel? {
+        guard let data = UserDefaults.standard.data(forKey: key(stepId: stepId)) else {
+            return nil
+        }
+
+        do {
+            return try JSONDecoder().decode(CreateUserDocumentResponseModel.self, from: data)
+        } catch {
+            print("CreateUserDocumentObject decode error:", error)
+            return nil
+        }
+    }
+
+    // Clears all keys that belong to the current InteractionObject session
+    public func clear() {
+        let prefix = "CreateUserDocumentObject_\(InteractionObject.shared.get())_"
+        UserDefaults.standard.dictionaryRepresentation().keys
+            .filter { $0.hasPrefix(prefix) }
+            .forEach { UserDefaults.standard.removeObject(forKey: $0) }
+    }
+}
+
+
+public final class SignatureResponseObject {
+
+    public static let shared = SignatureResponseObject()
+    private init() {}
+
+    private func key(stepId: Int) -> String {
+        return "SignatureResponseObject_\(InteractionObject.shared.get())_\(stepId)"
+    }
+
+    public func set(_ model: SignatureResponseModel?, stepId: Int) {
+        guard let model else {
+            UserDefaults.standard.removeObject(forKey: key(stepId: stepId))
+            return
+        }
+
+        do {
+            let data = try JSONEncoder().encode(model)
+            UserDefaults.standard.set(data, forKey: key(stepId: stepId))
+        } catch {
+            print("SignatureResponseObject encode error:", error)
+        }
+    }
+
+    public func get(stepId: Int) -> SignatureResponseModel? {
+        guard let data = UserDefaults.standard.data(forKey: key(stepId: stepId)) else {
+            return nil
+        }
+
+        do {
+            return try JSONDecoder().decode(SignatureResponseModel.self, from: data)
+        } catch {
+            print("SignatureResponseObject decode error:", error)
+            return nil
+        }
+    }
+
+    // Clears all keys that belong to the current InteractionObject session
+    public func clear() {
+        let prefix = "SignatureResponseObject_\(InteractionObject.shared.get())_"
+        UserDefaults.standard.dictionaryRepresentation().keys
+            .filter { $0.hasPrefix(prefix) }
+            .forEach { UserDefaults.standard.removeObject(forKey: $0) }
+    }
+}

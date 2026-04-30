@@ -189,7 +189,8 @@ public struct FaceResultScreen: View {
                     cornerRadius: 28,
                     verticalPadding: 18,
                     enabled: true,
-                    action: onIDChange
+                    fontWeight: .bold,
+                    action: onIDChange,
                 )
                 
                 OutlineButton(

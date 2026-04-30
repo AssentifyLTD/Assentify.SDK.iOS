@@ -47,9 +47,89 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                 self.eventType = .onTokensComplete
             }
         }
+
+        if let stepId = flowController.getCurrentStep()?.stepDefinition?.stepId {
+            if let userDocumentModel = CreateUserDocumentObject.shared.get(stepId: stepId) {
+                buildOnCreateUserDocumentInstance(userDocumentResponseModel: userDocumentModel)
+            }
+        }
     }
 
+
+    public func buildOnCreateUserDocumentInstance(userDocumentResponseModel: CreateUserDocumentResponseModel) {
+        DispatchQueue.main.async {
+            self.checked = true
+            self.currentTemplateId = self.selectedTemplates.first?.templateId
+            guard let tid = self.currentTemplateId else { return }
+            self.documentWithTokensObject.append(
+                DocumentWithTokensModel(
+                    templateId: tid,
+                    createUserDocumentResponseModel: userDocumentResponseModel
+                )
+            )
+            self.eventType = .onTokensComplete
+            if let stepId = flowController.getCurrentStep()?.stepDefinition?.stepId {
+                if let signatureModel = SignatureResponseObject.shared.get(stepId: stepId) {
+                    buildOnSignature(signatureResponseModel: signatureModel)
+                }
+            }
+        }
+    }
+
+
+    public func buildOnSignature(signatureResponseModel: SignatureResponseModel) {
+        approvedDocuments.append(
+            DocumentWithTokensModel(
+                templateId: self.documentWithTokensObject.first!.templateId,
+                createUserDocumentResponseModel: self.documentWithTokensObject.first!.createUserDocumentResponseModel
+            )
+        )
+
+        DispatchQueue.main.async {
+            guard let firstApproved = self.approvedDocuments.first else { return }
+
+            self.documentWithTokensAndSigned.append(
+                DocumentWithTokensAndSinged(
+                    templateId: firstApproved.templateId,
+                    signatureResponseModel: signatureResponseModel
+                )
+            )
+
+            if self.contextAwareSigningObject?.data.autoDownload == true {
+                downloadAndShare(signatureResponseModel.signedDocumentUri)
+            }
+
+            if !self.approvedDocuments.isEmpty {
+                self.approvedDocuments.removeFirst()
+            }
+
+            if self.contextAwareSigningObject?.data.selectedTemplates.count == self.documentWithTokensAndSigned.count {
+                self.eventType = .onSignature
+                self.clickLoading = false
+            } else {
+                self.signNextApprovedIfPossible()
+            }
+
+            let currentStep = flowController.getCurrentStep()
+            var extractedInformation: [String: String] = [:]
+
+            let outputProperties = flowController.getCurrentStep()?.stepDefinition?.outputProperties ?? []
+            for outputProperty in outputProperties {
+                if outputProperty.key.contains("OnBoardMe_ContextAwareSigning_DocumentURL") {
+                    extractedInformation[outputProperty.key] =
+                        documentWithTokensAndSigned.first?.signatureResponseModel.signedDocumentUri ?? ""
+                }
+            }
+        }
+    }
+
+
     public func onCreateUserDocumentInstance(userDocumentResponseModel: CreateUserDocumentResponseModel) {
+
+        if let stepId = flowController.getCurrentStep()?.stepDefinition?.stepId {
+            CreateUserDocumentObject.shared.set(userDocumentResponseModel, stepId: stepId)
+        }
+
         DispatchQueue.main.async {
             guard let tid = self.currentTemplateId else { return }
             self.documentWithTokensObject.append(
@@ -64,7 +144,12 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
     }
 
     public func onSignature(signatureResponseModel: SignatureResponseModel) {
+
         DispatchQueue.main.async {
+            if let stepId = flowController.getCurrentStep()?.stepDefinition?.stepId {
+                SignatureResponseObject.shared.set(signatureResponseModel, stepId: stepId)
+            }
+
             guard let firstApproved = self.approvedDocuments.first else { return }
 
             self.documentWithTokensAndSigned.append(
@@ -120,8 +205,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
 
                 try data.write(to: fileURL, options: [.atomic])
                 shareFile = ShareFile(url: fileURL)
-            } catch {
-            }
+            } catch {}
         }
     }
 
@@ -194,7 +278,6 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
         contextAwareSigningObject?.data.otpInputType ?? ""
     }
 
-    // Kotlin: hideSignatureBoard == false means show board
     private var enableDigitalSignature: Bool {
         contextAwareSigningObject?.data.hideSignatureBoard == false
     }
@@ -398,7 +481,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
 
                             let shouldShowListScreen =
                                 (selectedTemplate == nil)
-                                || (selectedTemplate != nil && docForTemplate(selectedTemplate!.templateId) == nil)
+                                || (selectedTemplate != nil && docForTemplate(selectedTemplate!.templateId) == nil && !clickLoading)
 
                             if shouldShowListScreen {
                                 if let obj = contextAwareSigningObject {
@@ -519,30 +602,34 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                 }
                             }
 
+                            // ── Signed doc viewer (after signature) ──
                             if let sel = selectedTemplate,
-                               let signed = signedForTemplate(sel.templateId),
                                eventType == .onSignature {
                                 DocumentPageFromUrlView(
-                                    url: signed.signatureResponseModel.signedDocumentUri,
+                                    url: signedForTemplate(sel.templateId)?.signatureResponseModel.signedDocumentUri,
+                                    isLoading: signedForTemplate(sel.templateId) == nil,
                                     onCancel: { selectedTemplate = nil }
                                 )
                                 .padding(.top, 8)
                             }
 
+                            // ── PDF viewer / loader (before signature) ──
                             if let sel = selectedTemplate,
-                               let doc = docForTemplate(sel.templateId),
                                eventType != .onSignature {
                                 DocumentPageView(
-                                    userDocumentResponseModel: doc.createUserDocumentResponseModel,
+                                    userDocumentResponseModel: docForTemplate(sel.templateId)?.createUserDocumentResponseModel,
                                     isApproved: isTemplateApproved(sel.templateId),
+                                    isLoading: docForTemplate(sel.templateId) == nil,
                                     onAccept: {
                                         if !isTemplateApproved(sel.templateId) {
-                                            approvedDocuments.append(
-                                                DocumentWithTokensModel(
-                                                    templateId: sel.templateId,
-                                                    createUserDocumentResponseModel: doc.createUserDocumentResponseModel
+                                            if let doc = docForTemplate(sel.templateId) {
+                                                approvedDocuments.append(
+                                                    DocumentWithTokensModel(
+                                                        templateId: sel.templateId,
+                                                        createUserDocumentResponseModel: doc.createUserDocumentResponseModel
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                         selectedTemplate = nil
                                     },
@@ -565,12 +652,8 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                             title: "Email to Receive a Verification Code",
                                             contextAwareSigningModel: contextAwareSigningObject!,
                                             flowController: flowController,
-                                            onValueChange: { value in
-                                                otpValue = value
-                                            },
-                                            onValid: {
-                                                isOtpValidated = true
-                                            }
+                                            onValueChange: { value in otpValue = value },
+                                            onValid: { isOtpValidated = true }
                                         )
                                         .padding(.horizontal, 25)
                                     } else {
@@ -578,20 +661,16 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                             title: "Phone Number",
                                             contextAwareSigningModel: contextAwareSigningObject!,
                                             flowController: flowController,
-                                            onValueChange: { value in
-                                                otpValue = value
-                                            },
-                                            onValid: {
-                                                isOtpValidated = true
-                                            }
+                                            onValueChange: { value in otpValue = value },
+                                            onValid: { isOtpValidated = true }
                                         )
                                         .padding(.horizontal, 25)
                                     }
                                 } else if enableDigitalSignature {
-                                    SignaturePadContainer(
-                                        signatureBase64: $signatureB64
-                                    )
-                                    .padding(.top, 8)
+                                    SignaturePadContainer(signatureBase64: $signatureB64,isLoading:clickLoading)
+                                            .padding(.top, 8)
+                                    
+                                 
                                 }
                             }
                         }
@@ -601,13 +680,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                     .padding(.top, 20)
                 }
 
-                if clickLoading {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .tint(Color(BaseTheme.baseTextColor))
-                        .scaleEffect(1.2)
-                        .padding(.bottom, 10)
-                }
+
 
                 if selectedTemplate == nil && eventType == .onTokensComplete && !clickLoading {
                     BaseClickButton(
@@ -659,7 +732,6 @@ fileprivate struct DocumentRowView: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-
                 if isActive {
                     Image(systemName: isApproved ? "checkmark.circle" : "doc")
                         .font(.system(size: isApproved ? 22 : 18, weight: .semibold))
@@ -691,59 +763,103 @@ fileprivate struct DocumentRowView: View {
     }
 }
 
-// MARK: - Document Page
+// MARK: - Document Page (before signature)
 fileprivate struct DocumentPageView: View {
-    let userDocumentResponseModel: CreateUserDocumentResponseModel
+    let userDocumentResponseModel: CreateUserDocumentResponseModel?
     let isApproved: Bool
+    let isLoading: Bool
     let onAccept: () -> Void
     let onCancel: () -> Void
 
+    private var pdfHeight: CGFloat {
+        !isApproved
+            ? UIScreen.main.bounds.height - 380
+            : UIScreen.main.bounds.height - 360
+    }
+
     var body: some View {
         VStack(spacing: 15) {
-            PdfViewerFromBase64(base64Data: userDocumentResponseModel.templateInstance)
-                .frame(maxWidth: .infinity)
-                .frame(height: !isApproved ? UIScreen.main.bounds.height - 380 : UIScreen.main.bounds.height - 360)
 
-            if !isApproved {
-                BaseClickButton(title: "Approve", verticalPadding: 18, enabled: true) {
-                    onAccept()
+            if isLoading {
+                // ← loader shown immediately while PDF is fetched
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(BaseTheme.fieldColor))
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(Color(BaseTheme.baseTextColor))
+                        .scaleEffect(1.2)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: pdfHeight)
+
+            } else if let doc = userDocumentResponseModel {
+                PdfViewerFromBase64(base64Data: doc.templateInstance)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: pdfHeight)
+
+                if !isApproved {
+                    BaseClickButton(title: "Approve", verticalPadding: 18, enabled: true) {
+                        onAccept()
+                    }
                 }
             }
+            
+                OutlineButton(
+                    title: "Cancel",
+                    cornerRadius: 28,
+                    borderColor: Color(BaseTheme.baseAccentColor),
+                    textColor: Color(BaseTheme.baseAccentColor),
+                    height: 55,
+                    action: onCancel
+                )
+            
 
-            OutlineButton(
-                title: "Cancel",
-                cornerRadius: 28,
-                borderColor: Color(BaseTheme.baseAccentColor),
-                textColor: Color(BaseTheme.baseAccentColor),
-                height: 55,
-                action: onCancel
-            )
+            
         }
     }
 }
 
-fileprivate struct ShareFile: Identifiable {
-    let id = UUID()
-    let url: URL
-}
-
+// MARK: - Document Page From URL (after signature)
 fileprivate struct DocumentPageFromUrlView: View {
-    let url: String
+    let url: String?
+    let isLoading: Bool
     let onCancel: () -> Void
 
     @State private var shareFile: ShareFile? = nil
     @State private var showFullScreen: Bool = false
 
+    private var pdfHeight: CGFloat {
+        UIScreen.main.bounds.height - 350
+    }
+
     var body: some View {
         VStack(spacing: 15) {
-            BasePDFCardViewFomUrl(
-                urlString: url,
-                tintColor: BaseTheme.baseTextColor,
-                onDownloadTap: { downloadAndShare(url) },
-                onFullScreenTap: { showFullScreen = true }
-            )
-            .frame(height: UIScreen.main.bounds.height - 350)
-            .padding(.horizontal, 15)
+
+            if isLoading {
+                // ← loader shown immediately while signed PDF loads
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(BaseTheme.fieldColor))
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(Color(BaseTheme.baseTextColor))
+                        .scaleEffect(1.2)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: pdfHeight)
+                .padding(.horizontal, 15)
+
+            } else if let url {
+                BasePDFCardViewFomUrl(
+                    urlString: url,
+                    tintColor: BaseTheme.baseTextColor,
+                    onDownloadTap: { downloadAndShare(url) },
+                    onFullScreenTap: { showFullScreen = true }
+                )
+                .frame(height: pdfHeight)
+                .padding(.horizontal, 15)
+            }
 
             OutlineButton(
                 title: "Cancel",
@@ -759,32 +875,35 @@ fileprivate struct DocumentPageFromUrlView: View {
             ShareSheet(items: [file.url])
         }
         .fullScreenCover(isPresented: $showFullScreen) {
-            FullScreenPDFView(urlString: url)
+            if let url { FullScreenPDFView(urlString: url) }
         }
     }
 
     private func downloadAndShare(_ urlString: String) {
         guard let u = URL(string: urlString) else { return }
-
         Task {
             do {
                 let (data, _) = try await URLSession.shared.data(from: u)
                 let fileURL = FileManager.default.temporaryDirectory
                     .appendingPathComponent("SignedDocument_\(UUID().uuidString).pdf")
-
                 try data.write(to: fileURL, options: [.atomic])
                 shareFile = ShareFile(url: fileURL)
-            } catch {
-            }
+            } catch {}
         }
     }
 }
 
+fileprivate struct ShareFile: Identifiable {
+    let id = UUID()
+    let url: URL
+}
+
 fileprivate struct SignaturePadContainer: View {
     @Binding var signatureBase64: String
+    var isLoading: Bool
 
     var body: some View {
-        SignaturePad(title: "Signature") { b64 in
+        SignaturePad(title: "Signature",isLoading:isLoading) { b64 in
             signatureBase64 = b64
         }
         .frame(maxWidth: .infinity)
@@ -816,11 +935,7 @@ public struct SelectedTemplatesTokens: Codable {
     public let templateName: String
     public let documentTokens: [TokensMappings]
 
-    public init(
-        templateId: Int,
-        templateName: String,
-        documentTokens: [TokensMappings]
-    ) {
+    public init(templateId: Int, templateName: String, documentTokens: [TokensMappings]) {
         self.templateId = templateId
         self.templateName = templateName
         self.documentTokens = documentTokens
@@ -831,10 +946,7 @@ public struct DocumentWithTokensModel: Codable {
     public let templateId: Int
     public let createUserDocumentResponseModel: CreateUserDocumentResponseModel
 
-    public init(
-        templateId: Int,
-        createUserDocumentResponseModel: CreateUserDocumentResponseModel
-    ) {
+    public init(templateId: Int, createUserDocumentResponseModel: CreateUserDocumentResponseModel) {
         self.templateId = templateId
         self.createUserDocumentResponseModel = createUserDocumentResponseModel
     }
@@ -844,10 +956,7 @@ public struct DocumentWithTokensAndSinged: Codable {
     public let templateId: Int
     public let signatureResponseModel: SignatureResponseModel
 
-    public init(
-        templateId: Int,
-        signatureResponseModel: SignatureResponseModel
-    ) {
+    public init(templateId: Int, signatureResponseModel: SignatureResponseModel) {
         self.templateId = templateId
         self.signatureResponseModel = signatureResponseModel
     }
@@ -877,3 +986,5 @@ private struct OutlineButton: View {
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }
 }
+
+
