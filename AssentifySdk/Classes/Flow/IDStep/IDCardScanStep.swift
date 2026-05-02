@@ -76,7 +76,7 @@ public struct IDCardScanStep: View {
             response : nil,
             status : "InProgress"
         )
-        /***/
+        /**/
     }
     
     private func loadTemplates() {
@@ -180,7 +180,7 @@ public struct IDCardScanStep: View {
                             response: "Completed",
                             status: "InProgress"
                         )
-                        /***/
+                        /**/
                         
                     }else{
                         start = false
@@ -236,7 +236,7 @@ public struct IDCardScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onRetry: { model in
@@ -268,7 +268,7 @@ public struct IDCardScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onWrongTemplate: { model in
@@ -299,7 +299,7 @@ public struct IDCardScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onLivenessUpdate: { model in
@@ -330,7 +330,7 @@ public struct IDCardScanStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onEnvironmental: { brightnessEvents, motion, zoom, isCentered in

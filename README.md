@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.7**
+1. *Enhanced The Overall User Experience*
+
 **1.0.0-Beta.6**
 1. *Support Clean Flow And Start Again*
 

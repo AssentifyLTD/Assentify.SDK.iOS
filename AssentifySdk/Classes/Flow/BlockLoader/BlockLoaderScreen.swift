@@ -86,7 +86,7 @@ struct BlockLoaderScreen: View {
             )
         }
        
-        /***/
+        /**/
         flowController.naveToNextStep()
     }
     
@@ -316,7 +316,7 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
             response : nil,
             status : "InProgress"
         )
-        /***/
+        /**/
 
         
     }

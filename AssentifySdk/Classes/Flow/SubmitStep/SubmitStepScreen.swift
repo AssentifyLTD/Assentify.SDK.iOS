@@ -5,6 +5,7 @@ public enum SubmitDataTypes {
     public static let onError    = "onError"
     public static let onComplete = "onComplete"
     public static let none       = "none"
+    public static let backGroundInit  = "none"
 }
 
 // MARK: - SubmitStepScreen (SwiftUI - single view like your other screens)
@@ -47,9 +48,11 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                         switch submitDataTypes {
 
                         case SubmitDataTypes.onSend:
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
-                                .scaleEffect(1.6)
+                            MiddleContent(
+                                title: "Almost Done!",
+                                message: "Your information is being submitted. We'll be done shortly.",
+                                messageColor: Color(BaseTheme.baseTextColor)
+                            )
 
                         case SubmitDataTypes.onError:
                             MiddleContent(
@@ -90,6 +93,10 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                         }
                         .padding(.horizontal, 20)
                         .padding(.vertical, 30)
+                    }
+                    if(submitDataTypes == SubmitDataTypes.onSend){
+                        ProgressView().progressViewStyle(CircularProgressViewStyle(tint: Color(BaseTheme.baseTextColor)))
+                           .scaleEffect(1.6) .padding(.vertical, 30)
                     }
                 }
             }.topBarBackLogo {
@@ -142,7 +149,6 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
             
         }
         .onChange(of: submitDataTypes) { newValue in
-            // Kotlin behavior: when onError -> after 3s -> none (and reset swipe)
             if newValue == SubmitDataTypes.onError {
                 resetTick += 1
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
@@ -159,7 +165,6 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     private var shouldShowSwipe: Bool {
         if submitDataTypes == SubmitDataTypes.onSend { return false }
         if submitDataTypes == SubmitDataTypes.onError { return false }
-        // show swipe in "none" and in "onComplete"
         return true
     }
 

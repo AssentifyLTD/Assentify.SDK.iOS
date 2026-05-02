@@ -209,6 +209,7 @@ import PencilKit
 public struct SignaturePad: View {
 
     public var title: String = "Signature"
+    var isLoading: Bool = false
     public let onConfirmBase64: (String) -> Void
 
     @State private var canvas = PKCanvasView()
@@ -226,8 +227,9 @@ public struct SignaturePad: View {
     private let cardHeight: CGFloat = 190
     private let pillCollapsedWidth: CGFloat = 52
 
-    public init(title: String = "Signature", onConfirmBase64: @escaping (String) -> Void) {
+    public init(title: String = "Signature",isLoading:Bool, onConfirmBase64: @escaping (String) -> Void) {
         self.title = title
+        self.isLoading = isLoading
         self.onConfirmBase64 = onConfirmBase64
     }
 
@@ -241,34 +243,45 @@ public struct SignaturePad: View {
                 RoundedRectangle(cornerRadius: 18)
                     .fill(Color.black.opacity(0.10))
 
-                VStack(alignment: .leading, spacing: 10) {
-
-                    HStack {
-                        Text(title)
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
-                        Spacer()
+                if isLoading {
+                    ZStack {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .tint(Color(BaseTheme.baseTextColor))
+                            .scaleEffect(1.2)
                     }
-                    .padding(.top, 12)
-                    .padding(.horizontal, 14)
-                    .opacity(confirmState == .confirmed ? 0 : 1)
-                    .animation(.easeInOut(duration: 0.2), value: confirmState)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }else{
+                    VStack(alignment: .leading, spacing: 10) {
+                        
+                        HStack {
+                            Text(title)
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                            Spacer()
+                        }
+                        .padding(.top, 12)
+                        .padding(.horizontal, 14)
+                        .opacity(confirmState == .confirmed ? 0 : 1)
+                        .animation(.easeInOut(duration: 0.2), value: confirmState)
 
-                    PencilCanvasView(
-                        canvas: $canvas,
-                        hasSignature: $hasSignature,
-                        isEnabled: confirmState == .idle
-                    )
-                    .frame(height: 180)
-                    .background(Color.clear)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .padding(.horizontal, 12)
-                    .padding(.bottom, 12)
+                        PencilCanvasView(
+                            canvas: $canvas,
+                            hasSignature: $hasSignature,
+                            isEnabled: confirmState == .idle
+                        )
+                        .frame(height: 180)
+                        .background(Color.clear)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .padding(.horizontal, 12)
+                        .padding(.bottom, 12)
+                    }
+                    .padding(.trailing, 12)
+
+                    // ✅ Confirm pill: NO padding BEFORE and AFTER (touches edges always)
+                    confirmControl(padWidth: padWidth, cardHeight: cardHeight)
                 }
-                .padding(.trailing, 12)
-
-                // ✅ Confirm pill: NO padding BEFORE and AFTER (touches edges always)
-                confirmControl(padWidth: padWidth, cardHeight: cardHeight)
+                
             }
             .frame(width: padWidth, height: cardHeight, alignment: .topTrailing)
             .clipShape(RoundedRectangle(cornerRadius: 18))

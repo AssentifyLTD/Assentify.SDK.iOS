@@ -45,7 +45,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
             response : nil,
             status : "InProgress"
         )
-        /***/
+        /**/
          defaultTitle = configModel!
             .stepDefinitions
             .first(where: { $0.stepId == currentStep!.stepDefinition!.stepId })!
@@ -277,7 +277,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
                 response: status,
                 status: status
             )
-            /***/
+            /**/
         }
         
         

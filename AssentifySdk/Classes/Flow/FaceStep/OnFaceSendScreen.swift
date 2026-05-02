@@ -36,13 +36,13 @@ struct OnFaceSendScreen: View {
         return VStack {
             
             if progress == 100 {
-                ScanAnimation(
+                FaceScanAnimation(
                    iconName: "ic_face_id"
                 ).frame(width: 170, height: 180)
             } else {
                 SVGAssetIcon(
                     name: "ic_uploading_face",
-                    size: CGSize(width: 150, height: 160),
+                    size: CGSize(width: 140, height: 155),
                     tintColor: BaseTheme.baseAccentColor
             
                 ).frame(width: 150, height: 160)

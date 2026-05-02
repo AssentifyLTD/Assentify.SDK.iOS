@@ -42,7 +42,7 @@ struct OnSendScreen: View {
             } else {
                 SVGAssetIcon(
                     name: "ic_uploading",
-                    size: CGSize(width: 200, height: 160),
+                    size: CGSize(width: 200, height: 140),
                     tintColor: BaseTheme.baseAccentColor
             
                 ).frame(width: 200, height: 160)

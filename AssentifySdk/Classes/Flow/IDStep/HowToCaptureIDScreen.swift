@@ -107,40 +107,48 @@ public struct HowToCaptureScreen: View {
             }.modifier(InterceptSystemBack(action: onBack))
         }
     }
-private struct AssetVideoPlayer: View {
+public struct AssetVideoPlayer: View {
 
     let assetName: String
-    @State private var player: AVPlayer?
+    @State public var player: AVPlayer?
 
-    var body: some View {
-        ZStack {
-            if let player {
-                VideoPlayer(player: player)
-                    .onAppear {
-                        player.play()
-
-                        // Loop video
-                        NotificationCenter.default.addObserver(
-                            forName: .AVPlayerItemDidPlayToEndTime,
-                            object: player.currentItem,
-                            queue: .main
-                        ) { _ in
-                            player.seek(to: .zero)
+    public var body: some View {
+        GeometryReader { geo in
+            ZStack {
+                if let player {
+                    VideoPlayer(player: player)
+                        .frame(width: geo.size.width, height: geo.size.width)
+                        .clipped()
+                        // Overlay blocks the tap gesture that reveals controls
+                        .overlay(Color.clear.contentShape(Rectangle()))
+                        .allowsHitTesting(false)
+                        .onAppear {
                             player.play()
+                            NotificationCenter.default.addObserver(
+                                forName: .AVPlayerItemDidPlayToEndTime,
+                                object: player.currentItem,
+                                queue: .main
+                            ) { _ in
+                                player.seek(to: .zero)
+                                player.play()
+                            }
                         }
-                    }
-                    .onDisappear {
-                        player.pause()
-                    }
-            } else {
-                ProgressView()
+                        .onDisappear {
+                            player.pause()
+                        }
+                } else {
+                    ProgressView()
+                }
             }
         }
+        .aspectRatio(1/1, contentMode: .fit)
         .onAppear {
             guard let url = Bundle.main.url(forResource: assetName, withExtension: "mp4") else {
                 return
             }
-            player = AVPlayer(url: url)
+            let newPlayer = AVPlayer(url: url)
+            newPlayer.isMuted = true   // mute audio
+            player = newPlayer
         }
     }
 }

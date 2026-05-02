@@ -173,39 +173,3 @@ public struct HowToCaptureFaceScreen: View {
     }
 }
 
-private struct AssetVideoPlayer: View {
-
-    let assetName: String
-    @State private var player: AVPlayer?
-
-    var body: some View {
-        ZStack {
-            if let player {
-                VideoPlayer(player: player)
-                    .onAppear {
-                        player.play()
-
-                        NotificationCenter.default.addObserver(
-                            forName: .AVPlayerItemDidPlayToEndTime,
-                            object: player.currentItem,
-                            queue: .main
-                        ) { _ in
-                            player.seek(to: .zero)
-                            player.play()
-                        }
-                    }
-                    .onDisappear {
-                        player.pause()
-                    }
-            } else {
-                ProgressView()
-            }
-        }
-        .onAppear {
-            guard let url = Bundle.main.url(forResource: assetName, withExtension: "mp4") else {
-                return
-            }
-            player = AVPlayer(url: url)
-        }
-    }
-}

@@ -68,7 +68,7 @@ public struct FaceMatchStep: View {
             response : nil,
             status : "InProgress"
         )
-        /***/
+        /**/
         
     }
 
@@ -150,7 +150,7 @@ public struct FaceMatchStep: View {
                         response: "Completed",
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onError: { model in
@@ -175,7 +175,7 @@ public struct FaceMatchStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onRetry: { model in
@@ -200,7 +200,7 @@ public struct FaceMatchStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onLiveness: { model in
@@ -225,7 +225,7 @@ public struct FaceMatchStep: View {
                         response: finalResponse,
                         status: "InProgress"
                     )
-                    /***/
+                    /**/
                 }
             },
             onEnvironmental: { brightness, motion, faceEvents, zoom, detectedFaces, isCentered in

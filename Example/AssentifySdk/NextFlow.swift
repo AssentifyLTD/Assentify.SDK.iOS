@@ -1,9 +1,9 @@
 import UIKit
 import AVFoundation
+import AssentifySdk
 
 
 
-final class ViewController2: UIViewController {
+final class ViewController2: UIViewController{
+    
 }
-
-   
