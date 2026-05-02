@@ -117,8 +117,11 @@ public struct AssetVideoPlayer: View {
             ZStack {
                 if let player {
                     VideoPlayer(player: player)
-                        .frame(width: geo.size.width, height: geo.size.width) // square frame matches 1770x1746
+                        .frame(width: geo.size.width, height: geo.size.width)
                         .clipped()
+                        // Overlay blocks the tap gesture that reveals controls
+                        .overlay(Color.clear.contentShape(Rectangle()))
+                        .allowsHitTesting(false)
                         .onAppear {
                             player.play()
                             NotificationCenter.default.addObserver(
@@ -138,12 +141,14 @@ public struct AssetVideoPlayer: View {
                 }
             }
         }
-        .aspectRatio(1/1, contentMode: .fit) // locks the GeometryReader to square
+        .aspectRatio(1/1, contentMode: .fit)
         .onAppear {
             guard let url = Bundle.main.url(forResource: assetName, withExtension: "mp4") else {
                 return
             }
-            player = AVPlayer(url: url)
+            let newPlayer = AVPlayer(url: url)
+            newPlayer.isMuted = true   // mute audio
+            player = newPlayer
         }
     }
 }
