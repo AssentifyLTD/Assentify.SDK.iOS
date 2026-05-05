@@ -3,9 +3,7 @@ import SwiftUI
 public enum SubmitDataTypes {
     public static let onSend     = "onSend"
     public static let onError    = "onError"
-    public static let onComplete = "onComplete"
     public static let none       = "none"
-    public static let backGroundInit  = "none"
 }
 
 // MARK: - SubmitStepScreen (SwiftUI - single view like your other screens)
@@ -17,8 +15,10 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     }
     
     public func onSubmitSuccess() {
+        
         DispatchQueue.main.async {
-            submitDataTypes = SubmitDataTypes.onComplete
+            flowController.endFlow(flowData:flowController.getFlowCompletedList())
+
         }
 
     }
@@ -26,7 +26,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
 
     public let flowController: FlowController
 
-    @State private var submitDataTypes: String = SubmitDataTypes.onSend
+    @State private var submitDataTypes: String = SubmitDataTypes.none
 
     @State private var resetTick: Int = 0
 
@@ -47,13 +47,13 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                     ZStack {
                         switch submitDataTypes {
 
-                        case SubmitDataTypes.onSend:
+                        case SubmitDataTypes.none , SubmitDataTypes.onSend:
                             MiddleContent(
-                                title: "Almost Done!",
-                                message: "Your information is being submitted. We'll be done shortly.",
+                                title: "Ready to Submit?",
+                                message: "Swipe the button below to confirm your submission.",
                                 messageColor: Color(BaseTheme.baseTextColor)
                             )
-
+                            
                         case SubmitDataTypes.onError:
                             MiddleContent(
                                 title: nil,
@@ -61,14 +61,8 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                                 messageColor: Color(BaseTheme.baseRedColor)
                             )
 
-                        case SubmitDataTypes.onComplete:
-                            MiddleContent(
-                                title: "THANK YOU",
-                                message: "Swipe the button below to continue.",
-                                messageColor: Color(BaseTheme.baseTextColor)
-                            )
-
-                        default: // none
+                       
+                        default:
                             MiddleContent(
                                 title: "Ready to Submit?",
                                 message: "Swipe the button below to confirm your submission.",
@@ -87,7 +81,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                             text: swipeText,
                             height: 75,
                             corner: 35,
-                            resetKey: resetTick
+                            resetKey: resetTick,
                         ) {
                             onSubmit()
                         }
@@ -105,7 +99,6 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
         } .modifier(InterceptSystemBack(action: onBack))
         .onAppear {
             // Start submit when screen appears (like Activity onCreate)
-            startSubmit()
 
             var wrapUp: SubmitRequestModel? = nil
             let initSteps = ConfigModelObject.shared.get()!.stepDefinitions
@@ -169,25 +162,18 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     }
 
     private var swipeText: String {
-        submitDataTypes == SubmitDataTypes.onComplete ? "Next" : "Swipe to Submit"
+         "Swipe to Submit"
     }
 
     // MARK: - Actions
     private func onBack() {
-        if submitDataTypes == SubmitDataTypes.onComplete {
-            flowController.endFlow(flowData:flowController.getFlowCompletedList())
-        } else {
-            flowController.backClick()
-        }
+        flowController.backClick()
+        
     }
 
     private func onSubmit() {
-        if submitDataTypes == SubmitDataTypes.onComplete {
-            flowController.endFlow(flowData:flowController.getFlowCompletedList())
-        } else {
             startSubmit()
             submitDataTypes = SubmitDataTypes.onSend
-        }
     }
 
     private func startSubmit() {
