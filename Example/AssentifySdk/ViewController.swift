@@ -348,6 +348,8 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
             var customProperties: [String: Any] = [:]
             
             customProperties["phoneNumber"] = "0101"
+            customProperties["email"] = "tariq@gmail.com"
+            customProperties["city"] = "ANSAR"
 
 
             let flowEnvironmentalConditions = FlowEnvironmentalConditions(
@@ -382,6 +384,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
                 blockLoaderCustomProperties: customProperties
             )
 
+          //  sdk.clearFlow();
             sdk.startFlow(from: self, flowDelegate: self, flowEnvironmentalConditions: flowEnvironmentalConditions)
         }
     }

@@ -17,6 +17,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     public func onSubmitSuccess() {
         
         DispatchQueue.main.async {
+            HasSubmittedObject.shared.set(true)
             flowController.endFlow(flowData:flowController.getFlowCompletedList())
 
         }

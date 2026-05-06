@@ -104,14 +104,8 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
 
                 if let dirtyKey = isDirtyKey, !dirtyKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                    !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-
-                     let defultValue = AssistedFormHelper.getDefaultValueValueToCheckIsDirty(key!, index, flowController: flowController)
-                    print("__________________ Check IS Dirty ")
-                    print(key)
-                    print(dirtyKey)
-                    print(value)
-                    print(defultValue)
-                    print("__________________")
+                    let defultValue = AssistedFormHelper.getDefaultValueValueToCheckIsDirty(key!, index, flowController: flowController)
+               
                     if(defultValue == value){
                         extractedInformation[dirtyKey] = "false"
                     }else{

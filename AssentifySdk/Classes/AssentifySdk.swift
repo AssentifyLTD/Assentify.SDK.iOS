@@ -628,6 +628,7 @@ public class AssentifySdk {
         ConfigModelObject.shared.set(nil)
         CreateUserDocumentObject.shared.clear()
         SignatureResponseObject.shared.clear()
+        HasSubmittedObject.shared.clear()
         LocalStepsObject.shared.set(
               []
            )

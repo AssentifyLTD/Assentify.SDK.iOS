@@ -422,3 +422,26 @@ public final class SignatureResponseObject {
             .forEach { UserDefaults.standard.removeObject(forKey: $0) }
     }
 }
+
+
+public final class HasSubmittedObject {
+
+    public static let shared = HasSubmittedObject()
+    private init() {}
+
+    private func key() -> String {
+        return "HasSubmittedObject_\(String(describing: InteractionObject.shared.get()))"
+    }
+
+    public func set(_ value: Bool) {
+        UserDefaults.standard.set(value, forKey: key())
+    }
+
+    public func get() -> Bool {
+        return UserDefaults.standard.bool(forKey: key())
+    }
+
+    public func clear() {
+        UserDefaults.standard.removeObject(forKey: key())
+    }
+}
