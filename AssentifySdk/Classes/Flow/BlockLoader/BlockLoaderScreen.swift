@@ -129,23 +129,23 @@ struct BlockLoaderScreen: View {
                     
                 }else{
                     Text("Thank you!")
-                        .font(.system(size: 25, weight: .bold))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
-                        .multilineTextAlignment(.leading)
+                        .multilineTextAlignment(.center)
                         .lineSpacing(6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 25)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 15)
                         .padding(.leading, 25)
                         .padding(.trailing, 20)
                     
-                    Text(" All Done! Completed \(steps.count) " + (steps.count == 1 ? "Step" : "Steps") + " Successfully")
-                        .font(.system(size: 20, weight: .regular))
+                    Text("Completed \(steps.count) " + (steps.count == 1 ? "Step" : "Steps") + " Successfully")
+                        .font(.system(size: 15, weight: .regular))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .multilineTextAlignment(.leading)
                         .lineSpacing(6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 5)
-                        .padding(.horizontal, 25)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 10)
+                        .padding(.horizontal, 10)
                         .padding(.bottom, 10)
                 }
                 // Header
