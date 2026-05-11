@@ -384,7 +384,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
                 blockLoaderCustomProperties: customProperties
             )
 
-          //  sdk.clearFlow();
+            sdk.clearFlow();
             sdk.startFlow(from: self, flowDelegate: self, flowEnvironmentalConditions: flowEnvironmentalConditions)
         }
     }
