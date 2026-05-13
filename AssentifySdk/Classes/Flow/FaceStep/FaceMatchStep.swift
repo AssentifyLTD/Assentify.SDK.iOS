@@ -366,7 +366,7 @@ public struct FaceMatchStep: View {
                 EmptyView()
 
             case .sending:
-                OnFaceSendScreen(progress: uploadProgress)
+                OnFaceSendScreen(progress: uploadProgress,onBack: {onBack()})
                     .ignoresSafeArea()
                     .background(Color.black.opacity(0.35).ignoresSafeArea())
                     .zIndex(999)
@@ -384,21 +384,28 @@ public struct FaceMatchStep: View {
                     onIDChange: {
                         flowController.faceIDChange();
                         flowController.backClick()
-                    }
+                    },
+                    onBack: {onBack()}
                 )
 
             case .error, .retry, .liveness:
-                OnFaceLivenessScreen(imageUrl: imageUrl) {
+                OnFaceLivenessScreen(imageUrl: imageUrl,onRetry: {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true
                         commands.triggerRetry += 1
                     }
+                },
+                onBack:{
+                      onBack()
                 }
+            )
+
+                
             }
         }
         .animation(.easeInOut(duration: 0.2), value: start)
-        .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
+        .topBarBackLogo(logoUrl : screenEvent == .idle || BaseTheme.stepperType == .normal ?  BaseTheme.baseLogo : "" ,noStepper: screenEvent == .idle || BaseTheme.stepperType == .normal  ?  true : false,) {
             onBack()
         }
         .modifier(InterceptSystemBack(action: onBack))

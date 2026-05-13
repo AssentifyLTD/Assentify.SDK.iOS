@@ -32,6 +32,7 @@ public struct TopBarBackLogoToolbar: ViewModifier {
                         }
                     }
                 }
+                if BaseTheme.stepperType == .normal || noStepper {
                     ToolbarItem(placement: .principal) {
                         AsyncImage(url: URL(string: logoUrl)) { phase in
                             switch phase {
@@ -43,6 +44,7 @@ public struct TopBarBackLogoToolbar: ViewModifier {
                         }
                         .frame(height: 28)
                     }
+                }
                
             }
     }

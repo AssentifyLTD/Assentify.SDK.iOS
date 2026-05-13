@@ -191,7 +191,7 @@ public struct QrScanStep: View {
                 .zIndex(1)
 
             case .sending:
-                OnSendScreen(progress: uploadProgress)
+                OnSendScreen(progress: uploadProgress,onBack: {onBack()})
                     .ignoresSafeArea()
                     .background(Color.black.opacity(0.35).ignoresSafeArea())
                     .zIndex(999)
@@ -200,23 +200,38 @@ public struct QrScanStep: View {
 
             case .completed:
                 if showResultPage {
-                    OnCompleteScreen(imageUrl: self.imageUrl) { onNext() }
+                    OnCompleteScreen(imageUrl: self.imageUrl,
+                                     onNext: {
+                                      onNext()
+                                  },
+                                      onBack: {
+                                      onBack()
+                                    })
                 } else {
-                    OnNormalCompleteScreen(imageUrl: self.imageUrl) { onNext() }
+                    OnNormalCompleteScreen(imageUrl: self.imageUrl,
+                                           onNext: {
+                                            onNext()
+                                        },
+                                            onBack: {
+                                            onBack()
+                                          })
                 }
 
             case .error:
-                OnErrorScreen(imageUrl: self.imageUrl) {
+                OnErrorScreen(imageUrl: self.imageUrl,onRetry:  {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true
                         commands.triggerRetry += 1
                     }
-                }
+                },
+                onBack: {
+                onBack()
+              })
             }
         }
         .animation(.easeInOut(duration: 0.2), value: start)
-        .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
+        .topBarBackLogo(logoUrl : screenEvent == .idle || BaseTheme.stepperType == .normal ?  BaseTheme.baseLogo : "" ,noStepper: screenEvent == .idle || BaseTheme.stepperType == .normal  ?  true : false,) {
             onBack()
         }
         .modifier(InterceptSystemBack(action: onBack))

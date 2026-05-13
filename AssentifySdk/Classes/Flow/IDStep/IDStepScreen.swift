@@ -80,7 +80,7 @@ public struct IDStepScreen: View {
                                 LogoSvgUrl(url: self.iDCustomization.svgLogoUrl ?? "")
                                     .frame(width: 80, height: 80)
                                 Spacer()
-                            }.padding(.top,10)
+                            }.padding(.top, 10)
 
                             Text(self.iDCustomization.header ?? "")
                                 .font(.system(size: 25, weight: .bold))

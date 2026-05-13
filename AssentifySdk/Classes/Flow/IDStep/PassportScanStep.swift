@@ -346,7 +346,7 @@ public struct PassportScanStep: View {
                 EmptyView()
                 
             case .sending:
-                OnSendScreen(progress: uploadProgress)
+                OnSendScreen(progress: uploadProgress,onBack: {onBack()})
                     .ignoresSafeArea()
                     .background(Color.black.opacity(0.35).ignoresSafeArea()) // optional dim
                     .zIndex(999)
@@ -355,65 +355,85 @@ public struct PassportScanStep: View {
             case .completed:
                 
                 if(FlowEnvironmentalConditionsObject.shared.get()!.enableNfc){
-                    OnNormalCompleteScreen(imageUrl:self.imageUrl
-                    ) {
+                    OnNormalCompleteScreen(imageUrl:self.imageUrl,
+                       onNext: {
                         onNext()
-                    }
+                    },
+                        onBack: {
+                        onBack()
+                      })
                 }else{
                     if(self.showResultPage){
                         
                         OnCompleteScreen(imageUrl:self.imageUrl
-                        ) {
-                            onNext()
-                        }
+                                         ,
+                                            onNext: {
+                                             onNext()
+                                         },
+                                             onBack: {
+                                             onBack()
+                                           })
                     }else{
                         OnNormalCompleteScreen(imageUrl:self.imageUrl
-                        ) {
-                            onNext()
-                        }
+                                               ,
+                                                  onNext: {
+                                                   onNext()
+                                               },
+                                                   onBack: {
+                                                   onBack()
+                                                 })
                     }
                 }
                 
             case .error:
-                OnErrorScreen(imageUrl:self.imageUrl
-                ) {
+                OnErrorScreen(imageUrl:self.imageUrl,onRetry:
+                 {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true;
                         commands.triggerRetry += 1
                     }
-                }
+                },onBack: {
+                    onBack()
+                  })
                 
             case .retry:
-                OnErrorScreen(imageUrl:self.imageUrl
-                ) {
+                OnErrorScreen(imageUrl:self.imageUrl,onRetry:
+                  {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true;
                         commands.triggerRetry += 1
                     }
-                }
+                },onBack: {
+                    onBack()
+                  }
+                )
             case .expired:
-                OnPassportExpired(imageUrl:self.imageUrl
-                ) {
+                OnPassportExpired(imageUrl:self.imageUrl,onRetry:
+                {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true;
                         commands.triggerRetry += 1
                     }
-                }
+                },onBack: {
+                    onBack()
+                  })
             case .wrongTemplate:
                 OnErrorScreen(imageUrl:self.imageUrl
-                ) {
+                              ,onRetry: {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true;
                         commands.triggerRetry += 1
                     }
-                }
+                },onBack: {
+                    onBack()
+                  })
             case .liveness:
                 OnLivenessScreen(imageUrl:self.imageUrl
-                ) {
+                ,onRetry:  {
                     
                     DispatchQueue.main.async {
                         screenEvent = .idle
@@ -421,14 +441,16 @@ public struct PassportScanStep: View {
                         commands.triggerRetry += 1
                     }
                     
-                }
+                },onBack: {
+                    onBack()
+                  })
                 
             }
             
             
         }
         .animation(.easeInOut(duration: 0.2), value: start)
-        .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
+        .topBarBackLogo(logoUrl : screenEvent == .idle || BaseTheme.stepperType == .normal ?  BaseTheme.baseLogo : "" ,noStepper: screenEvent == .idle || BaseTheme.stepperType == .normal  ?  true : false,) {
             onBack()
         }
         .modifier(InterceptSystemBack(action: onBack))

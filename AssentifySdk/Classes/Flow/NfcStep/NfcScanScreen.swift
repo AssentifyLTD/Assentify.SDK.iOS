@@ -166,9 +166,21 @@ private struct NfcScanScreenUI: View {
                 
             case .completed:
                 if showResultPage {
-                    OnCompleteScreen(imageUrl: imageUrl,showStper: false,ignoresSvg: true) { onNext() }
+                    OnCompleteScreen(imageUrl: imageUrl,showStper: false,ignoresSvg: true,
+                                     onNext: {
+                                      onNext()
+                                  },
+                                      onBack: {
+                                      onBack()
+                                    })
                 } else {
-                    OnNormalCompleteScreen(imageUrl: imageUrl,showStper: false,ignoresSvg: true) { onNext() }
+                    OnNormalCompleteScreen(imageUrl: imageUrl,showStper: false,ignoresSvg: true,
+                                           onNext: {
+                                            onNext()
+                                        },
+                                            onBack: {
+                                            onBack()
+                                          })
                 }
                 
             case .error:

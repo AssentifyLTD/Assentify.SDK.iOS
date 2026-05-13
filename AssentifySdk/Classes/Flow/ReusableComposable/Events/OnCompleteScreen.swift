@@ -5,6 +5,7 @@ public struct OnCompleteScreen: View {
     let imageUrl: String
     let showStper: Bool
     let onNext: () -> Void
+    let onBack: () -> Void
     var ignoresSvg: Bool = false
 
     let steps: [LocalStepModel] = LocalStepsObject.shared.get() ?? []
@@ -14,11 +15,13 @@ public struct OnCompleteScreen: View {
         showStper: Bool = true,
         ignoresSvg: Bool = false,
         onNext: @escaping () -> Void,
+        onBack: @escaping () -> Void,
     ) {
         self.imageUrl = imageUrl
         self.onNext = onNext
         self.showStper = showStper
         self.ignoresSvg = ignoresSvg
+        self.onBack = onBack
     }
 
     // ✅ allowed keys (contains) like Kotlin
@@ -141,15 +144,14 @@ public struct OnCompleteScreen: View {
                 VStack(spacing: 0) {
 
                     if(showStper){
-                        if(BaseTheme.stepperType == .normal){
                             ProgressStepperView(
                                 steps: steps,
-                                bundle: .main
+                                bundle: .main,
+                                onBack: {onBack()}
                             )
-                            .padding(.top, 120)
-                        }else{
-                            Spacer().frame(height: 0).padding(.top, 200)
-                        }
+                            .padding(.top,
+                                     BaseTheme.stepperType == .normal ?
+                                     120 : 80)
                     }
                     
 

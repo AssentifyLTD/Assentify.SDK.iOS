@@ -4,15 +4,17 @@ public struct OnLivenessScreen: View {
 
     let imageUrl: String
     let onRetry: () -> Void
-
+    let onBack: () -> Void
     let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         imageUrl: String,
-        onRetry: @escaping () -> Void
+        onRetry: @escaping () -> Void,
+        onBack: @escaping () -> Void,
     ) {
         self.imageUrl = imageUrl
         self.onRetry = onRetry
+        self.onBack = onBack
     }
 
     public var body: some View {
@@ -22,15 +24,15 @@ public struct OnLivenessScreen: View {
 
         BaseBackgroundContainer {
             VStack(spacing: 0) {
-                if(BaseTheme.stepperType == .normal){
                     ProgressStepperView(
                         steps: steps,
-                        bundle: .main
+                        bundle: .main,
+                        onBack: {onBack()}
                     )
-                    .padding(.top, 120)
-                }else{
-                    Spacer().frame(height: 0).padding(.top, 200)
-                }
+                    .padding(.top,
+                             BaseTheme.stepperType == .normal ?
+                             120 : 80)
+               
 
                 VStack(spacing: 0) {
 
