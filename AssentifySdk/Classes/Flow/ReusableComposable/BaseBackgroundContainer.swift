@@ -50,7 +50,8 @@ public extension BackgroundStyle {
 
 struct BaseBackgroundContainer<Content: View>: View {
     let content: () -> Content
-
+    var ignoresSvg: Bool = false
+    
     var body: some View {
         switch BaseTheme.baseBackgroundType {
         case .color:
@@ -66,9 +67,14 @@ struct BaseBackgroundContainer<Content: View>: View {
             }
 
         case .image:
-            SvgUrlBackground(url: BaseTheme.baseBackgroundUrl) {
-                AnyView(content())
+            if(ignoresSvg){
+                content()
+            }else{
+                SvgUrlBackground(url: BaseTheme.baseBackgroundUrl) {
+                    AnyView(content())
+                }
             }
+            
         }
     }
 }
@@ -82,26 +88,21 @@ final class SvgDataCache {
 final class SvgImageCache {
     static let shared = NSCache<NSString, SVGKImage>()
 }
-
 struct SvgUrlBackground: View {
     let url: String
     let content: () -> AnyView
 
-    @State private var svgData: Data?
+    @State private var svgImage: SVGKImage?
+    @State private var loadedUrl: String = ""
 
     var body: some View {
         ZStack {
-            if let svgData {
-                SVGDataView(
-                    data: svgData,
-                    cacheKey: url
-                )
+            if let svgImage {
+                GeometryReader { geo in
+                    SVGImageView(image: svgImage, size: geo.size)
+                }
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
-            } else {
-                Color.clear
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
             }
 
             content()
@@ -111,44 +112,59 @@ struct SvgUrlBackground: View {
         }
     }
 
+    @MainActor
     private func load() async {
-        guard !url.isEmpty else { return }
+        guard !url.isEmpty, loadedUrl != url, let u = URL(string: url) else { return }
 
         let cacheKey = url as NSString
 
-        // 1) Return cached raw SVG data if available
-        if let cachedData = SvgDataCache.shared.object(forKey: cacheKey) {
-            self.svgData = cachedData as Data
+        if let cached = SvgImageCache.shared.object(forKey: cacheKey) {
+            self.svgImage = cached
+            self.loadedUrl = url
             return
         }
 
-        // 2) Download and cache
-        guard let u = URL(string: url) else { return }
-
         do {
-            let (data, _) = try await URLSession.shared.data(from: u)
-
-            SvgDataCache.shared.setObject(data as NSData, forKey: cacheKey)
-
-            await MainActor.run {
-                self.svgData = data
+            let data: Data
+            if let cachedData = SvgDataCache.shared.object(forKey: cacheKey) {
+                data = cachedData as Data
+            } else {
+                let (downloaded, _) = try await URLSession.shared.data(from: u)
+                SvgDataCache.shared.setObject(downloaded as NSData, forKey: cacheKey)
+                data = downloaded
             }
+
+            let parsed = try await Task.detached(priority: .userInitiated) {
+                guard let svgString = String(data: data, encoding: .utf8),
+                      svgString.contains("<svg") else {
+                    throw URLError(.cannotDecodeContentData)
+                }
+                guard let img = SVGKImage(data: data) else {
+                    throw URLError(.cannotDecodeContentData)
+                }
+                print("SVG parsed size: \(img.size)")
+                return img
+            }.value
+
+            guard !Task.isCancelled else { return }
+
+            SvgImageCache.shared.setObject(parsed, forKey: cacheKey)
+            self.svgImage = parsed
+            self.loadedUrl = url
+
         } catch {
             print("SvgUrlBackground load error: \(error)")
         }
     }
 }
 
-struct SVGDataView: UIViewRepresentable {
-    typealias UIViewType = SVGKFastImageView
-
-    let data: Data
-    let cacheKey: String
+struct SVGImageView: UIViewRepresentable {
+    let image: SVGKImage
+    let size: CGSize
 
     func makeUIView(context: Context) -> SVGKFastImageView {
-        let emptyImage = SVGKImage()
-        let view = SVGKFastImageView(svgkImage: emptyImage) ?? SVGKFastImageView()
-
+        image.size = size
+        let view = SVGKFastImageView(svgkImage: image) ?? SVGKFastImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
@@ -156,24 +172,8 @@ struct SVGDataView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: SVGKFastImageView, context: Context) {
-        let imageCacheKey = cacheKey as NSString
-
-        // 1) Return cached parsed SVG image if available
-        if let cachedImage = SvgImageCache.shared.object(forKey: imageCacheKey) {
-            uiView.image = cachedImage
-            uiView.contentMode = .scaleAspectFill
-            uiView.isUserInteractionEnabled = false
-            return
-        }
-
-        // 2) Parse once, then cache
-        guard let svgImage = SVGKImage(data: data) else { return }
-
-        SvgImageCache.shared.setObject(svgImage, forKey: imageCacheKey)
-
-        uiView.image = svgImage
+        image.size = size
+        uiView.image = image
         uiView.contentMode = .scaleAspectFill
-        uiView.isUserInteractionEnabled = false
     }
 }
-

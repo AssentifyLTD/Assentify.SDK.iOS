@@ -94,7 +94,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                            .scaleEffect(1.6) .padding(.vertical, 30)
                     }
                 }
-            }.topBarBackLogo {
+            }.topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                 onBack()
             }
         } .modifier(InterceptSystemBack(action: onBack))

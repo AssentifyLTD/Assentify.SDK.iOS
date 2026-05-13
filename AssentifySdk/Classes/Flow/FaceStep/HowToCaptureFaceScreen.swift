@@ -16,9 +16,18 @@ public struct HowToCaptureFaceScreen: View {
     private let flowController: FlowController
     private var docUrl = ""
 
+    private var faceCustomization:Customization
+
+    
     public init(flowController: FlowController) {
         self.flowController = flowController
+        self.faceCustomization =  getIDStepFromConfigFile(
+            configModel: ConfigModelObject.shared.get()!  ,
+            id:flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0
+        )!
         self.docUrl = normalizeUrlString(self.flowController.getPreviousIDImage())
+        
+      
     }
 
     private func normalizeUrlString(_ raw: String) -> String {
@@ -41,6 +50,7 @@ public struct HowToCaptureFaceScreen: View {
     
     private var titleText = "Face Match"
     private var subTitleText = "Watch How Easy It Is\nTo Take A Selfie"
+    private var subTitleTextOnLine = "Watch How Easy It Is To Take A Selfie"
     private var assetVideoFileName = "face-video"
 
     // ✅ New states (logic only)
@@ -101,14 +111,44 @@ public struct HowToCaptureFaceScreen: View {
 
                     Spacer().frame(height: 10)
 
-                    Text(titleText)
-                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                        .font(.system(size: 25, weight: .bold))
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(6)
-                        .frame(maxWidth: .infinity)
+                    if self.faceCustomization.header != nil &&
+                       self.faceCustomization.subHeader != nil &&
+                       self.faceCustomization.svgLogoUrl != nil {
+                        
+                        VStack(spacing: 5) {
+                            HStack {
+                                Spacer()
+                                LogoSvgUrl(url: self.faceCustomization.svgLogoUrl ?? "")
+                                    .frame(width: 80, height: 80)
+                                Spacer()
+                            }
 
-                    Spacer().frame(height: 20)
+                            Text(self.faceCustomization.header ?? "")
+                                .font(.system(size: 25, weight: .bold))
+                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.horizontal, 20)
+
+                            Text(self.faceCustomization.subHeader ?? "")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.horizontal, 20)
+                        }
+                        Spacer().frame(height: 10)
+                    }
+                    else{
+                        Text(titleText)
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .font(.system(size: 25, weight: .bold))
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(6)
+                            .frame(maxWidth: .infinity)
+                        Spacer().frame(height: 20)
+                    }
+                
+
+                
 
                     // MARK: VIDEO (Flexible like weight(1f))
                     AssetVideoPlayer(assetName: assetVideoFileName)
@@ -118,12 +158,25 @@ public struct HowToCaptureFaceScreen: View {
 
                     Spacer().frame(height: 20)
 
-                    Text(subTitleText)
-                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                        .font(.system(size: 25, weight: .bold))
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(6)
-                        .padding(.horizontal, 12)
+                 if self.faceCustomization.header != nil &&
+                        self.faceCustomization.subHeader != nil &&
+                        self.faceCustomization.svgLogoUrl != nil {
+                     Text(subTitleTextOnLine)
+                         .foregroundColor(Color(BaseTheme.baseTextColor))
+                         .font(.system(size: 20, weight: .bold))
+                         .multilineTextAlignment(.center)
+                         .lineSpacing(4)
+                         .padding(.horizontal, 8)
+                 }else{
+                     Text(subTitleText)
+                         .foregroundColor(Color(BaseTheme.baseTextColor))
+                         .font(.system(size: 25, weight: .bold))
+                         .multilineTextAlignment(.center)
+                         .lineSpacing(6)
+                         .padding(.horizontal, 12)
+                 }
+
+                    
 
                     Spacer().frame(height: 20)
 
@@ -149,7 +202,11 @@ public struct HowToCaptureFaceScreen: View {
                         onNext()
                     }
                     .padding(.horizontal, 25)
-                    .padding(.vertical, 25)
+                    .padding(.vertical,
+                        self.faceCustomization.header != nil &&
+                        self.faceCustomization.subHeader != nil &&
+                        self.faceCustomization.svgLogoUrl != nil ? 10 : 25
+                    )
 
                 } else {
                     ProgressView()
@@ -158,7 +215,7 @@ public struct HowToCaptureFaceScreen: View {
                         .scaleEffect(1.2).padding(.vertical, 25)
                 }
             }
-            .topBarBackLogo {
+            .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                 onBack()
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -171,5 +228,13 @@ public struct HowToCaptureFaceScreen: View {
             isLoadingBase64 = false
         }
     }
+}
+
+func getFaceStepFromConfigFile(
+    configModel: ConfigModel,
+    id: Int
+) -> Customization? {
+    let step = configModel.stepDefinitions.first { $0.stepId == id }
+    return step?.customization
 }
 

@@ -428,7 +428,9 @@ public struct PassportScanStep: View {
             
         }
         .animation(.easeInOut(duration: 0.2), value: start)
-        .topBarBackLogo { onBack() }
+        .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
+            onBack()
+        }
         .modifier(InterceptSystemBack(action: onBack))
         
     }

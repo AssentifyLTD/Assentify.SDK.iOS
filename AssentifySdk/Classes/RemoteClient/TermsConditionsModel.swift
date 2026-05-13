@@ -15,17 +15,20 @@ public struct TermsConditionsDataModel: Codable {
     public let header: String?
     public let subHeader: String?
     public let file: String?
+    public let svgLogoUrl: String?
     public let nextButtonTitle: String?
     public let confirmationRequired: Bool?
 
     public init(header: String?,
                 subHeader: String?,
                 file: String?,
+                svgLogoUrl: String?,
                 nextButtonTitle: String?,
                 confirmationRequired: Bool?) {
         self.header = header
         self.subHeader = subHeader
         self.file = file
+        self.svgLogoUrl = svgLogoUrl
         self.nextButtonTitle = nextButtonTitle
         self.confirmationRequired = confirmationRequired
     }

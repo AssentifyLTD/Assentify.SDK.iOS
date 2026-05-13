@@ -112,6 +112,7 @@ extension Customization {
                 selectedTemplates: self.selectedTemplates ?? [],
                 header: self.header,
                 subHeader: self.subHeader,
+                svgLogoUrl: self.svgLogoUrl,
                 confirmationMessage: self.confirmationMessage,
                 autoDownload: self.autoDownload ?? false,
                 enableDigitalSignature: !(self.hideSignatureBoard ?? false),
@@ -120,7 +121,8 @@ extension Customization {
                 enableOtp: self.enableOtp ?? false,
                 otpSize: self.otpSize,
                 otpType: self.otpType,
-                otpExpiryTime: self.otpExpiryTime
+                otpExpiryTime: self.otpExpiryTime,
+                smsProvider: self.smsProvider,
             )
         )
     }

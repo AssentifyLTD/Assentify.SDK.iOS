@@ -12,12 +12,15 @@ struct OnFaceSendScreen: View {
         BaseBackgroundContainer {
             
             VStack(spacing: 0) {
-                
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
+                if(BaseTheme.stepperType == .normal){
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main
+                    )
+                    .padding(.top, 120)
+                }else{
+                    Spacer().frame(height: 0).padding(.top, 200)
+                }
                                 
                 content .padding(.top, 80)
                 

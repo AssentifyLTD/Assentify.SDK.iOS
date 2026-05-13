@@ -159,16 +159,16 @@ private struct NfcScanScreenUI: View {
         
         VStack(spacing: 0) {
             
-            ProgressStepperView(steps: steps ?? [], bundle: .main)
+            ProgressStepperView(steps: steps ?? [], bundle: .main,onBack: {onBack()})
                 .padding(.top, 20)
             
             switch screenEvent {
                 
             case .completed:
                 if showResultPage {
-                    OnCompleteScreen(imageUrl: imageUrl,showStper: false) { onNext() }
+                    OnCompleteScreen(imageUrl: imageUrl,showStper: false,ignoresSvg: true) { onNext() }
                 } else {
-                    OnNormalCompleteScreen(imageUrl: imageUrl,showStper: false) { onNext() }
+                    OnNormalCompleteScreen(imageUrl: imageUrl,showStper: false,ignoresSvg: true) { onNext() }
                 }
                 
             case .error:

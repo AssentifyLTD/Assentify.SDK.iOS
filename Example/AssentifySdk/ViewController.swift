@@ -112,7 +112,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
         
         
         
-        apiKeyField.text = "QwWzzKOYLkDzCLJ9lENlgvRQ1kmkKDv76KbJ9sPfr9Joxwj2DUuzC7htaZP89RqzgB9i9lHc4IpYOA7g"
+        apiKeyField.text = "YHRNQEbDAn7R0uVZ7OC4gyAl0PscNgk3cLo2Khka9TPHGUq0EAXltk1XnwPSaee6kq2OjGKtX6ujDAcF1jdg"
         
        
         
@@ -353,8 +353,8 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
 
             let flowEnvironmentalConditions = FlowEnvironmentalConditions(
-                backgroundType: .color,
-
+                backgroundType: .image,
+           
                 
 //                logoUrl: "https://i.postimg.cc/3xY0ybsp/icon-1-(1).png",
 //                                  textColor: "#000000",
@@ -369,15 +369,25 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 //                                      holdUntil: 0.4
 //                                  ),
                 
-                logoUrl: "https://image2url.com/r2/default/images/1769694393603-0afa5733-d9a5-4b0d-9134-868d3a750069.png",
-             //   svgBackgroundImageUrl: "https://api.dicebear.com/7.x/shapes/svg?seed=patternA",
+                logoUrl : "https://image2url.com/r2/default/images/1774601396029-0d566673-586b-4d36-9f30-19704f88dba6.png",
+                svgBackgroundImageUrl: "https://qa.blob.assentify.com/v2/Document/6X1Zo1iR8OI13NUb2Gt9luIyX1aXodXzZpgpJDGcXlA=/Wave-20260512162501378.svg",
 
-//                textColor: self.textHex,
-//                secondaryTextColor: self.secondaryTextHex,
-//                backgroundCardColor: self.cardHex,
-//                accentColor: self.accentHex,
-//                backgroundColor: .solid(hex: self.bgHex),
-//                clickColor: .solid(hex: self.accentHex),
+                textColor:  "#FFFFFF",
+                secondaryTextColor: "#000000",
+                backgroundCardColor:  "#2C2C2E",
+                accentColor: "#E6BF00",
+                //backgroundColor: .solid(hex: "#2C2C2E"),
+                clickColor: .solid(hex:"#E6BF00"),
+                
+                
+                
+                
+                
+                stepperType: StepperType.normal,
+                rangeStart: 30,
+                rangeEnd: 95,
+
+                
                 language: cfg.language,
                 enableNfc: cfg.enableNfc,
                 enableQr: cfg.enableQr,

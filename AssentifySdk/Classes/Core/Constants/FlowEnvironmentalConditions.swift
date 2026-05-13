@@ -114,6 +114,11 @@ public enum BackgroundType: String, Codable {
     case color = "Color"
 }
 
+public enum StepperType: String, Codable {
+    case normal = "Normal"
+    case percentageBased = "PercentageBased"
+}
+
 // MARK: - FlowEnvironmentalConditions
 
 public final class FlowEnvironmentalConditions {
@@ -127,6 +132,12 @@ public final class FlowEnvironmentalConditions {
     public var clickColor: BackgroundStyle?
     public var backgroundType: BackgroundType
 
+    
+    public var stepperType: StepperType
+    public var rangeStart: Int
+    public var rangeEnd : Int
+    public var stepperTitle:String
+    
     public let language: String
     public let enableNfc: Bool
     public let enableQr: Bool
@@ -142,7 +153,11 @@ public final class FlowEnvironmentalConditions {
         accentColor: String = "",
         backgroundColor: BackgroundStyle? = nil,
         clickColor: BackgroundStyle? = nil,
-        language: String = Language.NON,              
+        stepperType: StepperType = StepperType.normal,
+        rangeStart: Int = 25,
+        rangeEnd: Int = 50,
+        stepperTitle: String = "Identification",
+        language: String = Language.NON,
         enableNfc: Bool = false,
         enableQr: Bool = false,
         blockLoaderCustomProperties: [String: Any] = [:]
@@ -157,6 +172,11 @@ public final class FlowEnvironmentalConditions {
         self.clickColor = clickColor
         self.backgroundType = backgroundType
 
+        self.stepperType = stepperType
+        self.rangeStart = rangeStart
+        self.rangeEnd = rangeEnd
+        self.stepperTitle = stepperTitle
+        
         self.language = language
         self.enableNfc = enableNfc
         self.enableQr = enableQr

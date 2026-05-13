@@ -251,7 +251,8 @@ public struct SecureEmailWithOtpField: View {
             inputType: field.inputType,
             otpSize: otpSize,
             otpType: otpType,
-            otpExpiryTime: expiryMinutes
+            otpExpiryTime: expiryMinutes,
+            smsProvider : 2
         )
         
         OtpHelper.requestOtp(config: configModelObject!, requestOtpModel: request) {

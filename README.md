@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.9**
+1. *Enhanced User Experience*
+
 **1.0.0-Beta.8**
 1. *Enhanced User Experience
 

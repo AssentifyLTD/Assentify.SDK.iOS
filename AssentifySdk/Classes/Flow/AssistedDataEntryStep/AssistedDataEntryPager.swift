@@ -55,10 +55,37 @@ fileprivate struct AssistedDataEntrySinglePage: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 20) {
                 
-                Text(page.title)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(Color(BaseTheme.baseTextColor))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                if page.title != nil &&
+                   page.subTitle != nil &&
+                   page.svgLogoUrl != nil {
+                    VStack(spacing: 5) {
+                        HStack {
+                            Spacer()
+                            LogoSvgUrl(url: page.svgLogoUrl ?? "")
+                                .frame(width: 70, height: 70)
+                            Spacer()
+                        }
+                        Text(page.title ?? "")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color(BaseTheme.baseTextColor))
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.horizontal, 20)
+
+                        Text(page.subTitle ?? "")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.horizontal, 20)
+                    }
+                }else{
+                    Text(page.title)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                
+            
                 
                 AssistedDataEntryFieldsList(
                     model: $model,
@@ -326,6 +353,43 @@ fileprivate struct AssistedDataEntryFieldRow: View {
                             AssistedFormHelper.changeLocalOtpValid(key, true, pageIndex)
                             onFieldChanged()
                         }
+                )
+            case .checkbox:
+                SecureCheckbox(
+                    title: element.textTitle ?? "",
+                    page: pageIndex,
+                    field: $elementBinding,
+                    flowController: flowController,
+                    onValueChange: { new in
+                        guard let key = element.inputKey else { return }
+                        
+                        AssistedFormHelper.changeValue(key, String(new), pageIndex)
+                        
+                        
+                        onFieldChanged()
+                    }
+                )
+            case .checkboxGroup:
+                SecureCheckboxGroup(
+                    title: element.textTitle ?? "",
+                    options: element.dataSourceContent?
+                        .split(separator: ",")
+                        .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+                        .filter { !$0.isEmpty }
+                    ?? [],
+                    page: pageIndex,
+                    field: $elementBinding,
+                    flowController: flowController,
+                    onValueChange: { new in
+                        let result = new.joined(separator: ",")
+
+                        guard let key = element.inputKey else { return }
+
+                        AssistedFormHelper.changeValue(key, result, pageIndex)
+                        
+
+                        onFieldChanged()
+                    }
                 )
             default:
                 EmptyView()

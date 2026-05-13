@@ -159,19 +159,21 @@ public struct RequestOtpModel: Codable {
     public let otpSize: Int
     public let otpType: Int
     public let otpExpiryTime: Double
-
+    public let smsProvider: Int?
     public init(
         token: String,
         inputType: String,
         otpSize: Int,
         otpType: Int,
-        otpExpiryTime: Double
+        otpExpiryTime: Double,
+        smsProvider: Int,
     ) {
         self.token = token
         self.inputType = inputType
         self.otpSize = otpSize
         self.otpType = otpType
         self.otpExpiryTime = otpExpiryTime
+        self.smsProvider = smsProvider
     }
 }
 

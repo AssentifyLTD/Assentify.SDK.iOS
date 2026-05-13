@@ -62,6 +62,7 @@ public struct SigningEmailWithOtp: View {
             }
         }
         .onAppear {
+            self.email = getEmailValueByKey("", flowController: flowController)
             recomputeEmailError()
         }
         .onChange(of: email) { _ in
@@ -91,6 +92,7 @@ public struct SigningEmailWithOtp: View {
     private func emailField() -> some View {
         HStack(spacing: 10) {
             TextField(title, text: $email)
+                .disabled(true)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .keyboardType(.emailAddress)
@@ -224,7 +226,8 @@ public struct SigningEmailWithOtp: View {
             inputType: "EmailWithOtp",
             otpSize: otpSize,
             otpType: otpType,
-            otpExpiryTime: expiryMinutes
+            otpExpiryTime: expiryMinutes,
+            smsProvider : 2
         )
         
         OtpHelper.requestOtp(config: configModelObject, requestOtpModel: request) { result in
@@ -353,4 +356,16 @@ fileprivate extension String {
     var isNotBlank: Bool {
         !trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+}
+
+
+func getEmailValueByKey(_ key: String,flowController:FlowController) -> String {
+    let doneList = flowController.getAllDoneSteps()
+    for step in doneList {
+        let list = step.submitRequestModel?.extractedInformation ?? [:]
+        for info in list where info.key == key {
+            return info.value
+        }
+    }
+    return ""
 }

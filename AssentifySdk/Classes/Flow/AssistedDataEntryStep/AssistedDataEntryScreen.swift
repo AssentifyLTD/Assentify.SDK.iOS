@@ -132,7 +132,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
 
-                ProgressStepperView(steps: steps ?? [], bundle: .main)
+                ProgressStepperView(steps: steps ?? [], bundle: .main,onBack: {onBack()})
                     .padding(.top, 20)
 
                 if isLoading {

@@ -66,47 +66,37 @@ public struct TermsAndConditionsScreen: View {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
                 
-                ProgressStepperView(steps: steps ?? [], bundle: .main)
-                    .padding(.top, 20)
+                ProgressStepperView(steps: steps ?? [], bundle: .main,onBack: {onBack()})
+                .padding(.top, 20)
                 
-                if isLoading {
-                    VStack {
-                        Text(termsModel?.data.header ?? defaultTitle)
-                            .font(.system(size: 34, weight: .bold))
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 18)
+                
+                if(termsModel?.data.header != nil && termsModel?.data.subHeader != nil && termsModel?.data.svgLogoUrl != nil ){
+                    LogoSvgUrl(url: termsModel?.data.svgLogoUrl ?? "").frame(width: 80, height: 80) .padding(.top, 5)
+                    Text(termsModel?.data.header ?? "Terms And Conditions")
+                        .font(.system(size: 25, weight: .bold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 5)
+                        .padding(.horizontal, 20)
+                    if(termsModel?.data.subHeader != nil){
+                        Text((termsModel?.data.subHeader)!)
+                            .font(.system(size: 15, weight: .regular))
+                            .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, 5)
                             .padding(.horizontal, 20)
-                        // Divider line
-                        Rectangle()
-                            .fill(Color(BaseTheme.baseTextColor).opacity(0.2))
-                            .frame(height: 1)
-                            .padding(.top, 10)
-                            .padding(.horizontal, 20)
-                        
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .tint(Color(BaseTheme.baseTextColor))
-                            .scaleEffect(1.2)
-                        Spacer()
                     }
-                }
-                else {
+                }else{
                     Text(termsModel?.data.header ?? "Terms And Conditions")
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top, 18)
                         .padding(.horizontal, 20)
-                    if(termsModel?.data.subHeader != nil){
-                        Text((termsModel?.data.subHeader)!)
-                            .font(.system(size: 20, weight: .regular))
-                            .foregroundColor(Color(BaseTheme.baseTextColor))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 10)
-                            .padding(.horizontal, 20)
-                    }
+                }
+                
+                  
+                
                     
                     
                     
@@ -161,7 +151,7 @@ public struct TermsAndConditionsScreen: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 20)
-                }
+                
             } 
             .topBarBackLogo {
                 onBack()

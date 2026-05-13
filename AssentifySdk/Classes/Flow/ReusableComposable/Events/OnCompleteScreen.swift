@@ -5,17 +5,20 @@ public struct OnCompleteScreen: View {
     let imageUrl: String
     let showStper: Bool
     let onNext: () -> Void
+    var ignoresSvg: Bool = false
 
     let steps: [LocalStepModel] = LocalStepsObject.shared.get() ?? []
 
     public init(
         imageUrl: String,
         showStper: Bool = true,
+        ignoresSvg: Bool = false,
         onNext: @escaping () -> Void,
     ) {
         self.imageUrl = imageUrl
         self.onNext = onNext
         self.showStper = showStper
+        self.ignoresSvg = ignoresSvg
     }
 
     // ✅ allowed keys (contains) like Kotlin
@@ -133,16 +136,20 @@ public struct OnCompleteScreen: View {
         let text = Color(BaseTheme.baseTextColor)
         let green = Color(BaseTheme.baseGreenColor)
 
-        BaseBackgroundContainer {
+        BaseBackgroundContainer(ignoresSvg :ignoresSvg) {
             GeometryReader { geo in
                 VStack(spacing: 0) {
 
                     if(showStper){
-                        ProgressStepperView(
-                            steps: steps,
-                            bundle: .main
-                        )
-                        .padding(.top, 120)
+                        if(BaseTheme.stepperType == .normal){
+                            ProgressStepperView(
+                                steps: steps,
+                                bundle: .main
+                            )
+                            .padding(.top, 120)
+                        }else{
+                            Spacer().frame(height: 0).padding(.top, 200)
+                        }
                     }
                     
 

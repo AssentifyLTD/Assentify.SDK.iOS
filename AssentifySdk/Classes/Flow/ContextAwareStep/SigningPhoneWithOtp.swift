@@ -41,6 +41,7 @@ public struct SigningPhoneWithOtp: View {
         self.flowController = flowController
         self.onValueChange = onValueChange
         self.onValid = onValid
+        self.localNumber = getPhoneValueByKey("",flowController: flowController);
     }
     
     public var body: some View {
@@ -66,6 +67,8 @@ public struct SigningPhoneWithOtp: View {
             }
         }
         .onAppear {
+            self.localNumber = getPhoneValueByKey("",flowController: flowController);
+
             recomputePhoneError()
         }
         .onChange(of: localNumber) { _ in
@@ -126,9 +129,9 @@ public struct SigningPhoneWithOtp: View {
     private func phoneInputSection() -> some View {
         HStack(spacing: 8) {
             Button {
-                searchQuery = ""
-                userStartedTyping = false
-                showCountryDialog = true
+//                searchQuery = ""
+//                userStartedTyping = false
+//                showCountryDialog = true
             } label: {
                 HStack {
                     Text("\(countryFlag) \(countryDial)")
@@ -136,10 +139,10 @@ public struct SigningPhoneWithOtp: View {
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .lineLimit(1)
 
-                    Spacer(minLength: 4)
-
-                    Image(systemName: "chevron.down")
-                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
+//                    Spacer(minLength: 4)
+//
+//                    Image(systemName: "chevron.down")
+//                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.8))
                 }
                 .padding(.horizontal, 12)
                 .frame(maxWidth: .infinity)
@@ -150,7 +153,7 @@ public struct SigningPhoneWithOtp: View {
                 )
             }
             .buttonStyle(.plain)
-            .frame(width: 120)
+            .frame(width: 100)
 
             HStack(spacing: 10) {
                 TextField(title, text: Binding(
@@ -160,6 +163,7 @@ public struct SigningPhoneWithOtp: View {
                         localNumber = String(onlyDigits.prefix(8))
                     }
                 ))
+                .disabled(true)
                 .keyboardType(.numberPad)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -352,7 +356,8 @@ public struct SigningPhoneWithOtp: View {
             inputType: "PhoneNumberWithOtp",
             otpSize: otpSize,
             otpType: otpType,
-            otpExpiryTime: expiryMinutes
+            otpExpiryTime: expiryMinutes,
+            smsProvider : 2
         )
         
         OtpHelper.requestOtp(config: configModelObject, requestOtpModel: req) { result in
@@ -500,5 +505,24 @@ fileprivate struct ColumnView<Content: View>: View {
         VStack(alignment: .leading, spacing: 0) {
             content()
         }
+    }
+}
+
+func getPhoneValueByKey(_ key: String, flowController: FlowController) -> String {
+    let doneList = flowController.getAllDoneSteps()
+    for step in doneList {
+        let list = step.submitRequestModel?.extractedInformation ?? [:]
+        for info in list where info.key == key {
+            return info.value
+                .removingPrefix("+961")
+                .removingPrefix("961")
+        }
+    }
+    return ""
+}
+extension String {
+    func removingPrefix(_ prefix: String) -> String {
+        guard hasPrefix(prefix) else { return self }
+        return String(dropFirst(prefix.count))
     }
 }

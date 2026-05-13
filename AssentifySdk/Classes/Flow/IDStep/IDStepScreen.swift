@@ -30,6 +30,9 @@ public struct IDStepScreen: View {
 
     private var hasPassport = false
     private var hasID = false
+    private var iDCustomization:Customization
+    
+    
     
     public init(flowController: FlowController) {
         self.flowController = flowController
@@ -46,6 +49,13 @@ public struct IDStepScreen: View {
         OnCompleteScreenData.shared.clear();
         NfcPassportResponseModelObject.shared.clear();
         QrIDResponseModelObject.shared.clear();
+        
+        self.iDCustomization =  getIDStepFromConfigFile(
+            configModel: ConfigModelObject.shared.get()!  ,
+            id:flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0
+        )!
+        
+      
     }
 
     
@@ -55,13 +65,41 @@ public struct IDStepScreen: View {
         BaseBackgroundContainer { // <- your existing background container
             VStack(spacing: 0) {
 
-                ProgressStepperView(steps: steps ?? [], bundle: .main)
+                ProgressStepperView(steps: steps ?? [], bundle: .main,onBack: {onBack()})
                     .padding(.top, 20)
 
                 // Middle content
                 ScrollView {
+                    if self.iDCustomization.header != nil &&
+                       self.iDCustomization.subHeader != nil &&
+                       self.iDCustomization.svgLogoUrl != nil {
+                        
+                        VStack(spacing: 8) {
+                            HStack {
+                                Spacer()
+                                LogoSvgUrl(url: self.iDCustomization.svgLogoUrl ?? "")
+                                    .frame(width: 80, height: 80)
+                                Spacer()
+                            }.padding(.top,10)
+
+                            Text(self.iDCustomization.header ?? "")
+                                .font(.system(size: 25, weight: .bold))
+                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.horizontal, 20)
+
+                            Text(self.iDCustomization.subHeader ?? "")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.horizontal, 20)
+                        }
+                    }
+                    
                     VStack(alignment: .leading, spacing: 16) {
 
+                       
+                        
                         Text("Choose your country of residence")
                             .font(.system(size: 18, weight: .bold))
                             .foregroundStyle(Color(BaseTheme.baseTextColor))
@@ -81,6 +119,7 @@ public struct IDStepScreen: View {
 
                         if let country = selectedCountry {
                             DocumentPickerCards(
+                                minVerticalPadding: self.iDCustomization.header != nil && self.iDCustomization.subHeader != nil && self.iDCustomization.svgLogoUrl != nil ,
                                 country: country,
                                 selectedTemplate: selectedTemplate,
                                 onSelect: { t in
@@ -195,6 +234,7 @@ struct CountryDropdownPill: View {
 ////
 
 struct DocumentPickerCards: View {
+    let minVerticalPadding: Bool
     let country: TemplatesByCountry
     let selectedTemplate: Templates?
     let onSelect: (Templates) -> Void
@@ -210,6 +250,7 @@ struct DocumentPickerCards: View {
 
             if(hasPassport){
                 SelectCard(
+                    minVerticalPadding: minVerticalPadding,
                     title: "Passport",
                     subtitle: nil,
                     selected: isSelectedPassport(),
@@ -234,6 +275,7 @@ struct DocumentPickerCards: View {
             if(hasID){
                 if !country.templates.isEmpty {
                     SelectCard(
+                        minVerticalPadding: minVerticalPadding,
                         title: "Supported IDs",
                         subtitle: "View more",
                         selected: isSelectedIDs(),
@@ -260,6 +302,7 @@ struct DocumentPickerCards: View {
 }
 
 struct SelectCard: View {
+    let minVerticalPadding: Bool
     let title: String
     let subtitle: String?
     let selected: Bool
@@ -267,21 +310,29 @@ struct SelectCard: View {
     let onTap: () -> Void
     var onSubtitleTap: (() -> Void)? = nil
 
+    
+    
+    
     var body: some View {
         Button(action: onTap) {
             HStack(alignment: .center, spacing: 20) {   // ⬅️ more spacing
                 
-                // Bigger icon
                 SVGAssetIcon(
                     name: icon,
-                    size: CGSize(width: 64, height: 64),   // ⬅️ increased size
+                    size: CGSize(
+                        width: minVerticalPadding ? 40 : 64,
+                        height: minVerticalPadding ? 40 : 64
+                    ),
                     tintColor: UIColor(
                         selected
                         ? Color(BaseTheme.baseSecondaryTextColor)
                         : Color(BaseTheme.baseTextColor)
                     )
                 )
-                .frame(width: 64, height: 64)
+                .frame(
+                    width: minVerticalPadding ? 40 : 64,
+                    height: minVerticalPadding ? 40 : 64
+                )
 
                 VStack(alignment: .leading, spacing: 6) {  // ⬅️ slightly more spacing
                     
@@ -320,8 +371,8 @@ struct SelectCard: View {
 
                 Spacer()
             }
-            .padding(.horizontal, 24)   // ⬅️ more horizontal breathing
-            .padding(.vertical, 26)     // ⬅️ slightly reduced from 30 (more balanced)
+            .padding(.horizontal, 24)
+            .padding(.vertical, minVerticalPadding ? 20 : 26)
             .frame(maxWidth: .infinity)
             .background(
                 selected
@@ -467,3 +518,12 @@ public extension View {
         modifier(BottomSheetOverlay(isPresented: isPresented, height: height, sheetContent: content))
     }
 }
+
+func getIDStepFromConfigFile(
+    configModel: ConfigModel,
+    id: Int
+) -> Customization? {
+    let step = configModel.stepDefinitions.first { $0.stepId == id }
+    return step?.customization
+}
+

@@ -59,6 +59,23 @@ public struct BaseTheme {
     public static var baseLogo: String {
         env.logoUrl
     }
+    
+    public static var stepperType: StepperType {
+        env.stepperType
+    }
+    
+    public static var rangeStart: Int {
+        env.rangeStart
+    }
+    
+    
+    public static var rangeEnd: Int {
+        env.rangeEnd
+    }
+    
+    public static var stepperTitle: String {
+        env.stepperTitle
+    }
 }
 
 
@@ -175,7 +192,7 @@ struct BlockLoaderScreen: View {
                  
                 }
               
-            } .topBarBackLogo {
+            } .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                 onBack()
             }
             

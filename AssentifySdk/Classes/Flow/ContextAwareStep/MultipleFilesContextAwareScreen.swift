@@ -436,7 +436,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
             VStack(spacing: 0) {
 
                 VStack(spacing: 10) {
-                    ProgressStepperView(steps: steps ?? [], bundle: .main)
+                    ProgressStepperView(steps: steps ?? [], bundle: .main,onBack: {onBack()})
                 }
                 .padding(.top, 20)
 
@@ -444,25 +444,55 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                     VStack(spacing: 16) {
 
                         if eventType == .onSend {
-                            VStack {
-                                Text(contextAwareSigningObject?.data.header ?? defaultTitle)
-                                    .font(.system(size: 23, weight: .bold))
-                                    .foregroundColor(Color(BaseTheme.baseTextColor))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal, 25)
-                                    .padding(.top, 10)
+                            
+                            
+                            if self.contextAwareSigningObject?.data.header != nil &&
+                               self.contextAwareSigningObject?.data.subHeader != nil &&
+                               self.contextAwareSigningObject?.data.svgLogoUrl != nil {
+                                
+                                VStack(spacing: 5) {
+                                    HStack {
+                                        Spacer()
+                                        LogoSvgUrl(url: self.contextAwareSigningObject?.data.svgLogoUrl ?? "")
+                                            .frame(width: 80, height: 80)
+                                        Spacer()
+                                    }
 
-                                Spacer()
-                                    .frame(height: UIScreen.main.bounds.height * 0.25)
+                                    Text(self.contextAwareSigningObject?.data.header ?? "")
+                                        .font(.system(size: 25, weight: .bold))
+                                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding(.horizontal, 20)
 
-                                ProgressView()
-                                    .progressViewStyle(.circular)
-                                    .tint(Color(BaseTheme.baseTextColor))
-                                    .scaleEffect(1.2)
-
-                                Spacer()
+                                    Text(self.contextAwareSigningObject?.data.subHeader ?? "")
+                                        .font(.system(size: 15, weight: .regular))
+                                        .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding(.horizontal, 20)
+                                }
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            else{
+                                VStack {
+                                    Text(contextAwareSigningObject?.data.header ?? defaultTitle)
+                                        .font(.system(size: 23, weight: .bold))
+                                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal, 25)
+                                        .padding(.top, 10)
+
+                                    Spacer()
+                                        .frame(height: UIScreen.main.bounds.height * 0.25)
+
+                                    ProgressView()
+                                        .progressViewStyle(.circular)
+                                        .tint(Color(BaseTheme.baseTextColor))
+                                        .scaleEffect(1.2)
+
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            }
+                        
                         }
 
                         if eventType == .onError {
@@ -485,22 +515,54 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
 
                             if shouldShowListScreen {
                                 if let obj = contextAwareSigningObject {
-                                    Text(obj.data.header ?? "")
-                                        .font(.system(size: 23, weight: .bold))
-                                        .foregroundColor(Color(BaseTheme.baseTextColor))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.horizontal, 25)
+                                    
+                                    if self.contextAwareSigningObject?.data.header != nil &&
+                                       self.contextAwareSigningObject?.data.subHeader != nil &&
+                                       self.contextAwareSigningObject?.data.svgLogoUrl != nil {
+                                        
+                                        VStack(spacing: 5) {
+                                            HStack {
+                                                Spacer()
+                                                LogoSvgUrl(url: self.contextAwareSigningObject?.data.svgLogoUrl ?? "")
+                                                    .frame(width: 80, height: 80)
+                                                Spacer()
+                                            }
 
-                                    if let sub = obj.data.subHeader, !sub.isEmpty {
-                                        Text(sub)
-                                            .font(.system(size: 15, weight: .bold))
+                                            Text(self.contextAwareSigningObject?.data.header ?? "")
+                                                .font(.system(size: 25, weight: .bold))
+                                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                                .frame(maxWidth: .infinity, alignment: .center)
+                                                .padding(.horizontal, 20)
+
+                                            Text(self.contextAwareSigningObject?.data.subHeader ?? "")
+                                                .font(.system(size: 15, weight: .regular))
+                                                .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.5))
+                                                .frame(maxWidth: .infinity, alignment: .center)
+                                                .padding(.horizontal, 20)
+                                        }
+                                        
+                                    }
+                                    else{
+                                        Text(obj.data.header ?? "")
+                                            .font(.system(size: 23, weight: .bold))
                                             .foregroundColor(Color(BaseTheme.baseTextColor))
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .padding(.horizontal, 25)
+
+                                        if let sub = obj.data.subHeader, !sub.isEmpty {
+                                            Text(sub)
+                                                .font(.system(size: 15, weight: .bold))
+                                                .foregroundColor(Color(BaseTheme.baseTextColor))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.horizontal, 25)
+                                        }
+                                        
+                                        Spacer(minLength: 12)
                                     }
+                                 
                                 }
 
-                                Spacer(minLength: 12)
+                             
 
                                 HStack(spacing: 0) {
                                     Toggle(isOn: Binding(

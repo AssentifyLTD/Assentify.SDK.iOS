@@ -60,12 +60,17 @@ public struct FaceResultScreen: View {
 
                 // TOP + MIDDLE CONTENT
                 VStack(spacing: 0) {
-
-                    ProgressStepperView(
-                        steps: steps,
-                        bundle: .main
-                    )
-                    .padding(.top, 100)
+                    
+                    if(BaseTheme.stepperType == .normal){
+                        ProgressStepperView(
+                            steps: steps,
+                            bundle: .main,onBack: {onRetry()}
+                        )
+                        .padding(.top, 100)
+                    }else{
+                        Spacer().frame(height: 0).padding(.top, 200)
+                    }
+                   
 
                     Text(title)
                         .foregroundColor(text)

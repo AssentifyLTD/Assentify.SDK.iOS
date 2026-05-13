@@ -22,13 +22,15 @@ public struct OnFaceLivenessScreen: View {
 
         BaseBackgroundContainer {
             VStack(spacing: 0) {
-
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
-
+                if(BaseTheme.stepperType == .normal){
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main
+                    )
+                    .padding(.top, 120)
+                }else{
+                    Spacer().frame(height: 0).padding(.top, 200)
+                }
                 VStack(spacing: 0) {
 
                     Spacer().frame(height: 80)
