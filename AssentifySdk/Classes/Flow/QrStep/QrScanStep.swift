@@ -229,11 +229,21 @@ public struct QrScanStep: View {
                 onBack()
               })
             }
+            
+            
+            if screenEvent == .idle || BaseTheme.stepperType == .normal{
+               Color.clear
+                    .topBarBackLogo(logoUrl : screenEvent == .idle || BaseTheme.stepperType == .normal ?  BaseTheme.baseLogo : "" ,noStepper: screenEvent == .idle || BaseTheme.stepperType == .normal  ?  true : false,) {
+                        onBack()
+                    }
+            }else{
+                Color.clear
+                     .topBarBackLogo(logoUrl : "" ,noStepper: false,) {
+                         onBack()
+                     }
+            }
         }
         .animation(.easeInOut(duration: 0.2), value: start)
-        .topBarBackLogo(logoUrl : screenEvent == .idle || BaseTheme.stepperType == .normal ?  BaseTheme.baseLogo : "" ,noStepper: screenEvent == .idle || BaseTheme.stepperType == .normal  ?  true : false,) {
-            onBack()
-        }
         .modifier(InterceptSystemBack(action: onBack))
     }
 }

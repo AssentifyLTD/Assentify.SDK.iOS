@@ -383,7 +383,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
                 
                 
                 
-                stepperType: StepperType.normal,
+                stepperType: StepperType.percentageBased,
                 rangeStart: 30,
                 rangeEnd: 95,
 
