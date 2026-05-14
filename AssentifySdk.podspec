@@ -30,7 +30,8 @@ Pod::Spec.new do |s|
   
   s.documentation_url = 'https://github.com/AssentifyLTD/Assentify.SDK.iOS/blob/main/README.md'
 
-  s.ios.deployment_target = '15.0'
+  s.ios.deployment_target = '16.0'
+
 
   s.static_framework = true
   
