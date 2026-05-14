@@ -8,7 +8,7 @@ public struct SigningEmailWithOtp: View {
     public var contextAwareSigningModel: ContextAwareSigningModel
     
     public let onValueChange: (String) -> Void
-    public let onValid: () -> Void
+    public let onValid: (VerifyOtpRequestOtpModel) -> Void
     
     @State private var email: String = ""
     @State private var otp: String = ""
@@ -28,7 +28,7 @@ public struct SigningEmailWithOtp: View {
         contextAwareSigningModel: ContextAwareSigningModel,
         flowController: FlowController,
         onValueChange: @escaping (String) -> Void,
-        onValid: @escaping () -> Void
+        onValid: @escaping (VerifyOtpRequestOtpModel) -> Void
     ) {
         self.title = title
         self.contextAwareSigningModel = contextAwareSigningModel
@@ -62,7 +62,7 @@ public struct SigningEmailWithOtp: View {
             }
         }
         .onAppear {
-            self.email = getEmailValueByKey("", flowController: flowController)
+            self.email = getEmailValueByKey(contextAwareSigningModel.data.otpTargets.first!, flowController: flowController)
             recomputeEmailError()
         }
         .onChange(of: email) { _ in
@@ -278,7 +278,7 @@ public struct SigningEmailWithOtp: View {
                     if response {
                         isVerified = true
                         requestError = ""
-                        onValid()
+                        onValid(req)
                     } else {
                         isVerified = false
                         requestError = "Invalid OTP. Please try again."

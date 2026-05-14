@@ -8,7 +8,7 @@ public struct SigningPhoneWithOtp: View {
     public var contextAwareSigningModel: ContextAwareSigningModel
     
     public let onValueChange: (String) -> Void   // full E164 phone
-    public let onValid: () -> Void
+    public let onValid: (VerifyOtpRequestOtpModel) -> Void
     
     // Lebanon constants
     private let countryFlag = "🇱🇧"
@@ -34,7 +34,7 @@ public struct SigningPhoneWithOtp: View {
         contextAwareSigningModel: ContextAwareSigningModel,
         flowController: FlowController,
         onValueChange: @escaping (String) -> Void,
-        onValid: @escaping () -> Void
+        onValid: @escaping (VerifyOtpRequestOtpModel) -> Void
     ) {
         self.title = title
         self.contextAwareSigningModel = contextAwareSigningModel
@@ -67,7 +67,7 @@ public struct SigningPhoneWithOtp: View {
             }
         }
         .onAppear {
-            self.localNumber = getPhoneValueByKey("",flowController: flowController);
+            self.localNumber = getPhoneValueByKey(contextAwareSigningModel.data.otpTargets.first!,flowController: flowController);
 
             recomputePhoneError()
         }
@@ -406,7 +406,7 @@ public struct SigningPhoneWithOtp: View {
                     
                     if success {
                         requestError = ""
-                        onValid()
+                        onValid(verifyReq)
                     } else {
                         requestError = "Invalid OTP. Please try again."
                     }

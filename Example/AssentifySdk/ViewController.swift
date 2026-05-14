@@ -347,8 +347,8 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
             var customProperties: [String: Any] = [:]
             
-            customProperties["phoneNumber"] = "0101"
-            customProperties["email"] = "tariq@gmail.com"
+            customProperties["phoneNumber"] = "76640401"
+            customProperties["email"] = "tariq.alskran@gmail.com"
             customProperties["city"] = "ANSAR"
 
 
@@ -383,7 +383,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
                 
                 
                 
-                stepperType: StepperType.percentageBased,
+                stepperType: StepperType.normal,
                 rangeStart: 30,
                 rangeEnd: 95,
 
