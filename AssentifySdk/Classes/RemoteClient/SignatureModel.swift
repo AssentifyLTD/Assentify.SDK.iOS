@@ -16,6 +16,7 @@ public struct SignatureRequestModel:Codable {
     public   var hasOtp: Bool?
     public   var signerContact: String?
     public   var enableVisualVerifier: Bool?
+    public   var faceImageUrl: String?
 
 
 
