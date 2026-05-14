@@ -59,6 +59,23 @@ public struct BaseTheme {
     public static var baseLogo: String {
         env.logoUrl
     }
+    
+    public static var stepperType: StepperType {
+        env.stepperType
+    }
+    
+    public static var rangeStart: Int {
+        env.rangeStart
+    }
+    
+    
+    public static var rangeEnd: Int {
+        env.rangeEnd
+    }
+    
+    public static var stepperTitle: String {
+        env.stepperTitle
+    }
 }
 
 
@@ -105,27 +122,51 @@ struct BlockLoaderScreen: View {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
                 
+                
+                if(!HasSubmittedObject.shared.get()){
+                    Text("Complete Your\nOnboarding in \(steps.count) " + (steps.count == 1 ? "Step" : "Steps"))
+                        .font(.system(size: 25, weight: .bold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(6)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 25)
+                        .padding(.leading, 25)
+                        .padding(.trailing, 20)
+                    
+                    Text("It will include capturing your ID and your face — it's fast, easy, and secure.")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(6)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 5)
+                        .padding(.horizontal, 25)
+                        .padding(.bottom, 10)
+                    
+                }else{
+                    Text("Thank you!")
+                        .font(.system(size: 30, weight: .bold))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(6)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 15)
+                        .padding(.leading, 25)
+                        .padding(.trailing, 20)
+                    
+                    Text("Completed \(steps.count) " + (steps.count == 1 ? "Step" : "Steps") + " Successfully")
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(Color(BaseTheme.baseTextColor))
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(6)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 10)
+                        .padding(.horizontal, 10)
+                        .padding(.bottom, 10)
+                }
                 // Header
-                Text("Complete Your\nOnboarding in \(steps.count) " + (steps.count == 1 ? "Step" : "Steps"))
-                    .font(.system(size: 25, weight: .bold))
-                    .foregroundColor(Color(BaseTheme.baseTextColor))
-                    .multilineTextAlignment(.leading)
-                    .lineSpacing(6)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 25)
-                    .padding(.leading, 25)
-                    .padding(.trailing, 20)
-                
-                Text("It will include capturing your ID and your face — it's fast, easy, and secure.")
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(BaseTheme.baseTextColor))
-                    .multilineTextAlignment(.leading)
-                    .lineSpacing(6)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 5)
-                    .padding(.horizontal, 25)
-                    .padding(.bottom, 10)
-                
+               
                 // Steps list
                 ScrollView {
                     LazyVStack(spacing: 6) {
@@ -143,12 +184,15 @@ struct BlockLoaderScreen: View {
                 
                 .frame(maxHeight: .infinity)
                 
-                BaseClickButton(title: "Next") {
-                    onNext()
+                if(!HasSubmittedObject.shared.get()){
+                    BaseClickButton(title: "Next") {
+                        onNext()
+                    }.padding(.vertical, 25)
+                    .padding(.horizontal, 25)
+                 
                 }
-                .padding(.vertical, 25)
-                .padding(.horizontal, 25)
-            } .topBarBackLogo {
+              
+            } .topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                 onBack()
             }
             

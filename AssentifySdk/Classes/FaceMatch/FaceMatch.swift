@@ -485,7 +485,7 @@ public class FaceMatch :UIViewController, CameraSetupDelegate , RemoteProcessing
         }
         
         if (self.showCountDown ) {
-            if (!hasFace() || !isRectFInsideTheScreen ||  self.faceEvent != FaceEvents.GOOD) {
+            if (!hasFace() || !isRectFInsideTheScreen ||  self.faceEvent != FaceEvents.GOOD  ||  self.zoom != ZoomType.SENDING) {
                 DispatchQueue.main.async {
                     self.countdownLabel?.removeFromSuperview();
                     self.countdownTimer?.invalidate();

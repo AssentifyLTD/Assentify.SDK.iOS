@@ -4,15 +4,18 @@ public struct OnPassportExpired: View {
 
     let imageUrl: String
     let onRetry: () -> Void
+    let onBack: () -> Void
 
     let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         imageUrl: String,
-        onRetry: @escaping () -> Void
+        onRetry: @escaping () -> Void,
+        onBack: @escaping () -> Void,
     ) {
         self.imageUrl = imageUrl
         self.onRetry = onRetry
+        self.onBack = onBack
     }
 
     public var body: some View {
@@ -22,12 +25,14 @@ public struct OnPassportExpired: View {
 
         BaseBackgroundContainer {
             VStack(spacing: 0) {
-
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main,
+                        onBack: {onBack()}
+                    )
+                   .padding(.top,
+                                                  BaseTheme.stepperType == .normal ?
+                                                  120 : 80)
 
                 VStack(spacing: 0) {
 

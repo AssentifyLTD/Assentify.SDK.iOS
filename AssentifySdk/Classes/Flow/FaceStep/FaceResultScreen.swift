@@ -5,6 +5,7 @@ public struct FaceResultScreen: View {
     public let faceModel: FaceResponseModel
     public let onNext: () -> Void
     public let onRetry: () -> Void
+    public let onBack: () -> Void
     public let onIDChange: () -> Void
 
     let steps: [LocalStepModel] = LocalStepsObject.shared.get();
@@ -13,12 +14,14 @@ public struct FaceResultScreen: View {
         faceModel: FaceResponseModel,
         onNext: @escaping () -> Void = {},
         onRetry: @escaping () -> Void = {},
-        onIDChange: @escaping () -> Void = {}
+        onIDChange: @escaping () -> Void = {},
+        onBack: @escaping () -> Void = {}
     ) {
         self.faceModel = faceModel
         self.onNext = onNext
         self.onRetry = onRetry
         self.onIDChange = onIDChange
+        self.onBack = onBack
     }
 
     // MARK: - Derived data (same logic as Kotlin)
@@ -60,12 +63,16 @@ public struct FaceResultScreen: View {
 
                 // TOP + MIDDLE CONTENT
                 VStack(spacing: 0) {
-
-                    ProgressStepperView(
-                        steps: steps,
-                        bundle: .main
-                    )
-                    .padding(.top, 100)
+                    
+                        ProgressStepperView(
+                            steps: steps,
+                            bundle: .main,
+                            onBack: {onBack()}
+                        )
+                        .padding(.top,
+                                 BaseTheme.stepperType == .normal ?
+                                 100 : 60)
+                   
 
                     Text(title)
                         .foregroundColor(text)

@@ -5,6 +5,7 @@ public struct OnWrongTemplateScreen: View {
     let imageUrl: String
     let expectedImageUrl: String
     let onRetry: () -> Void
+    let onBack: () -> Void
 
     // same as your base screen
     let steps: [LocalStepModel] = LocalStepsObject.shared.get()
@@ -12,11 +13,13 @@ public struct OnWrongTemplateScreen: View {
     public init(
         imageUrl: String,
         expectedImageUrl: String,
-        onRetry: @escaping () -> Void = {}
+        onRetry: @escaping () -> Void = {},
+        onBack: @escaping () -> Void = {}
     ) {
         self.imageUrl = imageUrl
         self.expectedImageUrl = expectedImageUrl
         self.onRetry = onRetry
+        self.onBack = onBack
     }
 
     public var body: some View {
@@ -26,12 +29,15 @@ public struct OnWrongTemplateScreen: View {
 
         BaseBackgroundContainer {
             VStack(spacing: 0) {
-
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main,
+                        onBack: {onBack()}
+                    )
+                    .padding(.top,
+                             BaseTheme.stepperType == .normal ?
+                             120 : 80)
+                
 
                 VStack(spacing: 0) {
 

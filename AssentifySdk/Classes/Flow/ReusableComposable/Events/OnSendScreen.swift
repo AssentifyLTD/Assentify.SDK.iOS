@@ -5,20 +5,22 @@ struct OnSendScreen: View {
     
     let progress: Int
     let steps: [LocalStepModel] = LocalStepsObject.shared.get();
-    
+    let onBack: () -> Void
     
     var body: some View {
         
         BaseBackgroundContainer {
             
             VStack(spacing: 0) {
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main,
+                        onBack: {onBack()}
+                    )
+                    .padding(.top,
+                             BaseTheme.stepperType == .normal ?
+                             120 : 80)
                 
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
-                                
                 content .padding(.top, 80)
                 
                 Spacer()

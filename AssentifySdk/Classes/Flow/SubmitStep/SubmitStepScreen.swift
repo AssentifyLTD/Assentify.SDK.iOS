@@ -17,6 +17,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     public func onSubmitSuccess() {
         
         DispatchQueue.main.async {
+            HasSubmittedObject.shared.set(true)
             flowController.endFlow(flowData:flowController.getFlowCompletedList())
 
         }
@@ -93,7 +94,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
                            .scaleEffect(1.6) .padding(.vertical, 30)
                     }
                 }
-            }.topBarBackLogo {
+            }.topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                 onBack()
             }
         } .modifier(InterceptSystemBack(action: onBack))

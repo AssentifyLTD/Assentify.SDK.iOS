@@ -13,6 +13,8 @@ public enum InputTypes: String, Codable, CaseIterable {
     case phoneNumber         = "PhoneNumber"
     case phoneNumberWithOTP  = "PhoneNumberWithOTP"
     case emailWithOTP        = "EmailWithOTP"
+    case checkbox             = "Checkbox"
+    case checkboxGroup       = "CheckboxGroup"
 
     /// Kotlin: fromString(type: String?) -> InputTypes
     public static func fromString(_ type: String?) -> InputTypes {
@@ -40,7 +42,8 @@ public struct AssistedDataEntryModel: Codable {
 
 public struct AssistedDataEntryPage: Codable {
     public let title: String
-    public let subTitle: String
+    public let subTitle: String?
+    public let svgLogoUrl: String?
     public let nextButtonTitle: String
     public var dataEntryPageElements: [DataEntryPageElement]
 }

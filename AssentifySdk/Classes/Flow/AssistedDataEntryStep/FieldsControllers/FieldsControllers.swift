@@ -3,6 +3,62 @@ import Foundation
 public enum AssistedFormHelper {
     
     // MARK: Default Value
+    public static func getDefaultValueValueToCheckIsDirty(
+        _ key: String,
+        _ page: Int,
+        flowController: FlowController
+    ) -> String? {
+        
+        guard var model = AssistedDataEntryPagesObject.shared.get() else {
+            return nil
+        }
+        
+        guard model.assistedDataEntryPages.indices.contains(page) else { return nil }
+        
+        let pageElements = model.assistedDataEntryPages[page].dataEntryPageElements
+        guard let idx = pageElements.firstIndex(where: { $0.inputKey == key }) else { return nil }
+        
+        let field = model.assistedDataEntryPages[page].dataEntryPageElements[idx]
+    
+        
+        // If no identifiers list => return ""
+        let identifiers = field.inputPropertyIdentifierList ?? []
+        if identifiers.isEmpty {
+            return ""
+        }
+        
+        var defaultValue = ""
+        let doneList = flowController.getAllDoneSteps()
+        
+        for step in doneList {
+            
+            let outputProps = step.stepDefinition!.customization.outputProperties
+            
+            let extractedAny = step.submitRequestModel?.extractedInformation ?? [:]
+            
+            for keyID in identifiers {
+                for outputProperty in outputProps where outputProperty.keyIdentifier == keyID {
+                    
+                    if let raw = extractedAny[outputProperty.key] {
+                        let val = String(describing: raw)
+                        
+                        if !val.isEmpty {
+                            if defaultValue.isEmpty {
+                                defaultValue = val
+                            } else {
+                                defaultValue += ",\(val)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Kotlin updates model too
+        return defaultValue
+    }
+    
+    // MARK: Default Value
     public static func getDefaultValueValue(
         _ key: String,
         _ page: Int,

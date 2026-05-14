@@ -23,6 +23,7 @@ extension Customization {
                 header: self.header,
                 subHeader: self.subHeader,
                 file: self.file,
+                svgLogoUrl: self.svgLogoUrl,
                 nextButtonTitle: self.nextButtonTitle,
                 confirmationRequired: self.confirmationRequired
             )

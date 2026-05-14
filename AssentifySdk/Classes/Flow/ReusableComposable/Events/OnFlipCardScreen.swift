@@ -4,16 +4,19 @@ public struct OnFlipCardScreen: View {
 
     let expectedImageUrl: String
     let onNext: () -> Void
-
+    let onBack: () -> Void
+    
     // same base as your other screens
     let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         expectedImageUrl: String,
-        onNext: @escaping () -> Void = {}
+        onNext: @escaping () -> Void = {},
+        onBack: @escaping () -> Void = {}
     ) {
         self.expectedImageUrl = expectedImageUrl
         self.onNext = onNext
+        self.onBack = onBack
     }
 
     public var body: some View {
@@ -24,12 +27,15 @@ public struct OnFlipCardScreen: View {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
 
-                // ✅ Same as OnWrongTemplateScreen base
-                ProgressStepperView(
-                    steps: steps,
-                    bundle: .main
-                )
-                .padding(.top, 120)
+                    ProgressStepperView(
+                        steps: steps,
+                        bundle: .main,
+                        onBack: {onBack()}
+                    )
+                    .padding(.top,
+                             BaseTheme.stepperType == .normal ?
+                             120 : 80)
+                
 
                 VStack(spacing: 0) {
 

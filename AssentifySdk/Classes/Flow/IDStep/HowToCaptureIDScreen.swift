@@ -100,7 +100,7 @@ public struct HowToCaptureScreen: View {
                     }
                     .padding(.horizontal, 25)
                     .padding(.vertical, 25)
-                } .topBarBackLogo {
+                }.topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                     onBack()
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)

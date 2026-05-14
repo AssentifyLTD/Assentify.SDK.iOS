@@ -95,6 +95,8 @@ public class AssentifySdk {
                         throw NSError(domain: "Parse error", code: 0)
                     }
 
+                
+                    
                     // Has Changes check
                     if let hasChanges = json["hasChanges"] as? Bool {
                         let flowInstanceId = json["flowInstanceId"] as? String ?? ""
@@ -122,10 +124,8 @@ public class AssentifySdk {
                     self.clearFlow()
                     self.configFileManager?.clear()
                     self.configFileManager?.write(bodyString)
-
                     self.configModel      = self.configFileManager?.readEngagement()
                     self.tenantThemeModel = self.configFileManager?.readTheme()
-
                     if let templates = self.configFileManager?.readTemplates() {
                         self.getTemplatesByCountry(templates: templates)
                     }
@@ -628,6 +628,7 @@ public class AssentifySdk {
         ConfigModelObject.shared.set(nil)
         CreateUserDocumentObject.shared.clear()
         SignatureResponseObject.shared.clear()
+        HasSubmittedObject.shared.clear()
         LocalStepsObject.shared.set(
               []
            )

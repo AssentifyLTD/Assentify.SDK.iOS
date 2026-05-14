@@ -5,17 +5,22 @@ public struct OnNormalCompleteScreen: View {
     let imageUrl: String
     let showStper: Bool
     let onNext: () -> Void
-
+    let onBack: () -> Void
+    var ignoresSvg: Bool = false
     let steps: [LocalStepModel] = LocalStepsObject.shared.get()
 
     public init(
         imageUrl: String,
         showStper: Bool  = true,
-        onNext: @escaping () -> Void
+        ignoresSvg: Bool  = false,
+        onNext: @escaping () -> Void,
+        onBack: @escaping () -> Void
     ) {
         self.imageUrl = imageUrl
         self.onNext = onNext
         self.showStper = showStper
+        self.ignoresSvg = ignoresSvg
+        self.onBack = onBack
     }
 
     public var body: some View {
@@ -23,15 +28,19 @@ public struct OnNormalCompleteScreen: View {
         let accent = Color(BaseTheme.baseAccentColor)
         let text   = Color(BaseTheme.baseTextColor)
 
-        BaseBackgroundContainer {
+        BaseBackgroundContainer(ignoresSvg:ignoresSvg){
             VStack(spacing: 0) {
 
                 if(showStper){
-                    ProgressStepperView(
-                        steps: steps,
-                        bundle: .main
-                    )
-                    .padding(.top, 120)
+                        ProgressStepperView(
+                            steps: steps,
+                            bundle: .main,
+                            onBack: {onBack()}
+                        )
+                        .padding(.top,
+                                 BaseTheme.stepperType == .normal ?
+                                 120 : 80)
+                    
                 }
 
                 VStack(spacing: 0) {

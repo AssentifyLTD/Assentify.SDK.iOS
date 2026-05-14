@@ -287,7 +287,8 @@ public struct SecurePhoneWithOtpField: View {
             inputType: field.inputType,
             otpSize: otpSize,
             otpType: otpType,
-            otpExpiryTime: expiryMinutes
+            otpExpiryTime: expiryMinutes,
+            smsProvider : 2
         )
 
         OtpHelper.requestOtp(config: config, requestOtpModel: request) { result in

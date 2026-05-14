@@ -82,7 +82,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
 
         let pages = model.assistedDataEntryPages
 
-        for page in pages {
+        for (index, page) in pages.enumerated() {
             for element in page.dataEntryPageElements {
 
                 let key = element.inputKey
@@ -104,11 +104,12 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
 
                 if let dirtyKey = isDirtyKey, !dirtyKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                    !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-
-                    if fieldType == .phoneNumber {
-                        extractedInformation[dirtyKey] = phoneFullValue
-                    } else {
-                        extractedInformation[dirtyKey] = value
+                    let defultValue = AssistedFormHelper.getDefaultValueValueToCheckIsDirty(key!, index, flowController: flowController)
+               
+                    if(defultValue == value){
+                        extractedInformation[dirtyKey] = "false"
+                    }else{
+                        extractedInformation[dirtyKey] = "true"
                     }
                 }
 
@@ -131,7 +132,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
         BaseBackgroundContainer {
             VStack(spacing: 0) {
 
-                ProgressStepperView(steps: steps ?? [], bundle: .main)
+                ProgressStepperView(steps: steps ?? [], bundle: .main,onBack: {onBack()})
                     .padding(.top, 20)
 
                 if isLoading {

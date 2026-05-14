@@ -4,25 +4,10 @@ import SVGKit
 
 // MARK: - Theme
 
-public struct StepperTheme {
-    public let activeColor: Color
-    public let doneColor: Color
-    public let upcomingColor: Color
-
-    public init() {
-        self.activeColor = Color(BaseTheme.baseAccentColor)
-        self.doneColor = Color(BaseTheme.baseGreenColor)
-        self.upcomingColor = Color(BaseTheme.baseTextColor)
-    }
-}
-
-private enum StepVisualState {
-    case done, active, upcoming
-}
 
 // MARK: - Main View
 
-public struct ProgressStepperView: View {
+public struct NormalProgressStepper: View {
 
     private let steps: [LocalStepModel]
     private let theme: StepperTheme = StepperTheme()
