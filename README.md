@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.11**
+1. *Enhanced Flow Design*
+
 **1.0.0-Beta.10**
 1. *Enhanced User Experience*
 2. *Auto Generated Signature*
