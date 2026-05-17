@@ -99,8 +99,8 @@ public struct BaseSliderClick: View {
                 Color.clear.onAppear {
                     trackWidth = geo.size.width
                 }
-                .onChange(of: geo.size.width) {
-                     trackWidth = geo.size.width
+                .onChange(of: geo.size.width) { newValue in
+                    trackWidth = newValue
                 }
             }
         )
