@@ -18,18 +18,22 @@ public struct TermsConditionsDataModel: Codable {
     public let svgLogoUrl: String?
     public let nextButtonTitle: String?
     public let confirmationRequired: Bool?
+    public let isNormalClick: Bool
 
     public init(header: String?,
                 subHeader: String?,
                 file: String?,
                 svgLogoUrl: String?,
                 nextButtonTitle: String?,
-                confirmationRequired: Bool?) {
+                confirmationRequired: Bool?,
+                isNormalClick: Bool
+    ) {
         self.header = header
         self.subHeader = subHeader
         self.file = file
         self.svgLogoUrl = svgLogoUrl
         self.nextButtonTitle = nextButtonTitle
         self.confirmationRequired = confirmationRequired
+        self.isNormalClick = isNormalClick
     }
 }

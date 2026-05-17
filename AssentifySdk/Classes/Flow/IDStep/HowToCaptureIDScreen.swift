@@ -22,8 +22,14 @@ public struct HowToCaptureScreen: View {
     private let flowController: FlowController
 
 
+    private var iDCustomization:Customization
     public init(flowController: FlowController) {
         self.flowController = flowController
+        
+        self.iDCustomization =  getIDStepFromConfigFile(
+            configModel: ConfigModelObject.shared.get()!  ,
+            id:flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0
+        )!
     }
 
     private var isPassport: Bool { selectedTemplateId == -1 }
@@ -89,17 +95,31 @@ public struct HowToCaptureScreen: View {
                     .padding(.top, 8)
                     .frame(maxHeight: .infinity)
 
-                    // MARK: BOTTOM BUTTON (your reusable component)
-                    BaseClickButton(
-                        title: "Lets Start",
-                        cornerRadius: 28,
-                        verticalPadding: 15,
-                        enabled: true
-                    ) {
-                        onNext()
+                    if(iDCustomization.isNormalClick!){
+                        BaseClickButton(
+                            title: "Lets Start",
+                            cornerRadius: 28,
+                            verticalPadding: 15,
+                            enabled: true
+                        ) {
+                            onNext()
+                        }
+                        .padding(.horizontal, 25)
+                        .padding(.vertical, 25)
+                    }else{
+                        BaseSliderClick(
+                            onNext: { onNext()},
+                            label:  "Lets Start",
+                            icon: "camera",
+                            isActive: true
+                        ) .padding(.horizontal, 25)
+                         .padding(.vertical, 25)
                     }
-                    .padding(.horizontal, 25)
-                    .padding(.vertical, 25)
+                   
+                    
+                
+                    
+                    
                 }.topBarBackLogo(logoUrl :BaseTheme.baseLogo,noStepper: true,) {
                     onBack()
                 }
