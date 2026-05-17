@@ -45,6 +45,7 @@ public struct AssistedDataEntryPage: Codable {
     public let subTitle: String?
     public let svgLogoUrl: String?
     public let nextButtonTitle: String
+    public let isNormalClick: Bool
     public var dataEntryPageElements: [DataEntryPageElement]
 }
 

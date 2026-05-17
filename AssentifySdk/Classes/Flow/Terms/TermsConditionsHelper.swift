@@ -25,7 +25,8 @@ extension Customization {
                 file: self.file,
                 svgLogoUrl: self.svgLogoUrl,
                 nextButtonTitle: self.nextButtonTitle,
-                confirmationRequired: self.confirmationRequired
+                confirmationRequired: self.confirmationRequired,
+                isNormalClick: self.isNormalClick ?? true,
             )
         )
     }

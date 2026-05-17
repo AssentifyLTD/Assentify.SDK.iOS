@@ -124,30 +124,44 @@ public struct TermsAndConditionsScreen: View {
                     // Bottom buttons
                     HStack(spacing: 16) {
                         
-                        Button {
-                            if (termsModel?.data.confirmationRequired == true) {
-                                onBack()
-                            } else {
-                                onNext(value: false)
-                            }
-                        } label: {
-                            Text("Decline")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(Color(BaseTheme.baseAccentColor))
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 54)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 28)
-                                        .stroke(Color(BaseTheme.baseAccentColor), lineWidth: 2)
-                                )
-                        }
-                        .buttonStyle(.plain)
+                      
                         
-                        BaseClickButton(title: termsModel?.data.nextButtonTitle ?? "Next",verticalPadding:18,) {
-                            onNext(value: true)
+                        
+                        if termsModel?.data.isNormalClick == true {
+                            Button {
+                                if (termsModel?.data.confirmationRequired == true) {
+                                    onBack()
+                                } else {
+                                    onNext(value: false)
+                                }
+                            } label: {
+                                Text("Decline")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(Color(BaseTheme.baseAccentColor))
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 54)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 28)
+                                            .stroke(Color(BaseTheme.baseAccentColor), lineWidth: 2)
+                                    )
+                            }
+                            .buttonStyle(.plain)
                             
+                            BaseClickButton(title: termsModel?.data.nextButtonTitle ?? "Next",verticalPadding:18,) {
+                                onNext(value: true)
+                                
+                            }
+                            .frame(maxWidth: .infinity)
+                        }else{
+                            BaseSliderClick(
+                                onNext: {onNext(value: true)},
+                                label: termsModel?.data.nextButtonTitle ?? "Next",
+                                icon: "checkmark",
+                                isActive: true
+                            ).frame(maxWidth: .infinity)
+                               
                         }
-                        .frame(maxWidth: .infinity)
+                        
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 20)

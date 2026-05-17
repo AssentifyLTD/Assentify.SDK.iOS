@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.12**
+1. *Support for new button design
+
 **1.0.0-Beta.11**
 1. *Enhanced Flow Design*
 

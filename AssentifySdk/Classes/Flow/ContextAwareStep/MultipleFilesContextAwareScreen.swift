@@ -812,11 +812,27 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                 }
 
                 if selectedTemplate == nil && eventType == .onSignature {
-                    BaseClickButton(title: "Next", verticalPadding: 18, enabled: true) {
-                        onNext()
+                    
+                    
+                    if self.contextAwareSigningObject?.data.isNormalClick ==  true{
+                        BaseClickButton(title: "Next", verticalPadding: 18, enabled: true) {
+                            onNext()
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 20)
+                    }else{
+                        BaseSliderClick(
+                            onNext: {
+                                onNext()
+                            },
+                            label: "Next",
+                            icon: "checkmark",
+                            isActive: true
+                        ) .padding(.horizontal, 20)
+                            .padding(.bottom, 20)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
+                    
+                  
                 }
             }
             .topBarBackLogo { onBack() }

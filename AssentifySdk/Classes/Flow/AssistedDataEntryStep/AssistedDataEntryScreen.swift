@@ -181,28 +181,54 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
                                     
                                 }
                             )
+                            
+                            let islast = (currentPage == assistedDataEntryModel!.assistedDataEntryPages.count - 1)
+                            if(assistedDataEntryModel!.assistedDataEntryPages[currentPage].isNormalClick || islast==false){
+                                BaseClickButton(
+                                    title: assistedDataEntryModel!.assistedDataEntryPages[currentPage].nextButtonTitle,
+                                    verticalPadding: 18,
+                                    enabled :AssistedFormHelper.validatePage(currentPage),
 
-                            BaseClickButton(
-                                title: assistedDataEntryModel!.assistedDataEntryPages[currentPage].nextButtonTitle,
-                                verticalPadding: 18,
-                                enabled :AssistedFormHelper.validatePage(currentPage),
-
-                            ) {
-                                let last = (currentPage == assistedDataEntryModel!.assistedDataEntryPages.count - 1)
-                                if last {
-                                    if(AssistedFormHelper.validatePage(currentPage)){
-                                        status = "Completed"
-                                        onNext()
-                                    }
-                                  
-                                } else {
-                                    if(AssistedFormHelper.validatePage(currentPage)){
-                                        currentPage += 1
+                                ) {
+                                    let last = (currentPage == assistedDataEntryModel!.assistedDataEntryPages.count - 1)
+                                    if last {
+                                        if(AssistedFormHelper.validatePage(currentPage)){
+                                            status = "Completed"
+                                            onNext()
+                                        }
+                                      
+                                    } else {
+                                        if(AssistedFormHelper.validatePage(currentPage)){
+                                            currentPage += 1
+                                        }
                                     }
                                 }
+                                .padding(.horizontal, 20)
+                                .padding(.bottom, 20)
+                            }else{
+                                BaseSliderClick(
+                                    onNext: {
+                                        let last = (currentPage == assistedDataEntryModel!.assistedDataEntryPages.count - 1)
+                                        if last {
+                                            if(AssistedFormHelper.validatePage(currentPage)){
+                                                status = "Completed"
+                                                onNext()
+                                            }
+                                          
+                                        } else {
+                                            if(AssistedFormHelper.validatePage(currentPage)){
+                                                currentPage += 1
+                                            }
+                                        }
+                                    },
+                                    label: assistedDataEntryModel!.assistedDataEntryPages[currentPage].nextButtonTitle,
+                                    icon: "checkmark",
+                                    isActive: AssistedFormHelper.validatePage(currentPage),
+                                ) .padding(.horizontal, 20)
+                                .padding(.bottom, 20)
                             }
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 20)
+
+                           
                         }
                     }
                 }

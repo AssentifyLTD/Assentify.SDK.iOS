@@ -21,7 +21,7 @@ public struct HowToCaptureFaceScreen: View {
     
     public init(flowController: FlowController) {
         self.flowController = flowController
-        self.faceCustomization =  getIDStepFromConfigFile(
+        self.faceCustomization =  getFaceStepFromConfigFile(
             configModel: ConfigModelObject.shared.get()!  ,
             id:flowController.getCurrentStep()?.stepDefinition?.stepId ?? 0
         )!
@@ -193,20 +193,38 @@ public struct HowToCaptureFaceScreen: View {
 
                 // ✅ UI stays the same: button if base64 exists, else progress
                 if let _ = cachedBase64 {
-                    BaseClickButton(
-                        title: "Lets Start",
-                        cornerRadius: 28,
-                        verticalPadding: 15,
-                        enabled: true
-                    ) {
-                        onNext()
+                    
+                    if(faceCustomization.isNormalClick!){
+                        BaseClickButton(
+                            title: "Lets Start",
+                            cornerRadius: 28,
+                            verticalPadding: 15,
+                            enabled: true
+                        ) {
+                            onNext()
+                        }
+                        .padding(.horizontal, 25)
+                        .padding(.vertical,
+                            self.faceCustomization.header != nil &&
+                            self.faceCustomization.subHeader != nil &&
+                            self.faceCustomization.svgLogoUrl != nil ? 10 : 25
+                        )
+                    }else{
+                        BaseSliderClick(
+                            onNext: { onNext()},
+                            label:  "Lets Start",
+                            icon: "camera",
+                            isActive: true
+                        ).padding(.horizontal, 25)
+                         .padding(.vertical,
+                                self.faceCustomization.header != nil &&
+                                self.faceCustomization.subHeader != nil &&
+                                self.faceCustomization.svgLogoUrl != nil ? 10 : 25
+                            )
                     }
-                    .padding(.horizontal, 25)
-                    .padding(.vertical,
-                        self.faceCustomization.header != nil &&
-                        self.faceCustomization.subHeader != nil &&
-                        self.faceCustomization.svgLogoUrl != nil ? 10 : 25
-                    )
+                    
+                    
+                  
 
                 } else {
                     ProgressView()
