@@ -22,8 +22,14 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.14**
+1. *Optimized Face Match Experience*
+
+**1.0.0-Beta.13**
+1. *Support for new button design*
+
 **1.0.0-Beta.12**
-1. *Support for new button design
+1. *Support for new button design*
 
 **1.0.0-Beta.11**
 1. *Enhanced Flow Design*

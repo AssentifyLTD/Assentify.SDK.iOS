@@ -31,34 +31,19 @@
       "size" : "40x40"
     },
     {
-      "filename" : "120x120 1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "180x180 1.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "assentify_icon (1).png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
-    },
-    {
-      "filename" : "120x120.png",
-      "idiom" : "universal",
-      "scale" : "1x",
-      "size" : "120x120"
-    },
-    {
-      "filename" : "180x180.png",
-      "idiom" : "universal",
-      "scale" : "1x",
-      "size" : "180x180"
     }
   ],
   "info" : {

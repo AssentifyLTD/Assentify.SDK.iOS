@@ -76,6 +76,11 @@ public struct BaseTheme {
     public static var stepperTitle: String {
         env.stepperTitle
     }
+    
+    public static var showCountDown: Bool {
+        env.showCountDown
+    }
+    
 }
 
 

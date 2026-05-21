@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AssentifySdk'
-  s.version          = '1.0.0-Beta.13'
+  s.version          = '1.0.0-Beta.14'
   s.summary          = 'This iOS Pod provides integration with Assentify services.'
 
   # This description is used to generate tags and improve search results.
@@ -84,6 +84,7 @@ Pod::Spec.new do |s|
   "ic_flip_card.svg",
   "qr-video.mp4",
   "ic_phone.svg",
+  "ic_warning.svg",
 
 
 

@@ -389,7 +389,8 @@ public struct FaceMatchStep: View {
                 )
 
             case .error, .retry, .liveness:
-                OnFaceLivenessScreen(imageUrl: imageUrl,onRetry: {
+                OnFaceLivenessScreen(imageUrl: imageUrl,isLivnessError:screenEvent == .liveness,
+                                     onRetry: {
                     DispatchQueue.main.async {
                         screenEvent = .idle
                         start = true
@@ -575,7 +576,7 @@ struct FaceMatchUIKitView: UIViewControllerRepresentable {
             guard let vc = assentifySdk?.startFaceMatch(
                 faceMatchDelegate: delegate,
                 secondImage: secondImage,
-                showCountDown: true,
+                showCountDown: BaseTheme.showCountDown,
                 stepId: stepId
             ) else {
                 assertionFailure("startFaceMatch returned nil (sdk instance or config missing)")
