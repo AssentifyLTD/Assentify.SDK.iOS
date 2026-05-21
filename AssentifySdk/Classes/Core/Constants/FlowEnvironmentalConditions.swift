@@ -141,6 +141,7 @@ public final class FlowEnvironmentalConditions {
     public let language: String
     public let enableNfc: Bool
     public let enableQr: Bool
+    public let showCountDown: Bool
     public let blockLoaderCustomProperties: [String: Any]
 
     public init(
@@ -160,6 +161,7 @@ public final class FlowEnvironmentalConditions {
         language: String = Language.NON,
         enableNfc: Bool = false,
         enableQr: Bool = false,
+        showCountDown: Bool = true,
         blockLoaderCustomProperties: [String: Any] = [:]
     ) {
         self.logoUrl = logoUrl
@@ -180,6 +182,7 @@ public final class FlowEnvironmentalConditions {
         self.language = language
         self.enableNfc = enableNfc
         self.enableQr = enableQr
+        self.showCountDown = showCountDown
         self.blockLoaderCustomProperties = blockLoaderCustomProperties
     }
 }

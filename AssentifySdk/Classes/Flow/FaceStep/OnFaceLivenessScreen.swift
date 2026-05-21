@@ -3,6 +3,7 @@ import SwiftUI
 public struct OnFaceLivenessScreen: View {
 
     let imageUrl: String
+    let isLivnessError: Bool
     let onRetry: () -> Void
     let onBack: () -> Void
 
@@ -10,10 +11,12 @@ public struct OnFaceLivenessScreen: View {
 
     public init(
         imageUrl: String,
+        isLivnessError: Bool,
         onRetry: @escaping () -> Void,
         onBack: @escaping () -> Void,
     ) {
         self.imageUrl = imageUrl
+        self.isLivnessError = isLivnessError
         self.onRetry = onRetry
         self.onBack = onBack
     }
@@ -43,30 +46,57 @@ public struct OnFaceLivenessScreen: View {
                             .frame(width: 300, height: 200)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
 
-                        SVGAssetIcon(
-                            name: "ic_error",
-                            size: CGSize(width: 70, height:70),
-                            tintColor: BaseTheme.baseAccentColor
-                        ).frame(width: 70, height:70)
+                        if(isLivnessError){
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 70, height: 70)
+                                .foregroundColor(Color(BaseTheme.baseAccentColor))
+                        }else{
+                            SVGAssetIcon(
+                                name: "ic_error",
+                                size: CGSize(width: 70, height:70),
+                                tintColor: BaseTheme.baseAccentColor
+                            ).frame(width: 70, height:70)
+                        }
+                      
                     }
                     .frame(height: 250)
 
                     Spacer().frame(height: 25)
 
-                    Text("Let's try again")
-                        .foregroundColor(text)
-                        .font(.system(size: 20, weight: .bold))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 32)
+                    if(isLivnessError){
+                        Text("We couldn't verify a live face. Please try again.")
+                            .foregroundColor(text)
+                            .font(.system(size: 20, weight: .bold))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 32)
 
-                    Spacer().frame(height: 15)
+                        Spacer().frame(height: 15)
 
-                    Text("Please make sure your face is well lit, look directly at the camera, and avoid using photos or videos")
-                        .foregroundColor(text.opacity(0.85))
-                        .font(.system(size: 10, weight: .thin))
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(4)
-                        .padding(.horizontal, 32)
+                        Text("We could not verify a live face. Please ensure you are in a well-lit area, and avoid using photos or videos")
+                            .foregroundColor(text.opacity(0.85))
+                            .font(.system(size: 10, weight: .thin))
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(4)
+                            .padding(.horizontal, 32)
+                    }else{
+                        Text("Let's try again")
+                            .foregroundColor(text)
+                            .font(.system(size: 20, weight: .bold))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 32)
+
+                        Spacer().frame(height: 15)
+
+                        Text("Please make sure your face is well lit, look directly at the camera, and avoid using photos or videos")
+                            .foregroundColor(text.opacity(0.85))
+                            .font(.system(size: 10, weight: .thin))
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(4)
+                            .padding(.horizontal, 32)
+                    }
+                   
 
                     Spacer(minLength: 0)
 
