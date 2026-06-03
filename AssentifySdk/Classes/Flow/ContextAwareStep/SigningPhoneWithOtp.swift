@@ -87,8 +87,8 @@ public struct SigningPhoneWithOtp: View {
         Int(contextAwareSigningModel.data.otpSize ?? 8)
     }
     
-    private var otpType: Int {
-        Int(contextAwareSigningModel.data.otpType ?? 1)
+    private var otpFormat: Int {
+        Int(contextAwareSigningModel.data.otpFormat ?? 1)
     }
     
     private var expiryMinutes: Double {
@@ -216,16 +216,16 @@ public struct SigningPhoneWithOtp: View {
                     
                     requestError = ""
                     
-                    let filtered = filterByOtpType(raw, otpType: otpType)
+                    let filtered = filterByOtpType(raw, otpType: otpFormat)
                     let limited = String(filtered.prefix(otpSize))
                     otp = limited
                     
-                    if limited.count == otpSize, otpMatchesType(limited, otpType: otpType) {
+                    if limited.count == otpSize, otpMatchesType(limited, otpType: otpFormat) {
                         verifyOtp()
                     }
                 }
             ))
-            .keyboardType(otpKeyboardType(otpType))
+            .keyboardType(otpKeyboardType(otpFormat))
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .disabled(isVerified)
@@ -353,11 +353,13 @@ public struct SigningPhoneWithOtp: View {
         
         let req = RequestOtpModel(
             token: e164Phone,
-            inputType: "PhoneNumberWithOtp",
+            inputType:OtpChannelEnum.from(value: contextAwareSigningModel.data.otpInputType ?? 1)?.name ?? "Sms",
             otpSize: otpSize,
-            otpType: otpType,
+            otpType: contextAwareSigningModel.data.otpInputType ?? 1,
             otpExpiryTime: expiryMinutes,
-            smsProvider : 2
+            otpFormat: contextAwareSigningModel.data.otpFormat ?? 1,
+            smsProvider: contextAwareSigningModel.data.smsProvider,
+            whatsappProvider: contextAwareSigningModel.data.whatsappProvider,
         )
         
         OtpHelper.requestOtp(config: configModelObject, requestOtpModel: req) { result in
@@ -431,6 +433,8 @@ public struct SigningPhoneWithOtp: View {
             return value.allSatisfy { $0.isLetter || $0.isNumber }
         case 3:
             return value.allSatisfy { $0.isLetter }
+        case 4:
+            return value.allSatisfy { $0.isLetter || $0.isNumber }
         default:
             return true
         }
@@ -444,6 +448,8 @@ public struct SigningPhoneWithOtp: View {
             return raw.filter { $0.isLetter || $0.isNumber }
         case 3:
             return raw.filter { $0.isLetter }
+        case 4:
+            return raw.filter { $0.isLetter || $0.isNumber }
         default:
             return raw
         }
@@ -457,6 +463,8 @@ public struct SigningPhoneWithOtp: View {
             return .asciiCapable
         case 3:
             return .default
+        case 4:
+            return .asciiCapable
         default:
             return .asciiCapable
         }

@@ -159,30 +159,35 @@ public struct RequestOtpModel: Codable {
     public let otpSize: Int
     public let otpType: Int
     public let otpExpiryTime: Double
+    public let otpFormat: Int?
     public let smsProvider: Int?
+    public let whatsappProvider: Int?
     public init(
         token: String,
         inputType: String,
         otpSize: Int,
         otpType: Int,
         otpExpiryTime: Double,
-        smsProvider: Int,
+        otpFormat: Int,
+        smsProvider: Int?,
+        whatsappProvider: Int?,
     ) {
         self.token = token
         self.inputType = inputType
         self.otpSize = otpSize
         self.otpType = otpType
         self.otpExpiryTime = otpExpiryTime
+        self.otpFormat = otpFormat
         self.smsProvider = smsProvider
+        self.whatsappProvider = whatsappProvider
     }
 }
 
 public struct RequestOtpResponseModel: Codable {
     public let message: String?
     public let error: String?
-    public let statusCode: Int
+    public let statusCode: Int?
     public let isSuccessful: Bool
-    public let data: Bool
     public let otpExpiryTime: Double?
 
     public init(
@@ -190,14 +195,12 @@ public struct RequestOtpResponseModel: Codable {
         error: String?,
         statusCode: Int,
         isSuccessful: Bool,
-        data: Bool,
         otpExpiryTime: Double
     ) {
         self.message = message
         self.error = error
         self.statusCode = statusCode
         self.isSuccessful = isSuccessful
-        self.data = data
         self.otpExpiryTime = otpExpiryTime
     }
 }

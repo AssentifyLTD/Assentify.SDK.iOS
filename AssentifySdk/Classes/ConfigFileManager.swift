@@ -63,11 +63,22 @@ public final class ConfigFileManager {
     
     func readEngagement() -> ConfigModel? {
         guard let root = readRootJSON(),
-              let engagementDict = root["engagement"] as? [String: Any],
-              let engagementData = try? JSONSerialization.data(withJSONObject: engagementDict) else {
+              let engagementDict = root["engagement"] as? [String: Any] else {
+            print("Failed to get engagement dictionary")
             return nil
         }
-        return try? JSONDecoder().decode(ConfigModel.self, from: engagementData)
+
+        do {
+            let engagementData = try JSONSerialization.data(withJSONObject: engagementDict)
+
+            let decoder = JSONDecoder()
+            let config = try decoder.decode(ConfigModel.self, from: engagementData)
+
+            return config
+        } catch {
+            print("ConfigModel decode error: \(error)")
+            return nil
+        }
     }
     
     func readTheme() -> TenantThemeModel? {

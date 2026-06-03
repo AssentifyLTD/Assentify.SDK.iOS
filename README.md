@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.15**
+1. *Optimized OTP Delivery Process*
+
 **1.0.0-Beta.14**
 1. *Optimized Face Match Experience*
 

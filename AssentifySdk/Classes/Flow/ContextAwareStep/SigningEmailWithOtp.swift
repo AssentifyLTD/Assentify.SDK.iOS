@@ -78,8 +78,8 @@ public struct SigningEmailWithOtp: View {
         Int(contextAwareSigningModel.data.otpSize ?? 8)
     }
     
-    private var otpType: Int {
-        Int(contextAwareSigningModel.data.otpType ?? 1)
+    private var otpFormat: Int {
+        Int(contextAwareSigningModel.data.otpFormat ?? 1)
     }
     
     private var expiryMinutes: Double {
@@ -143,18 +143,18 @@ public struct SigningEmailWithOtp: View {
                 
                 requestError = ""
                 
-                let filtered = filterByOtpType(raw, otpType: otpType)
+                let filtered = filterByOtpType(raw, otpType: otpFormat)
                 let limited = String(filtered.prefix(otpSize))
                 otp = limited
                 
-                if limited.count == otpSize, otpMatchesType(limited, otpType: otpType) {
+                if limited.count == otpSize, otpMatchesType(limited, otpType: otpFormat) {
                     verifyOtp()
                 }
             }
         ))
         .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
-        .keyboardType(otpKeyboardType(otpType))
+        .keyboardType(otpKeyboardType(otpFormat))
         .disabled(isVerified)
         .foregroundColor(Color(BaseTheme.baseTextColor))
         .padding(.horizontal, 14)
@@ -223,14 +223,17 @@ public struct SigningEmailWithOtp: View {
         
         let request = RequestOtpModel(
             token: email.trimmingCharacters(in: .whitespacesAndNewlines),
-            inputType: "EmailWithOtp",
+            inputType:OtpChannelEnum.from(value: contextAwareSigningModel.data.otpInputType ?? 1)?.name ?? "Sms",
             otpSize: otpSize,
-            otpType: otpType,
+            otpType: contextAwareSigningModel.data.otpInputType ?? 1,
             otpExpiryTime: expiryMinutes,
-            smsProvider : 2
+            otpFormat: contextAwareSigningModel.data.otpFormat ?? 1,
+            smsProvider: contextAwareSigningModel.data.smsProvider,
+            whatsappProvider: contextAwareSigningModel.data.whatsappProvider,
         )
         
-        OtpHelper.requestOtp(config: configModelObject, requestOtpModel: request) { result in
+        OtpHelper.requestOtp(config: configModelObject, requestOtpModel: request)
+        { result in
             switch result {
             case .success:
                 DispatchQueue.main.async {
@@ -320,6 +323,8 @@ public struct SigningEmailWithOtp: View {
             return value.allSatisfy { $0.isLetter || $0.isNumber }
         case 3:
             return value.allSatisfy { $0.isLetter }
+        case 4:
+            return value.allSatisfy { $0.isLetter || $0.isNumber }
         default:
             return true
         }
@@ -333,6 +338,8 @@ public struct SigningEmailWithOtp: View {
             return raw.filter { $0.isLetter || $0.isNumber }
         case 3:
             return raw.filter { $0.isLetter }
+        case 4:
+            return raw.filter { $0.isLetter || $0.isNumber }
         default:
             return raw
         }
@@ -346,6 +353,8 @@ public struct SigningEmailWithOtp: View {
             return .asciiCapable
         case 3:
             return .default
+        case 4:
+            return .asciiCapable
         default:
             return .asciiCapable
         }

@@ -110,8 +110,8 @@ public struct SecurePhoneWithOtpField: View {
         Int(field.otpSize ?? 8)
     }
 
-    private var otpType: Int {
-        Int(field.otpType ?? 1) // 1 numeric, 2 alnum, 3 letters
+    private var otpFormat: Int {
+        Int(field.otpFormat ?? 1) // 1 numeric, 2 alnum, 3 letters
     }
 
     private var expiryMinutes: Double {
@@ -203,10 +203,10 @@ public struct SecurePhoneWithOtpField: View {
                     get: { isVerified ? e164Phone : otp },
                     set: { raw in
                         guard !isVerified else { return }
-                        let filtered = filterByOtpType(raw, otpType: otpType)
+                        let filtered = filterByOtpType(raw, otpType: otpFormat)
                         otp = String(filtered.prefix(otpSize))
 
-                        if otp.count == otpSize, otpMatchesType(otp, otpType: otpType) {
+                        if otp.count == otpSize, otpMatchesType(otp, otpType: otpFormat) {
                             verifyOtp()
                         }
                     }
@@ -219,7 +219,7 @@ public struct SecurePhoneWithOtpField: View {
                     }
                 ),
                 isEnabled: !isReadOnly && !isVerified,
-                keyboardType: otpKeyboardType(otpType)
+                keyboardType: otpKeyboardType(otpFormat)
             )
             .frame(height: 55)
         }
@@ -286,12 +286,15 @@ public struct SecurePhoneWithOtpField: View {
             token: e164Phone,
             inputType: field.inputType,
             otpSize: otpSize,
-            otpType: otpType,
+            otpType: field.otpType ?? 1,
             otpExpiryTime: expiryMinutes,
-            smsProvider : 2
+            otpFormat: field.otpFormat ?? 1,
+            smsProvider: field.smsProvider,
+            whatsappProvider: field.whatsappProvider,
         )
 
-        OtpHelper.requestOtp(config: config, requestOtpModel: request) { result in
+        OtpHelper.requestOtp(config: config, requestOtpModel: request) {
+            result in
             switch result {
             case .success:
                 DispatchQueue.main.async {
@@ -350,6 +353,7 @@ public struct SecurePhoneWithOtpField: View {
         case 1: return value.allSatisfy { $0.isNumber }
         case 2: return value.allSatisfy { $0.isLetter || $0.isNumber }
         case 3: return value.allSatisfy { $0.isLetter }
+        case 4: return value.allSatisfy { $0.isLetter || $0.isNumber }
         default: return true
         }
     }
@@ -359,6 +363,7 @@ public struct SecurePhoneWithOtpField: View {
         case 1: return raw.filter { $0.isNumber }
         case 2: return raw.filter { $0.isLetter || $0.isNumber }
         case 3: return raw.filter { $0.isLetter }
+        case 4: return raw.filter { $0.isLetter || $0.isNumber }
         default: return raw
         }
     }
@@ -368,6 +373,7 @@ public struct SecurePhoneWithOtpField: View {
         case 1: return .numberPad
         case 2: return .asciiCapable
         case 3: return .default
+        case 4: return .asciiCapable
         default: return .asciiCapable
         }
     }
