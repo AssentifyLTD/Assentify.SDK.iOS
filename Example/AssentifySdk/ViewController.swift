@@ -4,6 +4,6 @@ import AssentifySdk
 
 
 
-final class ViewController1: UIViewController{
+final class ViewController: UIViewController{
     
 }
