@@ -401,7 +401,7 @@ public struct SecurePhoneInput: View {
     }
 }
 
-fileprivate struct UIKitPhoneTextField: UIViewRepresentable {
+ struct UIKitPhoneTextField: UIViewRepresentable {
     @Binding var text: String
     @Binding var isFirstResponder: Bool
     let isEnabled: Bool

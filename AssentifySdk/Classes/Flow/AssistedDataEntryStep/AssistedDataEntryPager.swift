@@ -335,6 +335,7 @@ fileprivate struct AssistedDataEntryFieldRow: View {
             case .phoneNumberWithOTP :
                 SecurePhoneWithOtpField(
                     title: element.textTitle ?? "",
+                    options: allCountries,
                     page: pageIndex,
                     field: $elementBinding,
                     flowController: flowController,
@@ -346,7 +347,13 @@ fileprivate struct AssistedDataEntryFieldRow: View {
                         AssistedFormHelper.changeValue(key, newPhone, pageIndex)
                         onFieldChanged()
                             onFieldChanged()
-                        },
+                    }, onRegxChange : {phoneRegex,selectedDial in
+
+                        guard let key = element.inputKey else { return }
+                        AssistedFormHelper.changeRegex(key, phoneRegex, selectedDial, pageIndex)
+
+                    },
+                    
                         onValid: {
                             guard let key = element.inputKey else { return }
 

@@ -97,6 +97,9 @@ public struct DataEntryPageElement: Codable {
     public let additionalFeatures: Bool?
     public let children: [String: [DataEntryPageElement]]?
     public var defaultCountryCode: String?
+    public let otpFormat: Int?
+    public let smsProvider: Int?
+    public let whatsappProvider: Int?
 
     enum CodingKeys: String, CodingKey {
         case value, isLocalOtpValid, dataSourceValues
@@ -105,7 +108,7 @@ public struct DataEntryPageElement: Codable {
         case targetOutputLanguage, regexDescriptor, regexErrorMessage, showBasedOnParent, dataSourceType, enableDatePicker
         case from, enableConstraints, constraintType, to, dataSourceContent, linkedChildren, sendEmailVerificationLink
         case hasRelatedDataTypes, inputPropertyIdentifier, inputPropertyIdentifierList, isLocked, readOnly,isHidden
-        case maxLength, minLength, otp, otpSize, otpType, otpExpiryTime, additionalFeatures, children, defaultCountryCode
+        case maxLength, minLength, otp, otpSize, otpType, otpExpiryTime, additionalFeatures, children, defaultCountryCode,otpFormat,smsProvider,whatsappProvider
     }
 
     public init(from decoder: Decoder) throws {
@@ -158,6 +161,9 @@ public struct DataEntryPageElement: Codable {
         additionalFeatures = try c.decodeIfPresent(Bool.self, forKey: .additionalFeatures)
         children = try c.decodeIfPresent([String: [DataEntryPageElement]].self, forKey: .children)
         defaultCountryCode = try c.decodeIfPresent(String.self, forKey: .defaultCountryCode)
+        otpFormat = try c.decodeIfPresent(Int.self, forKey: .otpFormat)
+        smsProvider = try c.decodeIfPresent(Int.self, forKey: .smsProvider)
+        whatsappProvider = try c.decodeIfPresent(Int.self, forKey: .whatsappProvider)
     }
 }
 

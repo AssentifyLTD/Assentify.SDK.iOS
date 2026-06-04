@@ -100,8 +100,8 @@ public struct SecureEmailWithOtpField: View {
         Int(field.otpSize ?? 8)
     }
     
-    private var otpType: Int {
-        Int(field.otpType ?? 1) // 1 numeric, 2 alnum, 3 letters
+    private var otpFormat: Int {
+        Int(field.otpFormat ?? 1) // 1 numeric, 2 alnum, 3 letters
     }
     
     private var expiryMinutes: Double {
@@ -169,12 +169,12 @@ public struct SecureEmailWithOtpField: View {
                     get: { isVerified ? email : otp },
                     set: { raw in
                         guard !isVerified else { return }
-                        let filtered = filterByOtpType(raw, otpType: otpType)
+                        let filtered = filterByOtpType(raw, otpType: otpFormat)
                         let limited = String(filtered.prefix(otpSize))
                         otp = limited
                         
                         // auto verify when otp complete
-                        if otp.count == otpSize, otpMatchesType(otp, otpType: otpType) {
+                        if otp.count == otpSize, otpMatchesType(otp, otpType: otpFormat) {
                             verifyOtp()
                         }
                     }
@@ -187,7 +187,7 @@ public struct SecureEmailWithOtpField: View {
                     }
                 ),
                 isEnabled: !isReadOnly && !isVerified,
-                keyboardType: otpKeyboardType(otpType)
+                keyboardType: otpKeyboardType(otpFormat)
             )
             .frame(height: 55)
         }
@@ -250,9 +250,11 @@ public struct SecureEmailWithOtpField: View {
             token: email.trimmingCharacters(in: .whitespacesAndNewlines),
             inputType: field.inputType,
             otpSize: otpSize,
-            otpType: otpType,
+            otpType: field.otpType ?? 1,
             otpExpiryTime: expiryMinutes,
-            smsProvider : 2
+            otpFormat: field.otpFormat ?? 1,
+            smsProvider: field.smsProvider,
+            whatsappProvider: field.whatsappProvider,
         )
         
         OtpHelper.requestOtp(config: configModelObject!, requestOtpModel: request) {
@@ -335,6 +337,7 @@ public struct SecureEmailWithOtpField: View {
         case 1: return value.allSatisfy { $0.isNumber }
         case 2: return value.allSatisfy { $0.isLetter || $0.isNumber }
         case 3: return value.allSatisfy { $0.isLetter }
+        case 4: return value.allSatisfy { $0.isLetter || $0.isNumber }
         default: return true
         }
     }
@@ -344,6 +347,7 @@ public struct SecureEmailWithOtpField: View {
         case 1: return raw.filter { $0.isNumber }
         case 2: return raw.filter { $0.isLetter || $0.isNumber }
         case 3: return raw.filter { $0.isLetter }
+        case 4: return raw.filter { $0.isLetter || $0.isNumber }
         default: return raw
         }
     }
@@ -353,6 +357,7 @@ public struct SecureEmailWithOtpField: View {
         case 1: return .numberPad
         case 2: return .asciiCapable
         case 3: return .default
+        case 4: return .asciiCapable
         default: return .asciiCapable
         }
     }
@@ -363,8 +368,9 @@ public struct ResendOtpControl: View {
     public let expiryMinutes: Double
     public let onResend: () -> Void
 
-    @State private var remainingMs: Int64 = 0
-    @State private var ticking: Bool = true
+    @State private var remainingSeconds: Int = 0
+
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     public init(expiryMinutes: Double, onResend: @escaping () -> Void) {
         self.expiryMinutes = expiryMinutes
@@ -374,6 +380,7 @@ public struct ResendOtpControl: View {
     public var body: some View {
         Button {
             guard canResend else { return }
+
             onResend()
             resetTimer()
         } label: {
@@ -383,36 +390,31 @@ public struct ResendOtpControl: View {
         }
         .buttonStyle(.plain)
         .disabled(!canResend)
-        .onAppear { resetTimer() }
-        .task {
-            while ticking {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if remainingMs > 0 {
-                    remainingMs = max(0, remainingMs - 1000)
-                }
-                if remainingMs <= 0 {
-                    ticking = false
-                }
-            }
+        .onAppear {
+            resetTimer()
+        }
+        .onReceive(timer) { _ in
+            guard remainingSeconds > 0 else { return }
+            remainingSeconds -= 1
         }
     }
 
-    private var totalMs: Int64 {
-        max(1000, Int64(expiryMinutes * 60_000))
+    private var totalSeconds: Int {
+        max(1, Int(expiryMinutes * 60))
     }
 
-    private var canResend: Bool { remainingMs <= 0 }
+    private var canResend: Bool {
+        remainingSeconds <= 0
+    }
 
     private var countdownLabel: String {
-        let totalSeconds = Int(max(0, remainingMs) / 1000)
-        let m = totalSeconds / 60
-        let s = totalSeconds % 60
+        let m = remainingSeconds / 60
+        let s = remainingSeconds % 60
         return String(format: "%d:%02d", m, s)
     }
 
     private func resetTimer() {
-        remainingMs = totalMs
-        ticking = true
+        remainingSeconds = totalSeconds
     }
 }
 

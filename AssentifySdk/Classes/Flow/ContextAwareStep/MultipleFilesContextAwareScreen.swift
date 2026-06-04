@@ -1,6 +1,31 @@
 import SwiftUI
 import Foundation
 
+
+enum OtpChannelEnum: Int, Codable {
+    case sms = 1
+    case whatsapp = 2
+    case both = 3
+    case email = 4
+
+    var name: String {
+        switch self {
+        case .sms:
+            return "Sms"
+        case .whatsapp:
+            return "Whatsapp"
+        case .both:
+            return "Both"
+        case .email:
+            return "Email"
+        }
+    }
+
+    static func from(value: Int) -> OtpChannelEnum? {
+        return OtpChannelEnum(rawValue: value)
+    }
+}
+
 public enum ContextAwareStepEventType: String {
     case onSend
     case onTokensComplete
@@ -275,8 +300,8 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
         contextAwareSigningObject?.data.enableOtp == true
     }
 
-    private var otpInputType: String {
-        contextAwareSigningObject?.data.otpInputType ?? ""
+    private var otpInputType: Int? {
+        contextAwareSigningObject?.data.otpInputType
     }
 
     private var enableDigitalSignature: Bool {
@@ -748,7 +773,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                 Spacer(minLength: 8)
 
                                 if enableOtp && !isOtpValidated {
-                                    if otpInputType == "EmailWithOtp" {
+                                    if otpInputType == OtpChannelEnum.email.rawValue {
                                         SigningEmailWithOtp(
                                             title: "Email to Receive a Verification Code",
                                             contextAwareSigningModel: contextAwareSigningObject!,
