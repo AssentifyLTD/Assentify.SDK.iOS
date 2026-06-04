@@ -33,7 +33,11 @@ public enum OtpHelper {
           
           do {
               let encoder = JSONEncoder()
-              request.httpBody = try encoder.encode(requestOtpModel)
+              let jsonData = try encoder.encode(requestOtpModel)
+
+              
+
+              request.httpBody = jsonData
           } catch {
               completion(.failure(error))
               return

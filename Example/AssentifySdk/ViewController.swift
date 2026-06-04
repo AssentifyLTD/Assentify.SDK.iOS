@@ -347,7 +347,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
 
             var customProperties: [String: Any] = [:]
             
-            customProperties["phoneNumber"] = "76733845"
+            customProperties["phoneNumber"] = "+963931646973"
             customProperties["email"] = "tariq.alskran@gmail.com"
             customProperties["city"] = "ANSAR"
 
@@ -397,7 +397,7 @@ final class ViewController: UIViewController, AssentifySdkDelegate, FlowDelegate
                 
             )
 
-           // sdk.clearFlow();
+           sdk.clearFlow();
             sdk.startFlow(from: self, flowDelegate: self, flowEnvironmentalConditions: flowEnvironmentalConditions)
         }
     }

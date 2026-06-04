@@ -368,8 +368,9 @@ public struct ResendOtpControl: View {
     public let expiryMinutes: Double
     public let onResend: () -> Void
 
-    @State private var remainingMs: Int64 = 0
-    @State private var ticking: Bool = true
+    @State private var remainingSeconds: Int = 0
+
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     public init(expiryMinutes: Double, onResend: @escaping () -> Void) {
         self.expiryMinutes = expiryMinutes
@@ -379,6 +380,7 @@ public struct ResendOtpControl: View {
     public var body: some View {
         Button {
             guard canResend else { return }
+
             onResend()
             resetTimer()
         } label: {
@@ -388,36 +390,31 @@ public struct ResendOtpControl: View {
         }
         .buttonStyle(.plain)
         .disabled(!canResend)
-        .onAppear { resetTimer() }
-        .task {
-            while ticking {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if remainingMs > 0 {
-                    remainingMs = max(0, remainingMs - 1000)
-                }
-                if remainingMs <= 0 {
-                    ticking = false
-                }
-            }
+        .onAppear {
+            resetTimer()
+        }
+        .onReceive(timer) { _ in
+            guard remainingSeconds > 0 else { return }
+            remainingSeconds -= 1
         }
     }
 
-    private var totalMs: Int64 {
-        max(1000, Int64(expiryMinutes * 60_000))
+    private var totalSeconds: Int {
+        max(1, Int(expiryMinutes * 60))
     }
 
-    private var canResend: Bool { remainingMs <= 0 }
+    private var canResend: Bool {
+        remainingSeconds <= 0
+    }
 
     private var countdownLabel: String {
-        let totalSeconds = Int(max(0, remainingMs) / 1000)
-        let m = totalSeconds / 60
-        let s = totalSeconds % 60
+        let m = remainingSeconds / 60
+        let s = remainingSeconds % 60
         return String(format: "%d:%02d", m, s)
     }
 
     private func resetTimer() {
-        remainingMs = totalMs
-        ticking = true
+        remainingSeconds = totalSeconds
     }
 }
 

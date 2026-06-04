@@ -13,7 +13,7 @@ enum OtpChannelEnum: Int, Codable {
         case .sms:
             return "Sms"
         case .whatsapp:
-            return "WhatsApp"
+            return "Whatsapp"
         case .both:
             return "Both"
         case .email:
