@@ -83,7 +83,7 @@ public struct NormalProgressStepper: View {
             }
             .frame(height: nodeSize + (max(2, ringWidth) * 2))
 
-            Text("Step \(activeIndex + 1) out of \(steps.count) stpes")
+            Text("Step \(activeIndex + 1) out of \(steps.count) steps")
                 .font(.system(size: 8, weight: .regular))
                 .foregroundColor(theme.upcomingColor)
                 .multilineTextAlignment(.center)
