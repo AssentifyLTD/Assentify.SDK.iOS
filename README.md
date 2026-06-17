@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.16**
+1. *Enhanced Flow Design*
+
 **1.0.0-Beta.15**
 1. *Optimized OTP Delivery Process*
 
