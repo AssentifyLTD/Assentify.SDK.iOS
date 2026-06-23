@@ -11,11 +11,20 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
 
     public func onAssistedDataEntrySuccess(assistedDataEntryModel: AssistedDataEntryModel) {
         DispatchQueue.main.async {
-            AssistedDataEntryPagesObject.shared.clear()
-            AssistedDataEntryPagesObject.shared.set(assistedDataEntryModel)
-            self.isLoading = false
-            self.isError = false
-            self.assistedDataEntryModel = assistedDataEntryModel
+            if(AssistedDataEntryPagesObjectJson.shared.get(stepId: (flowController.getCurrentStep()?.stepDefinition!.stepId)!) == nil){
+                AssistedDataEntryPagesObject.shared.clear()
+                AssistedDataEntryPagesObject.shared.set(assistedDataEntryModel)
+                self.isLoading = false
+                self.isError = false
+                self.assistedDataEntryModel = assistedDataEntryModel
+            }else{
+                AssistedDataEntryPagesObject.shared.clear()
+                AssistedDataEntryPagesObject.shared.set(AssistedDataEntryPagesObjectJson.shared.get(stepId: (flowController.getCurrentStep()?.stepDefinition!.stepId)!)!)
+                self.isLoading = false
+                self.isError = false
+                self.assistedDataEntryModel = AssistedDataEntryPagesObjectJson.shared.get(stepId: (flowController.getCurrentStep()?.stepDefinition!.stepId)!)
+            }
+          
         }
     }
     private var defaultTitle: String = "";

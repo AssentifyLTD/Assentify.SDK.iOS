@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.17**
+1. *"Assisted Data Entry Step" Improvements*
+
 **1.0.0-Beta.16**
 1. *Enhanced Flow Design*
 

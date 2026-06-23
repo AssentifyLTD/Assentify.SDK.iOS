@@ -629,6 +629,7 @@ public class AssentifySdk {
         CreateUserDocumentObject.shared.clear()
         SignatureResponseObject.shared.clear()
         HasSubmittedObject.shared.clear()
+        AssistedDataEntryPagesObjectJson.shared.clear()
         LocalStepsObject.shared.set(
               []
            )
