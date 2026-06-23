@@ -318,6 +318,9 @@ public final class AssistedDataEntryPagesObject {
     
     public func set(_ assistedDataEntryModel: AssistedDataEntryModel) {
         self.assistedDataEntryModel = assistedDataEntryModel
+        let steps = LocalStepsObject.shared.get()
+        let currentStep =  steps.first { $0.isDone == false }
+        AssistedDataEntryPagesObjectJson.shared.set(self.assistedDataEntryModel, stepId: (currentStep?.stepDefinition!.stepId)!)
     }
     
     public func get() -> AssistedDataEntryModel? {
@@ -330,7 +333,50 @@ public final class AssistedDataEntryPagesObject {
 }
 
 
+public final class AssistedDataEntryPagesObjectJson {
 
+    public static let shared = AssistedDataEntryPagesObjectJson()
+    private init() {}
+
+    private func key(stepId: Int) -> String {
+        return "AssistedDataEntryPagesObject_\(InteractionObject.shared.get())_\(stepId)"
+    }
+
+    public func set(_ model: AssistedDataEntryModel?, stepId: Int) {
+        guard let model else {
+            UserDefaults.standard.removeObject(forKey: key(stepId: stepId))
+            return
+        }
+
+        do {
+            let data = try JSONEncoder().encode(model)
+            UserDefaults.standard.set(data, forKey: key(stepId: stepId))
+        } catch {
+            print("AssistedDataEntryPagesObject encode error:", error)
+        }
+    }
+
+    public func get(stepId: Int) -> AssistedDataEntryModel? {
+        guard let data = UserDefaults.standard.data(forKey: key(stepId: stepId)) else {
+            return nil
+        }
+
+        do {
+            return try JSONDecoder().decode(AssistedDataEntryModel.self, from: data)
+        } catch {
+            print("AssistedDataEntryPagesObject decode error:", error)
+            return nil
+        }
+    }
+
+    // Clears all keys that belong to the current InteractionObject session
+    public func clear() {
+        let prefix = "AssistedDataEntryPagesObject_\(InteractionObject.shared.get())_"
+        UserDefaults.standard.dictionaryRepresentation().keys
+            .filter { $0.hasPrefix(prefix) }
+            .forEach { UserDefaults.standard.removeObject(forKey: $0) }
+    }
+}
 
 public final class CreateUserDocumentObject {
 
