@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		52EB27F52F60496500E077FA /* NextFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EB27F42F60495F00E077FA /* NextFlow.swift */; };
-		52FE710D2FAA53C800757F85 /* configFile1.json in Resources */ = {isa = PBXBuildFile; fileRef = 52FE710C2FAA53C800757F85 /* configFile1.json */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -36,7 +35,6 @@
 		52EB27F42F60495F00E077FA /* NextFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextFlow.swift; sourceTree = "<group>"; };
 		52FD24AA2F459403008FC125 /* AssentifySdk_ExampleRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssentifySdk_ExampleRelease.entitlements; sourceTree = "<group>"; };
 		52FD24AB2F4594D3008FC125 /* AssentifySdk_ExampleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssentifySdk_ExampleDebug.entitlements; sourceTree = "<group>"; };
-		52FE710C2FAA53C800757F85 /* configFile1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = configFile1.json; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* AssentifySdk_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssentifySdk_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 			isa = PBXGroup;
 			children = (
 				607FACD41AFB9204008FA782 /* Info.plist */,
-				52FE710C2FAA53C800757F85 /* configFile1.json */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -263,7 +260,6 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				52FE710D2FAA53C800757F85 /* configFile1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +383,7 @@
 				"${PODS_ROOT}/../../ic_flip_card.svg",
 				"${PODS_ROOT}/../../qr-video.mp4",
 				"${PODS_ROOT}/../../ic_phone.svg",
+				"${PODS_ROOT}/../../ic_warning.svg",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MLKitFaceDetection/GoogleMVFaceDetectorResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -432,6 +429,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ic_flip_card.svg",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/qr-video.mp4",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ic_phone.svg",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ic_warning.svg",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMVFaceDetectorResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
