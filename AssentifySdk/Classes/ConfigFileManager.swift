@@ -38,10 +38,16 @@ public final class ConfigFileManager {
     
     // MARK: - Public Methods
     
-    func initFromBundleIfNeeded() {
+    func initFromBundleIfNeeded(processJsonConfigFile: String = "") {
         guard !FileManager.default.fileExists(atPath: fileURL.path) else { return }
         do {
-            let json = try readFromBundle()
+            let json: String
+            if processJsonConfigFile.isEmpty {
+                json = try readFromBundle()
+            } else {
+                let sourceURL = URL(fileURLWithPath: processJsonConfigFile)
+                json = try String(contentsOf: sourceURL, encoding: .utf8)
+            }
             try json.write(to: fileURL, atomically: true, encoding: .utf8)
         } catch {
             print("[ConfigFileManager] initFromBundleIfNeeded error: \(error)")
