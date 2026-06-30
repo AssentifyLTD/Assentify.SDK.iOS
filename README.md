@@ -22,6 +22,9 @@ pod 'AssentifySdk'
   
 ## Versions
 
+**1.0.0-Beta.18**
+1. *Support for initializing the SDK using a file path*
+
 **1.0.0-Beta.17**
 1. *"Assisted Data Entry Step" Improvements*
 

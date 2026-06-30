@@ -19,15 +19,17 @@ public class AssentifySdk {
     private var configFileName:String?;
     private var initContentHash:String?;
     private var configFileManager: ConfigFileManager?;
+    private var processJsonConfigFile: String = "";
     
     
     
-    public init(apiKey: String, configFileName: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?,  performActiveLivenessFace: Bool? = nil) {
+    public init(apiKey: String, configFileName: String, environmentalConditions: EnvironmentalConditions?, assentifySdkDelegate: AssentifySdkDelegate?,  performActiveLivenessFace: Bool? = nil,processJsonConfigFile:String = "") {
         self.apiKey = apiKey
         self.environmentalConditions = environmentalConditions
         self.assentifySdkDelegate = assentifySdkDelegate
         self.performActiveLivenessFace = performActiveLivenessFace
         self.configFileName = configFileName
+        self.processJsonConfigFile = processJsonConfigFile
         self.timeStarted = getTimeUTC()
         if apiKey.isEmpty {
             print("AssentifySdk Init Error: ApiKey must not be blank or nil")
@@ -46,8 +48,16 @@ public class AssentifySdk {
     
     
     private func loadLocalFile() {
-        configFileManager = ConfigFileManager(fileName: configFileName!)
-        configFileManager?.initFromBundleIfNeeded();
+        let fileName: String
+        let unwrappedConfigFileName = configFileName ?? ""
+
+        if processJsonConfigFile.isEmpty {
+            fileName = "\(unwrappedConfigFileName)"
+        } else {
+            fileName = "AssentifySdk\(unwrappedConfigFileName)"
+        }
+        configFileManager = ConfigFileManager(fileName: fileName)
+        configFileManager?.initFromBundleIfNeeded(processJsonConfigFile: self.processJsonConfigFile);
         self.configModel = configFileManager?.readEngagement();
         self.tenantThemeModel = configFileManager?.readTheme();
         self.initContentHash = configFileManager?.readContentHash();
