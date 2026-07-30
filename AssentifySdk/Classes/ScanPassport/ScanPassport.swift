@@ -95,7 +95,7 @@ public class ScanPassport :UIViewController, CameraSetupDelegate , RemoteProcess
         for item in self.configModel!.stepDefinitions {
             if let stepIdInt = self.stepId, stepIdInt == item.stepId {
                 if performLivenessDocument == nil {
-                    performLivenessDocument = item.customization.documentLiveness
+                   performLivenessDocument = item.customization.documentLiveness
                 }
                 if processMrz == nil {
                     processMrz = item.customization.processMrz
