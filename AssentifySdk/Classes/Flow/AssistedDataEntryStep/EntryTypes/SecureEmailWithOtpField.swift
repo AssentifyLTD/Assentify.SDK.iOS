@@ -66,7 +66,7 @@ public struct SecureEmailWithOtpField: View {
                 }
                 
                 if verifying {
-                    Text("Otp verifying ...")
+                    Text(FlowStrings.otpVerifying)
                         .font(.system(size: 12))
                         .foregroundColor(Color(BaseTheme.baseAccentColor))
                         .padding(.top, 4)
@@ -93,7 +93,7 @@ public struct SecureEmailWithOtpField: View {
     // MARK: - Derived
     
     private var headerTitle: String {
-        (!isOtpStep || isVerified) ? title : "Enter OTP"
+        (!isOtpStep || isVerified) ? title : FlowStrings.enterOtp
     }
     
     private var otpSize: Int {
@@ -137,7 +137,7 @@ public struct SecureEmailWithOtpField: View {
                 Button {
                     sendOtp()
                 } label: {
-                    Text("Send OTP")
+                    Text(FlowStrings.sendOtp)
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .padding(.horizontal, 12)
@@ -187,7 +187,8 @@ public struct SecureEmailWithOtpField: View {
                     }
                 ),
                 isEnabled: !isReadOnly && !isVerified,
-                keyboardType: otpKeyboardType(otpFormat)
+                keyboardType: otpKeyboardType(otpFormat),
+                placeholder: FlowStrings.otpPlaceholder(size: otpSize)
             )
             .frame(height: 55)
         }
@@ -206,7 +207,7 @@ public struct SecureEmailWithOtpField: View {
     private func otpFooter() -> some View {
         HStack {
             if isVerified {
-                Text("Verified successfully")
+                Text(FlowStrings.verifiedSuccessfully)
                     .font(.system(size: 12))
                     .foregroundColor(Color(BaseTheme.baseAccentColor))
             } else {
@@ -234,7 +235,7 @@ public struct SecureEmailWithOtpField: View {
     
     private func recomputeEmailError() {
         if email.isNotBlank, !emailLooksValid(email) {
-            errToShow = "Please enter a valid email address"
+            errToShow = FlowStrings.invalidEmail
         } else {
             errToShow = ""
         }
@@ -384,7 +385,7 @@ public struct ResendOtpControl: View {
             onResend()
             resetTimer()
         } label: {
-            Text(canResend ? "Resend OTP" : "Resend in \(countdownLabel)")
+            Text(canResend ? FlowStrings.resendOtpReady : FlowStrings.resendIn(countdownLabel))
                 .font(.system(size: 12, weight: .regular))
                 .foregroundColor(Color(BaseTheme.baseAccentColor))
         }
@@ -484,7 +485,8 @@ fileprivate struct UIKitOtpTextField: UIViewRepresentable {
     @Binding var isFirstResponder: Bool
     let isEnabled: Bool
     let keyboardType: UIKeyboardType
-    
+    var placeholder: String = "OTP"
+
     func makeUIView(context: Context) -> UITextField {
         let tf = PaddedTextFieldEmail()
         tf.borderStyle = .none
@@ -496,7 +498,7 @@ fileprivate struct UIKitOtpTextField: UIViewRepresentable {
         tf.delegate = context.coordinator
         tf.addTarget(context.coordinator, action: #selector(Coordinator.editingChanged), for: .editingChanged)
         tf.font = .systemFont(ofSize: 16)
-        tf.placeholder = "OTP"
+        tf.placeholder = placeholder
         return tf
     }
     

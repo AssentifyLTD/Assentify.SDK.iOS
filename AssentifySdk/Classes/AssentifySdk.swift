@@ -6,7 +6,7 @@ import SwiftUI
 
 public class AssentifySdk {
     private let apiKey: String
-    private let environmentalConditions: EnvironmentalConditions?
+    public let environmentalConditions: EnvironmentalConditions?
     private let assentifySdkDelegate : AssentifySdkDelegate?
     private var performActiveLivenessFace: Bool?
     private var isKeyValid: Bool = false
@@ -83,7 +83,8 @@ public class AssentifySdk {
             blockIdentifier: configModel!.blockIdentifier,
             instanceId: configModel!.instanceId,
             sourceAgent: "SDK",
-            apiKey: apiKey
+            apiKey: apiKey,
+            language: environmentalConditions?.flowUiLanguage ?? UiLanguage.English
         ) { [weak self] result in
             guard let self = self else { return }
             
@@ -619,14 +620,9 @@ public class AssentifySdk {
             
             let controller = FlowController(navigationController: nav,flowDelegate: flowDelegate)
             self.flowController = controller
-            
-            let blockLoader = BlockLoaderScreen(
-                flowController: controller
-            )
-            
-            let rootVC = UIHostingController(rootView: blockLoader)
-            nav.setViewControllers([rootVC], animated: false)
-            
+
+            controller.setRoot(animated: false)
+
             presenter.present(nav, animated: true)
         }
         

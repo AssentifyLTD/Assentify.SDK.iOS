@@ -79,7 +79,7 @@ public struct PdfViewerFromBase64: View {
         } else {
             ZStack {
                 Color.white
-                Text("Failed to load PDF")
+                Text(FlowStrings.failedToLoadPdf)
                     .font(.system(size: 13, weight: .regular))
                     .foregroundColor(Color(BaseTheme.baseRedColor))
             }
@@ -335,7 +335,7 @@ public struct SignaturePad: View {
                 RoundedRectangle(cornerRadius: 18)
                     .fill(fillColor) // ✅ solid when confirmed
 
-                Text(confirmState == .confirmed ? "Confirmed" : "Confirm")
+                Text(confirmState == .confirmed ? FlowStrings.confirmed : FlowStrings.confirm)
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(Color(BaseTheme.baseTextColor))
                     .rotationEffect(.degrees(isExpanded ? 0 : -90))

@@ -62,7 +62,7 @@ public struct OnNormalCompleteScreen: View {
 
                     Spacer().frame(height: 25)
 
-                    Text("ID Processed Successfully")
+                    Text(FlowStrings.idProcessedSuccessfully)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -77,7 +77,7 @@ public struct OnNormalCompleteScreen: View {
                    
 
                     BaseClickButton(
-                        title: "Next",
+                        title: FlowStrings.next,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

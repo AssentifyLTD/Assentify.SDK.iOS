@@ -119,6 +119,12 @@ public enum StepperType: String, Codable {
     case percentageBased = "PercentageBased"
 }
 
+public struct UiLanguage {
+      public static let English = "en"
+      public static let Arabic = "ar"
+}
+
+
 // MARK: - FlowEnvironmentalConditions
 
 public final class FlowEnvironmentalConditions {
@@ -138,7 +144,7 @@ public final class FlowEnvironmentalConditions {
     public var rangeEnd : Int
     public var stepperTitle:String
     
-    public let language: String
+    public let extractedDataLanguage: String
     public let enableNfc: Bool
     public let enableQr: Bool
     public let showCountDown: Bool
@@ -158,7 +164,7 @@ public final class FlowEnvironmentalConditions {
         rangeStart: Int = 25,
         rangeEnd: Int = 50,
         stepperTitle: String = "Identification",
-        language: String = Language.NON,
+        extractedDataLanguage: String = Language.NON,
         enableNfc: Bool = false,
         enableQr: Bool = false,
         showCountDown: Bool = true,
@@ -179,7 +185,7 @@ public final class FlowEnvironmentalConditions {
         self.rangeEnd = rangeEnd
         self.stepperTitle = stepperTitle
         
-        self.language = language
+        self.extractedDataLanguage = extractedDataLanguage
         self.enableNfc = enableNfc
         self.enableQr = enableQr
         self.showCountDown = showCountDown

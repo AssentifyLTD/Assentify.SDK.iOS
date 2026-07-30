@@ -212,14 +212,14 @@ public struct SecureDateField: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(FlowStrings.cancel) {
                         showPicker = false
                     }
                     .foregroundColor(Color(BaseTheme.baseAccentColor))
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("OK") {
+                    Button(FlowStrings.ok) {
                         let s = formatDate(tempDate, pattern: dateFormat)
                         persist(s)
                         showPicker = false

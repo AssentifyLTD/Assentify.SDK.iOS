@@ -53,7 +53,7 @@ public struct OnErrorScreen: View {
 
                     Spacer().frame(height: 25)
 
-                    Text("Oops unable to Process ID Provided")
+                    Text(FlowStrings.errorProcessId)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -61,7 +61,7 @@ public struct OnErrorScreen: View {
 
                     Spacer().frame(height: 15)
 
-                    Text("Make sure presented ID is clear and does not have any light reflections on it. Try presenting the ID vertically if your camera resolution is low to ease the extraction process.")
+                    Text(FlowStrings.errorProcessIdHint)
                         .foregroundColor(text.opacity(0.85))
                         .font(.system(size: 10, weight: .thin))
                         .multilineTextAlignment(.center)
@@ -71,7 +71,7 @@ public struct OnErrorScreen: View {
                     Spacer(minLength: 0)
 
                     BaseClickButton(
-                        title: "Retry",
+                        title: FlowStrings.retry,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

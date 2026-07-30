@@ -32,6 +32,9 @@ public class EnvironmentalConditions {
 
     var minRam : Int = 2
     var minCPUCores : Int = 6
+    
+    var flowUiLanguage: String = UiLanguage.English
+
 
     public  init(
         enableDetect: Bool = true,
@@ -45,7 +48,8 @@ public class EnvironmentalConditions {
         activeLivenessCheckCount:Int = 0,
         faceLivenessRetryCount:Int = 2,
         minRam:Int = 8,
-        minCPUCores:Int = 6
+        minCPUCores:Int = 6,
+        flowUiLanguage:String = UiLanguage.English
     ) {
         self.enableDetect = enableDetect
         self.enableGuide = true
@@ -60,6 +64,7 @@ public class EnvironmentalConditions {
         self.faceLivenessRetryCount = faceLivenessRetryCount
         self.minRam = minRam
         self.minCPUCores = minCPUCores
+        self.flowUiLanguage = flowUiLanguage
 
         // Perform validation checks
         precondition(!self.HoldHandColor.isEmpty, "Invalid HoldHandColor value")

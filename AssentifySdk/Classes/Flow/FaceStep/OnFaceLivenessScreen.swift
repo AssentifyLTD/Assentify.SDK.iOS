@@ -66,7 +66,7 @@ public struct OnFaceLivenessScreen: View {
                     Spacer().frame(height: 25)
 
                     if(isLivnessError){
-                        Text("We couldn't verify a live face. Please try again.")
+                        Text(FlowStrings.livenessErrorTitle)
                             .foregroundColor(text)
                             .font(.system(size: 20, weight: .bold))
                             .multilineTextAlignment(.center)
@@ -74,14 +74,14 @@ public struct OnFaceLivenessScreen: View {
 
                         Spacer().frame(height: 15)
 
-                        Text("We could not verify a live face. Please ensure you are in a well-lit area, and avoid using photos or videos")
+                        Text(FlowStrings.livenessErrorHint)
                             .foregroundColor(text.opacity(0.85))
                             .font(.system(size: 10, weight: .thin))
                             .multilineTextAlignment(.center)
                             .lineSpacing(4)
                             .padding(.horizontal, 32)
                     }else{
-                        Text("Let's try again")
+                        Text(FlowStrings.letsTryAgain)
                             .foregroundColor(text)
                             .font(.system(size: 20, weight: .bold))
                             .multilineTextAlignment(.center)
@@ -89,7 +89,7 @@ public struct OnFaceLivenessScreen: View {
 
                         Spacer().frame(height: 15)
 
-                        Text("Please make sure your face is well lit, look directly at the camera, and avoid using photos or videos")
+                        Text(FlowStrings.faceLightHint)
                             .foregroundColor(text.opacity(0.85))
                             .font(.system(size: 10, weight: .thin))
                             .multilineTextAlignment(.center)
@@ -101,7 +101,7 @@ public struct OnFaceLivenessScreen: View {
                     Spacer(minLength: 0)
 
                     BaseClickButton(
-                        title: "Retry",
+                        title: FlowStrings.retry,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

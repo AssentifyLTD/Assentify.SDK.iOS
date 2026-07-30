@@ -72,7 +72,7 @@ public struct TermsAndConditionsScreen: View {
                 
                 if(termsModel?.data.header != nil && termsModel?.data.subHeader != nil && termsModel?.data.svgLogoUrl != nil ){
                     LogoSvgUrl(url: termsModel?.data.svgLogoUrl ?? "").frame(width: 80, height: 80) .padding(.top, 5)
-                    Text(termsModel?.data.header ?? "Terms And Conditions")
+                    Text(termsModel?.data.header ?? FlowStrings.termsAndConditions)
                         .font(.system(size: 25, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity, alignment: .center)
@@ -87,7 +87,7 @@ public struct TermsAndConditionsScreen: View {
                             .padding(.horizontal, 20)
                     }
                 }else{
-                    Text(termsModel?.data.header ?? "Terms And Conditions")
+                    Text(termsModel?.data.header ?? FlowStrings.termsAndConditions)
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -135,7 +135,7 @@ public struct TermsAndConditionsScreen: View {
                                     onNext(value: false)
                                 }
                             } label: {
-                                Text("Decline")
+                                Text(FlowStrings.decline)
                                     .font(.system(size: 18, weight: .medium))
                                     .foregroundColor(Color(BaseTheme.baseAccentColor))
                                     .frame(maxWidth: .infinity)
@@ -147,7 +147,7 @@ public struct TermsAndConditionsScreen: View {
                             }
                             .buttonStyle(.plain)
                             
-                            BaseClickButton(title: termsModel?.data.nextButtonTitle ?? "Next",verticalPadding:18,) {
+                            BaseClickButton(title: termsModel?.data.nextButtonTitle ?? FlowStrings.next,verticalPadding:18,) {
                                 onNext(value: true)
                                 
                             }
@@ -155,7 +155,7 @@ public struct TermsAndConditionsScreen: View {
                         }else{
                             BaseSliderClick(
                                 onNext: {onNext(value: true)},
-                                label: termsModel?.data.nextButtonTitle ?? "Next",
+                                label: termsModel?.data.nextButtonTitle ?? FlowStrings.next,
                                 icon: "checkmark",
                                 isActive: true
                             ).frame(maxWidth: .infinity)

@@ -76,8 +76,8 @@ struct OnFaceSendScreen: View {
             }
             
             Text(progress == 100
-                 ? "Processing Face please wait"
-                 : "Uploading Face please wait")
+                 ? FlowStrings.processingFaceWait
+                 : FlowStrings.uploadingFaceWait)
             .foregroundColor(text)
             .font(.system(size: 18, weight: .bold))
             .multilineTextAlignment(.center)

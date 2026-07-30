@@ -208,7 +208,7 @@ public struct SecureDropdown: View {
                                 userStartedTyping = true
                             }
                         ),
-                        prompt: Text("Search...")
+                        prompt: Text(FlowStrings.search)
                             .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.45))
                     )
                     .textFieldStyle(.plain)
@@ -227,7 +227,7 @@ public struct SecureDropdown: View {
                     LazyVStack(spacing: 0) {
                         if filteredOptions.isEmpty {
                             HStack {
-                                Text("No results found")
+                                Text(FlowStrings.noResultsFound)
                                     .font(.system(size: 15))
                                     .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
                                 Spacer()
@@ -277,7 +277,7 @@ public struct SecureDropdown: View {
                 Button {
                     closeDialog()
                 } label: {
-                    Text("Close")
+                    Text(FlowStrings.close)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity)

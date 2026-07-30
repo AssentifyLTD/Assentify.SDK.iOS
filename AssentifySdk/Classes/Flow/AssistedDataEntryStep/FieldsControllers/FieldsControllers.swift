@@ -123,23 +123,33 @@ public enum AssistedFormHelper {
     public static func changeValue(_ key: String, _ value: String, _ page: Int) {
         guard var model = AssistedDataEntryPagesObject.shared.get() else { return }
         guard model.assistedDataEntryPages.indices.contains(page) else { return }
-        
+
         guard let idx = model.assistedDataEntryPages[page].dataEntryPageElements.firstIndex(where: { $0.inputKey == key }) else {
             return
         }
-        
-        // Check children
+
+        let parentIdentifier = model.assistedDataEntryPages[page].dataEntryPageElements[idx].elementIdentifier
+
         if let children = model.assistedDataEntryPages[page].dataEntryPageElements[idx].children,
            !children.isEmpty {
-            
+
             for (childKey, list) in children {
                 if childKey == value, !list.isEmpty {
                     var pageList = model.assistedDataEntryPages[page].dataEntryPageElements
+
+                    
+                    guard let parentIdx = pageList.firstIndex(where: { $0.elementIdentifier == parentIdentifier }) else {
+                        continue
+                    }
+
+                    var insertPosition = parentIdx + 1
                     for element in list {
                         if !pageList.contains(where: { $0.elementIdentifier == element.elementIdentifier }) {
-                            pageList.append(element)
+                            pageList.insert(element, at: insertPosition)
+                            insertPosition += 1
                         }
                     }
+
                     model.assistedDataEntryPages[page].dataEntryPageElements = pageList
                 } else {
                     let removeIds = Set(list.map { $0.elementIdentifier })
@@ -147,8 +157,11 @@ public enum AssistedFormHelper {
                 }
             }
         }
-        
-        model.assistedDataEntryPages[page].dataEntryPageElements[idx].value = value
+
+        if let finalIdx = model.assistedDataEntryPages[page].dataEntryPageElements.firstIndex(where: { $0.elementIdentifier == parentIdentifier }) {
+            model.assistedDataEntryPages[page].dataEntryPageElements[finalIdx].value = value
+        }
+
         AssistedDataEntryPagesObject.shared.set(model)
     }
     
@@ -182,29 +195,29 @@ public enum AssistedFormHelper {
         
         // Mandatory
         if (field.mandatory ?? false) && fieldValue.isEmpty {
-            return "This field is required"
+            return FlowStrings.fieldRequired
         }
-        
+
         if fieldValue.isEmpty { return nil }
-        
+
         // Min/Max
         if let min = field.minLength, fieldValue.count < min {
-            return "Minimum \(min) characters required"
+            return FlowStrings.minCharactersRequired(min)
         }
         if let max = field.maxLength, fieldValue.count > max {
-            return "Maximum \(max) characters allowed"
+            return FlowStrings.maxCharactersAllowed(max)
         }
-        
+
         // Email regex
         if fieldType == .email, !fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             let emailPattern = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$"
             if !matchesRegex(fieldValue, pattern: emailPattern, ignoreCase: true) {
                 return (field.regexErrorMessage?.isEmpty == false)
                 ? field.regexErrorMessage
-                : "Please enter a valid email address"
+                : FlowStrings.invalidEmail
             }
         }
-        
+
         // Custom regex
         if field.applyRegex ?? false {
             let pattern = field.regexDescriptor ?? ""
@@ -212,7 +225,7 @@ public enum AssistedFormHelper {
                 if !matchesRegex(fieldValue, pattern: pattern, ignoreCase: true) {
                     return (field.regexErrorMessage?.isEmpty == false)
                     ? field.regexErrorMessage
-                    : "Please enter a valid value"
+                    : FlowStrings.pleaseEnterValidValue
                 }
             }
         }
@@ -303,15 +316,16 @@ public enum AssistedFormHelper {
             .firstIndex(where: { $0.inputKey == key }) else { return }
 
         var field = pages[page].dataEntryPageElements[fieldIndex]   // ✅ var copy (struct)
+        let parentIdentifier = field.elementIdentifier
 
         /** Check IF Has Children **/
         if let children = field.children, !children.isEmpty {
 
-            children.forEach { (childKey, list) in
+            let displayValue = dataSourceAttribute
+                .first(where: { $0.mappedKey == "Display Value" })?
+                .value ?? ""
 
-                let displayValue = dataSourceAttribute
-                    .first(where: { $0.mappedKey == "Display Value" })?
-                    .value ?? ""
+            children.forEach { (childKey, list) in
 
                 if !dataSourceAttribute.isEmpty,
                    childKey == displayValue,
@@ -319,11 +333,18 @@ public enum AssistedFormHelper {
 
                     var pageList = pages[page].dataEntryPageElements
 
+                    // Re-locate the parent's *current* index — earlier
+                    // insert/remove calls in this loop may have shifted it.
+                    guard let parentIdx = pageList.firstIndex(where: { $0.elementIdentifier == parentIdentifier }) else {
+                        return
+                    }
+
+                    var insertPosition = parentIdx + 1
                     list.forEach { element in
-                        // Replace `.id` with your real unique key if needed
                         let exists = pageList.contains(where: { $0.elementIdentifier == element.elementIdentifier })
                         if !exists {
-                            pageList.append(element)
+                            pageList.insert(element, at: insertPosition)
+                            insertPosition += 1
                         }
                     }
 
@@ -354,8 +375,12 @@ public enum AssistedFormHelper {
                 }
             }
 
-            // ✅ write back the updated field
-            pages[page].dataEntryPageElements[fieldIndex] = field
+            // ✅ re-locate the field's current index before writing back —
+            // it may have shifted due to inserts/removals above
+            if let currentFieldIndex = pages[page].dataEntryPageElements
+                .firstIndex(where: { $0.elementIdentifier == parentIdentifier }) {
+                pages[page].dataEntryPageElements[currentFieldIndex] = field
+            }
 
             // ✅ write back pages to model and save
             model.assistedDataEntryPages = pages

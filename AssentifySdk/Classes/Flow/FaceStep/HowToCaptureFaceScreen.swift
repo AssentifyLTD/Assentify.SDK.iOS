@@ -48,9 +48,9 @@ public struct HowToCaptureFaceScreen: View {
 
     
     
-    private var titleText = "Face Match"
-    private var subTitleText = "Watch How Easy It Is\nTo Take A Selfie"
-    private var subTitleTextOnLine = "Watch How Easy It Is To Take A Selfie"
+    private var titleText = FlowStrings.faceMatch
+    private var subTitleText = FlowStrings.watchCaptureSelfieMultiline
+    private var subTitleTextOnLine = FlowStrings.watchCaptureSelfieSingleLine
     private var assetVideoFileName = "face-video"
 
     // ✅ New states (logic only)
@@ -180,7 +180,7 @@ public struct HowToCaptureFaceScreen: View {
 
                     Spacer().frame(height: 20)
 
-                    Text("The selfie includes liveness capture to ensure you're real, follow the on screen instructions.")
+                    Text(FlowStrings.faceLivenessHint)
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .font(.system(size: 12, weight: .thin))
                         .multilineTextAlignment(.center)
@@ -196,7 +196,7 @@ public struct HowToCaptureFaceScreen: View {
                     
                     if(faceCustomization.isNormalClick!){
                         BaseClickButton(
-                            title: "Lets Start",
+                            title: FlowStrings.letsStart,
                             cornerRadius: 28,
                             verticalPadding: 15,
                             enabled: true
@@ -212,7 +212,7 @@ public struct HowToCaptureFaceScreen: View {
                     }else{
                         BaseSliderClick(
                             onNext: { onNext()},
-                            label:  "Lets Start",
+                            label:  FlowStrings.letsStart,
                             icon: "camera",
                             isActive: true
                         ).padding(.horizontal, 25)

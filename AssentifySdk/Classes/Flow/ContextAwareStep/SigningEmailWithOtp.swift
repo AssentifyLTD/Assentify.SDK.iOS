@@ -109,7 +109,7 @@ public struct SigningEmailWithOtp: View {
                                 .tint(Color(BaseTheme.baseTextColor))
                                 .scaleEffect(0.9)
                         } else {
-                            Text("Send OTP")
+                            Text(FlowStrings.sendOtp)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundColor(Color(BaseTheme.baseTextColor))
                         }
@@ -136,7 +136,7 @@ public struct SigningEmailWithOtp: View {
     
     @ViewBuilder
     private func otpField() -> some View {
-        TextField("OTP (\(otpSize))", text: Binding(
+        TextField(FlowStrings.otpPlaceholder(size: otpSize), text: Binding(
             get: { isVerified ? email : otp },
             set: { raw in
                 guard !isVerified, !verifying else { return }
@@ -170,11 +170,11 @@ public struct SigningEmailWithOtp: View {
     private func otpFooter() -> some View {
         HStack {
             if isVerified {
-                Text("Verified successfully")
+                Text(FlowStrings.verifiedSuccessfully)
                     .font(.system(size: 12))
                     .foregroundColor(Color(BaseTheme.baseAccentColor))
             } else if verifying {
-                Text("Otp verifying ...")
+                Text(FlowStrings.otpVerifying)
                     .font(.system(size: 12))
                     .foregroundColor(Color(BaseTheme.baseAccentColor))
             } else if sendingOtp {
@@ -184,7 +184,7 @@ public struct SigningEmailWithOtp: View {
                         .tint(Color(BaseTheme.baseTextColor))
                         .scaleEffect(0.7)
                     
-                    Text("Sending OTP...")
+                    Text(FlowStrings.sendingOtp)
                         .font(.system(size: 12))
                         .foregroundColor(Color(BaseTheme.baseAccentColor))
                 }
@@ -205,7 +205,7 @@ public struct SigningEmailWithOtp: View {
     
     private func recomputeEmailError() {
         if email.isNotBlank && !emailLooksValid(email) {
-            errToShow = "Please enter a valid email address"
+            errToShow = FlowStrings.invalidEmail
         } else {
             errToShow = ""
         }
@@ -247,7 +247,7 @@ public struct SigningEmailWithOtp: View {
             case .failure:
                 DispatchQueue.main.async {
                     sendingOtp = false
-                    requestError = "Failed to send OTP. Please try again."
+                    requestError = FlowStrings.otpSendFailed
                 }
             }
         }
@@ -284,7 +284,7 @@ public struct SigningEmailWithOtp: View {
                         onValid(req)
                     } else {
                         isVerified = false
-                        requestError = "Invalid OTP. Please try again."
+                        requestError = FlowStrings.invalidOtp
                     }
                 }
                 
@@ -292,7 +292,7 @@ public struct SigningEmailWithOtp: View {
                 DispatchQueue.main.async {
                     verifying = false
                     isVerified = false
-                    requestError = "Invalid OTP. Please try again."
+                    requestError = FlowStrings.invalidOtp
                 }
             }
         }

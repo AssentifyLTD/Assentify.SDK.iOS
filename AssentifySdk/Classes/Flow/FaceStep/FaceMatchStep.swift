@@ -234,42 +234,42 @@ public struct FaceMatchStep: View {
                     // if (start == false && currentActiveLiveEvents == Good) { ... } else { ... }
                     if  currentActiveLiveEvents == .GOOD {
                         if detectedFaces > 1 {
-                            feedbackText = "We detected more than one face.Please keep just your face in view."
+                            feedbackText = FlowStrings.moreThanOneFace
                         } else if zoom != .SENDING && zoom != .NO_DETECT {
-                            if zoom == .ZOOM_IN { feedbackText = "Please Move Closer" }
-                            else if zoom == .ZOOM_OUT { feedbackText = "Please Move Further" }
+                            if zoom == .ZOOM_IN { feedbackText = FlowStrings.moveCloser }
+                            else if zoom == .ZOOM_OUT { feedbackText = FlowStrings.moveFurther }
                             else { feedbackText = "" }
                         } else if motion != .SENDING && motion != .NO_DETECT {
-                            feedbackText = "Please Hold Your Hand"
+                            feedbackText = FlowStrings.holdYourHand
                         } else if brightness != .Good {
-                            if brightness == .TooDark { feedbackText = "Please increase the lighting" }
-                            else if brightness == .TooBright { feedbackText = "Please reduce the lighting" }
+                            if brightness == .TooDark { feedbackText = FlowStrings.increaseLighting }
+                            else if brightness == .TooBright { feedbackText = FlowStrings.reduceLighting }
                             else { feedbackText = "" }
                         } else if faceEvents != .GOOD && faceEvents != .NO_DETECT {
                             switch faceEvents {
                             case .ROLL_LEFT:
-                                feedbackText = "Please tilt your head to the right"
+                                feedbackText = FlowStrings.tiltHeadRight
                             case .ROLL_RIGHT:
-                                feedbackText = "Please tilt your head to the left"
+                                feedbackText = FlowStrings.tiltHeadLeft
                             case .YAW_LEFT:
-                                feedbackText = "Please turn your head to the right"
+                                feedbackText = FlowStrings.turnHeadRight
                             case .YAW_RIGHT:
-                                feedbackText = "Please turn your head to the left"
+                                feedbackText = FlowStrings.turnHeadLeft
                             case .PITCH_UP:
-                                feedbackText = "Please lower your head"
+                                feedbackText = FlowStrings.lowerHead
                             case .PITCH_DOWN:
-                                feedbackText = "Please raise your head"
+                                feedbackText = FlowStrings.raiseHead
                             default:
                                 feedbackText = ""
                             }
                         } else {
                             if motion == .SENDING && zoom == .SENDING && brightness == .Good && faceEvents == .GOOD {
-                                feedbackText = "Hold Steady"
+                                feedbackText = FlowStrings.holdSteady
                             }
                             if motion == .NO_DETECT && zoom == .NO_DETECT && faceEvents == .NO_DETECT {
-                                feedbackText = "Please face within circle"
+                                feedbackText = FlowStrings.faceWithinCircle
                             } else if !isCentered {
-                                feedbackText = "Please center your face"
+                                feedbackText = FlowStrings.centerYourFace
                             }
                         }
                     } else {
@@ -285,19 +285,19 @@ public struct FaceMatchStep: View {
                     if active != .GOOD {
                         switch active {
                         case .YAW_LEFT:
-                            feedbackText = "Please move your face left"
+                            feedbackText = FlowStrings.moveFaceLeft
                         case .YAW_RIGHT:
-                            feedbackText = "Please move your face right"
+                            feedbackText = FlowStrings.moveFaceRight
                         case .PITCH_UP:
-                            feedbackText = "Please move your face up"
+                            feedbackText = FlowStrings.moveFaceUp
                         case .PITCH_DOWN:
-                            feedbackText = "Please move your face down"
+                            feedbackText = FlowStrings.moveFaceDown
                         case .WINK_LEFT:
-                            feedbackText = "Please wink with your left eye"
+                            feedbackText = FlowStrings.winkLeftEye
                         case .WINK_RIGHT:
-                            feedbackText = "Please wink with your right eye"
+                            feedbackText = FlowStrings.winkRightEye
                         case .BLINK:
-                            feedbackText = "Please blink your eyes"
+                            feedbackText = FlowStrings.blinkEyes
                         case .GOOD:
                             feedbackText = ""
                         default:
@@ -308,7 +308,7 @@ public struct FaceMatchStep: View {
             },
             onCollectingManualImages: {
                 DispatchQueue.main.async {
-                    feedbackText = "Hold Steady"
+                    feedbackText = FlowStrings.holdSteady
                 }
             }
         )
@@ -347,7 +347,7 @@ public struct FaceMatchStep: View {
                        
                         
                         BaseClickButton(
-                            title: "Take Photo",
+                            title: FlowStrings.takePhoto,
                             cornerRadius: 28,
                             verticalPadding: 15,
                             enabled: true
