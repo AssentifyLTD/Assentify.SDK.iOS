@@ -77,7 +77,7 @@ public struct SecurePhoneWithOtpField: View {
                 }
 
                 if verifying {
-                    Text("Otp verifying ...")
+                    Text(FlowStrings.otpVerifying)
                         .font(.system(size: 12))
                         .foregroundColor(Color(BaseTheme.baseAccentColor))
                         .padding(.top, 4)
@@ -101,7 +101,7 @@ public struct SecurePhoneWithOtpField: View {
     }
 
     private var headerTitle: String {
-        (!isOtpStep || isVerified) ? title : "Enter OTP"
+        (!isOtpStep || isVerified) ? title : FlowStrings.enterOtp
     }
 
     private var otpSize: Int {
@@ -199,7 +199,7 @@ public struct SecurePhoneWithOtpField: View {
                     Button {
                         sendOtp()
                     } label: {
-                        Text("Send OTP")
+                        Text(FlowStrings.sendOtp)
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundColor(Color(BaseTheme.baseTextColor))
                             .padding(.horizontal, 12)
@@ -280,7 +280,8 @@ public struct SecurePhoneWithOtpField: View {
                 }
             ),
             isEnabled: !isReadOnly && !isVerified,
-            keyboardType: otpKeyboardType(otpFormat)
+            keyboardType: otpKeyboardType(otpFormat),
+            placeholder: FlowStrings.otpPlaceholder(size: otpSize)
         )
         .padding(.horizontal, 14)
         .frame(height: 55)
@@ -299,7 +300,7 @@ public struct SecurePhoneWithOtpField: View {
     private func otpFooter() -> some View {
         HStack {
             if isVerified {
-                Text("Verified successfully")
+                Text(FlowStrings.verifiedSuccessfully)
                     .font(.system(size: 12))
                     .foregroundColor(Color(BaseTheme.baseAccentColor))
             } else if !verifying {
@@ -374,7 +375,7 @@ public struct SecurePhoneWithOtpField: View {
                                 userStartedTyping = true
                             }
                         ),
-                        prompt: Text("Search...")
+                        prompt: Text(FlowStrings.search)
                             .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.45))
                     )
                     .textFieldStyle(.plain)
@@ -394,7 +395,7 @@ public struct SecurePhoneWithOtpField: View {
                 Button {
                     closeDialog()
                 } label: {
-                    Text("Close")
+                    Text(FlowStrings.close)
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
@@ -419,7 +420,7 @@ public struct SecurePhoneWithOtpField: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 if filteredOptions.isEmpty {
-                    Text("No results found")
+                    Text(FlowStrings.noResultsFound)
                         .font(.system(size: 15))
                         .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
                         .frame(height: rowHeight)
@@ -486,7 +487,7 @@ public struct SecurePhoneWithOtpField: View {
 
     private func recomputePhoneError() {
         if localNumber.isNotBlank, !phoneLooksValid(localNumber) {
-            errToShow = "Please enter a valid phone number"
+            errToShow = FlowStrings.pleaseEnterValidPhone
         } else {
             errToShow = ""
         }
@@ -574,7 +575,7 @@ public struct SecurePhoneWithOtpField: View {
                         onValid()
                     } else {
                         isVerified = false
-                        errToShow = "Invalid OTP"
+                        errToShow = FlowStrings.invalidOtp
                     }
 
                 case .failure(let err):
@@ -644,6 +645,7 @@ struct UIKitOtpTextFieldPhone: UIViewRepresentable {
 
     let isEnabled: Bool
     let keyboardType: UIKeyboardType
+    var placeholder: String = "OTP"
 
     func makeUIView(context: Context) -> UITextField {
         let tf = PaddedTextFieldPhone()
@@ -660,7 +662,7 @@ struct UIKitOtpTextFieldPhone: UIViewRepresentable {
             for: .editingChanged
         )
         tf.font = .systemFont(ofSize: 16)
-        tf.placeholder = "OTP"
+        tf.placeholder = placeholder
         return tf
     }
 

@@ -50,23 +50,23 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
 
                         case SubmitDataTypes.none , SubmitDataTypes.onSend:
                             MiddleContent(
-                                title: "Ready to Submit?",
-                                message: "Swipe the button below to confirm your submission.",
+                                title: FlowStrings.readyToSubmit,
+                                message: FlowStrings.swipeToConfirm,
                                 messageColor: Color(BaseTheme.baseTextColor)
                             )
                             
                         case SubmitDataTypes.onError:
                             MiddleContent(
                                 title: nil,
-                                message: "We couldn't complete your submission. Check your connection and retry.",
+                                message: FlowStrings.submitError,
                                 messageColor: Color(BaseTheme.baseRedColor)
                             )
 
                        
                         default:
                             MiddleContent(
-                                title: "Ready to Submit?",
-                                message: "Swipe the button below to confirm your submission.",
+                                title: FlowStrings.readyToSubmit,
+                                message: FlowStrings.swipeToConfirm,
                                 messageColor: Color(BaseTheme.baseTextColor)
                             )
                         }
@@ -163,7 +163,7 @@ public struct SubmitStepScreen: View ,SubmitDataDelegate {
     }
 
     private var swipeText: String {
-         "Swipe to Submit"
+         FlowStrings.swipeToSubmit
     }
 
     // MARK: - Actions
@@ -230,22 +230,35 @@ fileprivate struct MiddleContent: View {
     }
 }
 
+
+import SwiftUI
+
 public struct SwipeToSubmit: View {
 
-    public var text: String = "Swipe to Submit"
-    public var height: CGFloat = 65
-    public var corner: CGFloat = 35
-    public var resetKey: AnyHashable? = nil
+    @Environment(\.layoutDirection) private var appLayoutDirection
+
+    public var text: String
+    public var height: CGFloat
+    public var corner: CGFloat
+    public var resetKey: AnyHashable?
     public var onComplete: () -> Void
 
-    @State private var knobOffset: CGFloat = 0
+    @State private var dragProgress: CGFloat = 0
     @State private var knobTextWidth: CGFloat = 0
+    @State private var isCompleting = false
 
-    // ✅ slower swipe factor (0.35 = much slower, 0.5 = medium, 0.7 = slightly slower)
-    private let swipeSpeed: CGFloat = 0.45
+    private var isRTL: Bool {
+        appLayoutDirection == .rightToLeft
+    }
+
+    private let horizontalPadding: CGFloat = 8
+    private let innerPadding: CGFloat = 6
+
+    // The user only needs to swipe halfway.
+    private let completionThreshold: CGFloat = 0.50
 
     public init(
-        text: String = "Swipe to Submit",
+        text: String = FlowStrings.swipeToSubmit,
         height: CGFloat = 75,
         corner: CGFloat = 35,
         resetKey: AnyHashable? = nil,
@@ -259,91 +272,346 @@ public struct SwipeToSubmit: View {
     }
 
     public var body: some View {
-
-        GeometryReader { geo in
-            let w = geo.size.width
-            let padding: CGFloat = 8
-            let knobPadding: CGFloat = 6
-
-            let knobMinWidth = (height - 12) * 2.2
-            let knobWidth = max(knobMinWidth, knobTextWidth + 32)
-
-            let maxOffset = max(0, w - padding * 2 - knobPadding - knobWidth)
-            let threshold = maxOffset * 0.75
-
-            ZStack {
-
-                // Right arrows hint
-                HStack {
-                    Spacer()
-                    Image(systemName: "chevron.right.2")
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(Color(UIColor.fromHex("#f3f4f6")))
-                        .padding(.trailing, 18)
-                }
-
-                // Knob
-                RoundedRectangle(cornerRadius: corner)
-                    .fill(Color(UIColor.fromHex("#f3f4f6")))
-                    .shadow(radius: 4)
-                    .frame(width: knobWidth, height: height - 14)
-                    .overlay(
-                        Text(text)
-                            .foregroundColor(Color(BaseTheme.baseAccentColor))
-                            .font(.system(size: 15, weight: .bold))
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: false)
-                            .background(
-                                WidthReader(width: $knobTextWidth).hidden()
-                            )
-                            .padding(.horizontal, 16)
-                    )
-                    .offset(x: knobOffset - (w/2 - knobWidth/2 - padding), y: 0)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                // ✅ slower movement
-                                let delta = value.translation.width * swipeSpeed
-                                let newOffset = knobOffset + delta
-                                knobOffset = min(max(0, newOffset), maxOffset)
-                            }
-                            .onEnded { _ in
-                                settle(threshold: threshold, maxOffset: maxOffset)
-                            }
-                    )
-                    .animation(.easeOut(duration: 0.22), value: knobOffset) // ✅ slightly slower animation
-            }
-            // ✅ Rounded track for whole control
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(BaseTheme.baseClickColor?.toSwiftUIBackground())
-            .clipShape(RoundedRectangle(cornerRadius: corner))
-            .padding(.horizontal, padding)
-            .padding(.vertical, 10)
-            .onChange(of: resetKey) { _ in
-                knobOffset = 0
-            }
+        GeometryReader { geometry in
+            sliderContent(
+                containerWidth: geometry.size.width,
+                containerHeight: geometry.size.height
+            )
         }
         .frame(height: height)
+        .padding(.horizontal, horizontalPadding)
+        .onChange(of: resetKey) { _ in
+            resetSlider(animated: true)
+        }
+        .onChange(of: appLayoutDirection) { _ in
+            resetSlider(animated: false)
+        }
     }
 
-    private func settle(threshold: CGFloat, maxOffset: CGFloat) {
-        if knobOffset >= threshold {
-            knobOffset = maxOffset
-            onComplete()
-        } else {
-            knobOffset = 0
+    @ViewBuilder
+    private func sliderContent(
+        containerWidth: CGFloat,
+        containerHeight: CGFloat
+    ) -> some View {
+
+        let knobHeight = max(
+            0,
+            height - 14
+        )
+
+        let minimumKnobWidth = max(
+            0,
+            (height - 12) * 2.2
+        )
+
+        let availableKnobWidth = max(
+            0,
+            containerWidth - ((innerPadding + horizontalPadding) * 2)
+        )
+
+        let knobWidth = min(
+            availableKnobWidth,
+            max(
+                minimumKnobWidth,
+                knobTextWidth + 32
+            )
+        )
+
+        let leftPosition = innerPadding
+
+        let rightPosition = max(
+            leftPosition,
+            containerWidth - innerPadding - knobWidth
+        )
+
+        let travelDistance = max(
+            0,
+            rightPosition - leftPosition
+        )
+
+        /*
+         English:
+         progress 0 = left
+         progress 1 = right
+
+         Arabic:
+         progress 0 = right
+         progress 1 = left
+         */
+        let knobLeadingX = isRTL
+            ? rightPosition - (dragProgress * travelDistance)
+            : leftPosition + (dragProgress * travelDistance)
+
+        ZStack {
+            arrowView
+
+            knobView(
+                width: knobWidth,
+                height: knobHeight
+            )
+            .position(
+                x: knobLeadingX + (knobWidth / 2),
+                y: containerHeight / 2
+            )
+            .contentShape(
+                RoundedRectangle(
+                    cornerRadius: corner
+                )
+            )
+            .highPriorityGesture(
+                dragGesture(
+                    travelDistance: travelDistance
+                )
+            )
         }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .background(
+            BaseTheme.baseClickColor?
+                .toSwiftUIBackground()
+        )
+        .clipShape(
+            RoundedRectangle(
+                cornerRadius: corner
+            )
+        )
+
+        // Prevent SwiftUI from mirroring the slider again.
+        .environment(
+            \.layoutDirection,
+            .leftToRight
+        )
+    }
+
+    private var arrowView: some View {
+        GeometryReader { geometry in
+            Image(
+                systemName: isRTL
+                    ? "chevron.left.2"
+                    : "chevron.right.2"
+            )
+            .font(.system(size: 22, weight: .bold))
+            .foregroundColor(
+                Color(UIColor.fromHex("#f3f4f6"))
+            )
+            .position(
+                x: isRTL
+                    ? 28                          // Arabic -> arrows on LEFT
+                    : geometry.size.width - 28,   // English -> arrows on RIGHT
+                y: geometry.size.height / 2
+            )
+        }
+        .allowsHitTesting(false)
+    }
+
+    private func knobView(
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        RoundedRectangle(
+            cornerRadius: corner
+        )
+        .fill(
+            Color(
+                UIColor.fromHex("#f3f4f6")
+            )
+        )
+        .shadow(
+            color: Color.black.opacity(0.18),
+            radius: 4,
+            x: 0,
+            y: 2
+        )
+        .frame(
+            width: width,
+            height: height
+        )
+        .overlay {
+            Text(text)
+                .foregroundColor(
+                    Color(
+                        BaseTheme.baseAccentColor
+                    )
+                )
+                .font(
+                    .system(
+                        size: 15,
+                        weight: .bold
+                    )
+                )
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+                .fixedSize(
+                    horizontal: true,
+                    vertical: false
+                )
+                .background {
+                    WidthReader(
+                        width: $knobTextWidth
+                    )
+                    .hidden()
+                }
+                .padding(.horizontal, 16)
+        }
+    }
+
+    private func dragGesture(
+        travelDistance: CGFloat
+    ) -> some Gesture {
+        DragGesture(
+            minimumDistance: 1,
+            coordinateSpace: .local
+        )
+        .onChanged { value in
+            guard !isCompleting else {
+                return
+            }
+
+            guard travelDistance > 0 else {
+                return
+            }
+
+            /*
+             English:
+             right movement is positive.
+
+             Arabic:
+             left movement is converted to positive.
+             */
+            let directionalTranslation = isRTL
+                ? -value.translation.width
+                : value.translation.width
+
+            dragProgress = clamp(
+                directionalTranslation / travelDistance
+            )
+        }
+        .onEnded { value in
+            guard !isCompleting else {
+                return
+            }
+
+            guard travelDistance > 0 else {
+                resetSlider(animated: true)
+                return
+            }
+
+            let currentTranslation = isRTL
+                ? -value.translation.width
+                : value.translation.width
+
+            let predictedTranslation = isRTL
+                ? -value.predictedEndTranslation.width
+                : value.predictedEndTranslation.width
+
+            let currentProgress = clamp(
+                currentTranslation / travelDistance
+            )
+
+            let predictedProgress = clamp(
+                predictedTranslation / travelDistance
+            )
+
+            let shouldComplete =
+                currentProgress >= completionThreshold ||
+                predictedProgress >= 0.65
+
+            if shouldComplete {
+                completeSlider()
+            } else {
+                returnSliderToStart()
+            }
+        }
+    }
+
+    private func completeSlider() {
+        guard !isCompleting else {
+            return
+        }
+
+        isCompleting = true
+
+        withAnimation(
+            .easeOut(duration: 0.22)
+        ) {
+            dragProgress = 1
+        }
+
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + 0.22
+        ) {
+            onComplete()
+        }
+    }
+
+    private func returnSliderToStart() {
+        withAnimation(
+            .spring(
+                response: 0.35,
+                dampingFraction: 0.78
+            )
+        ) {
+            dragProgress = 0
+        }
+    }
+
+    private func resetSlider(
+        animated: Bool
+    ) {
+        isCompleting = false
+
+        if animated {
+            withAnimation(
+                .easeOut(duration: 0.20)
+            ) {
+                dragProgress = 0
+            }
+        } else {
+            dragProgress = 0
+        }
+    }
+
+    private func clamp(
+        _ value: CGFloat
+    ) -> CGFloat {
+        min(
+            max(value, 0),
+            1
+        )
     }
 }
 
-// MARK: - Helpers (measure text width)
 fileprivate struct WidthReader: View {
+
     @Binding var width: CGFloat
+
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { geometry in
             Color.clear
-                .onAppear { width = geo.size.width }
-                .onChange(of: geo.size.width) { width = $0 }
+                .onAppear {
+                    updateWidth(
+                        geometry.size.width
+                    )
+                }
+                .onChange(
+                    of: geometry.size.width
+                ) { newWidth in
+                    updateWidth(newWidth)
+                }
+        }
+    }
+
+    private func updateWidth(
+        _ newWidth: CGFloat
+    ) {
+        guard abs(width - newWidth) > 0.5 else {
+            return
+        }
+
+        DispatchQueue.main.async {
+            width = newWidth
         }
     }
 }

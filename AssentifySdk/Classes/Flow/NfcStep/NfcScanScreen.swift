@@ -24,8 +24,7 @@ final class NfcScanCommands: ObservableObject {
 
 public struct NfcScanScreen: View {
     
-    @State private var feedbackText: String =
-    "Position the passport on the bottom of the phone where the NFC chip reader is and ensure that you have the passport close enough for detection and reading."
+    @State private var feedbackText: String = FlowStrings.nfcPositionHint
     
     @State private var imageUrl: String = ""
     @State private var dataIDModel: PassportResponseModel?
@@ -79,7 +78,7 @@ public struct NfcScanScreen: View {
             onStart: {
                 DispatchQueue.main.async {
                     screenEvent = .sending
-                    feedbackText = "Nfc reading..."
+                    feedbackText = FlowStrings.nfcReading
                 }
             },
             onComplete: { model in
@@ -99,7 +98,7 @@ public struct NfcScanScreen: View {
                     screenEvent = .error
                     self.imageUrl = model.passportExtractedModel?.imageUrl ?? ""
                     feedbackText = message.isEmpty
-                    ? "Connection lost. Keep the phone still on the passport and try again."
+                    ? FlowStrings.nfcConnectionLost
                     : message
                 }
             }
@@ -110,7 +109,7 @@ public struct NfcScanScreen: View {
                 NfcScanUIKitView(
                     flowController: flowController,
                     passportResponseModel: passportResponseModel,
-                    language: FlowEnvironmentalConditionsObject.shared.get()?.language ?? "en",
+                    language: FlowEnvironmentalConditionsObject.shared.get()?.extractedDataLanguage ?? "en",
                     events: events,
                     commands: commands
                 ).frame(width: 0, height: 0)
@@ -126,8 +125,7 @@ public struct NfcScanScreen: View {
                         DispatchQueue.main.async {
                             screenEvent = .idle
                             commands.triggerRetry += 1
-                            feedbackText =
-                            "Position the passport on the bottom of the phone where the NFC chip reader is and ensure that you have the passport close enough for detection and reading."
+                            feedbackText = FlowStrings.nfcPositionHint
                         }
                     },
                     onSkip: { onSkip() },
@@ -197,7 +195,7 @@ private struct NfcScanScreenUI: View {
         VStack(spacing: 0) {
             Spacer().frame(height: 24)
             
-            Text("NFC Based Capture")
+            Text(FlowStrings.nfcBasedCapture)
                 .font(.system(size: 24, weight: .bold))
                 .foregroundColor(Color(BaseTheme.baseTextColor))
                 .multilineTextAlignment(.center)
@@ -219,7 +217,7 @@ private struct NfcScanScreenUI: View {
                         .scaleEffect(1.6)
                         .frame(height: 34)
                 } else {
-                    Text("NFC DETECTED")
+                    Text(FlowStrings.nfcDetected)
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .multilineTextAlignment(.center)
@@ -242,7 +240,7 @@ private struct NfcScanScreenUI: View {
                     onRetry()
                     
                 }) {
-                    Text("Retry")
+                    Text(FlowStrings.retry)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(
                             Color(BaseTheme.baseSecondaryTextColor)
@@ -261,7 +259,7 @@ private struct NfcScanScreenUI: View {
             }
             
             BaseClickButton(
-                title: "Skip",
+                title: FlowStrings.skip,
                 cornerRadius: 28,
                 verticalPadding: 14,
                 enabled: true,
@@ -377,7 +375,7 @@ struct NfcScanUIKitView: UIViewControllerRepresentable {
                 
                 self.scanNfc = self.assentifySdk?.startScanNfc(
                     scanNfcDelegate: delegate,
-                    language: FlowEnvironmentalConditionsObject.shared.get()!.language,
+                    language: FlowEnvironmentalConditionsObject.shared.get()!.extractedDataLanguage,
                     stepId: stepId
                 )
                 

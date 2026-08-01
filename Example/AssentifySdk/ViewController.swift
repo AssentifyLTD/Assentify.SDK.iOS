@@ -3,7 +3,6 @@ import AVFoundation
 import AssentifySdk
 
 
-
 final class ViewController: UIViewController{
-    
 }
+

@@ -29,6 +29,8 @@ public struct FaceResultScreen: View {
     private var match: Int {
         faceModel.faceExtractedModel?.percentageMatch ?? 0
     }
+    
+    
 
     private var baseImage: String {
         faceModel.faceExtractedModel?.baseImageFace ?? ""
@@ -39,13 +41,13 @@ public struct FaceResultScreen: View {
     }
 
     private var title: String {
-        match > 50 ? "Verification Successful" : "Verification UnSuccessful"
+        match > 50 ? FlowStrings.verificationSuccessful : FlowStrings.verificationUnsuccessful
     }
 
     private var subTitle: String {
         match > 50
-        ? "We have been able to make sure its you!"
-        : "Your face did not match with the provided document. Provide another document or confirm."
+        ? FlowStrings.verificationSuccessSubtitle
+        : FlowStrings.verificationFailSubtitle
     }
 
     private var borderColor: Color {
@@ -163,45 +165,45 @@ public struct FaceResultScreen: View {
             if match > 50 {
                 
                 BaseClickButton(
-                    title: "Next",
+                    title: FlowStrings.next,
                     cornerRadius: 28,
                     verticalPadding: 18,
                     enabled: true,
                     action: onNext
                 )
-                
+
             } else if match > 30 {
-                
+
                 BaseClickButton(
-                    title: "Retry",
+                    title: FlowStrings.retry,
                     cornerRadius: 28,
                     verticalPadding: 18,
                     enabled: true,
                     action: onRetry
                 )
-                
+
                 OutlineButton(
-                    title: "Confirm & Proceed",
+                    title: FlowStrings.confirmAndProceed,
                     cornerRadius: 28,
                     borderColor: Color(BaseTheme.baseAccentColor),
                     textColor: Color(BaseTheme.baseAccentColor),
                     height: 55,
                     action: onNext
                 )
-                
+
             } else {
-                
+
                 BaseClickButton(
-                    title: "Provide Supporting ID to match with",
+                    title: FlowStrings.provideSupportingId,
                     cornerRadius: 28,
                     verticalPadding: 18,
                     enabled: true,
                     fontWeight: .bold,
                     action: onIDChange,
                 )
-                
+
                 OutlineButton(
-                    title: "Override & Proceed",
+                    title: FlowStrings.overrideAndProceed,
                     cornerRadius: 28,
                     borderColor: Color(BaseTheme.baseRedColor),
                     textColor: Color(BaseTheme.baseRedColor),
@@ -260,7 +262,7 @@ public struct MatchProgressView: View {
                     .foregroundColor(progressColor)
                     .font(.system(size: 15, weight: .regular))
 
-                Text("Match")
+                Text(FlowStrings.matchLabel)
                     .foregroundColor(progressColor)
                     .font(.system(size: 18, weight: .regular))
             }

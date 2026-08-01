@@ -340,37 +340,37 @@ public struct IDCardScanStep: View {
                         if zoom != .SENDING && zoom != .NO_DETECT {
                             
                             if zoom == .ZOOM_IN {
-                                feedbackText = "Move ID Closer"
+                                feedbackText = FlowStrings.moveIdCloser
                             } else if zoom == .ZOOM_OUT {
-                                feedbackText = "Move ID Further"
+                                feedbackText = FlowStrings.moveIdFurther
                             } else {
                                 feedbackText = ""
                             }
-                            
+
                         } else if motion != .SENDING && motion != .NO_DETECT {
-                            
-                            feedbackText = "Please Hold Your Hand"
-                            
+
+                            feedbackText = FlowStrings.holdYourHand
+
                         } else if brightnessEvents != .Good {
-                            
+
                             if brightnessEvents == .TooDark {
-                                feedbackText = "Please increase the lighting"
+                                feedbackText = FlowStrings.increaseLighting
                             } else if brightnessEvents == .TooBright {
-                                feedbackText = "Please reduce the lighting"
+                                feedbackText = FlowStrings.reduceLighting
                             } else {
                                 feedbackText = ""
                             }
-                            
+
                         } else {
-                            
+
                             if motion == .SENDING && zoom == .SENDING && brightnessEvents == .Good {
-                                feedbackText = "Hold Steady"
+                                feedbackText = FlowStrings.holdSteady
                             }
-                            
+
                             if motion == .NO_DETECT && zoom == .NO_DETECT {
-                                feedbackText = "Please present ID"
+                                feedbackText = FlowStrings.presentId2
                             } else if !isCentered {
-                                feedbackText = "Please center your ID"
+                                feedbackText = FlowStrings.centerYourId
                             }
                         }
                         
@@ -409,7 +409,7 @@ public struct IDCardScanStep: View {
                             .padding(.bottom, 40)
                     } else {
                         BaseClickButton(
-                            title: "Take Photo",
+                            title: FlowStrings.takePhoto,
                             cornerRadius: 28,
                             verticalPadding: 15,
                             enabled: true
@@ -702,7 +702,7 @@ struct IDScanUIKitView: UIViewControllerRepresentable {
             guard let vc = assentifySdk?.startScanID(
                 scanIDCardDelegate: delegate,
                 templatesByCountry: templatesByCountry,
-                language: FlowEnvironmentalConditionsObject.shared.get()!.language,
+                language: FlowEnvironmentalConditionsObject.shared.get()!.extractedDataLanguage,
                 stepId: stepId
             ) else {
                 assertionFailure("startScanID returned nil (sdk instance or config missing)")

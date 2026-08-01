@@ -60,7 +60,7 @@ public struct OnWrongTemplateScreen: View {
 
                     Spacer().frame(height: 25)
 
-                    Text("Unsupported ID Provided \n Wrong Template")
+                    Text(FlowStrings.wrongTemplate)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -69,7 +69,7 @@ public struct OnWrongTemplateScreen: View {
 
                     Spacer().frame(height: 15)
 
-                    Text("Make sure its one of the above IDs presented and allowed by \(ConfigModelObject.shared.get()!.flowName) to verify your identity.")
+                    Text(FlowStrings.wrongTemplateHint(flowName: ConfigModelObject.shared.get()!.flowName))
                         .foregroundColor(text.opacity(0.85))
                         .font(.system(size: 10, weight: .thin))
                         .multilineTextAlignment(.center)
@@ -87,7 +87,7 @@ public struct OnWrongTemplateScreen: View {
 
                         Spacer().frame(height: 10)
 
-                        Text("Expected Card Type")
+                        Text(FlowStrings.expectedCardType)
                             .foregroundColor(text.opacity(0.9))
                             .font(.system(size: 10, weight: .light))
                             .multilineTextAlignment(.center)
@@ -98,7 +98,7 @@ public struct OnWrongTemplateScreen: View {
                     Spacer(minLength: 0)
 
                     BaseClickButton(
-                        title: "Retry",
+                        title: FlowStrings.retry,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

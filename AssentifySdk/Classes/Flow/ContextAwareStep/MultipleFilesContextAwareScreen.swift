@@ -51,7 +51,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
             self.selectedTemplates.append(
                 SelectedTemplatesTokens(
                     templateId: templateId,
-                    templateName: "Agreement",
+                    templateName: FlowStrings.agreement,
                     documentTokens: documentTokens
                 )
             )
@@ -265,7 +265,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
     @State private var selectedTemplate: SelectedTemplatesTokens? = nil
     @State private var showTemplates: Bool = false
 
-    @State private var errorMessage: String = "Something went wrong"
+    @State private var errorMessage: String = FlowStrings.somethingWentWrong
 
     // OTP states
     @State private var otpValue: String = ""
@@ -637,7 +637,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                             }
                                         }
                                     )) {
-                                        Text("I agree to the terms and conditions")
+                                        Text(FlowStrings.agreeToTerms)
                                             .font(.system(size: 12, weight: .light))
                                             .foregroundColor(Color(BaseTheme.baseTextColor))
                                     }
@@ -659,8 +659,8 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
 
                                     Text(
                                         approvedDocuments.count != selectedTemplates.count
-                                        ? "Please review and approve the below files"
-                                        : "Thank you for approving"
+                                        ? FlowStrings.pleaseReviewFiles
+                                        : FlowStrings.thankYouApproving
                                     )
                                     .font(.system(size: 15, weight: .bold))
                                     .foregroundColor(Color(BaseTheme.baseTextColor))
@@ -690,7 +690,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                             showTemplates.toggle()
                                         } label: {
                                             HStack {
-                                                Text("Files Reviewed and Approved")
+                                                Text(FlowStrings.filesReviewedApproved)
                                                     .font(.system(size: 14, weight: .semibold))
                                                     .foregroundColor(Color(BaseTheme.baseTextColor))
                                                 Spacer()
@@ -775,7 +775,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                 if enableOtp && !isOtpValidated {
                                     if otpInputType == OtpChannelEnum.email.rawValue {
                                         SigningEmailWithOtp(
-                                            title: "Email to Receive a Verification Code",
+                                            title: FlowStrings.emailVerificationTitle,
                                             contextAwareSigningModel: contextAwareSigningObject!,
                                             flowController: flowController,
                                             onValueChange: { value in otpValue = value },
@@ -787,7 +787,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                                         .padding(.horizontal, 25)
                                     } else {
                                         SigningPhoneWithOtp(
-                                            title: "Phone Number",
+                                            title: FlowStrings.phoneNumberTitle,
                                             contextAwareSigningModel: contextAwareSigningObject!,
                                             flowController: flowController,
                                             onValueChange: { value in otpValue = value },
@@ -825,8 +825,8 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                 if selectedTemplate == nil && eventType == .onTokensComplete && !clickLoading {
                     BaseClickButton(
                         title: enableOtp && !isOtpValidated
-                            ? "Validate OTP First"
-                            : (enableDigitalSignature ? "Accept Terms & Sign" : "Accept Terms"),
+                            ? FlowStrings.validateOtpFirst
+                            : (enableDigitalSignature ? FlowStrings.acceptTermsAndSign : FlowStrings.acceptTerms),
                         verticalPadding: 18,
                         enabled: canSign
                     ) {
@@ -840,7 +840,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                     
                     
                     if self.contextAwareSigningObject?.data.isNormalClick ==  true{
-                        BaseClickButton(title: "Next", verticalPadding: 18, enabled: true) {
+                        BaseClickButton(title: FlowStrings.next, verticalPadding: 18, enabled: true) {
                             onNext()
                         }
                         .padding(.horizontal, 20)
@@ -850,7 +850,7 @@ public struct MultipleFilesContextAwareScreen: View, ContextAwareDelegate {
                             onNext: {
                                 onNext()
                             },
-                            label: "Next",
+                            label: FlowStrings.next,
                             icon: "checkmark",
                             isActive: true
                         ) .padding(.horizontal, 20)
@@ -955,14 +955,14 @@ fileprivate struct DocumentPageView: View {
                     .frame(height: pdfHeight)
 
                 if !isApproved {
-                    BaseClickButton(title: "Approve", verticalPadding: 18, enabled: true) {
+                    BaseClickButton(title: FlowStrings.approve, verticalPadding: 18, enabled: true) {
                         onAccept()
                     }
                 }
             }
             
                 OutlineButton(
-                    title: "Cancel",
+                    title: FlowStrings.cancel,
                     cornerRadius: 28,
                     borderColor: Color(BaseTheme.baseAccentColor),
                     textColor: Color(BaseTheme.baseAccentColor),
@@ -1018,7 +1018,7 @@ fileprivate struct DocumentPageFromUrlView: View {
             }
 
             OutlineButton(
-                title: "Cancel",
+                title: FlowStrings.cancel,
                 cornerRadius: 28,
                 borderColor: Color(BaseTheme.baseAccentColor),
                 textColor: Color(BaseTheme.baseAccentColor),
@@ -1059,7 +1059,7 @@ fileprivate struct SignaturePadContainer: View {
     var isLoading: Bool
 
     var body: some View {
-        SignaturePad(title: "Signature",isLoading:isLoading) { b64 in
+        SignaturePad(title: FlowStrings.signature,isLoading:isLoading) { b64 in
             signatureBase64 = b64
         }
         .frame(maxWidth: .infinity)

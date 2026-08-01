@@ -246,7 +246,7 @@ public struct SecureDropdownWithDataSource: View {
                                     userStartedTyping = true
                                 }
                             ),
-                            prompt: Text("Search...")
+                            prompt: Text(FlowStrings.search)
                                 .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.45))
                         )
                         .textFieldStyle(.plain)
@@ -263,7 +263,7 @@ public struct SecureDropdownWithDataSource: View {
                     
                     dialogList(items: filteredItems)
                 } else {
-                    Text("No data available")
+                    Text(FlowStrings.noDataAvailable)
                         .font(.system(size: 15))
                         .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
                         .frame(maxWidth: .infinity)
@@ -274,7 +274,7 @@ public struct SecureDropdownWithDataSource: View {
                 Button {
                     closeDialog()
                 } label: {
-                    Text("Close")
+                    Text(FlowStrings.close)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity)
@@ -307,7 +307,7 @@ public struct SecureDropdownWithDataSource: View {
             LazyVStack(spacing: 0) {
                 if items.isEmpty {
                     HStack {
-                        Text("No results found")
+                        Text(FlowStrings.noResultsFound)
                             .font(.system(size: 15))
                             .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
                         Spacer()

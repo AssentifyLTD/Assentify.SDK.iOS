@@ -100,7 +100,7 @@ public struct IDStepScreen: View {
 
                        
                         
-                        Text("Choose your country of residence")
+                        Text(FlowStrings.chooseCountry)
                             .font(.system(size: 18, weight: .bold))
                             .foregroundStyle(Color(BaseTheme.baseTextColor))
 
@@ -113,7 +113,7 @@ public struct IDStepScreen: View {
                             }
                         )
 
-                        Text("Select type of document")
+                        Text(FlowStrings.selectDocumentType)
                             .font(.system(size: 18, weight: .bold))
                             .foregroundStyle(Color(BaseTheme.baseTextColor))
 
@@ -138,13 +138,13 @@ public struct IDStepScreen: View {
 
                 // Bottom
                 VStack(spacing: 10) {
-                    Text("Only the presented IDs are supported and accepted by \(flowName). Make sure to provide one of them.")
+                    Text(FlowStrings.onlySupportedIds(flowName: flowName))
                         .font(.system(size: 12, weight: .thin))
                         .foregroundStyle(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
 
-                    BaseClickButton(title: "Next",  enabled: selectedTemplate != nil,) {
+                    BaseClickButton(title: FlowStrings.next,  enabled: selectedTemplate != nil,) {
                         guard selectedTemplate != nil else { return }
                         onNext()
                     }.padding(.top,5)
@@ -160,7 +160,7 @@ public struct IDStepScreen: View {
                 list.append(
                     TemplatesByCountry(
                         id: -1,
-                        name: "Rest of the world",
+                        name: FlowStrings.restOfTheWorld,
                         sourceCountryCode: "",
                         flag: " ",
                         templates: []
@@ -176,7 +176,7 @@ public struct IDStepScreen: View {
         ) {
             if let country = selectedCountry {
                 TemplatesBottomSheet(
-                    title: "Supported IDs",
+                    title: FlowStrings.supportedIds,
                     templates: country.templates,
                     onClose: { showIdsSheet = false }
                 )
@@ -211,7 +211,7 @@ struct CountryDropdownPill: View {
             }
         } label: {
             HStack {
-                Text(selected?.name ?? "Select country")
+                Text(selected?.name ?? FlowStrings.selectCountry)
                     .font(.system(size: 16, weight: .light))
                     .foregroundStyle(Color(BaseTheme.baseTextColor))
                     .lineLimit(1)
@@ -251,7 +251,7 @@ struct DocumentPickerCards: View {
             if(hasPassport){
                 SelectCard(
                     minVerticalPadding: minVerticalPadding,
-                    title: "Passport",
+                    title: FlowStrings.passport,
                     subtitle: nil,
                     selected: isSelectedPassport(),
                     icon: "ic_passport.svg", // or Image(systemName:"passport") if you prefer
@@ -262,7 +262,7 @@ struct DocumentPickerCards: View {
                                 id: -1,
                                 sourceCountryFlag:"",
                                 sourceCountryCode: "",
-                                kycDocumentType: "Passport",
+                                kycDocumentType: FlowStrings.passport,
                                 sourceCountry:"",
                                 kycDocumentDetails: []
                             )
@@ -276,8 +276,8 @@ struct DocumentPickerCards: View {
                 if !country.templates.isEmpty {
                     SelectCard(
                         minVerticalPadding: minVerticalPadding,
-                        title: "Supported IDs",
-                        subtitle: "View more",
+                        title: FlowStrings.supportedIds,
+                        subtitle: FlowStrings.viewMore,
                         selected: isSelectedIDs(),
                         icon: "id_card.svg", // or SF Symbol
                         onTap: {
@@ -286,7 +286,7 @@ struct DocumentPickerCards: View {
                                     id: 1,
                                     sourceCountryFlag:"",
                                     sourceCountryCode:  country.sourceCountryCode,
-                                    kycDocumentType: "All IDs",
+                                    kycDocumentType: FlowStrings.allIds,
                                     sourceCountry:"",
                                     kycDocumentDetails: []
                                 )

@@ -263,37 +263,37 @@ public struct PassportScanStep: View {
                         if zoom != .SENDING && zoom != .NO_DETECT {
                             
                             if zoom == .ZOOM_IN {
-                                feedbackText = "Move Passport Closer"
+                                feedbackText = FlowStrings.movePassportCloser
                             } else if zoom == .ZOOM_OUT {
-                                feedbackText = "Move Passport Further"
+                                feedbackText = FlowStrings.movePassportFurther
                             } else {
                                 feedbackText = ""
                             }
-                            
+
                         } else if motion != .SENDING && motion != .NO_DETECT {
-                            
-                            feedbackText = "Please Hold Your Hand"
-                            
+
+                            feedbackText = FlowStrings.holdYourHand
+
                         } else if brightnessEvents != .Good {
-                            
+
                             if brightnessEvents == .TooDark {
-                                feedbackText = "Please increase the lighting"
+                                feedbackText = FlowStrings.increaseLighting
                             } else if brightnessEvents == .TooBright {
-                                feedbackText = "Please reduce the lighting"
+                                feedbackText = FlowStrings.reduceLighting
                             } else {
                                 feedbackText = ""
                             }
-                            
+
                         } else {
-                            
+
                             if motion == .SENDING && zoom == .SENDING && brightnessEvents == .Good {
-                                feedbackText = "Hold Steady"
+                                feedbackText = FlowStrings.holdSteady
                             }
-                            
+
                             if motion == .NO_DETECT && zoom == .NO_DETECT {
-                                feedbackText = "Please present passport"
+                                feedbackText = FlowStrings.pleasePresentPassport
                             } else if !isCentered {
-                                feedbackText = "Please center your card"
+                                feedbackText = FlowStrings.centerYourCard
                             }
                         }
                         
@@ -326,7 +326,7 @@ public struct PassportScanStep: View {
                             .padding(.bottom, 40)
                     } else {
                         BaseClickButton(
-                            title: "Take Photo",
+                            title: FlowStrings.takePhoto,
                             cornerRadius: 28,
                             verticalPadding: 15,
                             enabled: true
@@ -614,7 +614,7 @@ struct PassportScanUIKitView: UIViewControllerRepresentable {
             
             guard let vc = assentifySdk?.startScanPassport(
                 scanPassportDelegate: delegate,
-                language: FlowEnvironmentalConditionsObject.shared.get()!.language,
+                language: FlowEnvironmentalConditionsObject.shared.get()!.extractedDataLanguage,
                 stepId: stepId
             ) else {
                 assertionFailure("startScanPassport returned nil (sdk instance or config missing)")

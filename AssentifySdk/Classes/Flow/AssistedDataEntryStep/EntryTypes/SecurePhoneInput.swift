@@ -220,7 +220,7 @@ public struct SecurePhoneInput: View {
                                 userStartedTyping = true
                             }
                         ),
-                        prompt: Text("Search...")
+                        prompt: Text(FlowStrings.search)
                             .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.45))
                     )
                     .textFieldStyle(.plain)
@@ -240,7 +240,7 @@ public struct SecurePhoneInput: View {
                 Button {
                     closeDialog()
                 } label: {
-                    Text("Close")
+                    Text(FlowStrings.close)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .frame(maxWidth: .infinity)
@@ -277,7 +277,7 @@ public struct SecurePhoneInput: View {
             LazyVStack(spacing: 0) {
                 if filteredOptions.isEmpty {
                     HStack {
-                        Text("No results found")
+                        Text(FlowStrings.noResultsFound)
                             .font(.system(size: 15))
                             .foregroundColor(Color(BaseTheme.baseTextColor).opacity(0.7))
                         Spacer()
@@ -429,6 +429,7 @@ public struct SecurePhoneInput: View {
 
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.isEnabled = isEnabled
+        uiView.textAlignment = BaseTheme.baseUiLanguage == UiLanguage.Arabic ? .right : .left
 
         if uiView.text != text {
             uiView.text = text

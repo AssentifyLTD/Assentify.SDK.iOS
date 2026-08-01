@@ -1,5 +1,5 @@
 PODS:
-  - AssentifySdk (1.0.0-Beta.7):
+  - AssentifySdk (1.0.0-Beta.13):
     - Bugsnag
     - BugsnagPerformance
     - MLKitFaceDetection
@@ -101,7 +101,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AssentifySdk: 8aff368eba3eeabd3b90af724789f7b7f4dc5099
+  AssentifySdk: c1290c3ddd096efb99e843a55126ef2afcfbeb77
   Bugsnag: 8dae9f9a66d5c1bfe6e1afa18e32f116a1c44dbe
   BugsnagPerformance: 577f0f539073346d1a4074bfde6d6cd7d462570f
   CocoaLumberjack: 5644158777912b7de7469fa881f8a3f259c2512a

@@ -17,6 +17,8 @@ import SwiftUI
 
 public struct PercentageBasedProgressStepper: View {
 
+    @Environment(\.layoutDirection) private var layoutDirection
+
     // ── Inputs ────────────────────────────────────────────────────────────────
     private let steps: [LocalStepModel]       // filtered to show == true by caller
     private let theme: StepperPercentageTheme
@@ -203,6 +205,7 @@ public struct PercentageBasedProgressStepper: View {
                     state:         node.state,
                     fillFraction:  node.fillFraction,
                     size:          nodeSize,
+                    isRTL:         layoutDirection == .rightToLeft,
                     activeColor:   theme.activeColor,
                     doneColor:     theme.doneColor,
                     upcomingColor: theme.upcomingColor
@@ -282,6 +285,7 @@ private struct PBStepNode: View {
     let state: StepVisualState
     let fillFraction: Double
     let size: CGFloat
+    let isRTL: Bool
     let activeColor: Color
     let doneColor: Color
     let upcomingColor: Color
@@ -333,10 +337,9 @@ private struct PBStepNode: View {
             let effectiveFraction = minFraction + fillFraction * (1.0 - minFraction)
             let fillWidth         = size.width * effectiveFraction
 
-            let clipRect = CGRect(
-                x: 0, y: 0,
-                width: fillWidth, height: size.height
-            )
+            let clipRect = isRTL
+                ? CGRect(x: size.width - fillWidth, y: 0, width: fillWidth, height: size.height)
+                : CGRect(x: 0, y: 0, width: fillWidth, height: size.height)
             ctx.clip(to: Path(clipRect))
             ctx.fill(Path(ellipseIn: rect), with: .color(activeColor))
         }

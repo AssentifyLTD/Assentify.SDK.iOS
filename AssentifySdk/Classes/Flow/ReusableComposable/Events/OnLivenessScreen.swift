@@ -53,7 +53,7 @@ public struct OnLivenessScreen: View {
 
                     Spacer().frame(height: 25)
 
-                    Text("Seems like you didn't provide a real ID")
+                    Text(FlowStrings.notRealId)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -61,7 +61,7 @@ public struct OnLivenessScreen: View {
 
                     Spacer().frame(height: 15)
 
-                    Text("Make sure its one of the above IDs presented and allowed by \(ConfigModelObject.shared.get()!.flowName) to verify your identity.")
+                    Text(FlowStrings.wrongTemplateHint(flowName: ConfigModelObject.shared.get()!.flowName))
                         .foregroundColor(text.opacity(0.85))
                         .font(.system(size: 10, weight: .thin))
                         .multilineTextAlignment(.center)
@@ -71,7 +71,7 @@ public struct OnLivenessScreen: View {
                     Spacer(minLength: 0)
 
                     BaseClickButton(
-                        title: "Retry",
+                        title: FlowStrings.retry,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

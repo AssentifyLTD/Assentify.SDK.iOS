@@ -26,25 +26,25 @@ public struct OnCompleteScreen: View {
 
     // ✅ allowed keys (contains) like Kotlin
     private let allowedKeyParts: [(part: String, label: String)] = [
-        ("OnBoardMe_IdentificationDocumentCapture_name", "First Name"),
-        ("OnBoardMe_IdentificationDocumentCapture_surname", "Last Name"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_FathersName", "Father Name"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_MothersName", "Mother Name"),
-        ("OnBoardMe_IdentificationDocumentCapture_Birth_Date", "Birth Date"),
-        ("OnBoardMe_IdentificationDocumentCapture_Expiry_Date", "Expiry Date"),
-        ("OnBoardMe_IdentificationDocumentCapture_Country", "Country"),
-        ("OnBoardMe_IdentificationDocumentCapture_Nationality", "Nationality"),
-        ("OnBoardMe_IdentificationDocumentCapture_Document_Number", "Document Number"),
-        ("OnBoardMe_IdentificationDocumentCapture_IDType", "ID Type"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfBirth", "Place of Birth"),
-        ("OnBoardMe_IdentificationDocumentCapture_Document_Type", "Document Type"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_CivilRegisterNumber", "Civil Register Number"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_DateOfIssuance", "Date of Issuance"),
-        ("OnBoardMe_IdentificationDocumentCapture_Sex", "Gender"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_MaritalStatus", "Marital Status"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfResidence", "Place of Residence"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_Province", "Province"),
-        ("OnBoardMe_IdentificationDocumentCapture_ID_Governorate", "Governorate")
+        ("OnBoardMe_IdentificationDocumentCapture_name", FlowStrings.labelFirstName),
+        ("OnBoardMe_IdentificationDocumentCapture_surname", FlowStrings.labelLastName),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_FathersName", FlowStrings.labelFatherName),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_MothersName", FlowStrings.labelMotherName),
+        ("OnBoardMe_IdentificationDocumentCapture_Birth_Date", FlowStrings.labelBirthDate),
+        ("OnBoardMe_IdentificationDocumentCapture_Expiry_Date", FlowStrings.labelExpiryDate),
+        ("OnBoardMe_IdentificationDocumentCapture_Country", FlowStrings.labelCountry),
+        ("OnBoardMe_IdentificationDocumentCapture_Nationality", FlowStrings.labelNationality),
+        ("OnBoardMe_IdentificationDocumentCapture_Document_Number", FlowStrings.labelDocumentNumber),
+        ("OnBoardMe_IdentificationDocumentCapture_IDType", FlowStrings.labelIdType),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfBirth", FlowStrings.labelPlaceOfBirth),
+        ("OnBoardMe_IdentificationDocumentCapture_Document_Type", FlowStrings.labelDocumentType),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_CivilRegisterNumber", FlowStrings.labelCivilRegisterNumber),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_DateOfIssuance", FlowStrings.labelDateOfIssuance),
+        ("OnBoardMe_IdentificationDocumentCapture_Sex", FlowStrings.labelGender),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_MaritalStatus", FlowStrings.labelMaritalStatus),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_PlaceOfResidence", FlowStrings.labelPlaceOfResidence),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_Province", FlowStrings.labelProvince),
+        ("OnBoardMe_IdentificationDocumentCapture_ID_Governorate", FlowStrings.labelGovernorate)
     ]
 
     // MARK: - Helpers
@@ -195,7 +195,7 @@ public struct OnCompleteScreen: View {
                     Spacer().frame(height: 14)
 
                     BaseClickButton(
-                        title: "Next",
+                        title: FlowStrings.next,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

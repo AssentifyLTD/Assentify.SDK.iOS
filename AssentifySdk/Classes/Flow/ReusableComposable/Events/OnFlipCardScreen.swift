@@ -41,7 +41,7 @@ public struct OnFlipCardScreen: View {
 
                     Spacer().frame(height: 30)
 
-                    Text("Capture Back of ID")
+                    Text(FlowStrings.captureBackOfId)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -58,7 +58,7 @@ public struct OnFlipCardScreen: View {
 
                     Spacer().frame(height: 25)
 
-                    Text("Please flip the card provided to take the back of the card")
+                    Text(FlowStrings.flipCardHint)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -79,7 +79,7 @@ public struct OnFlipCardScreen: View {
 
                         Spacer().frame(height: 10)
 
-                        Text("Expected Card Type")
+                        Text(FlowStrings.expectedCardType)
                             .foregroundColor(text.opacity(0.85))
                             .font(.system(size: 10, weight: .thin))
                             .multilineTextAlignment(.center)
@@ -91,7 +91,7 @@ public struct OnFlipCardScreen: View {
 
                     // ✅ Bottom button (same style you use everywhere)
                     BaseClickButton(
-                        title: "Next",
+                        title: FlowStrings.next,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

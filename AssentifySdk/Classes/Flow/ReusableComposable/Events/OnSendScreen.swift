@@ -75,8 +75,8 @@ struct OnSendScreen: View {
             }
             
             Text(progress == 100
-                 ? "Processing ID please wait"
-                 : "Uploading ID please wait")
+                 ? FlowStrings.processingIdWait
+                 : FlowStrings.uploadingIdWait)
             .foregroundColor(text)
             .font(.system(size: 18, weight: .bold))
             .multilineTextAlignment(.center)

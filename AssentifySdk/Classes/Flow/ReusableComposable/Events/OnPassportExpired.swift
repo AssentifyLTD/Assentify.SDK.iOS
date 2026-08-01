@@ -53,7 +53,7 @@ public struct OnPassportExpired: View {
 
                     Spacer().frame(height: 25)
 
-                    Text("Expired Passport Detected!")
+                    Text(FlowStrings.expiredPassport)
                         .foregroundColor(text)
                         .font(.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -61,7 +61,7 @@ public struct OnPassportExpired: View {
 
                     Spacer().frame(height: 15)
 
-                    Text("Your passport appears to be expired. Please use a valid, non-expired passport to complete the verification process.")
+                    Text(FlowStrings.expiredPassportHint)
                         .foregroundColor(text.opacity(0.85))
                         .font(.system(size: 10, weight: .thin))
                         .multilineTextAlignment(.center)
@@ -71,7 +71,7 @@ public struct OnPassportExpired: View {
                     Spacer(minLength: 0)
 
                     BaseClickButton(
-                        title: "Retry",
+                        title: FlowStrings.retry,
                         cornerRadius: 28,
                         verticalPadding: 14,
                         enabled: true,

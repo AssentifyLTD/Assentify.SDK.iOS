@@ -56,7 +56,7 @@ private struct BackInterceptController: UIViewControllerRepresentable {
                 //    (Same chevron style; action calls only `action()`)
                 vc.navigationItem.hidesBackButton = true
                 vc.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                    image: UIImage(systemName: "chevron.left"),
+                    image: UIImage(systemName: "chevron.backward"),
                     style: .plain,
                     target: self,
                     action: #selector(didTapBack)

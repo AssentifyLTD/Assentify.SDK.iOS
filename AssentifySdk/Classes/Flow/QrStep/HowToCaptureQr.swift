@@ -30,8 +30,8 @@ public struct HowToCaptureQrScreen: View {
     
     
     
-    private var titleText = "Capture QR Code"
-    private var subTitleText = "Watch How Easy It Is\nTo Capture Your ID Qr Code"
+    private var titleText = FlowStrings.captureQrCode
+    private var subTitleText = FlowStrings.watchCaptureQr
     private var assetGifFileName = "qr_gif"
     
     
@@ -71,7 +71,7 @@ public struct HowToCaptureQrScreen: View {
                     
                     Spacer().frame(height: 20)
                     
-                    Text("Just make sure to be in a well lit area with no direct light reflecting on the ID .")
+                    Text(FlowStrings.qrLightingHint)
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .font(.system(size: 12, weight: .thin))
                         .multilineTextAlignment(.center)
@@ -86,7 +86,7 @@ public struct HowToCaptureQrScreen: View {
                 
                 if(iDCustomization.isNormalClick!){
                     BaseClickButton(
-                        title: "Lets Start",
+                        title: FlowStrings.letsStart,
                         cornerRadius: 28,
                         verticalPadding: 15,
                         enabled: true
@@ -98,7 +98,7 @@ public struct HowToCaptureQrScreen: View {
                 }else{
                     BaseSliderClick(
                         onNext: { onNext()},
-                        label:  "Lets Start",
+                        label:  FlowStrings.letsStart,
                         icon: "camera",
                         isActive: true
                     ).padding(.horizontal, 25)

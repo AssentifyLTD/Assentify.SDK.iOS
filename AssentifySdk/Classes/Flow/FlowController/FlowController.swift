@@ -13,9 +13,21 @@ public final class FlowController {
         self.flowDelegate = flowDelegate
     }
     
+    private var flowLayoutDirection: LayoutDirection {
+        BaseTheme.baseUiLanguage == UiLanguage.Arabic ? .rightToLeft : .leftToRight
+    }
+
+    private func applySemanticDirection() {
+        guard let nav = navigationController else { return }
+        let attr: UISemanticContentAttribute = BaseTheme.baseUiLanguage == UiLanguage.Arabic ? .forceRightToLeft : .forceLeftToRight
+        nav.view.semanticContentAttribute = attr
+        nav.navigationBar.semanticContentAttribute = attr
+    }
+
     public func push<V: View>(_ screen: V, animated: Bool = true) {
         guard let nav = navigationController else { return }
-        let vc = UIHostingController(rootView: screen)
+        applySemanticDirection()
+        let vc = UIHostingController(rootView: screen.environment(\.layoutDirection, flowLayoutDirection))
         nav.pushViewController(vc, animated: animated)
     }
     
@@ -28,7 +40,8 @@ public final class FlowController {
     }
     
     public func setRoot( animated: Bool = false) {
-        let vc = UIHostingController(rootView:     BlockLoaderScreen(flowController: self))
+        applySemanticDirection()
+        let vc = UIHostingController(rootView: BlockLoaderScreen(flowController: self).environment(\.layoutDirection, flowLayoutDirection))
         navigationController?.setViewControllers([vc], animated: animated)
     }
     
@@ -95,7 +108,7 @@ public final class FlowController {
             
             newItems.append(
                 LocalStepModel(
-                    name: "Step \(displayCounter): \(meta.name)",
+                    name: FlowStrings.stepLabel(number: displayCounter, name: meta.name),
                     description: meta.description,
                     iconAssetPath: meta.icon,
                     isDone: false,
@@ -117,7 +130,7 @@ public final class FlowController {
             if steps[i].show,
                let stepDef = steps[i].stepDefinition?.stepDefinition,
                let meta = getStepMeta(stepDef) {
-                steps[i].name = "Step \(newCounter): \(meta.name)"
+                steps[i].name = FlowStrings.stepLabel(number: newCounter, name: meta.name)
                 newCounter += 1
             }
         }
@@ -510,7 +523,7 @@ public final class FlowController {
               flowName: configModel.flowName,
               instanceHash: configModel.instanceHash,
               isSuccessful: true,
-              language: flowEnvironmentalConditions!.language,
+              language: flowEnvironmentalConditions!.extractedDataLanguage,
               nextStepDefinition: nextStepDefinition,
               nextStepId: nextStepId,
               nextStepTypeId: nextStepType,
@@ -611,7 +624,7 @@ public final class FlowController {
               deviceName: deviceName,
               userAgent: userAgent,
               timestamp: getCurrentDateTimeForTracking(),
-              language: flowEnvironmentalConditions!.language,
+              language: flowEnvironmentalConditions!.extractedDataLanguage,
               inputData: prepareTrackProgressInputData(currentStep:currentStep, inputData:inputData),
               response: response,
               customProperties: []

@@ -17,10 +17,12 @@ func initializeCheck(
     instanceId: String,
     sourceAgent: String,
     apiKey: String,
+    language: String,
     completion: @escaping (BaseResult<String, Error>) -> Void
 ) {
-    let urlString = BaseUrls.baseURLGateway + "v1/Manager/Initialize/\(pathContentHash)/check?contentHash=\(queryContentHash)"
+    let urlString = BaseUrls.baseURLGateway + "v1/Manager/Initialize/\(pathContentHash)/check?contentHash=\(queryContentHash)&language=\(language)"
     
+  
     guard let url = URL(string: urlString) else {
         completion(.failure(NSError(domain: "Invalid URL", code: 0)))
         return

@@ -214,7 +214,7 @@ fileprivate struct UIKitTextField: UIViewRepresentable {
         tf.minimumFontSize = 11
 
         // ✅ keep it one line
-        tf.textAlignment = .left
+        tf.textAlignment = BaseTheme.baseUiLanguage == UiLanguage.Arabic ? .right : .left
 
         // ✅ Helps SwiftUI sizing not fight UIKit
         tf.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -226,6 +226,7 @@ fileprivate struct UIKitTextField: UIViewRepresentable {
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.isEnabled = isEnabled
         uiView.textColor = textColor
+        uiView.textAlignment = BaseTheme.baseUiLanguage == UiLanguage.Arabic ? .right : .left
 
         if uiView.text != text {
             uiView.text = text

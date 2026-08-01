@@ -177,7 +177,7 @@ public struct QrScanStep: View {
 
                     if (assentifySdk!.isManual()) {
                         BaseClickButton(
-                            title: "Take Photo",
+                            title: FlowStrings.takePhoto,
                             cornerRadius: 28,
                             verticalPadding: 15,
                             enabled: true
@@ -379,7 +379,7 @@ struct QrScanUIKitView: UIViewControllerRepresentable {
             guard let vc = assentifySdk?.startScanQr(
                 scanQrDelegate: delegate,
                 templatesByCountry: templatesByCountry,
-                language: FlowEnvironmentalConditionsObject.shared.get()!.language,
+                language: FlowEnvironmentalConditionsObject.shared.get()!.extractedDataLanguage,
                 stepId: stepId
             ) else {
                 assertionFailure("startScanQr returned nil (sdk instance or config missing)")

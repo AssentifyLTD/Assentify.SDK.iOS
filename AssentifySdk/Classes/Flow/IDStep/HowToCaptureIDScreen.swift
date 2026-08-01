@@ -35,12 +35,11 @@ public struct HowToCaptureScreen: View {
     private var isPassport: Bool { selectedTemplateId == -1 }
 
     private var titleText: String {
-        isPassport ? "Present Your Passport" : "Present Your ID"
+        isPassport ? FlowStrings.presentPassport : FlowStrings.presentId
     }
 
     private var subTitleText: String {
-        isPassport ? "Watch How Easy It Is To Capture Your Passport"
-                  : "Watch How Easy It Is To Capture Your ID"
+        isPassport ? FlowStrings.watchCapturePassport : FlowStrings.watchCaptureId
     }
 
     private var assetVideoFileName: String {
@@ -84,7 +83,7 @@ public struct HowToCaptureScreen: View {
 
                         Spacer().frame(height: 20)
 
-                        Text("Just make sure to be in a well lit area with no direct light reflecting on the ID or Passport presented.")
+                        Text(FlowStrings.idLightingHint)
                             .foregroundColor(Color(BaseTheme.baseTextColor))
                             .font(.system(size: 12, weight: .thin))
                             .multilineTextAlignment(.center)
@@ -97,7 +96,7 @@ public struct HowToCaptureScreen: View {
 
                     if(iDCustomization.isNormalClick!){
                         BaseClickButton(
-                            title: "Lets Start",
+                            title: FlowStrings.letsStart,
                             cornerRadius: 28,
                             verticalPadding: 15,
                             enabled: true
@@ -109,7 +108,7 @@ public struct HowToCaptureScreen: View {
                     }else{
                         BaseSliderClick(
                             onNext: { onNext()},
-                            label:  "Lets Start",
+                            label:  FlowStrings.letsStart,
                             icon: "camera",
                             isActive: true
                         ) .padding(.horizontal, 25)

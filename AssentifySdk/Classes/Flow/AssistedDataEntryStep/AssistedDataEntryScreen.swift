@@ -164,7 +164,7 @@ public struct AssistedDataEntryScreen: View, AssistedDataEntryDelegate {
                     if isError {
                         VStack(spacing: 12) {
                             Spacer()
-                            Text("Something went wrong")
+                            Text(FlowStrings.somethingWentWrong)
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundColor(Color(BaseTheme.baseRedColor))
                                 .multilineTextAlignment(.center)

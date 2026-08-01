@@ -81,6 +81,9 @@ public struct BaseTheme {
         env.showCountDown
     }
     
+    public static var baseUiLanguage: String {
+        AssentifySdkObject.shared.get()?.environmentalConditions?.flowUiLanguage ?? UiLanguage.English;
+    }
 }
 
 
@@ -129,7 +132,7 @@ struct BlockLoaderScreen: View {
                 
                 
                 if(!HasSubmittedObject.shared.get()){
-                    Text("Complete Your\nOnboarding in \(steps.count) " + (steps.count == 1 ? "Step" : "Steps"))
+                    Text(FlowStrings.completeOnboarding(count: steps.count))
                         .font(.system(size: 25, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .multilineTextAlignment(.leading)
@@ -139,7 +142,7 @@ struct BlockLoaderScreen: View {
                         .padding(.leading, 25)
                         .padding(.trailing, 20)
                     
-                    Text("It will include capturing your ID and your face — it's fast, easy, and secure.")
+                    Text(FlowStrings.onboardingSubtitle)
                         .font(.system(size: 12, weight: .regular))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .multilineTextAlignment(.leading)
@@ -150,7 +153,7 @@ struct BlockLoaderScreen: View {
                         .padding(.bottom, 10)
                     
                 }else{
-                    Text("Thank you!")
+                    Text(FlowStrings.thankYou)
                         .font(.system(size: 30, weight: .bold))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .multilineTextAlignment(.center)
@@ -160,7 +163,7 @@ struct BlockLoaderScreen: View {
                         .padding(.leading, 25)
                         .padding(.trailing, 20)
                     
-                    Text("Completed \(steps.count) " + (steps.count == 1 ? "Step" : "Steps") + " Successfully")
+                    Text(FlowStrings.completedSteps(count: steps.count))
                         .font(.system(size: 15, weight: .regular))
                         .foregroundColor(Color(BaseTheme.baseTextColor))
                         .multilineTextAlignment(.leading)
@@ -190,7 +193,7 @@ struct BlockLoaderScreen: View {
                 .frame(maxHeight: .infinity)
                 
                 if(!HasSubmittedObject.shared.get()){
-                    BaseClickButton(title: "Next") {
+                    BaseClickButton(title: FlowStrings.next) {
                         onNext()
                     }.padding(.vertical, 25)
                     .padding(.horizontal, 25)
@@ -311,7 +314,7 @@ private func buildStepsFromConfig(flowController:FlowController) -> [LocalStepMo
                 
                 tempList.append(
                     LocalStepModel(
-                        name: "Step \(displayCounter): \(meta.name)",
+                        name: FlowStrings.stepLabel(number: displayCounter, name: meta.name),
                         show: true,
                         description: meta.description,
                         iconAssetPath: meta.icon,
@@ -386,36 +389,36 @@ public func getStepMeta(_ stepDefinition: String) -> StepMeta? {
         
     case StepsNames.termsConditions:
         return StepMeta(
-            name: "Terms & Conditions",
-            description: "Read and accept the Terms & Conditions.",
+            name: FlowStrings.stepTermsName,
+            description: FlowStrings.stepTermsDesc,
             icon: "ic_terms_step.svg"
         )
         
     case StepsNames.identificationDocumentCapture:
         return StepMeta(
-            name: "Scan Your ID",
-            description: "Take a photo of your national ID or passport to verify your identity.",
+            name: FlowStrings.stepScanIdName,
+            description: FlowStrings.stepScanIdDesc,
             icon: "ic_id_step.svg"
         )
         
     case StepsNames.faceImageAcquisition:
         return StepMeta(
-            name: "Take Selfie",
-            description: "Use your camera to securely confirm your identity with a quick selfie scan.",
+            name: FlowStrings.stepSelfieName,
+            description: FlowStrings.stepSelfieDesc,
             icon: "ic_face_step.svg"
         )
         
     case StepsNames.assistedDataEntry:
         return StepMeta(
-            name: "Information Capture",
-            description: "Provide basic personal details like name, address, and employment info.",
+            name: FlowStrings.stepDataEntryName,
+            description: FlowStrings.stepDataEntryDesc,
             icon: "ic_data_entry_step.svg"
         )
         
     case StepsNames.contextAwareSigning:
         return StepMeta(
-            name: "eKYC Signing",
-            description: "Provide a digital signature to complete onboarding.",
+            name: FlowStrings.stepSigningName,
+            description: FlowStrings.stepSigningDesc,
             icon: "ic_signing_step.svg"
         )
         
