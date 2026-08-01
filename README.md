@@ -23,6 +23,7 @@ pod 'AssentifySdk'
 ## Versions
 
 **1.0.0-Beta.19**
+
 1.⁠ ⁠*Added full RTL (Right-to-Left) and LTR (Left-to-Right) , Arabic and English layout support.*
 2.⁠ ⁠*Enhanced the slider click animation*
 
